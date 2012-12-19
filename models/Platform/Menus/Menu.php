@@ -42,13 +42,6 @@ class Menu extends \Cartalyst\Nesty\Model {
 	public $incrementing = false;
 
 	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
-	protected $hidden = array('lft', 'rgt', 'menu');
-
-	/**
 	 * Array of attributes reserved for the
 	 * worker. These attributes cannot be set
 	 * publically, only internally and shouldn't
@@ -87,8 +80,6 @@ class Menu extends \Cartalyst\Nesty\Model {
 
 				$menu->makeRoot();
 			}
-
-			dd($menu);
 
 			return $menu;
 		}

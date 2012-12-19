@@ -21,33 +21,24 @@
 use Platform\Foundation\Controllers\ApiController;
 use Platform\Menus\Menu;
 
-class MenusController extends ApiController {
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Cartalyst\Api\Http\Response
-	 */
-	public function index()
-	{
-		return $this->response(array('menus' => Menu::allRoot()));
-	}
+class ChildrenController extends ApiController {
 
 	/**
 	 * Display the specified resource.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($slug)
+	public function show($menuSlug)
 	{
-		if ( ! $menu = Menu::find($slug))
+		if ( ! $menu = Menu::find($menuSlug))
 		{
 			return $this->response(array(
-				'messge' => "Menu [$slug] does not exist.",
+				'message' => "Could not find children for [$menuSlug] menu as it does not exist.",
 			), 404);
 		}
 
-		return $this->response(array('menu' => $menu));
+		$menu->hydrateChildren();
+		return $this->response(array('children' => $menu->getChildren()));
 	}
 
 	/**
@@ -55,22 +46,17 @@ class MenusController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function update($slug)
+	public function update($menuSlug)
 	{
-		if ( ! $menu = Menu::find($slug))
+		if ( ! $menu = Menu::find($menuSlug))
 		{
 			return $this->response(array(
-				'messge' => "Menu [$slug] does not exist.",
+				'message' => "Could not update children for [$menuSlug] menu as it does not exist.",
 			), 404);
 		}
 
-		foreach ($this->request->input('menu', array()) as $key => $value)
-		{
-			$menu->{$key} = $value;
-		}
-
-		$menu->save();
-		return $this->response(array('menu' => $menu));
+		$menu->mapChildren($this->request->input('children'));
+		return $this->show($menuSlug);
 	}
 
 }
