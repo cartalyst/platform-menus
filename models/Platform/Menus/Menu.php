@@ -68,14 +68,14 @@ class Menu extends \Cartalyst\Nesty\Model {
 		if (ends_with($method, 'Menu'))
 		{
 			// Determine the slug the person was after
-			$slug = snake_case(substr($method, 0, -4));
+			$slug = str_replace('_', '-', snake_case(substr($method, 0, -4)));
 
 			// Lazily create the menu item
 			if (($menu = static::find($slug)) === null)
 			{
 				$menu = new static(array(
 					'slug' => $slug,
-					'name' => ucwords(str_replace('_', ' ', $slug))
+					'name' => ucwords(str_replace('-', ' ', $slug))
 				));
 
 				$menu->makeRoot();
