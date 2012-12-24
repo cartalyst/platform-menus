@@ -14,7 +14,7 @@
         "php": ">=5.3.0",
         "platform/composer-installers": "*",
 
-        "cartalyst/nesty": "dev-master",
+        "cartalyst/nesty": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "0.7.*"
