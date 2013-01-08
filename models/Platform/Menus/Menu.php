@@ -32,7 +32,7 @@ class Menu extends \Cartalyst\Nesty\Model {
 	 *
 	 * @var string
 	 */
-	protected $key = 'slug';
+	protected $primaryKey = 'slug';
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
