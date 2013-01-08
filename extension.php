@@ -175,4 +175,20 @@ return array(
 		Route::put(':api/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
 	},
 
+	/*
+	|--------------------------------------------------------------------------
+	| Widgets
+	|--------------------------------------------------------------------------
+	|
+	| List of custom widgets associated with the extension. Like routes, the
+	| value for the widget key may either be a closure or a class & method name
+	| (joined with an @ symbol). Of course, Platform will guess the widget
+	| class for you, this is just for custom widgets or if you do not wish to
+	| make a new class for a very small widget.
+	|
+	*/
+
+	'widgets' => array(
+
+	),
 );
