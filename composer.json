@@ -26,6 +26,7 @@
         "classmap": [
             "controllers",
             "database/migrations",
+            "plugins",
             "tests",
             "widgets"
         ]
