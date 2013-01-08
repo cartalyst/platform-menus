@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-use Api;
+use API;
 
 class Nav {
 
@@ -44,7 +44,20 @@ class Nav {
 			{
 				throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 			}
+
+			$result   = API::get("menus/$start/children");
+			$children = $result['children'];
 		}
+		else
+		{
+			$activeMenu = get_active_menu();
+			$result     = API::get("menus/$activeMenu/children");
+			$children   = $result['children'];
+		}
+
+		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+
+		// var_dump(API::get('menus/admin'));
 	}
 
 }

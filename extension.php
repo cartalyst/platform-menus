@@ -154,7 +154,42 @@ return array(
 
 	'boot' => function(Platform\Foundation\Extensions\Extension $extension)
 	{
+		if ( ! function_exists('set_active_menu'))
+		{
+			/**
+			 * Sets the active menu for the current request.
+			 *
+			 * @param  string  $slug
+			 * @return void
+			 */
+			function set_active_menu($slug)
+			{
+				$app = app();
+				$app['platform.menus.active'] = $slug;
+			}
+		}
 
+		if ( ! function_exists('get_active_menu'))
+		{
+			/**
+			 * Gets the active menu for the current request.
+			 *
+			 * @return string  $slug
+			 */
+			function get_active_menu()
+			{
+				$app = app();
+
+				// We're only interested on providing a default
+				// menu for the admin area only.
+				if ( ! isset($app['platform.menus.active']) and is_admin())
+				{
+					$app['platform.menus.active'] = 'admin';
+				}
+
+				return $app['platform.menus.active'];
+			}
+		}
 	},
 
 	/*
