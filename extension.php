@@ -191,4 +191,22 @@ return array(
 	'widgets' => array(
 
 	),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Plugins
+	|--------------------------------------------------------------------------
+	|
+	| List of custom plugins associated with the extension. Like routes, the
+	| value for the plugin key may either be a closure or a class & method name
+	| (joined with an @ symbol). Of course, Platform will guess the plugin
+	| class for you, this is just for custom plugins or if you do not wish to
+	| make a new class for a very small plugin.
+	|
+	*/
+
+	'plugins' => array(
+
+	),
+
 );
