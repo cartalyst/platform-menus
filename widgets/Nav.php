@@ -45,19 +45,42 @@ class Nav {
 				throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 			}
 
-			$result   = API::get("menus/$start/children");
-			$children = $result['children'];
+			$result = API::get("menus/$start/children");
 		}
 		else
 		{
 			$activeMenu = get_active_menu();
 			$result     = API::get("menus/$activeMenu/children");
-			$children   = $result['children'];
 		}
 
-		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+		$children = array_map(function($child)
+		{
+			return $child->toArray();
+		}, $result['children']);
 
-		// var_dump(API::get('menus/admin'));
+		foreach ($children as &$child)
+		{
+			$this->prepareChildRecursively($child);
+		}
+
+		die();
+
+		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+	}
+
+	protected function prepareChildRecursively(array &$child)
+	{
+		switch ($child['driver'])
+		{
+			// If the child is static, we are able to prepare it right away.
+			case 'static':
+				
+				break;
+			
+			default:
+				\Event::fire('platform.menus.nav.prepare', array('child' => $child));
+				break;
+		}
 	}
 
 }
