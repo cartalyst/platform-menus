@@ -32,9 +32,9 @@ class Nav {
 	 * rendering from, irrespective of the active menu item.
 	 *
 	 * @param  string|int  $start,
-	 * @param  string   $depth
-	 * @param  string  $cssClass
-	 * @param  string  $beforeUri
+	 * @param  string      $depth
+	 * @param  string      $cssClass
+	 * @param  string      $beforeUri
 	 */
 	public function show($start = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
@@ -45,41 +45,64 @@ class Nav {
 				throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 			}
 
-			$result = API::get("menus/$start/children");
+			$result   = API::get("menus/$start/children");
+			$children = $result['children'];
 		}
 		else
 		{
 			$activeMenu = get_active_menu();
 			$result     = API::get("menus/$activeMenu/children");
+			$children   = $result['children'];
 		}
 
-		$children = array_map(function($child)
+		// Loop through and prepare the child for display
+		foreach ($children as $child)
 		{
-			return $child->toArray();
-		}, $result['children']);
-
-		foreach ($children as &$child)
-		{
-			$this->prepareChildRecursively($child);
+			$this->prepareChildRecursively($child, $beforeUri);
 		}
-
-		die();
 
 		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
 	}
 
-	protected function prepareChildRecursively(array &$child)
+	/**
+	 * Recursively prepares a child for presentation within
+	 * the nav widget.
+	 *
+	 * If the driver type is anything but 'static', we'll fire
+	 * an event for the correct extension to handle the logic
+	 * of preparing the item for display.
+	 *
+	 * @param  Platform\Menus\Menu  $child
+	 * @param  string  $beforeUri
+	 * @return void
+	 */
+	protected function prepareChildRecursively($child, $beforeUri = null)
 	{
-		switch ($child['driver'])
+		switch ($child->driver)
 		{
 			// If the child is static, we are able to prepare it right away.
 			case 'static':
-				
+
+				// We'll modify the URI only if
+				// necessary.
+				if (isset($beforeUri))
+				{
+					$child->uri = "{$beforeUri}/{$child->uri}";
+				}
+
 				break;
 			
+			// We'll fire an event for the logic to be handled by the correct
+			// driver.
 			default:
-				\Event::fire('platform.menus.nav.prepare', array('child' => $child));
+				\Event::fire("platform.menus.nav.prepare_child.$driver", array('child' => $child, 'beforeUri' => $beforeUri));
 				break;
+		}
+
+		// Recursive!
+		foreach ($child->children as $grandChild)
+		{
+			$this->prepareChildRecursively($grandChild, $beforeUri);
 		}
 	}
 
