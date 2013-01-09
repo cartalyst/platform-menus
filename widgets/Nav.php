@@ -25,70 +25,98 @@ class Nav {
 	/**
 	 * Returns navigation HTML based off the current active menu.
 	 *
-	 * If the start is an integer, it's the depth from the top
+	 * If the identifier is an integer, it's the depth from the top
 	 * level item based on the current active menu item.
 	 *
 	 * If it's a string, it's the slug of the item to start
 	 * rendering from, irrespective of the active menu item.
 	 *
-	 * @param  string|int  $start,
+	 * @param  string|int  $identifier,
 	 * @param  string      $depth
 	 * @param  string      $cssClass
 	 * @param  string      $beforeUri
 	 */
-	public function show($start = 0, $depth = 0, $cssClass = null, $beforeUri = null)
+	public function show($identifier = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
-		if (is_numeric($start))
+		// Fallback active path
+		$activePath = array();
+
+		if ( ! is_numeric($identifier))
 		{
-			if ( ! $activeMenu = get_active_menu())
+			// If we have an active menu, we'll fill out the path now
+			if ($activeMenu = get_active_menu())
 			{
-				throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$start].");
+				$result     = API::get("menus/$activeMenu/path");
+				$activePath = $result['path'];
+				unset($result);
 			}
 
-			$result = API::get("menus/$activeMenu/path");
-			$path   = $result['path'];
+			// If the "start" property is a string, it's
+			// the slug of the menu which to render
+			$children = $this->getChildrenForSlug($identifier, $depth);
+		}
+		else
+		{
+			// Active menu is required for path based output
+			if ( ! $activeMenu = get_active_menu())
+			{
+				throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
+			}
+
+			$result     = API::get("menus/$activeMenu/path");
+			$activePath = $result['path'];
 			unset($result);
 
-			if ( ! isset($path[$start]))
+			if ( ! isset($activePath[$identifier]))
 			{
 				// Let's help the user out by formatting the path
 				// for them.
-				array_walk($path, function(&$slug, $index)
+				array_walk($activePath, function(&$slug, $index)
 				{
 					$slug = "$index => '$slug'";
 				});
 
 				throw new \InvalidArgumentException(sprintf(
 					'Path index of [%d] does not exist on active menu path [%s].',
-					$start,
-					implode(', ', $path)
+					$identifier,
+					implode(', ', $activePath)
 				));
 			}
 
-			// Now we have a slug in the active path, we'll simply call
-			// the method again
-			return $this->show($path[$start], $depth, $cssClass, $beforeUri);
+			$children = $this->getChildrenForSlug($activePath[$identifier], $depth);
 		}
 
+		// Loop through and prepare the child for display
+		foreach ($children as $child)
+		{
+			$this->prepareChildRecursively($child, $beforeUri, $activePath);
+		}
+
+		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+	}
+
+	/**
+	 * Returns the children for a menu with the given slug.
+	 *
+	 * @param  string  $slug
+	 * @param  int     $depth
+	 * @return array   $children
+	 */
+	protected function getChildrenForSlug($slug, $depth = 0)
+	{
 		// Validate the start compontent
-		if ( ! strlen($start))
+		if ( ! strlen($slug))
 		{
 			throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 		}
 
-		$result   = API::get("menus/$start/children", array(
+		$result   = API::get("menus/$slug/children", array(
 			'depth' => $depth,
 		));
 		$children = $result['children'];
 		unset($result);
 
-		// Loop through and prepare the child for display
-		foreach ($children as $child)
-		{
-			$this->prepareChildRecursively($child, $beforeUri);
-		}
-
-		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+		return $children;
 	}
 
 	/**
@@ -101,9 +129,10 @@ class Nav {
 	 *
 	 * @param  Platform\Menus\Menu  $child
 	 * @param  string  $beforeUri
+	 * @param  array   $activePath
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child, $beforeUri = null)
+	protected function prepareChildRecursively($child, $beforeUri = null, array $activePath = array())
 	{
 		switch ($child->driver)
 		{
@@ -117,6 +146,8 @@ class Nav {
 					$child->uri = "{$beforeUri}/{$child->uri}";
 				}
 
+				$child->in_active_path = in_array($child->slug, $activePath);
+
 				break;
 			
 			// We'll fire an event for the logic to be handled by the correct
@@ -129,7 +160,7 @@ class Nav {
 		// Recursive!
 		foreach ($child->children as $grandChild)
 		{
-			$this->prepareChildRecursively($grandChild, $beforeUri);
+			$this->prepareChildRecursively($grandChild, $beforeUri, $activePath);
 		}
 	}
 
