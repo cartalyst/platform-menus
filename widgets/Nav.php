@@ -38,22 +38,49 @@ class Nav {
 	 */
 	public function show($start = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
-		if ( ! is_numeric($start))
+		if (is_numeric($start))
 		{
-			if ( ! strlen($start))
+			if ( ! $activeMenu = get_active_menu())
 			{
-				throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
+				throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$start].");
 			}
 
-			$result   = API::get("menus/$start/children");
-			$children = $result['children'];
+			$result = API::get("menus/$activeMenu/path");
+			$path   = $result['path'];
+			unset($result);
+
+			if ( ! isset($path[$start]))
+			{
+				// Let's help the user out by formatting the path
+				// for them.
+				array_walk($path, function(&$slug, $index)
+				{
+					$slug = "$index => '$slug'";
+				});
+
+				throw new \InvalidArgumentException(sprintf(
+					'Path index of [%d] does not exist on active menu path [%s].',
+					$start,
+					implode(', ', $path)
+				));
+			}
+
+			// Now we have a slug in the active path, we'll simply call
+			// the method again
+			return $this->show($path[$start], $depth, $cssClass, $beforeUri);
 		}
-		else
+
+		// Validate the start compontent
+		if ( ! strlen($start))
 		{
-			$activeMenu = get_active_menu();
-			$result     = API::get("menus/$activeMenu/children");
-			$children   = $result['children'];
+			throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 		}
+
+		$result   = API::get("menus/$start/children", array(
+			'depth' => $depth,
+		));
+		$children = $result['children'];
+		unset($result);
 
 		// Loop through and prepare the child for display
 		foreach ($children as $child)

@@ -21,44 +21,23 @@
 use Platform\Foundation\Controllers\ApiController;
 use Platform\Menus\Menu;
 
-class ChildrenController extends ApiController {
+class PathController extends ApiController {
 
 	/**
 	 * Display the specified resource.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($menuSlug)
+	public function show($slug)
 	{
-		if ( ! $menu = Menu::find($menuSlug))
+		if ( ! $menu = Menu::find($slug))
 		{
 			return $this->response(array(
-				'message' => "Could not find children for [$menuSlug] menu as it does not exist.",
+				'messge' => "Menu [$slug] does not exist.",
 			), 404);
 		}
 
-		// Hydrate the children to the depth required
-		$menu->hydrateChildren((int) \API::input('depth', 0));
-
-		return $this->response(array('children' => $menu->getChildren()));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @return Cartalyst\Api\Http\Response
-	 */
-	public function update($menuSlug)
-	{
-		if ( ! $menu = Menu::find($menuSlug))
-		{
-			return $this->response(array(
-				'message' => "Could not update children for [$menuSlug] menu as it does not exist.",
-			), 404);
-		}
-
-		$menu->mapChildren($this->request->input('children'));
-		return $this->show($menuSlug);
+		return $this->response(array('path' => $menu->getPathKeys()));
 	}
 
 }

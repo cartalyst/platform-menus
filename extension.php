@@ -208,6 +208,7 @@ return array(
 	{
 		Route::get(':api/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
 		Route::put(':api/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
+		Route::get(':api/v1/menus/{slug}/path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
 	},
 
 	/*
