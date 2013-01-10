@@ -69,6 +69,8 @@ class Nav {
 
 			if ( ! isset($activePath[$identifier]))
 			{
+				return '';
+
 				// Let's help the user out by formatting the path
 				// for them.
 				array_walk($activePath, function(&$slug, $index)
