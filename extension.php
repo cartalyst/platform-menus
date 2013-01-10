@@ -154,6 +154,7 @@ return array(
 
 	'boot' => function(Platform\Foundation\Extensions\Extension $extension)
 	{
+		// Register a function to set the active menu
 		if ( ! function_exists('set_active_menu'))
 		{
 			/**
@@ -169,6 +170,7 @@ return array(
 			}
 		}
 
+		// Register a function to retrieve the active menu
 		if ( ! function_exists('get_active_menu'))
 		{
 			/**
