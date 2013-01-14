@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Foundation\Controllers\ApiController;
+use Platform\Routing\Controllers\ApiController;
 use Platform\Menus\Menu;
 
 class MenusController extends ApiController {
