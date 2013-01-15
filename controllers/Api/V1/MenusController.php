@@ -47,7 +47,7 @@ class MenusController extends ApiController {
 			), 404);
 		}
 
-		return $this->response(array('menu' => $menu));
+		return $this->response(compact('menu'));
 	}
 
 	/**
@@ -64,13 +64,13 @@ class MenusController extends ApiController {
 			), 404);
 		}
 
-		foreach ($this->request->input('menu', array()) as $key => $value)
+		foreach ($this->api->getCurrentRequest()->input('menu', array()) as $key => $value)
 		{
 			$menu->{$key} = $value;
 		}
 
 		$menu->save();
-		return $this->response(array('menu' => $menu));
+		return $this->response(compact('menu'));
 	}
 
 }
