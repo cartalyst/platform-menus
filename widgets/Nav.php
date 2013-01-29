@@ -38,60 +38,67 @@ class Nav {
 	 */
 	public function show($identifier = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
-		// Fallback active path
-		$activePath = array();
-
-		if ( ! is_numeric($identifier))
+		try
 		{
-			// If we have an active menu, we'll fill out the path now
-			if ($activeMenu = get_active_menu())
+			// Fallback active path
+			$activePath = array();
+
+			if ( ! is_numeric($identifier))
 			{
+				// If we have an active menu, we'll fill out the path now
+				if ($activeMenu = get_active_menu())
+				{
+					$result     = API::get("menus/$activeMenu/path");
+					$activePath = $result['path'];
+					unset($result);
+				}
+
+				// If the "start" property is a string, it's
+				// the slug of the menu which to render
+				$children = $this->getChildrenForSlug($identifier, $depth);
+			}
+			else
+			{
+				// Active menu is required for path based output
+				if ( ! $activeMenu = get_active_menu())
+				{
+					throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
+				}
+
 				$result     = API::get("menus/$activeMenu/path");
 				$activePath = $result['path'];
 				unset($result);
-			}
 
-			// If the "start" property is a string, it's
-			// the slug of the menu which to render
-			$children = $this->getChildrenForSlug($identifier, $depth);
-		}
-		else
-		{
-			// Active menu is required for path based output
-			if ( ! $activeMenu = get_active_menu())
-			{
-				throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
-			}
-
-			$result     = API::get("menus/$activeMenu/path");
-			$activePath = $result['path'];
-			unset($result);
-
-			if ( ! isset($activePath[$identifier]))
-			{
-				return '';
-
-				// Let's help the user out by formatting the path
-				// for them.
-				array_walk($activePath, function(&$slug, $index)
+				if ( ! isset($activePath[$identifier]))
 				{
-					$slug = "$index => '$slug'";
-				});
+					return '';
 
-				throw new \InvalidArgumentException(sprintf(
-					'Path index of [%d] does not exist on active menu path [%s].',
-					$identifier,
-					implode(', ', $activePath)
-				));
+					// Let's help the user out by formatting the path
+					// for them.
+					array_walk($activePath, function(&$slug, $index)
+					{
+						$slug = "$index => '$slug'";
+					});
+
+					throw new \InvalidArgumentException(sprintf(
+						'Path index of [%d] does not exist on active menu path [%s].',
+						$identifier,
+						implode(', ', $activePath)
+					));
+				}
+
+				$children = $this->getChildrenForSlug($activePath[$identifier], $depth);
 			}
 
-			$children = $this->getChildrenForSlug($activePath[$identifier], $depth);
+			// Loop through and prepare the child for display
+			foreach ($children as $child)
+			{
+				$this->prepareChildRecursively($child, $beforeUri, $activePath);
+			}
 		}
-
-		// Loop through and prepare the child for display
-		foreach ($children as $child)
+		catch (\Cartalyst\Api\ApiHttpException $e)
 		{
-			$this->prepareChildRecursively($child, $beforeUri, $activePath);
+			return null;
 		}
 
 		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
@@ -151,7 +158,7 @@ class Nav {
 				$child->in_active_path = in_array($child->slug, $activePath);
 
 				break;
-			
+
 			// We'll fire an event for the logic to be handled by the correct
 			// driver.
 			default:
