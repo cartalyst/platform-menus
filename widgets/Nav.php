@@ -98,7 +98,7 @@ class Nav {
 		}
 		catch (\Cartalyst\Api\ApiHttpException $e)
 		{
-			return null;
+			return '';
 		}
 
 		return \View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
@@ -167,7 +167,7 @@ class Nav {
 		}
 
 		// Recursive!
-		foreach ($child->children as $grandChild)
+		foreach ($child->getChildren() as $grandChild)
 		{
 			$this->prepareChildRecursively($grandChild, $beforeUri, $activePath);
 		}
