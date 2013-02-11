@@ -117,7 +117,7 @@ return array(
 	| your composer.json file specifies the autoloading logic, 'platform',
 	| where your extension receives convention autoloading based on Platform
 	| standards, or a closure which takes two parameters, first is an instance of
-	| Composer\Autoload\ClassLoader and second is Platform\Extensions\Extension.
+	| Composer\Autoload\ClassLoader and second is Cartalyst\Extensions\ExtensionInterface.
 	| The autoload must set appropriate classes and namespaces available when the
 	| extension is started.
 	|
@@ -143,16 +143,32 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
+	| Register Callback
+	|--------------------------------------------------------------------------
+	|
+	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a parameter
+	| and is called when the extension is registered. This can do whatever custom
+	| logic is needed upon registering.
+	|
+	*/
+
+	'register' => function(Cartalyst\Extensions\ExtensionInterface $extension)
+	{
+
+	},
+
+	/*
+	|--------------------------------------------------------------------------
 	| Boot Callback
 	|--------------------------------------------------------------------------
 	|
-	| Closure which takes a Platform\Extensions\Extension object as a parameter
+	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a parameter
 	| and is called when the extension is booted. This can do whatever custom
 	| logic is needed upon booting.
 	|
 	*/
 
-	'boot' => function(Platform\Extensions\Extension $extension)
+	'boot' => function(Cartalyst\Extensions\ExtensionInterface $extension)
 	{
 		// Register a function to set the active menu
 		if ( ! function_exists('set_active_menu'))
@@ -201,12 +217,12 @@ return array(
 	|
 	| Routes closure to be called when the Extension is started. Register any
 	| custom routing logic here. This closure takes a
-	| Platform\Extensions\Extension object as a parameter just in case you
+	| Cartalyst\Extensions\ExtensionInterface object as a parameter just in case you
 	| need it.
 	|
 	*/
 
-	'routes' => function(Platform\Extensions\Extension $extension)
+	'routes' => function(Cartalyst\Extensions\ExtensionInterface $extension)
 	{
 		Route::get('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
 		Route::put('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
