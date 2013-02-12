@@ -18,7 +18,9 @@
  * @link       http://cartalyst.com
  */
 
-class Menu extends \Cartalyst\Nesty\Model {
+use Cartalyst\NestedSets\Model;
+
+class Menu extends Model {
 
 	/**
 	 * The table associated with the model.
@@ -49,7 +51,7 @@ class Menu extends \Cartalyst\Nesty\Model {
 	 *
 	 * @var array
 	 */
-	protected $nestyAttributes = array(
+	protected $reservedAttributes = array(
 		'left'  => 'lft',
 		'right' => 'rgt',
 		'tree'  => 'menu',
