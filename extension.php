@@ -152,7 +152,7 @@ return array(
 	|
 	*/
 
-	'register' => function(Cartalyst\Extensions\ExtensionInterface $extension)
+	'register' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
 
 	},
@@ -168,7 +168,7 @@ return array(
 	|
 	*/
 
-	'boot' => function(Cartalyst\Extensions\ExtensionInterface $extension)
+	'boot' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
 		// Register a function to set the active menu
 		if ( ! function_exists('set_active_menu'))
@@ -222,7 +222,7 @@ return array(
 	|
 	*/
 
-	'routes' => function(Cartalyst\Extensions\ExtensionInterface $extension)
+	'routes' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
 		Route::get('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
 		Route::put('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
