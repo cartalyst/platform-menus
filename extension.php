@@ -154,7 +154,10 @@ return array(
 
 	'register' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
-
+		$app['platform/menus::menu'] = function($app)
+		{
+			return new Platform\Menus\Menu;
+		};
 	},
 
 	/*

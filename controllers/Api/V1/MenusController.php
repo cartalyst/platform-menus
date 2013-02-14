@@ -24,13 +24,32 @@ use Platform\Menus\Menu;
 class MenusController extends ApiController {
 
 	/**
+	 *
+	 *
+	 * @var Platform\Menus\Model
+	 */
+	protected $model;
+
+	/**
+	 * Initializer.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$app = app();
+
+		$this->model = $app->make('platform/menus::menu');
+	}
+
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
 	public function index()
 	{
-		return $this->response(array('menus' => Menu::allRoot()));
+		return $this->response(array('menus' => $this->model->allRoot()));
 	}
 
 	/**
@@ -40,11 +59,9 @@ class MenusController extends ApiController {
 	 */
 	public function show($slug)
 	{
-		if ( ! $menu = Menu::find($slug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return $this->response(array(
-				'messge' => "Menu [$slug] does not exist.",
-			), 404);
+			return $this->response("Menu [$slug] does not exist.", 404);
 		}
 
 		return $this->response(compact('menu'));
@@ -57,19 +74,18 @@ class MenusController extends ApiController {
 	 */
 	public function update($slug)
 	{
-		if ( ! $menu = Menu::find($slug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return $this->response(array(
-				'messge' => "Menu [$slug] does not exist.",
-			), 404);
+			return $this->response("Menu [$slug] does not exist.", 404);
 		}
 
-		foreach ($this->api->getCurrentRequest()->input('menu', array()) as $key => $value)
+		foreach ($this->input('menu', array()) as $key => $value)
 		{
 			$menu->{$key} = $value;
 		}
 
 		$menu->save();
+
 		return $this->response(compact('menu'));
 	}
 

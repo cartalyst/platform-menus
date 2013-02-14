@@ -18,6 +18,7 @@
  * @link       http://cartalyst.com
  */
 
+use Cartalyst\Api\Http\ApiHttpException;
 use Platform\Admin\Controllers\Admin\AdminController;
 
 class MenusController extends AdminController {
@@ -25,11 +26,34 @@ class MenusController extends AdminController {
 	/**
 	 * Menu management main page.
 	 *
-	 * @return mixed
+	 * @return View
 	 */
 	public function getIndex()
 	{
-		return 'Coming soon!';
+		// Set the current active menu
+		set_active_menu('admin-menus');
+
+		try
+		{
+			// Get all the menus
+			$menus = \API::get('menus');
+		}
+		catch (ApiHttpException $e)
+		{
+
+		}
+
+		// Show the page
+		return \View::make('platform/menus::index', compact('menus'));
 	}
 
+	/**
+	 * Create a new menu.
+	 *
+	 * @return View
+	 */
+	public function getCreate()
+	{
+
+	}
 }

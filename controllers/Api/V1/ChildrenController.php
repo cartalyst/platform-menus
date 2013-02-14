@@ -24,17 +24,34 @@ use Platform\Menus\Menu;
 class ChildrenController extends ApiController {
 
 	/**
+	 *
+	 *
+	 * @var Platform\Menus\Model
+	 */
+	protected $model;
+
+	/**
+	 * Initializer.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$app = app();
+
+		$this->model = $app->make('platform/menus::menu');
+	}
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
 	public function show($menuSlug)
 	{
-		if ( ! $menu = Menu::find($menuSlug))
+		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response(array(
-				'message' => "Could not find children for [$menuSlug] menu as it does not exist.",
-			), 404);
+			return $this->response("Could not find children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
 		// Hydrate the children to the depth required
@@ -50,14 +67,13 @@ class ChildrenController extends ApiController {
 	 */
 	public function update($menuSlug)
 	{
-		if ( ! $menu = Menu::find($menuSlug))
+		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response(array(
-				'message' => "Could not update children for [$menuSlug] menu as it does not exist.",
-			), 404);
+			return $this->response("Could not update children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
-		$menu->mapChildren($this->request->input('children'));
+		$menu->mapChildren($this->input('children'));
+
 		return $this->show($menuSlug);
 	}
 

@@ -24,17 +24,34 @@ use Platform\Menus\Menu;
 class PathController extends ApiController {
 
 	/**
+	 *
+	 *
+	 * @var Platform\Menus\Model
+	 */
+	protected $model;
+
+	/**
+	 * Initializer.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$app = app();
+
+		$this->model = $app->make('platform/menus::menu');
+	}
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
 	public function show($slug)
 	{
-		if ( ! $menu = Menu::find($slug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return $this->response(array(
-				'messge' => "Menu [$slug] does not exist.",
-			), 404);
+			return $this->response("Menu [$slug] does not exist.", 404);
 		}
 
 		return $this->response(array('path' => $menu->getPathKeys()));
