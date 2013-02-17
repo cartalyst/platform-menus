@@ -29,13 +29,15 @@
 	<tbody>
 	@foreach($menus as $menu)
 		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>{{ $menu->name }}</td>
+			<td>{{ $menu->slug }}</td>
+			<td>{{ Lang::get('platform/menus::table.children', array('count' => $menu->getChildrenCount())) }}</td>
+			<td>
+				<a class="btn btn-small" href="{{ URL::to(ADMIN_URI.'/menus/edit/'.$menu->slug) }}">{{ Lang::get('button.edit') }}</a>
+				<a class="btn btn-small btn-danger" href="{{ URL::to(ADMIN_URI.'/menus/delete/'.$menu->slug) }}">{{ Lang::get('button.delete') }}</a>
+			</td>
 		</tr>
 	@endforeach
 	</tbody>
 </table>
-
 @stop

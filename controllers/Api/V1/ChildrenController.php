@@ -24,7 +24,7 @@ use Platform\Menus\Menu;
 class ChildrenController extends ApiController {
 
 	/**
-	 *
+	 * Holds the menu model.
 	 *
 	 * @var Platform\Menus\Model
 	 */
@@ -55,7 +55,7 @@ class ChildrenController extends ApiController {
 		}
 
 		// Hydrate the children to the depth required
-		$menu->hydrateChildren((int) \API::input('depth', 0));
+		$menu->hydrateChildren((int) $this->input('depth', 0));
 
 		return $this->response(array('children' => $menu->getChildren()));
 	}

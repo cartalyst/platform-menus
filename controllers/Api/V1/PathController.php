@@ -24,7 +24,7 @@ use Platform\Menus\Menu;
 class PathController extends ApiController {
 
 	/**
-	 *
+	 * Holds the menu model.
 	 *
 	 * @var Platform\Menus\Model
 	 */

@@ -26,7 +26,7 @@ class MenusController extends AdminController {
 	/**
 	 * Menu management main page.
 	 *
-	 * @return View
+	 * @return mixed
 	 */
 	public function getIndex()
 	{
@@ -36,11 +36,16 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the menus
-			$menus = \API::get('menus');
+			$result = \API::get('menus');
+			$menus = $result['menus'];
 		}
 		catch (ApiHttpException $e)
 		{
+			// Set the error message
+			# TODO !
 
+			// Redirect to the admin dashboard
+			return \Redirect::to(ADMIN_URI);
 		}
 
 		// Show the page
@@ -54,6 +59,91 @@ class MenusController extends AdminController {
 	 */
 	public function getCreate()
 	{
+		// Set the current active menu
+		set_active_menu('admin-menus');
+
+		// Show the page
+		return \View::make('platform/menus::manage');
+	}
+
+	/**
+	 * Create a new menu form processing page.
+	 *
+	 * @return Redirect
+	 */
+	public function postCreate()
+	{
+		return $this->postEdit();
+	}
+
+	/**
+	 * Update a menu
+	 *
+	 * @param  string  $slug
+	 * @return View
+	 */
+	public function getEdit($slug = null)
+	{
+		// Set the current active menu
+		set_active_menu('admin-menus');
+
+		try
+		{
+			// Get the menu information
+			$result = \API::get('menus/'.$slug);
+			$menu   = $result['menu'];
+
+			// Get this menu children
+			$result   = \API::get('menus/'.$slug.'/children');
+			$children = $result['children'];
+		}
+		catch (ApiHttpException $e)
+		{
+			// Set the error message
+			# TODO !
+
+			// Return to the menus management page
+			return \Redirect::to(ADMIN_URI.'/menus')->with('error', $e->getMessage());
+		}
+
+		// Show the page
+		return \View::make('platform/menus::manage', compact('menu', 'children'));
+	}
+
+	/**
+	 * Menu update form processing page.
+	 *
+	 * @param  string  $slug
+	 * @return Redirect
+	 */
+	public function postEdit($slug = null)
+	{
 
 	}
+
+	/**
+	 * Delete a menu.
+	 *
+	 * @param  string  $slug
+	 * @return Redirect
+	 */
+	public function getDelete($slug)
+	{
+		try
+		{
+			\API::delete('menus/'.$slug);
+
+			// Set the success message
+			# TODO !
+		}
+		catch (ApiHttpException $e)
+		{
+			// Set the error message.
+			# TODO !
+		}
+
+		// Redirect to the menus management page
+		return \Redirect::to(ADMIN_URI.'/menus');
+	}
+
 }

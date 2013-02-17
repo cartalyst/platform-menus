@@ -24,7 +24,17 @@ use Platform\Menus\Menu;
 class MenusController extends ApiController {
 
 	/**
+	 * Holds the form validation rules.
 	 *
+	 * @var array
+	 */
+	protected $validationRules = array(
+		'name' => 'required',
+		'slug' => 'required|unique:menus,slug'
+	);
+
+	/**
+	 * Holds the menu model.
 	 *
 	 * @var Platform\Menus\Model
 	 */
@@ -43,7 +53,7 @@ class MenusController extends ApiController {
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of root menus.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
@@ -53,15 +63,27 @@ class MenusController extends ApiController {
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Create a new menu.
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($slug)
+	public function create()
 	{
-		if ( ! $menu = $this->model->find($slug))
+
+	}
+
+	/**
+	 * Returns information about the given menu.
+	 *
+	 * @param  string  $menuSlug
+	 * @return Cartalyst\Api\Http\Response
+	 */
+	public function show($menuSlug)
+	{
+		// Get this menu information
+		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response("Menu [$slug] does not exist.", 404);
+			return $this->response(\Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		return $this->response(compact('menu'));
@@ -72,11 +94,12 @@ class MenusController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function update($slug)
+	public function update($menuSlug)
 	{
-		if ( ! $menu = $this->model->find($slug))
+		// Get this menu information
+		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response("Menu [$slug] does not exist.", 404);
+			return $this->response(\Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		foreach ($this->input('menu', array()) as $key => $value)
@@ -84,9 +107,38 @@ class MenusController extends ApiController {
 			$menu->{$key} = $value;
 		}
 
+		// Update the menu
 		$menu->save();
 
 		return $this->response(compact('menu'));
+	}
+
+	/**
+	 * Deletes the provided menu.
+	 *
+	 * @param  int  $menuSlug
+	 * @return Cartalyst\Api\Http\Response
+	 */
+	public function destroy($menuSlug)
+	{
+		// Get this menu information
+		if ( ! $menu = $this->model->find($menuSlug))
+		{
+			return $this->response(\Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
+		}
+
+
+
+		die;
+
+		// Was the menu deleted?
+		if ($menu->delete())
+		{
+			return $this->response(\Lang::get('platform/menus::messages.delete.success'));
+		}
+
+		// Something went wrong
+		return $this->response(\Lang::get('platform/menus::messages.delete.error'));
 	}
 
 }
