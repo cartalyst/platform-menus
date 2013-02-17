@@ -18,22 +18,36 @@ p { line-height: 1.5em; }
 
 
 #nestable-output{ width: 100%; height: 7em; font-size: 0.75em; line-height: 1.333333em; font-family: Consolas, monospace; padding: 5px; box-sizing: border-box; -moz-box-sizing: border-box; }
+</style>
 
-
-
-	</style>
-
-		<link href="http://platform2.cy/platform\themes\admin\platform\default\extensions\platform\menus\assets\css/menus.css" rel="stylesheet">
+<link href="http://platform2.cy/platform\themes\admin\platform\default\extensions\platform\menus\assets\css/menus.css" rel="stylesheet">
 
 
 </head>
 <body>
 
+	<form id="menu">
+
+		<div class="cf">
+			<h4>Add children</h4>
+			Name: <input name="children-name" id="children-name" value="" />
+			<br>
+			Slug: <input name="children-slug" id="children-slug" value="" />
+			<p>
+				<button name="children-add" id="children-add">Add Item</button>
+			</p>
+		</div>
+
+		<h4>Menu Properties</h4>
+		Name: <input type="text" name="root-name" id="root-name" value="{{ $menu->name }}" /><br />
+		Slug: <input type="text" name="root-slug" id="root-slug" value="{{ $menu->slug }}" />
+	</form>
+
+
 	<menu id="nestable-menu">
 		<button type="button" data-action="expand-all">Expand All</button>
 		<button type="button" data-action="collapse-all">Collapse All</button>
 	</menu>
-
 
 
 	<div class="cf">
@@ -44,17 +58,6 @@ p { line-height: 1.5em; }
 			@endforeach
 			</ol>
 		</div>
-	</div>
-
-
-
-	<div class="cf">
-		Name: <input name="children-name" id="children-name" value="" />
-		<br>
-		Slug: <input name="children-slug" id="children-slug" value="" />
-		<p>
-			<button name="children-add" id="children-add">Add Item</button>
-		</p>
 	</div>
 
 
@@ -75,7 +78,6 @@ $(document).ready(function()
 	{
 		/*
 		 * TODO:
-		 *	- Prepend the Menu slug to the children slug
 		 *  - Figure some way to not allow the same slug more than once ...
 		 *  - Refactor!?
 		 *
@@ -87,35 +89,66 @@ $(document).ready(function()
 
 			// Plugin default option values
 			var option = {
-				menuSelector         : '#nestable',
-				childrenNameSelector : '#children-name',
-				childrenSlugSelector : '#children-slug',
-				childrenAddSelector  : '#children-add'
+
+				// Slug separator
+				slugSeparator     : '-',
+
+				menuSelector      : '#nestable', // ...
+
+				// Root
+				rootNameSelector  : '#root-name',
+				rootSlugSelector  : '#root-slug',
+				//rootAddSelector   : '#root-save'
+
+				// Children
+				childNameSelector : '#children-name',
+				childSlugSelector : '#children-slug',
+				childAddSelector  : '#children-add'
+
 			};
 
 			// Extend the default options with the
 			// provided options.
-    		$.extend(option, options);
+			$.extend(option, options);
 
-			// Adding new children
-			$(option.childrenNameSelector).keyup(function(){
-				$(option.childrenSlugSelector).val(slugify($(this).val()));
+
+			/**
+			 * 	R O O T
+			 *
+			 */
+			$(option.rootNameSelector).keyup(function(){
+				// Update the root slug
+				$(option.rootSlugSelector).val(generateSlug($(this).val()));
+
+				// Update the children slug
+				$(option.childSlugSelector).val(generateChildrenSlug($(option.childNameSelector).val()));
 			});
-			$(option.childrenAddSelector).on('click', function()
+
+			/**
+			 *  C H I L D R E N
+			 *
+			 */
+			// generate the children slug
+			$(option.childNameSelector).keyup(function(){
+				$(option.childSlugSelector).val(generateChildrenSlug($(this).val()));
+			});
+			// Adding new children
+			$(option.childAddSelector).on('click', function()
 			{
-				name = $(option.childrenNameSelector).val();
-				slug = slugify($(option.childrenSlugSelector).val());
+				name = $(option.childNameSelector).val();
+				slug = slugify($(option.childSlugSelector).val());
 
 				if (name != '' && slug != '')
 				{
 					html = '<li class="dd-item" data-slug="' + slug + '"><div class="dd-handle">' + name + '</div></li>';
 					$(option.menuSelector + ' > ol').append(html);
 
-					// not working ....
 					updateOutput($(option.menuSelector).data('output', $(option.menuSelector + '-output')));
 				}
 			});
-			// ------
+
+
+
 
 
 			function updateOutput(e)
@@ -129,6 +162,41 @@ $(document).ready(function()
 				}
 			}
 
+
+
+			/**
+			 * Returns the current `Root item` slug.
+			 *
+			 * @return string
+			 */
+			function getRootSlug()
+			{
+				return $(option.rootSlugSelector).val() + option.slugSeparator;
+			}
+
+			/**
+			 * Generates a slug.
+			 *
+			 * @param  string
+			 * @return string
+			 */
+			function generateSlug(string)
+			{
+				return slugify(string);
+			}
+
+			/**
+			 * Generates a new children slug based
+			 * on the root item slug.
+			 *
+			 * @param  string
+			 * @return string
+			 */
+			function generateChildrenSlug(string)
+			{
+				return getRootSlug() + generateSlug(string);
+			}
+
 			/**
 			 * Converts a String to a Slug.
 			 *
@@ -136,19 +204,20 @@ $(document).ready(function()
 			 * @param  string
 			 * @return string
 			 */
-			function slugify(string, separator)
+			function slugify(string)
 			{
 				// Make sure we have a slug separator
-				separator = (typeof separator === 'undefined' ? '-' : separator);
+				separator = option.slugSeparator;
 
-				// Convert string to lowercase and
-				// remove any spaces.
+				// Converts a string to lowercase and
+				// removes spaces.
 				string = string.toLowerCase().replace(/^\s+|\s+$/g, '');
 
 				// Remove accents
 				var from = 'ĺěščřžýťňďàáäâèéëêìíïîòóöôùůúüûñç·/_,:;';
 				var to   = 'lescrzytndaaaaeeeeiiiioooouuuuunc------';
-				for (var i=0, l=from.length ; i<l ; i++) {
+				for (var i = 0, l = from.length; i < l; i++)
+				{
 					string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
 				}
 
