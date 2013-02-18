@@ -1,245 +1,65 @@
-<style type="text/css">
-
-.cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
-* html .cf { zoom: 1; }
-*:first-child+html .cf { zoom: 1; }
-
-html { margin: 0; padding: 0; }
-body { font-size: 100%; margin: 0; padding: 1.75em; font-family: 'Helvetica Neue', Arial, sans-serif; }
-
-h1 { font-size: 1.75em; margin: 0 0 0.6em 0; }
-
-a { color: #2996cc; }
-a:hover { text-decoration: none; }
-
-p { line-height: 1.5em; }
-.small { color: #666; font-size: 0.875em; }
-.large { font-size: 1.25em; }
-
-
-#nestable-output{ width: 100%; height: 7em; font-size: 0.75em; line-height: 1.333333em; font-family: Consolas, monospace; padding: 5px; box-sizing: border-box; -moz-box-sizing: border-box; }
-</style>
+<html>
+<head>
 
 <link href="http://platform2.cy/platform\themes\admin\platform\default\extensions\platform\menus\assets\css/menus.css" rel="stylesheet">
-
 
 </head>
 <body>
 
-	<form id="menu">
+	<form id="menu" method="post" action="">
+		<div class="cf" style="margin-bottom: 20px; padding: 10px; background-color: rgba(0, 0, 0, 0.1);">
+			<h4>Menu Properties</h4>
+			Name: <input type="text" name="menu-name" id="menu-name" value="{{ $menu->name }}" /><br />
+			Slug: <input type="text" name="menu-slug" id="menu-slug" value="{{ $menu->slug }}" />
+		</div>
 
-		<div class="cf">
+		<div style="width: 30%; float: left; padding: 10px; background-color: rgba(0, 0, 0, 0.1);">
 			<h4>Add children</h4>
-			Name: <input name="children-name" id="children-name" value="" />
-			<br>
-			Slug: <input name="children-slug" id="children-slug" value="" />
+
+			Name: <input name="newitem-name" id="newitem-name" value="" /><br />
+			Slug: <input name="newitem-slug" id="newitem-slug" value="" />
+
 			<p>
-				<button name="children-add" id="children-add">Add Item</button>
+				<button name="newitem-add" id="newitem-add">Add Item</button>
 			</p>
 		</div>
 
-		<h4>Menu Properties</h4>
-		Name: <input type="text" name="root-name" id="root-name" value="{{ $menu->name }}" /><br />
-		Slug: <input type="text" name="root-slug" id="root-slug" value="{{ $menu->slug }}" />
+		<div style="width: 60%; xpadding: 10px; margin: 0 0 0 20px; float: left;">
+
+			<menu id="nestable-menu" style="padding: 0; padding: 10px; margin: 0 0 20px 0; background-color: rgba(0, 0, 0, 0.1);">
+				<button type="button" data-action="expand-all">Expand All</button>
+				<button type="button" data-action="collapse-all">Collapse All</button>
+			</menu>
+
+			<div class="dd" id="nestable">
+				<ol class="dd-list">
+				@foreach ($children as $child)
+					@include('platform/menus::children', array('item' => $child))
+				@endforeach
+				</ol>
+			</div>
+		</div>
+
 	</form>
 
+	<div class="cf"></div>
 
-	<menu id="nestable-menu">
-		<button type="button" data-action="expand-all">Expand All</button>
-		<button type="button" data-action="collapse-all">Collapse All</button>
-	</menu>
-
-
-	<div class="cf">
-		<div class="dd" id="nestable">
-			<ol class="dd-list">
-			@foreach ($children as $child)
-				@include('platform/menus::children', array('item' => $child))
-			@endforeach
-			</ol>
-		</div>
-	</div>
-
-
-	<p><strong>Serialised Output (per list)</strong></p>
+	<p><strong>Serialised Output</strong></p>
 
 	<textarea id="nestable-output"></textarea>
 
 
 
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="http://dbushell.github.com/Nestable/jquery.nestable.js"></script>
+<script src="http://platform2.cy/platform/themes/admin/platform/default/extensions/platform/menus/assets/js/jquery.menumanager.js"></script>
 <script>
-
 $(document).ready(function()
 {
-	(function($)
-	{
-		/*
-		 * TODO:
-		 *  - Figure some way to not allow the same slug more than once ...
-		 *  - Refactor!?
-		 *
-		 */
-		jQuery.MenuManager = function(options)
-		{
-			// to implement
-			var currentSlugs = [];
+	$('#menu').MenuManager({
+		persistedSlugs : {{{ json_encode($persistedSlugs) }}}
 
-			// Plugin default option values
-			var option = {
-
-				// Slug separator
-				slugSeparator     : '-',
-
-				menuSelector      : '#nestable', // ...
-
-				// Root
-				rootNameSelector  : '#root-name',
-				rootSlugSelector  : '#root-slug',
-				//rootAddSelector   : '#root-save'
-
-				// Children
-				childNameSelector : '#children-name',
-				childSlugSelector : '#children-slug',
-				childAddSelector  : '#children-add'
-
-			};
-
-			// Extend the default options with the
-			// provided options.
-			$.extend(option, options);
-
-
-			/**
-			 * 	R O O T
-			 *
-			 */
-			$(option.rootNameSelector).keyup(function(){
-				// Update the root slug
-				$(option.rootSlugSelector).val(generateSlug($(this).val()));
-
-				// Update the children slug
-				$(option.childSlugSelector).val(generateChildrenSlug($(option.childNameSelector).val()));
-			});
-
-			/**
-			 *  C H I L D R E N
-			 *
-			 */
-			// generate the children slug
-			$(option.childNameSelector).keyup(function(){
-				$(option.childSlugSelector).val(generateChildrenSlug($(this).val()));
-			});
-			// Adding new children
-			$(option.childAddSelector).on('click', function()
-			{
-				name = $(option.childNameSelector).val();
-				slug = slugify($(option.childSlugSelector).val());
-
-				if (name != '' && slug != '')
-				{
-					html = '<li class="dd-item" data-slug="' + slug + '"><div class="dd-handle">' + name + '</div></li>';
-					$(option.menuSelector + ' > ol').append(html);
-
-					updateOutput($(option.menuSelector).data('output', $(option.menuSelector + '-output')));
-				}
-			});
-
-
-
-
-
-			function updateOutput(e)
-			{
-				var list   = e.length ? e : $(e.target),
-					output = list.data('output');
-				if (window.JSON) {
-					output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
-				} else {
-					output.val('JSON browser support required for this demo.');
-				}
-			}
-
-
-
-			/**
-			 * Returns the current `Root item` slug.
-			 *
-			 * @return string
-			 */
-			function getRootSlug()
-			{
-				return $(option.rootSlugSelector).val() + option.slugSeparator;
-			}
-
-			/**
-			 * Generates a slug.
-			 *
-			 * @param  string
-			 * @return string
-			 */
-			function generateSlug(string)
-			{
-				return slugify(string);
-			}
-
-			/**
-			 * Generates a new children slug based
-			 * on the root item slug.
-			 *
-			 * @param  string
-			 * @return string
-			 */
-			function generateChildrenSlug(string)
-			{
-				return getRootSlug() + generateSlug(string);
-			}
-
-			/**
-			 * Converts a String to a Slug.
-			 *
-			 * @param  string
-			 * @param  string
-			 * @return string
-			 */
-			function slugify(string)
-			{
-				// Make sure we have a slug separator
-				separator = option.slugSeparator;
-
-				// Converts a string to lowercase and
-				// removes spaces.
-				string = string.toLowerCase().replace(/^\s+|\s+$/g, '');
-
-				// Remove accents
-				var from = 'ĺěščřžýťňďàáäâèéëêìíïîòóöôùůúüûñç·/_,:;';
-				var to   = 'lescrzytndaaaaeeeeiiiioooouuuuunc------';
-				for (var i = 0, l = from.length; i < l; i++)
-				{
-					string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-				}
-
-				// Return the slugified string
-				return string.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-					.replace(/\s+/g, separator) // collapse whitespace and replace by _
-					.replace(/-+/g, separator) // collapse dashes
-					.replace(new RegExp(separator + '+$'), '') // Trim separator from start
-					.replace(new RegExp('^' + separator + '+'), ''); // Trim separator from end
-			}
-
-
-			// activate Nestable for list 1
-			$('#nestable').nestable({maxDepth : 100}).on('change', updateOutput);
-
-			// output initial serialised data
-			updateOutput($('#nestable').data('output', $('#nestable-output')));
-		}
-	})(jQuery);
-
-	$.MenuManager();
-
+	});
 
 
 
@@ -256,3 +76,5 @@ $(document).ready(function()
 	});
 });
 </script>
+</body>
+</html>

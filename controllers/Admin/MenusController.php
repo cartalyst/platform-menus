@@ -82,6 +82,7 @@ class MenusController extends AdminController {
 	 * @param  string  $slug
 	 * @return View
 	 */
+
 	public function getEdit($slug = null)
 	{
 		// Set the current active menu
@@ -96,6 +97,34 @@ class MenusController extends AdminController {
 			// Get this menu children
 			$result   = \API::get('menus/'.$slug.'/children');
 			$children = $result['children'];
+
+			# workaround to get all the menu slugs on a
+			# flat array, this should get ALL the menus slugs
+			# not only the direct children of this menu !!!
+			$persistedSlugs = $this->flatMenuSlugs($children);
+			/*
+			try
+			{
+				// Get all the children.
+				$all_children = API::get('menus/flat');
+			}
+			catch (APIClientException $e)
+			{
+				// Fallback array.
+				$all_children = array();
+			}
+
+			// Get array of persisted menu slugs.
+			// It's used by javascript to validate unique slugs on
+			// client end in addition to server end.
+			//
+			$persisted_slugs = array();
+			foreach ($all_children as $child)
+			{
+			    $persisted_slugs[] = array_get($child, 'slug');
+			}
+			sort($persisted_slugs); // Purely for debugging on JS end really.
+			*/
 		}
 		catch (ApiHttpException $e)
 		{
@@ -107,7 +136,7 @@ class MenusController extends AdminController {
 		}
 
 		// Show the page
-		return \View::make('platform/menus::manage', compact('menu', 'children'));
+		return \View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs'));
 	}
 
 	/**
@@ -145,5 +174,23 @@ class MenusController extends AdminController {
 		// Redirect to the menus management page
 		return \Redirect::to(ADMIN_URI.'/menus');
 	}
+
+
+
+	protected function flatMenuSlugs($items, $return = array())
+	{
+		foreach ($items as $item)
+		{
+			$return[] = $item->slug;
+
+			if ($children = $item->getChildren())
+			{
+				$return = $this->flatMenuSlugs($children, $return);
+			}
+		}
+
+		return $return;
+	}
+
 
 }
