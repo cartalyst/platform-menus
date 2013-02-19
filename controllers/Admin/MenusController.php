@@ -80,7 +80,7 @@ class MenusController extends AdminController {
 	 * Update a menu
 	 *
 	 * @param  string  $menuSlug
-	 * @return View
+	 * @return mixed
 	 */
 
 	public function getEdit($menuSlug = null)
@@ -121,7 +121,7 @@ class MenusController extends AdminController {
 			$persisted_slugs = array();
 			foreach ($all_children as $child)
 			{
-			    $persisted_slugs[] = array_get($child, 'slug');
+				$persisted_slugs[] = array_get($child, 'slug');
 			}
 			sort($persisted_slugs); // Purely for debugging on JS end really.
 			*/
@@ -153,7 +153,7 @@ class MenusController extends AdminController {
 		// JSON string on non-AJAX form.
 		if (is_string($children_hierarchy))
 		{
-		    $children_hierarchy = json_decode($children_hierarchy, true);
+			$children_hierarchy = json_decode($children_hierarchy, true);
 		}
 
 		// Prepare our children
@@ -161,14 +161,13 @@ class MenusController extends AdminController {
 
 		foreach ($children_hierarchy as $child)
 		{
-		    // Ensure no bad data is coming through from POST.
-		    //
-		    if ( ! is_array($child))
-		    {
+			// Ensure no bad data is coming through from POST
+			if ( ! is_array($child))
+			{
 				continue;
-		    }
+			}
 
-		    $this->process_child_recursively($child, $children);
+			$this->process_child_recursively($child, $children);
 		}
 
 		// Prepare data for the API
@@ -177,7 +176,7 @@ class MenusController extends AdminController {
 		// Declare all the inputs we need to check
 		$inputs = array(
 			'name' => 'menu-name',
-			'slug' => 'menu-slug'
+			//'slug' => 'menu-slug'
 		);
 
 		//
@@ -189,28 +188,41 @@ class MenusController extends AdminController {
 			}
 		}
 
-		// Do we have children? We must have!
+		// Do we have children?
 		if (count($children) > 0)
 		{
 			$data['children'] = $children;
 		}
 
-		var_dump($data);
+		try
+		{
+			// Make the request
+			\API::put('menus/'.$menuSlug, array('menu' => $data));
 
-		\API::put('menus/'.$menuSlug, array('menu' => $data));
+			// Set the success message
+			# TODO !
+		}
+		catch (APIClientException $e)
+		{
+			// Set the error message
+			# TODO !
+		}
+
+		//
+		return \Redirect::to(ADMIN_URI.'/menus/edit/'.$menuSlug);
 	}
 
 	/**
 	 * Delete a menu.
 	 *
-	 * @param  string  $slug
+	 * @param  string  $menuSlug
 	 * @return Redirect
 	 */
-	public function getDelete($slug)
+	public function getDelete($menuSlug)
 	{
 		try
 		{
-			\API::delete('menus/'.$slug);
+			\API::delete('menus/'.$menuSlug);
 
 			// Set the success message
 			# TODO !
@@ -243,8 +255,8 @@ class MenusController extends AdminController {
 	}
 
 
-    protected function process_child_recursively($child, &$children)
-    {
+	protected function process_child_recursively($child, &$children)
+	{
 		$new_child = array(
 			'name'                => \Input::get('children.' . $child['slug'] . '.name'),
 			'slug'                => \Input::get('children.' . $child['slug'] . '.slug'),
@@ -264,19 +276,19 @@ class MenusController extends AdminController {
 		/*
 		if ( ! Input::get('children.' . $child['id'] . '.is_new'))
 		{
-		    $new_child['id'] = $child['id'];
+			$new_child['id'] = $child['id'];
 		}
 
 		// Now, look for secure URLs
 		if ($new_child['type'] == Menu::TYPE_STATIC and URL::valid($new_child['uri']))
 		{
-		    $new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
+			$new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
 		}
 
 		// Relative URL, look in the POST data
 		else
 		{
-		    $new_child['secure'] = \Input::get('children.' . $child['id'] . '.secure', 0);
+			$new_child['secure'] = \Input::get('children.' . $child['id'] . '.secure', 0);
 		}
 		*/
 
@@ -284,17 +296,17 @@ class MenusController extends AdminController {
 		//
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		{
-		    $grand_children = array();
+			$grand_children = array();
 
-		    foreach ($child['children'] as $child)
-		    {
+			foreach ($child['children'] as $child)
+			{
 				$this->process_child_recursively($child, $grand_children);
-		    }
+			}
 
-		    $new_child['children'] = $grand_children;
+			$new_child['children'] = $grand_children;
 		}
 
 		$children[] = $new_child;
-    }
+	}
 
 }

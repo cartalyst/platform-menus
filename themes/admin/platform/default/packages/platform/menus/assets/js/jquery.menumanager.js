@@ -96,8 +96,6 @@
 
 			// When we submit the form
 			base.$el.submit(function(e){
-				//e.preventDefault();
-
 				// Append input to the form. It's values are JSON encoded..
 				base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestableSelector).nestable('serialize')) + '\'>');
 
@@ -110,6 +108,8 @@
 		 * Adds a new item.
 		 *
 		 * @return void
+		 * @todo   Add TempoJs, so when we add a new item we
+		 *         use the template, instead of this messy code!
 		 */
 		base.addNewItem = function(e) {
 
@@ -134,6 +134,7 @@
 					// remove the error...
 
 
+
 					// ###################################
 					// Add the children...
 					// ### find another clean way to do this
@@ -153,11 +154,10 @@
 							html += '</div>';
 						html += '</div>';
 					html += '</li>';
+					$(base.options.nestableSelector + ' > ol').append(html);
 					// ###################################
 
 
-
-					$(base.options.nestableSelector + ' > ol').append(html);
 
 					// Add the item to the array
 					base.options.persistedSlugs.push(slug);

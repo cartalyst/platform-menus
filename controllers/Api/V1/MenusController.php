@@ -107,7 +107,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				// \API::put('menus/'.$menuSlug.'/children', array('children' => $value));
+				\API::put('menus/'.$menuSlug.'/children', array('children' => $value));
 			}
 			else
 			{
@@ -115,13 +115,13 @@ class MenusController extends ApiController {
 			}
 		}
 
-		// Update the menu
+		// Was the menu updated?
 		if ($menu->save())
 		{
-
+			return $this->response(compact('menu'));
 		}
 
-		return $this->response(compact('menu'));
+		# nopp
 	}
 
 	/**
