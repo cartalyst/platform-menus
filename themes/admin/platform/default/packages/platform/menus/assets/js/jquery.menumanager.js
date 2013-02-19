@@ -31,7 +31,6 @@
 		// Add a reverse reference to the DOM object
 		base.$el.data('MenuManager', base);
 
-
 		/**
 		 * Initializer
 		 *
@@ -44,13 +43,14 @@
 			base.options = $.extend({},$.MenuManager.defaultOptions, options);
 
 			// Activate Nestable
-			$(base.options.nestableSelector).nestable({maxDepth : 100}).on('change', base.updateOutput);
+			$(base.options.nestableSelector).nestable({
+				maxDepth : 100,
+				expandBtnHTML : false,
+				collapseBtnHTML : false
+			});
 
 			// Generate the initial children slug
 			$(base.options.itemSlugSelector).val(base.generateNewItemSlug());
-
-			// output initial serialised data
-			base.updateOutput();
 
 			// When the root menu name value changes
 			$(base.options.rootNameSelector).keyup(function() {
@@ -87,8 +87,24 @@
 
 			});
 
-		};
+			// Show the children details
+			$(base.options.children.toggleSelector).live('click', function() {
 
+				$(this).closest(base.options.nestable.itemSelector).find(base.options.nestable.itemDetailsSelector).toggleClass('show');
+
+			});
+
+			// When we submit the form
+			base.$el.submit(function(e){
+				//e.preventDefault();
+
+				// Append input to the form. It's values are JSON encoded..
+				base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestableSelector).nestable('serialize')) + '\'>');
+
+				return true;
+			});
+
+		};
 
 		/**
 		 * Adds a new item.
@@ -117,15 +133,29 @@
 				{
 					// remove the error...
 
+
+					// ###################################
 					// Add the children...
 					// ### find another clean way to do this
 					html = '<li class="child dd-item dd3-item" data-slug="' + slug + '">';
+
 						html += '<div class="dd-handle dd3-handle">Drag</div>';
-						html += '<div class="dd3-content">';
-							html += '<div class="remove" style="float: right;">x</div>';
-							html += name;
+
+						html += '<div class="dd3-content">' + name + '</div>';
+
+						html += '<div class="child">';
+							html += '<div class="dd-handlex teste-handle toggle-children">Toogle Details</div>';
+							html += '<div class="child-details">';
+								html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
+								html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
+								html += '<br ><br>';
+								html += '<button name="remove" class="remove">Delete</button>';
+							html += '</div>';
 						html += '</div>';
 					html += '</li>';
+					// ###################################
+
+
 
 					$(base.options.nestableSelector + ' > ol').append(html);
 
@@ -138,28 +168,9 @@
 
 				}
 
-				//
-				base.updateOutput();
-
 			}
 
 		};
-
-
-		/**
-		 * Generates the root menu slug, after
-		 * the root menu name has been updated.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.generateRootSlug = function(value) {
-
-			// Update the current menu slug
-			$(base.options.rootSlugSelector).val(base.generateSlug(value));
-
-		};
-
 
 		/**
 		 * Updates the new item slug.
@@ -180,6 +191,19 @@
 
 		};
 
+		/**
+		 * Generates the root menu slug, after
+		 * the root menu name has been updated.
+		 *
+		 * @param  string
+		 * @return void
+		 */
+		base.generateRootSlug = function(value) {
+
+			// Update the current menu slug
+			$(base.options.rootSlugSelector).val(base.generateSlug(value));
+
+		};
 
 		/**
 		 * Removes an item.
@@ -189,7 +213,9 @@
 		base.removeItem = function() {
 
 			// Get this item slug
-			itemSlug = $(this).closest(base.options.nestable.itemSelector).data('slug');
+			//itemSlug = $(this).closest(base.options.nestable.itemSelector).data('slug');
+			itemSlug = $(this).closest('.dd-item').data('slug');
+
 
 			// Remove the item from the array
 			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
@@ -197,11 +223,7 @@
 			// Remove the item from the menu
 			$('.dd-item[data-slug="' + itemSlug + '"]').remove();
 
-			//
-			base.updateOutput();
-
 		};
-
 
 		/**
 		 * Returns the current `Root item` slug.
@@ -213,7 +235,6 @@
 			return $(base.options.rootSlugSelector).val() + base.options.slugSeparator;
 
 		};
-
 
 		/**
 		 * Generates a slug.
@@ -231,7 +252,6 @@
 
 		};
 
-
 		/**
 		 * Generates a new item slug based
 		 * on the root item slug.
@@ -248,7 +268,6 @@
 			return base.getRootSlug() + base.generateSlug(string);
 
 		};
-
 
 		/**
 		 * Slugify a string.
@@ -282,25 +301,6 @@
 
 		};
 
-
-		/**
-		 *
-		 *
-		 * @return void
-		 */
-		base.updateOutput = function() {
-			e = $(base.options.nestableSelector).data('output', $(base.options.nestableSelector + '-output'))
-
-			var list   = e.length ? e : $(e.target),
-				output = list.data('output');
-			if (window.JSON) {
-				output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
-			} else {
-				output.val('JSON browser support required for this demo.');
-			}
-
-		};
-
 		// Run initializer
 		base.Initializer();
 
@@ -330,15 +330,20 @@
 
 		// Children
 		children : {
-			toogleSelector : '.toogle-details'
+			toggleSelector : '.toggle-children'
 		},
 
 		// Nestable settings
 		nestable : {
 			// namespace : == nestableSelector
 			itemSelector : '.child',
-			itemRemove   : '.remove'
-		}
+			itemRemove   : '.remove',
+
+			itemDetailsSelector : '.child-details'
+		},
+
+
+		hierarchyInputName: 'children_hierarchy'
 
 	};
 

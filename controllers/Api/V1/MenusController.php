@@ -102,13 +102,24 @@ class MenusController extends ApiController {
 			return $this->response(\Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
 		}
 
+		//
 		foreach ($this->input('menu', array()) as $key => $value)
 		{
-			$menu->{$key} = $value;
+			if ($key === 'children')
+			{
+				// \API::put('menus/'.$menuSlug.'/children', array('children' => $value));
+			}
+			else
+			{
+				$menu->{$key} = $value;
+			}
 		}
 
 		// Update the menu
-		$menu->save();
+		if ($menu->save())
+		{
+
+		}
 
 		return $this->response(compact('menu'));
 	}

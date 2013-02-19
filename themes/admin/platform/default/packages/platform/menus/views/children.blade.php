@@ -1,15 +1,21 @@
-<li class="child dd-item dd3-item" data-slug="{{ $item->slug }}">
+<li class="dd-item dd3-item" data-slug="{{ $item->slug }}">
 	<div class="dd-handle dd3-handle">Drag</div>
-	<div class="dd3-content">
-		<div class="remove" style="float: right;">x</div>
-		{{ $item->name }}
+
+	<div class="dd3-content">{{ $item->name }}</div>
+
+	<div class="child">
+		<div class="dd-handlex teste-handle toggle-children">Toogle Details</div>
+		<div class="child-details">
+
+			<input type="text" name="children[{{ $item->slug }}][name]" value="{{ $item->name }}"><br/>
+			<input type="text" name="children[{{ $item->slug }}][slug]" value="{{ $item->slug }}">
+
+			<br ><br>
+			<button name="remove" class="remove">Delete</button>
+
+		</div>
 	</div>
-	<!--
-	<div class="dd-handlex teste-handle toggle-children">Toogle Details</div>
-	<div class="child-details" style="display: none;">
-		something here
-	</div>
-	-->
+
 @if ($children = $item->getChildren())
 	<ol class="dd-list">
 	@foreach ($children as $child)

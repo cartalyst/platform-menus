@@ -79,11 +79,11 @@ class MenusController extends AdminController {
 	/**
 	 * Update a menu
 	 *
-	 * @param  string  $slug
+	 * @param  string  $menuSlug
 	 * @return View
 	 */
 
-	public function getEdit($slug = null)
+	public function getEdit($menuSlug = null)
 	{
 		// Set the current active menu
 		set_active_menu('admin-menus');
@@ -91,11 +91,11 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$result = \API::get('menus/'.$slug);
+			$result = \API::get('menus/'.$menuSlug);
 			$menu   = $result['menu'];
 
 			// Get this menu children
-			$result   = \API::get('menus/'.$slug.'/children');
+			$result   = \API::get('menus/'.$menuSlug.'/children');
 			$children = $result['children'];
 
 			# workaround to get all the menu slugs on a
@@ -106,7 +106,7 @@ class MenusController extends AdminController {
 			try
 			{
 				// Get all the children.
-				$all_children = API::get('menus/flat');
+				$all_children = API::get('menus', array('flat' => true, 'onlySlugs' => true));
 			}
 			catch (APIClientException $e)
 			{
@@ -142,12 +142,62 @@ class MenusController extends AdminController {
 	/**
 	 * Menu update form processing page.
 	 *
-	 * @param  string  $slug
+	 * @param  string  $menuSlug
 	 * @return Redirect
 	 */
-	public function postEdit($slug = null)
+	public function postEdit($menuSlug = null)
 	{
+		// Get the children hierarchy.
+		$children_hierarchy = \Input::get('children_hierarchy');
 
+		// JSON string on non-AJAX form.
+		if (is_string($children_hierarchy))
+		{
+		    $children_hierarchy = json_decode($children_hierarchy, true);
+		}
+
+		// Prepare our children
+		$children = array();
+
+		foreach ($children_hierarchy as $child)
+		{
+		    // Ensure no bad data is coming through from POST.
+		    //
+		    if ( ! is_array($child))
+		    {
+				continue;
+		    }
+
+		    $this->process_child_recursively($child, $children);
+		}
+
+		// Prepare data for the API
+		$data = array();
+
+		// Declare all the inputs we need to check
+		$inputs = array(
+			'name' => 'menu-name',
+			'slug' => 'menu-slug'
+		);
+
+		//
+		foreach ($inputs as $input => $slug)
+		{
+			if ($$input = \Input::get($slug))
+			{
+				$data[$input] = $$input;
+			}
+		}
+
+		// Do we have children? We must have!
+		if (count($children) > 0)
+		{
+			$data['children'] = $children;
+		}
+
+		var_dump($data);
+
+		\API::put('menus/'.$menuSlug, array('menu' => $data));
 	}
 
 	/**
@@ -192,5 +242,59 @@ class MenusController extends AdminController {
 		return $return;
 	}
 
+
+    protected function process_child_recursively($child, &$children)
+    {
+		$new_child = array(
+			'name'                => \Input::get('children.' . $child['slug'] . '.name'),
+			'slug'                => \Input::get('children.' . $child['slug'] . '.slug'),
+			// 'uri'              => Input::get('children.' . $child['id'] . '.uri'),
+			// 'page_id'          => Input::get('children.' . $child['id'] . '.page_id'),
+			// 'class'            => Input::get('children.' . $child['id'] . '.class'),
+			// 'target'           => Input::get('children.' . $child['id'] . '.target', Menu::TARGET_SELF),
+			// 'visibility'       => Input::get('children.' . $child['id'] . '.visibility', Menu::VISIBILITY_ALWAYS),
+			// 'group_visibility' => (array) Input::get('children.' . $child['id'] . '.group_visibility'),
+			// 'status'           => Input::get('children.' . $child['id'] . '.status', 1),
+			// 'type'             => Input::get('children.' . $child['id'] . '.type', Menu::TYPE_STATIC),
+		);
+
+		// Determine if we're a new child or not. If we're
+		// new, we don't attach an ID. Nesty will handle the
+		// rest.
+		/*
+		if ( ! Input::get('children.' . $child['id'] . '.is_new'))
+		{
+		    $new_child['id'] = $child['id'];
+		}
+
+		// Now, look for secure URLs
+		if ($new_child['type'] == Menu::TYPE_STATIC and URL::valid($new_child['uri']))
+		{
+		    $new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
+		}
+
+		// Relative URL, look in the POST data
+		else
+		{
+		    $new_child['secure'] = \Input::get('children.' . $child['id'] . '.secure', 0);
+		}
+		*/
+
+		// If we have children, call the function again.
+		//
+		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
+		{
+		    $grand_children = array();
+
+		    foreach ($child['children'] as $child)
+		    {
+				$this->process_child_recursively($child, $grand_children);
+		    }
+
+		    $new_child['children'] = $grand_children;
+		}
+
+		$children[] = $new_child;
+    }
 
 }
