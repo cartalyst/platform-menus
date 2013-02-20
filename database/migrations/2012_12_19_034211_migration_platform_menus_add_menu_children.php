@@ -12,8 +12,10 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 	 */
 	public function up()
 	{
-		if ($admin = Menu::find('admin') === null)
+		// Does the Admin menu exists?
+		if (is_null($admin = Menu::find('admin')))
 		{
+			// Create the Admin menu
 			$admin = new Menu(array(
 				'slug'      => 'admin',
 				'extension' => 'platform/menus',
@@ -22,25 +24,25 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 			$admin->makeRoot();
 		}
 
-		$system = new Menu(array(
+		// Create the Admin > System menu
+		$menu = new Menu(array(
 			'slug'      => 'admin-system',
 			'extension' => 'platform/menus',
 			'name'      => 'System',
 			'driver'    => 'static',
 			'uri'       => 'settings',
 		));
+		$menu->makeLastChildOf($admin);
 
-		$system->makeLastChildOf($admin);
-
-		$menus = new Menu(array(
+		// Create the Admin > Menus menu
+		$menu = new Menu(array(
 			'slug'      => 'admin-menus',
 			'extension' => 'platform/menus',
 			'name'      => 'Menus',
 			'driver'    => 'static',
 			'uri'       => 'menus',
 		));
-
-		$menus->makeLastChildOf($admin);
+		$menu->makeLastChildOf($admin);
 	}
 
 	/**

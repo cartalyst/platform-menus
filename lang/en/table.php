@@ -25,6 +25,6 @@ return array(
 
 	// Children specific
 	'children_count' => 'Number of Children',
-	'children'       => ':count children'
+	'children'       => ':count children',
 
 );

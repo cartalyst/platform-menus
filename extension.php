@@ -25,7 +25,7 @@ return array(
 	| Name
 	|--------------------------------------------------------------------------
 	|
-	| This is a name for your extension that is for presentational purposes
+	| This is the name of your extension, it is for presentational purposes
 	| only.
 	|
 	*/
@@ -146,18 +146,20 @@ return array(
 	| Register Callback
 	|--------------------------------------------------------------------------
 	|
-	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a parameter
-	| and is called when the extension is registered. This can do whatever custom
-	| logic is needed upon registering.
+	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a
+	| parameter and is called when the extension is registered. This can do
+	| whatever custom logic is needed upon registering.
 	|
 	*/
 
 	'register' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
+
 		$app['platform/menus::menu'] = function($app)
 		{
 			return new Platform\Menus\Menu;
 		};
+
 	},
 
 	/*
@@ -165,15 +167,18 @@ return array(
 	| Boot Callback
 	|--------------------------------------------------------------------------
 	|
-	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a parameter
-	| and is called when the extension is booted. This can do whatever custom
-	| logic is needed upon booting.
+	| Closure which takes a Cartalyst\Extensions\ExtensionInterface object as a
+	| parameter and is called when the extension is booted. This can do whatever
+	| custom logic is needed upon booting.
 	|
 	*/
 
 	'boot' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
+
+		// Include the helpers file
 		require_once __DIR__.'/helpers.php';
+
 	},
 
 	/*
@@ -190,9 +195,11 @@ return array(
 
 	'routes' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
+		// API Routes
 		Route::get('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
 		Route::put('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
 		Route::get('{api}/v1/menus/{slug}/path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
+
 	},
 
 	/*
@@ -211,8 +218,8 @@ return array(
 	|
 	| For example:
 	|
-	|    platform/users::admin.usersController@getIndex
-	|    Platform\Users\Controllers\Admin\UsersController@getIndex
+	|    platform/menus::admin.menusController@getIndex
+	|    Platform\Menus\Controllers\Admin\MenusController@getIndex
 	|
 	| These are automatically generated for controller routes however you are
 	| free to add your own permissions and check against them at any time.

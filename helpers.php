@@ -18,7 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-// Register a function to set the active menu
 if ( ! function_exists('set_active_menu'))
 {
 	/**
@@ -30,11 +29,11 @@ if ( ! function_exists('set_active_menu'))
 	function set_active_menu($slug)
 	{
 		$app = app();
+
 		$app['platform.menus.active'] = $slug;
 	}
 }
 
-// Register a function to retrieve the active menu
 if ( ! function_exists('get_active_menu'))
 {
 	/**

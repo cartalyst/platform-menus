@@ -73,7 +73,7 @@ class Menu extends Model {
 			$slug = str_replace('_', '-', snake_case(substr($method, 0, -4)));
 
 			// Lazily create the menu item
-			if (($menu = static::find($slug)) === null)
+			if (is_null($menu = static::find($slug)))
 			{
 				$menu = new static(array(
 					'slug' => $slug,

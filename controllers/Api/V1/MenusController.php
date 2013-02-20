@@ -29,8 +29,10 @@ class MenusController extends ApiController {
 	 * @var array
 	 */
 	protected $validationRules = array(
+
 		'name' => 'required',
 		'slug' => 'required|unique:menus,slug'
+
 	);
 
 	/**
