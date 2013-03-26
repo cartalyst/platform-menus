@@ -12,6 +12,8 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 	 */
 	public function up()
 	{
+		$admin = Menu::adminMenu();
+
 		// Create the Admin > Menus menu
 		$menu = new Menu(array(
 			'slug'      => 'admin-menus',
