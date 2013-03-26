@@ -161,7 +161,7 @@ return array(
 
 		$app['platform/menus::menu'] = function($app)
 		{
-			return new Platform\Menus\Menu;
+			return new Platform\Ui\Menu;
 		};
 
 	},

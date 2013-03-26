@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Controllers\Api\V1;
+<?php namespace Platform\Ui\Controllers\Api\V1;
 /**
  * Part of the Platform application.
  *
@@ -19,14 +19,14 @@
  */
 
 use Platform\Routing\Controllers\ApiController;
-use Platform\Menus\Menu;
+use Platform\Ui\Menu;
 
 class PathController extends ApiController {
 
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Menus\Model
+	 * @var Platform\Ui\Model
 	 */
 	protected $model;
 
