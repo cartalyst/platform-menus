@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Platform\Menus\Menu;
+use Platform\Ui\Menu;
 
 class MigrationPlatformMenusAddMenuChildren extends Migration {
 
@@ -12,28 +12,6 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 	 */
 	public function up()
 	{
-		// Does the Admin menu exists?
-		if (is_null($admin = Menu::find('admin')))
-		{
-			// Create the Admin menu
-			$admin = new Menu(array(
-				'slug'      => 'admin',
-				'extension' => 'platform/menus',
-				'name'      => 'Admin',
-			));
-			$admin->makeRoot();
-		}
-
-		// Create the Admin > System menu
-		$menu = new Menu(array(
-			'slug'      => 'admin-system',
-			'extension' => 'platform/menus',
-			'name'      => 'System',
-			'driver'    => 'static',
-			'uri'       => 'settings',
-		));
-		$menu->makeLastChildOf($admin);
-
 		// Create the Admin > Menus menu
 		$menu = new Menu(array(
 			'slug'      => 'admin-menus',
@@ -52,16 +30,8 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 	 */
 	public function down()
 	{
-		// Notice we don't delete the 'admin' menu ever.
-		$slugs = array('admin-system', 'admin-menus');
-
-		foreach ($slugs as $slug)
-		{
-			if ($menu = Menu::find($slug))
-			{
-				$menu->delete();
-			}
-		}
+		$menu = Menu::find('admin-menus');
+		$menu->delete();
 	}
 
 }
