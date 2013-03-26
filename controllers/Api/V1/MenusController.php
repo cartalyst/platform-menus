@@ -1,4 +1,4 @@
-<?php namespace Platform\Ui\Controllers\Api\V1;
+<?php namespace Platform\Menus\Controllers\Api\V1;
 /**
  * Part of the Platform application.
  *

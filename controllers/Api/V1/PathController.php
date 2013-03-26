@@ -1,4 +1,4 @@
-<?php namespace Platform\Ui\Controllers\Api\V1;
+<?php namespace Platform\Menus\Controllers\Api\V1;
 /**
  * Part of the Platform application.
  *
@@ -54,7 +54,7 @@ class PathController extends ApiController {
 			return $this->response("Menu [$slug] does not exist.", 404);
 		}
 
-		return $this->response(array('path' => $menu->getPathKeys()));
+		return $this->response(array('path' => $menu->getPath()));
 	}
 
 }

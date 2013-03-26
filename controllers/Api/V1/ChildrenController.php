@@ -1,4 +1,4 @@
-<?php namespace Platform\Ui\Controllers\Api\V1;
+<?php namespace Platform\Menus\Controllers\Api\V1;
 /**
  * Part of the Platform application.
  *
@@ -55,7 +55,7 @@ class ChildrenController extends ApiController {
 		}
 
 		// Hydrate the children to the depth required
-		$menu->hydrateChildren((int) $this->input('depth', 0));
+		$menu->findChildren((int) $this->input('depth', 0));
 
 		return $this->response(array('children' => $menu->getChildren()));
 	}
