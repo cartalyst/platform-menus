@@ -72,10 +72,6 @@ class ChildrenController extends ApiController {
 			return $this->response("Could not update children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
-		#\Log::error(print_r($this->input('children'), true));
-
-		#die;
-
 		$menu->mapTree($this->input('children'));
 
 		return $this->show($menuSlug);
