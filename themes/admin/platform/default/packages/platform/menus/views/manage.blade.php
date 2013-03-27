@@ -3,7 +3,7 @@
 {{-- Page title --}}
 @section('title')
 @parent
-:: {{ Lang::get('platform/users::users/general.title') }}
+:: {{ Lang::get('platform/menus::general.title') }}
 @stop
 
 {{-- Partial Assets --}}
@@ -30,7 +30,7 @@
 <script>
 jQuery(document).ready(function($) {
 	$('#menu').MenuManager({
-		persistedSlugs : {{ json_encode($persistedSlugs) }}
+		persistedSlugs : {{ $persistedSlugs }}
 
 	});
 

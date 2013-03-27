@@ -35,8 +35,8 @@ class MenusController extends AdminController {
 
 		try
 		{
-			// Get all the menus
-			$result = \API::get('menus');
+			// Get all the root menus
+			$result = \API::get('menus', array('root' => true));
 			$menus = $result['menus'];
 		}
 		catch (ApiHttpException $e)
@@ -98,33 +98,9 @@ class MenusController extends AdminController {
 			$result   = \API::get('menus/'.$menuSlug.'/children');
 			$children = $result['children'];
 
-			# workaround to get all the menu slugs on a
-			# flat array, this should get ALL the menus slugs
-			# not only the direct children of this menu !!!
-			$persistedSlugs = $this->flatMenuSlugs($children);
-			/*
-			try
-			{
-				// Get all the children.
-				$all_children = API::get('menus', array('flat' => true, 'onlySlugs' => true));
-			}
-			catch (APIClientException $e)
-			{
-				// Fallback array.
-				$all_children = array();
-			}
-
-			// Get array of persisted menu slugs.
-			// It's used by javascript to validate unique slugs on
-			// client end in addition to server end.
-			//
-			$persisted_slugs = array();
-			foreach ($all_children as $child)
-			{
-				$persisted_slugs[] = array_get($child, 'slug');
-			}
-			sort($persisted_slugs); // Purely for debugging on JS end really.
-			*/
+			// Get all the menu slugs
+			$result         = \API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$persistedSlugs = json_encode($result['menus']);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -155,7 +131,6 @@ class MenusController extends AdminController {
 		{
 			$children_hierarchy = json_decode($children_hierarchy, true);
 		}
-
 		// Prepare our children
 		$children = array();
 
@@ -176,7 +151,7 @@ class MenusController extends AdminController {
 		// Declare all the inputs we need to check
 		$inputs = array(
 			'name' => 'menu-name',
-			//'slug' => 'menu-slug'
+			'slug' => 'menu-slug'
 		);
 
 		//
@@ -239,20 +214,6 @@ class MenusController extends AdminController {
 
 
 
-	protected function flatMenuSlugs($items, $return = array())
-	{
-		foreach ($items as $item)
-		{
-			$return[] = $item->slug;
-
-			if ($children = $item->getChildren())
-			{
-				$return = $this->flatMenuSlugs($children, $return);
-			}
-		}
-
-		return $return;
-	}
 
 
 	protected function process_child_recursively($child, &$children)

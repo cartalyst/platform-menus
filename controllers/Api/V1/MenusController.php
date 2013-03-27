@@ -53,13 +53,41 @@ class MenusController extends ApiController {
 	}
 
 	/**
-	 * Display a listing of root menus.
+	 *
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
 	public function index()
 	{
-		return $this->response(array('menus' => $this->model->allRoot()));
+		// Get all the root menus
+		if ($this->input('root'))
+		{
+			$menus = $this->model->allRoot();
+		}
+
+		// Get all the menus on a flat array
+		elseif ($this->input('flat'))
+		{
+			if ($this->input('onlySlugs'))
+			{
+				$menus = array();
+
+				foreach ($this->model->findAll() as $menu)
+				{
+					$menus[] = $menu->slug;
+				}
+			}
+			else
+			{
+				$menus = $this->model->findAll();
+			}
+		}
+		else
+		{
+			$menus = $this->model->all(); # same as the above
+		}
+
+		return $this->response(compact('menus'));
 	}
 
 	/**
