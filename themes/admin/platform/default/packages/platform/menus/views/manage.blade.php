@@ -1,7 +1,7 @@
 <html>
 <head>
 
-<link href="http://platform2.cy/platform\themes\admin\platform\default\extensions\platform\menus\assets\css/menus.css" rel="stylesheet">
+<link href="http://platform2.dev/platform\themes\admin\platform\default\extensions\platform\menus\assets\css/menus.css" rel="stylesheet">
 
 </head>
 <body>
@@ -54,21 +54,22 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="http://dbushell.github.com/Nestable/jquery.nestable.js"></script>
-<script src="http://platform2.cy/platform/themes/admin/platform/default/extensions/platform/menus/assets/js/jquery.menumanager.js"></script>
-<script src="http://platform2.cy/platform/themes/admin/platform/default/extensions/platform/menus/assets/js/tempo.js"></script>
+<script src="http://platform2.dev/platform/themes/admin/platform/default/extensions/platform/menus/assets/js/jquery.menumanager.js"></script>
+<script src="http://platform2.dev/platform/themes/admin/platform/default/extensions/platform/menus/assets/js/tempo.js"></script>
+
 <script>
 $(document).ready(function()
 {
-
+/*
 var twitter = Tempo.prepare('nestable', {'var_braces' : '\\[\\[\\]\\]', 'tag_braces' : '\\[\\?\\?\\]'});
 twitter.starting();
 $.getJSON("http://platform2.cy/admin/menus/json", function(data) {
 	twitter.render(data.results);
-});
+});*/
 
 
 	$('#menu').MenuManager({
-		persistedSlugs : {{{ json_encode($persistedSlugs) }}}
+		persistedSlugs : {{ json_encode($persistedSlugs) }}
 
 	});
 

@@ -29,10 +29,8 @@ class MenusController extends ApiController {
 	 * @var array
 	 */
 	protected $validationRules = array(
-
 		'name' => 'required',
-		'slug' => 'required|unique:menus,slug'
-
+		'slug' => 'required|unique:menus,slug',
 	);
 
 	/**
@@ -139,10 +137,6 @@ class MenusController extends ApiController {
 		{
 			return $this->response(\Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
 		}
-
-
-
-		die;
 
 		// Was the menu deleted?
 		if ($menu->delete())
