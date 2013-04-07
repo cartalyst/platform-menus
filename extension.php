@@ -180,9 +180,6 @@ return array(
 	'boot' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
 
-		// Include the helpers file
-		require_once __DIR__.'/helpers.php';
-
 	},
 
 	/*
