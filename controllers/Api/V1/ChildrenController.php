@@ -51,13 +51,13 @@ class ChildrenController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response("Could not find children for [$menuSlug] menu as it does not exist.", 404);
+			return \Response::api("Could not find children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
 		// Hydrate the children to the depth required
-		$menu->findChildren((int) $this->input('depth', 0));
+		$menu->findChildren((int) \Input::get('depth', 0));
 
-		return $this->response(array('children' => $menu->getChildren()));
+		return \Response::api(array('children' => $menu->getChildren()));
 	}
 
 	/**
@@ -69,10 +69,10 @@ class ChildrenController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return $this->response("Could not update children for [$menuSlug] menu as it does not exist.", 404);
+			return \Response::api("Could not update children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
-		$menu->mapTree($this->input('children'));
+		$menu->mapTree(\Input::get('children'));
 
 		return $this->show($menuSlug);
 	}
