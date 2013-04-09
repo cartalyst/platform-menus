@@ -20,8 +20,8 @@
 (function($){
 
 	$.MenuManager = function(el, options) {
-		// To avoid scope issues, use 'base' instead of 'this'
-		// to reference this class from internal events and functions.
+		// To avoid scope issues, we use 'base' instead of 'this' to
+		// reference this class from internal events and functions.
 		var base = this;
 
 		// Access to jQuery and DOM versions of element
@@ -38,22 +38,17 @@
 		 */
 		base.Initializer = function() {
 
-			// Extend the default options with the
-			// provided options.
-			base.options = $.extend({},$.MenuManager.defaultOptions, options);
+			// Extend the default options with the provided options
+			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
 
 			// Activate Nestable
-			$(base.options.nestableSelector).nestable({
-				maxDepth : 100,
-				expandBtnHTML : false,
-				collapseBtnHTML : false
-			});
+			$(base.options.nestable.selector).nestable(base.options.nestable);
 
 			// Generate the initial children slug
-			$(base.options.itemSlugSelector).val(base.generateNewItemSlug());
+			$(base.options.form.children.slug).val(base.generateNewItemSlug());
 
 			// When the root menu name value changes
-			$(base.options.rootNameSelector).keyup(function() {
+			$(base.options.form.root.name).keyup(function() {
 
 				// Clean the root menu slug value
 				base.generateRootSlug($(this).val());
@@ -64,7 +59,7 @@
 			});
 
 			// When the root menu slug value changes
-			$(base.options.rootSlugSelector).on('change', function() {
+			$(base.options.form.root.slug).on('change', function() {
 
 				// Clean the root menu slug value
 				base.generateRootSlug($(this).val());
@@ -74,30 +69,41 @@
 
 			});
 
-			// Removes an item
-			$(base.options.nestable.itemRemove).live('click', base.removeItem);
-
 			// Adds a new item
-			$(base.options.itemAddSelector).on('click', base.addNewItem);
+			$(base.options.form.children.submit).on('click', base.addNewItem);
+
+			// Removes an item
+			$(base.options.children.itemRemove).live('click', base.removeItem);
 
 			// Generates the new item slug
-			$(base.options.itemNameSelector).keyup(function() {
+			$(base.options.form.children.name).keyup(function() {
 
-				$(base.options.itemSlugSelector).val(base.generateNewItemSlug($(this).val()));
+				$(base.options.form.children.slug).val(base.generateNewItemSlug($(this).val()));
 
 			});
 
 			// Show the children details
 			$(base.options.children.toggleSelector).live('click', function() {
 
-				$(this).closest(base.options.nestable.itemSelector).find(base.options.nestable.itemDetailsSelector).toggleClass('show');
+				//$(this).closest(base.options.nestable.itemClass + ' .child').find(base.options.children.itemDetailsSelector).toggleClass('show');
+				/*
+				^^ this works as expected, but i need to have it sorted this way on the markup !
+				.dd-item
+					.child
+						.toggle-children
+						.children-details
+				*/
+
+
+				// works, but opens all the children aswell .... grrrrrrrrrrrrr
+				$(this).parent().find('.child-details').toggleClass('show');
 
 			});
 
-			// When we submit the form
+			// When the main form is submited
 			base.$el.submit(function(e){
 				// Append input to the form. It's values are JSON encoded..
-				base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestableSelector).nestable('serialize')) + '\'>');
+				base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestable.selector).nestable('serialize')) + '\'>');
 
 				return true;
 			});
@@ -117,8 +123,8 @@
 			e.preventDefault();
 
 			// Get the new item data
-			name = $(base.options.itemNameSelector).val();
-			slug = base.slugify($(base.options.itemSlugSelector).val());
+			name = $(base.options.form.children.name).val();
+			slug = base.slugify($(base.options.form.children.slug).val());
 
 			// Make sure that both child name and slug
 			// are not empty.
@@ -154,7 +160,7 @@
 							html += '</div>';
 						html += '</div>';
 					html += '</li>';
-					$(base.options.nestableSelector + ' > ol').append(html);
+					$(base.options.nestable.selector + ' > ol').append(html);
 					// ###################################
 
 
@@ -163,8 +169,8 @@
 					base.options.persistedSlugs.push(slug);
 
 					// Clean the new item inputs
-					$(base.options.itemNameSelector).val('');
-					$(base.options.itemSlugSelector).val(base.generateNewItemSlug());
+					$(base.options.form.children.name).val('');
+					$(base.options.form.children.slug).val(base.generateNewItemSlug());
 
 				}
 
@@ -180,13 +186,13 @@
 		base.updateNewItemSlug = function() {
 
 			// Get the new item name value
-			itemNameValue = $(base.options.itemNameSelector).val();
+			itemNameValue = $(base.options.form.children.name).val();
 
 			// Does this new menu item have a name?
 			if (itemNameValue.length == 0)
 			{
 				// Update the new item slug
-				$(base.options.itemSlugSelector).val(base.generateNewItemSlug(itemNameValue));
+				$(base.options.form.children.slug).val(base.generateNewItemSlug(itemNameValue));
 			}
 
 		};
@@ -201,7 +207,7 @@
 		base.generateRootSlug = function(value) {
 
 			// Update the current menu slug
-			$(base.options.rootSlugSelector).val(base.generateSlug(value));
+			$(base.options.form.root.slug).val(base.generateSlug(value));
 
 		};
 
@@ -212,16 +218,17 @@
 		 */
 		base.removeItem = function() {
 
-			// Get this item slug
-			//itemSlug = $(this).closest(base.options.nestable.itemSelector).data('slug');
-			itemSlug = $(this).closest('.dd-item').data('slug');
+			// Get the item selector
+			itemSelector = '.' + base.options.nestable.itemClass;
 
+			// Get this item slug
+			itemSlug = $(this).closest(itemSelector).data('slug');
 
 			// Remove the item from the array
 			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
 
 			// Remove the item from the menu
-			$('.dd-item[data-slug="' + itemSlug + '"]').remove();
+			$(itemSelector + '[data-slug="' + itemSlug + '"]').remove();
 
 		};
 
@@ -232,7 +239,7 @@
 		 */
 		base.getRootSlug = function(string) {
 
-			return $(base.options.rootSlugSelector).val() + base.options.slugSeparator;
+			return $(base.options.form.root.slug).val() + base.options.slugSeparator;
 
 		};
 
@@ -240,15 +247,22 @@
 		 * Generates a slug.
 		 *
 		 * @param  string
+		 * @param  bool
 		 * @return string
 		 */
-		base.generateSlug = function(string) {
+		base.generateSlug = function(string, includeSeparator) {
 
 			// Make sure we have a string
-			string = typeof string !== 'undefined' ? string : '';
+			string = base.slugify(typeof string !== 'undefined' ? string : '');
+
+			// Do we want to include the slug separator?
+			if (typeof includeSeparator !== 'undefined' ? includeSeparator : false)
+			{
+				string += base.options.slugSeparator;
+			}
 
 			// Return the slugified string
-			return base.slugify(string);
+			return string;
 
 		};
 
@@ -316,30 +330,52 @@
 		// Slug separator
 		slugSeparator : '-',
 
-		// Selector that activates the Nestable plugin
-		nestableSelector : '#nestable',
+		// Form elements
+		form : {
 
-		// Root selectors
-		rootNameSelector : '#menu-name',
-		rootSlugSelector : '#menu-slug',
+			// Root elements
+			root : {
+				name : '#menu-name',
+				slug : '#menu-slug'
+			},
 
-		// New item
-		itemNameSelector : '#newitem-name',
-		itemSlugSelector : '#newitem-slug',
-		itemAddSelector  : '#newitem-add',
+			// New item elements
+			children : {
+				name   : '#newitem-name',
+				slug   : '#newitem-slug',
+				submit : '#newitem-add'
+			}
+
+		},
 
 		// Children
 		children : {
-			toggleSelector : '.toggle-children'
+			toggleSelector : '.toggle-children',
+
+			itemRemove : '.remove',
+
+			itemDetailsSelector : '.child-details'
 		},
 
 		// Nestable settings
 		nestable : {
-			// namespace : == nestableSelector
-			itemSelector : '.child',
-			itemRemove   : '.remove',
-
-			itemDetailsSelector : '.child-details'
+			selector        : '#nestable',
+			listNodeName    : 'ol',
+			itemNodeName    : 'li',
+			rootClass       : 'dd',
+			listClass       : 'dd-list',
+			itemClass       : 'dd-item',
+			dragClass       : 'dd-dragel',
+			handleClass     : 'dd-handle',
+			collapsedClass  : 'dd-collapsed',
+			placeClass      : 'dd-placeholder',
+			noDragClass     : 'dd-nodrag',
+			emptyClass      : 'dd-empty',
+			expandBtnHTML   : false,
+			collapseBtnHTML : false,
+			group           : 0,
+			maxDepth        : 100,
+			threshold       : 20
 		},
 
 

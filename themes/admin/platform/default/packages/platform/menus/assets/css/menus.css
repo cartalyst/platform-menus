@@ -1,21 +1,3 @@
-.cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
-* html .cf { zoom: 1; }
-*:first-child+html .cf { zoom: 1; }
-
-html { margin: 0; padding: 0; }
-body { font-size: 100%; margin: 0; padding: 1.75em; font-family: 'Helvetica Neue', Arial, sans-serif; }
-
-h4 { margin: 0 0 0.6em 0; }
-
-a { color: #2996cc; }
-a:hover { text-decoration: none; }
-
-p { line-height: 1.5em; }
-.small { color: #666; font-size: 0.875em; }
-.large { font-size: 1.25em; }
-
-
-
 
 /**
  * Nestable
@@ -89,7 +71,7 @@ p { line-height: 1.5em; }
  * Nestable Draggable Handles
  */
 
-.dd3-content { display: block; height: 30px; margin: 5px 0; padding: 5px 10px 5px 40px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
+.child-name { display: block; height: 30px; margin: 5px 0; padding: 5px 10px 5px 40px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
     background: #fafafa;
     background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
     background:    -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
@@ -98,7 +80,7 @@ p { line-height: 1.5em; }
             border-radius: 3px;
     box-sizing: border-box; -moz-box-sizing: border-box;
 }
-.dd3-content:hover { color: #2ea8e5; background: #fff; }
+.child-name:hover { color: #2ea8e5; background: #fff; }
 
 .dd-dragel > .dd3-item > .dd3-content { margin: 0; }
 
