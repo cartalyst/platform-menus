@@ -45,7 +45,7 @@ class MenusController extends AdminController {
 			# TODO !
 
 			// Redirect to the admin dashboard
-			return \Redirect::to(ADMIN_URI);
+			return \Redirect::toAdmin('');
 		}
 
 		// Show the page
@@ -108,7 +108,7 @@ class MenusController extends AdminController {
 			# TODO !
 
 			// Return to the menus management page
-			return \Redirect::to(ADMIN_URI.'/menus')->with('error', $e->getMessage());
+			return \Redirect::toAdmin('menus')->with('error', $e->getMessage());
 		}
 
 		// Show the page
@@ -184,7 +184,7 @@ class MenusController extends AdminController {
 		}
 
 		//
-		return \Redirect::to(ADMIN_URI.'/menus/edit/'.$menuSlug);
+		return \Redirect::toAdmin('menus/edit/'.$menuSlug);
 	}
 
 	/**
@@ -209,7 +209,7 @@ class MenusController extends AdminController {
 		}
 
 		// Redirect to the menus management page
-		return \Redirect::to(ADMIN_URI.'/menus');
+		return \Redirect::toAdmin('menus');
 	}
 
 

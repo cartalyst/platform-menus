@@ -13,7 +13,7 @@
 	<header class="clearfix">
 		<h1>{{ Lang::get('platform/menus::general.title') }}</h1>
 		<nav class="tertiary-navigation">
-			@widget('platform/ui::nav.show', array(2, 1, 'nav nav-pills', ADMIN_URI))
+			@widget('platform/ui::nav.show', array(2, 1, 'nav nav-pills', app('platform.admin.uri')))
 		</nav>
 	</header>
 
@@ -22,7 +22,7 @@
 	<section class="content">
 
 		<div class="actions clearfix">
-			<a class="btn btn-large btn-primary pull-right" href="{{ URL::to(ADMIN_URI.'/menus/create') }}">{{ Lang::get('button.create') }}</a>
+			<a class="btn btn-large btn-primary pull-right" href="{{ URL::toAdmin('menus/create') }}">{{ Lang::get('button.create') }}</a>
 		</div>
 
 		<table class="table table-bordered">
@@ -41,8 +41,8 @@
 					<td>{{ $menu->slug }}</td>
 					<td>{{ Lang::get('platform/menus::table.children', array('count' => $menu->getChildrenCount())) }}</td>
 					<td>
-						<a class="btn btn-small" href="{{ URL::to(ADMIN_URI.'/menus/edit/'.$menu->slug) }}">{{ Lang::get('button.edit') }}</a>
-						<a class="btn btn-small btn-danger" href="{{ URL::to(ADMIN_URI.'/menus/delete/'.$menu->slug) }}">{{ Lang::get('button.delete') }}</a>
+						<a class="btn btn-small" href="{{ URL::toAdmin('menus/edit/'.$menu->slug) }}">{{ Lang::get('button.edit') }}</a>
+						<a class="btn btn-small btn-danger" href="{{ URL::toAdmin('menus/delete/'.$menu->slug) }}">{{ Lang::get('button.delete') }}</a>
 					</td>
 				</tr>
 			@endforeach
