@@ -45,7 +45,7 @@
 			$(base.options.nestable.selector).nestable(base.options.nestable);
 
 			// Generate the initial children slug
-			$(base.options.form.children.slug).val(base.generateNewItemSlug());
+			$(base.options.form.newItem.slug).val(base.generateNewItemSlug());
 
 			// When the root menu name value changes
 			$(base.options.form.root.name).keyup(function() {
@@ -70,42 +70,31 @@
 			});
 
 			// Adds a new item
-			$(base.options.form.children.submit).on('click', base.addNewItem);
+			$(base.options.form.newItem.submit).on('click', base.addNewItem);
 
 			// Removes an item
 			$(base.options.children.itemRemove).live('click', base.removeItem);
 
 			// Generates the new item slug
-			$(base.options.form.children.name).keyup(function() {
+			$(base.options.form.newItem.name).keyup(function() {
 
-				$(base.options.form.children.slug).val(base.generateNewItemSlug($(this).val()));
+				$(base.options.form.newItem.slug).val(base.generateNewItemSlug($(this).val()));
 
 			});
 
 			// Show the children details
 			$(base.options.children.toggleSelector).live('click', function() {
 
-				//$(this).closest(base.options.nestable.itemClass + ' .child').find(base.options.children.itemDetailsSelector).toggleClass('show');
-				/*
-				^^ this works as expected, but i need to have it sorted this way on the markup !
-				.dd-item
-					.child
-						.toggle-children
-						.children-details
-				*/
-
-
-				// works, but opens all the children aswell .... grrrrrrrrrrrrr
-				$(this).parent().find('.child-details').toggleClass('show');
+				$(this).parent().children(base.options.children.itemDetailsSelector).toggleClass('show');
 
 			});
 
 			// When the main form is submited
 			base.$el.submit(function(e){
-				// Append input to the form. It's values are JSON encoded..
-				base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestable.selector).nestable('serialize')) + '\'>');
 
-				return true;
+				// Append input to the form. It's values are JSON encoded..
+				return base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestable.selector).nestable('serialize')) + '\'>');
+
 			});
 
 		};
@@ -123,8 +112,8 @@
 			e.preventDefault();
 
 			// Get the new item data
-			name = $(base.options.form.children.name).val();
-			slug = base.slugify($(base.options.form.children.slug).val());
+			name = $(base.options.form.newItem.name).val();
+			slug = base.slugify($(base.options.form.newItem.slug).val());
 
 			// Make sure that both child name and slug
 			// are not empty.
@@ -134,46 +123,43 @@
 				{
 					alert('item with this slug already exists');
 					// show the error...
-				}
-				else
-				{
-					// remove the error...
 
-
-
-					// ###################################
-					// Add the children...
-					// ### find another clean way to do this
-					html = '<li class="child dd-item dd3-item" data-slug="' + slug + '">';
-
-						html += '<div class="dd-handle dd3-handle">Drag</div>';
-
-						html += '<div class="dd3-content">' + name + '</div>';
-
-						html += '<div class="child">';
-							html += '<div class="dd-handlex teste-handle toggle-children">Toogle Details</div>';
-							html += '<div class="child-details">';
-								html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
-								html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
-								html += '<br ><br>';
-								html += '<button name="remove" class="remove">Delete</button>';
-							html += '</div>';
-						html += '</div>';
-					html += '</li>';
-					$(base.options.nestable.selector + ' > ol').append(html);
-					// ###################################
-
-
-
-					// Add the item to the array
-					base.options.persistedSlugs.push(slug);
-
-					// Clean the new item inputs
-					$(base.options.form.children.name).val('');
-					$(base.options.form.children.slug).val(base.generateNewItemSlug());
-
+					return false;
 				}
 
+
+				// remove the error...
+
+
+
+				// ###################################
+				// Add the children...
+				// ### find another clean way to do this
+				html = '<li class="dd-item dd3-item" data-slug="' + slug + '">';
+
+					html += '<div class="dd-handle dd3-handle">Drag</div>';
+
+					html += '<div class="child-name">' + name + '</div>';
+
+					html += '<div class="teste-handle toggle-children">Toogle Details</div>';
+					html += '<div class="child-details">';
+						html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
+						html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
+						html += '<br ><br>';
+						html += '<button name="remove" class="remove">Delete</button>';
+					html += '</div>';
+				html += '</li>';
+				$(base.options.nestable.selector + ' > ol').append(html);
+				// ###################################
+
+
+
+				// Add the item to the array
+				base.options.persistedSlugs.push(slug);
+
+				// Clean the new item inputs
+				$(base.options.form.newItem.name).val('');
+				$(base.options.form.newItem.slug).val(base.generateNewItemSlug());
 			}
 
 		};
@@ -186,13 +172,13 @@
 		base.updateNewItemSlug = function() {
 
 			// Get the new item name value
-			itemNameValue = $(base.options.form.children.name).val();
+			itemNameValue = $(base.options.form.newItem.name).val();
 
 			// Does this new menu item have a name?
 			if (itemNameValue.length == 0)
 			{
 				// Update the new item slug
-				$(base.options.form.children.slug).val(base.generateNewItemSlug(itemNameValue));
+				$(base.options.form.newItem.slug).val(base.generateNewItemSlug(itemNameValue));
 			}
 
 		};
@@ -340,7 +326,7 @@
 			},
 
 			// New item elements
-			children : {
+			newItem : {
 				name   : '#newitem-name',
 				slug   : '#newitem-slug',
 				submit : '#newitem-add'
@@ -350,11 +336,11 @@
 
 		// Children
 		children : {
-			toggleSelector : '.toggle-children',
+			toggleSelector : '.item-toggle',
 
 			itemRemove : '.remove',
 
-			itemDetailsSelector : '.child-details'
+			itemDetailsSelector : '.item-details'
 		},
 
 		// Nestable settings
@@ -362,20 +348,19 @@
 			selector        : '#nestable',
 			listNodeName    : 'ol',
 			itemNodeName    : 'li',
-			rootClass       : 'dd',
-			listClass       : 'dd-list',
-			itemClass       : 'dd-item',
-			dragClass       : 'dd-dragel',
-			handleClass     : 'dd-handle',
-			collapsedClass  : 'dd-collapsed',
-			placeClass      : 'dd-placeholder',
-			noDragClass     : 'dd-nodrag',
-			emptyClass      : 'dd-empty',
+			rootClass       : 'nestable',
+			listClass       : 'items',
+			itemClass       : 'item',
+			dragClass       : 'item-dd-drag',
+			handleClass     : 'item-dd-handle',
+			collapsedClass  : 'item-dd-collapsed',
+			placeClass      : 'item-dd-placeholder',
+			noDragClass     : 'item-dd-nodrag',
+			emptyClass      : 'item-dd-empty',
 			expandBtnHTML   : false,
 			collapseBtnHTML : false,
 			group           : 0,
-			maxDepth        : 100,
-			threshold       : 20
+			maxDepth        : 100
 		},
 
 

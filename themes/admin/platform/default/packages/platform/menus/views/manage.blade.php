@@ -113,7 +113,7 @@ jQuery(document).ready(function($) {
 			</menu>
 			-->
 
-			<div class="dd" id="nestable">
+			<div class="nestable" id="nestable">
 				@include('platform/menus::children', compact('children'))
 			</div>
 
