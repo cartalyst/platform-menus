@@ -3,17 +3,30 @@
 	<li class="item" data-slug="{{ $child->slug }}">
 		<div class="item-dd-handle">Drag</div>
 
-		<div class="item-toggle">Toogle Details</div>
+		<div href="#item-details-{{ $child->slug }}" class="item-toggle" data-toggle="modal">Toggle Details</div>
 
 		<div class="item-name">{{ $child->name }}</div>
 
-		<div class="item-details">
+		<div id="item-details-{{ $child->slug }}" class="modal hide fade">
 
-			<input type="text" name="children[{{ $child->slug }}][name]" value="{{ $child->name }}"><br/>
-			<input type="text" name="children[{{ $child->slug }}][slug]" value="{{ $child->slug }}">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>{{ $child->name }} Details</h3>
+			</div>
 
-			<br ><br>
-			<button name="remove" class="remove">Delete</button>
+			<div class="modal-body">
+				<fieldset id="item-details">
+				
+					<input type="text" name="children[{{ $child->slug }}][name]" value="{{ $child->name }}"><br/>
+					<input type="text" name="children[{{ $child->slug }}][slug]" value="{{ $child->slug }}">
+
+				</fieldset>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button name="remove" class="remove btn btn-large btn-primary">Delete</button>
+			</div>
 
 		</div>
 
