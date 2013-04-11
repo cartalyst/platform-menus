@@ -88,12 +88,12 @@ jQuery(document).ready(function($) {
 
 						<!-- Item Name -->
 						<div class="control-group">
-							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="" required>
+							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
 						</div>
 
 						<!-- Slug -->
 						<div class="control-group">
-							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="" required>
+							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
 					</fieldset>

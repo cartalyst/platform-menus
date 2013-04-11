@@ -135,14 +135,14 @@
 				// ###################################
 				// Add the children...
 				// ### find another clean way to do this
-				html = '<li class="dd-item dd3-item" data-slug="' + slug + '">';
+				html = '<li class="item" data-slug="' + slug + '">';
+					html += '<div class="item-dd-handle">Drag</div>';
 
-					html += '<div class="dd-handle dd3-handle">Drag</div>';
+					html += '<div class="item-toggle">Toogle Details</div>';
 
-					html += '<div class="child-name">' + name + '</div>';
+					html += '<div class="item-name">' + name + '</div>';
 
-					html += '<div class="teste-handle toggle-children">Toogle Details</div>';
-					html += '<div class="child-details">';
+					html += '<div class="item-details">';
 						html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
 						html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
 						html += '<br ><br>';
@@ -201,6 +201,8 @@
 		 * Removes an item.
 		 *
 		 * @return void
+		 * @todo   When removing an item, check if it has children, if yes
+		 *         move the children to a new parent or to root !
 		 */
 		base.removeItem = function() {
 

@@ -2,6 +2,7 @@
 @foreach ($children as $child)
 	<li class="item" data-slug="{{ $child->slug }}">
 		<div class="item-dd-handle">Drag</div>
+
 		<div class="item-toggle">Toogle Details</div>
 
 		<div class="item-name">{{ $child->name }}</div>
