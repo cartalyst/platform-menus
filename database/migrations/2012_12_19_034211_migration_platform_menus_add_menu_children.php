@@ -33,8 +33,10 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 	 */
 	public function down()
 	{
-		$menu = Menu::find('admin-menus');
-		$menu->delete();
+		if ($menu = Menu::find('admin-menus'))
+		{
+			$menu->delete();
+		}
 	}
 
 }
