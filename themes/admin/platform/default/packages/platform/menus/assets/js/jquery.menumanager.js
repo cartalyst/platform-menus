@@ -83,11 +83,11 @@
 			});
 
 			// Show the children details
-			$(base.options.children.toggleSelector).live('click', function() {
+			/*$(base.options.children.toggleSelector).live('click', function() {
 
 				$(this).parent().children(base.options.children.itemDetailsSelector).toggleClass('show');
 
-			});
+			});*/
 
 			// When the main form is submited
 			base.$el.submit(function(e){
@@ -338,7 +338,7 @@
 
 		// Children
 		children : {
-			toggleSelector : '.item-toggle',
+			//toggleSelector : '.item-toggle',
 
 			itemRemove : '.remove',
 
