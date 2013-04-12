@@ -16,16 +16,14 @@
 
 			<div class="modal-body">
 				<fieldset id="item-details">
-				
 					<input type="text" name="children[{{ $child->slug }}][name]" value="{{ $child->name }}"><br/>
 					<input type="text" name="children[{{ $child->slug }}][slug]" value="{{ $child->slug }}">
-
 				</fieldset>
 			</div>
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button name="remove" class="remove btn btn-large btn-primary">Delete</button>
+				<button name="remove" class="remove btn btn-large btn-primary" data-dismiss="modal" aria-hidden="true">Delete</button>
 			</div>
 
 		</div>
