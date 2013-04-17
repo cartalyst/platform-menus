@@ -18,8 +18,10 @@
  * @link       http://cartalyst.com
  */
 
+use Input;
 use Platform\Routing\Controllers\ApiController;
 use Platform\Ui\Menu;
+use Response;
 
 class ChildrenController extends ApiController {
 
@@ -51,13 +53,13 @@ class ChildrenController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return \Response::api("Could not find children for [$menuSlug] menu as it does not exist.", 404);
+			return Response::api("Could not find children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
 		// Hydrate the children to the depth required
-		$menu->findChildren((int) \Input::get('depth', 0));
+		$menu->findChildren((int) Input::get('depth', 0));
 
-		return \Response::api(array('children' => $menu->getChildren()));
+		return Response::api(array('children' => $menu->getChildren()));
 	}
 
 	/**
@@ -69,10 +71,10 @@ class ChildrenController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return \Response::api("Could not update children for [$menuSlug] menu as it does not exist.", 404);
+			return Response::api("Could not update children for [$menuSlug] menu as it does not exist.", 404);
 		}
 
-		$menu->mapTree(\Input::get('children'));
+		$menu->mapTree(Input::get('children'));
 
 		return $this->show($menuSlug);
 	}

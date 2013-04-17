@@ -20,6 +20,7 @@
 
 use Platform\Routing\Controllers\ApiController;
 use Platform\Ui\Menu;
+use Response;
 
 class PathController extends ApiController {
 
@@ -51,10 +52,10 @@ class PathController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($slug))
 		{
-			return \Response::api("Menu [$slug] does not exist.", 404);
+			return Response::api("Menu [$slug] does not exist.", 404);
 		}
 
-		return \Response::api(array('path' => $menu->getPath()));
+		return Response::api(array('path' => $menu->getPath()));
 	}
 
 }

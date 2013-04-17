@@ -18,8 +18,12 @@
  * @link       http://cartalyst.com
  */
 
+use API;
 use Cartalyst\Api\Http\ApiHttpException;
+use Input;
 use Platform\Admin\Controllers\Admin\AdminController;
+use Redirect;
+use View;
 
 class MenusController extends AdminController {
 
@@ -36,7 +40,7 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the root menus
-			$result = \API::get('menus', array('root' => true));
+			$result = API::get('menus', array('root' => true));
 			$menus = $result['menus'];
 		}
 		catch (ApiHttpException $e)
@@ -45,11 +49,11 @@ class MenusController extends AdminController {
 			# TODO !
 
 			// Redirect to the admin dashboard
-			return \Redirect::toAdmin('');
+			return Redirect::toAdmin('');
 		}
 
 		// Show the page
-		return \View::make('platform/menus::index', compact('menus'));
+		return View::make('platform/menus::index', compact('menus'));
 	}
 
 	/**
@@ -63,7 +67,7 @@ class MenusController extends AdminController {
 		set_active_menu('admin-menus');
 
 		// Show the page
-		return \View::make('platform/menus::manage');
+		return View::make('platform/menus::manage');
 	}
 
 	/**
@@ -91,15 +95,15 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$result = \API::get('menus/'.$menuSlug);
+			$result = API::get('menus/'.$menuSlug);
 			$menu   = $result['menu'];
 
 			// Get this menu children
-			$result   = \API::get('menus/'.$menuSlug.'/children');
+			$result   = API::get('menus/'.$menuSlug.'/children');
 			$children = $result['children'];
 
 			// Get all the menu slugs
-			$result         = \API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$result         = API::get('menus', array('flat' => true, 'onlySlugs' => true));
 			$persistedSlugs = json_encode($result['menus']);
 		}
 		catch (ApiHttpException $e)
@@ -124,7 +128,7 @@ class MenusController extends AdminController {
 	public function postEdit($menuSlug = null)
 	{
 		// Get the children hierarchy.
-		$children_hierarchy = \Input::get('children_hierarchy');
+		$children_hierarchy = Input::get('children_hierarchy');
 
 		// JSON string on non-AJAX form.
 		if (is_string($children_hierarchy))
@@ -157,7 +161,7 @@ class MenusController extends AdminController {
 		//
 		foreach ($inputs as $input => $slug)
 		{
-			if ($$input = \Input::get($slug))
+			if ($$input = Input::get($slug))
 			{
 				$data[$input] = $$input;
 			}
@@ -172,7 +176,7 @@ class MenusController extends AdminController {
 		try
 		{
 			// Make the request
-			\API::put('menus/'.$menuSlug, array('menu' => $data));
+			API::put('menus/'.$menuSlug, array('menu' => $data));
 
 			// Set the success message
 			# TODO !
@@ -184,7 +188,7 @@ class MenusController extends AdminController {
 		}
 
 		//
-		return \Redirect::toAdmin('menus/edit/'.$menuSlug);
+		return Redirect::toAdmin('menus/edit/'.$menuSlug);
 	}
 
 	/**
@@ -197,7 +201,7 @@ class MenusController extends AdminController {
 	{
 		try
 		{
-			\API::delete('menus/'.$menuSlug);
+			API::delete('menus/'.$menuSlug);
 
 			// Set the success message
 			# TODO !
@@ -209,7 +213,7 @@ class MenusController extends AdminController {
 		}
 
 		// Redirect to the menus management page
-		return \Redirect::toAdmin('menus');
+		return Redirect::toAdmin('menus');
 	}
 
 
