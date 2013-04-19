@@ -153,13 +153,13 @@ class MenusController extends AdminController {
 		$data = array();
 
 		// Declare all the inputs we need to check
-		$inputs = array(
+		$input = array(
 			'name' => 'menu-name',
 			'slug' => 'menu-slug'
 		);
 
 		//
-		foreach ($inputs as $input => $slug)
+		foreach ($input as $input => $slug)
 		{
 			if ($$input = Input::get($slug))
 			{
