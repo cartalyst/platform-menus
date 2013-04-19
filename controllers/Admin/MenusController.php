@@ -40,8 +40,8 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the root menus
-			$result = API::get('menus', array('root' => true));
-			$menus = $result['menus'];
+			$response = API::get('menus', array('root' => true));
+			$menus    = $response['menus'];
 		}
 		catch (ApiHttpException $e)
 		{
@@ -95,16 +95,16 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$result = API::get('menus/'.$menuSlug);
-			$menu   = $result['menu'];
+			$response = API::get('menus/'.$menuSlug);
+			$menu     = $response['menu'];
 
 			// Get this menu children
-			$result   = API::get('menus/'.$menuSlug.'/children');
-			$children = $result['children'];
+			$response = API::get('menus/'.$menuSlug.'/children');
+			$children = $response['children'];
 
 			// Get all the menu slugs
-			$result         = API::get('menus', array('flat' => true, 'onlySlugs' => true));
-			$persistedSlugs = json_encode($result['menus']);
+			$response       = API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$persistedSlugs = json_encode($response['menus']);
 		}
 		catch (ApiHttpException $e)
 		{
