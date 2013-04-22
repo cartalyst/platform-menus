@@ -54,13 +54,11 @@ jQuery(document).ready(function($) {
 					<input type="text" name="menu-name" id="menu-name" class="" value="{{ ! empty($menu) ? $menu->name : '' }}" required>
 
 					<label class="control-label" for="menu-slug">Slug</label>
-					<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : '' }}">
+					<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : '' }}" required>
 				</div>
 				<div class="pull-right">
 					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create</a>
-					<button type="submit" class="btn btn-large btn-primary btn-save-menu">
-						@lang('button.update')
-					</button>
+					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>
 
@@ -73,7 +71,6 @@ jQuery(document).ready(function($) {
 				</div>
 				<div class="modal-body">
 					<fieldset id="menu-new-child">
-
 						<!-- Item Name -->
 						<div class="control-group">
 							<label for="newitem-name">Name</label>
@@ -86,6 +83,24 @@ jQuery(document).ready(function($) {
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
+						<!-- Target -->
+						<div class="control-group">
+							<label class="control-label" for="newitem-target">Target</label>
+							<div class="controls">
+								<select name="newitem-target" id="newitem-target" class="child-target">
+									<option value="0">Same Window</option>
+									<option value="1">New Window</option>
+									<option value="2">Parent Frame</option>
+									<option value="3">Top Frame (Main Document)</option>
+								</select>
+							</div>
+						</div>
+
+						<!-- CSS Class -->
+						<div class="control-group">
+							<label for="newitem-css_class">CSS Class</label>
+							<input type="text" name="newitem-css_class" id="newitem-css_class" class="input-block-level" value="" placeholder="">
+						</div>
 					</fieldset>
 				</div>
 				<div class="modal-footer">
@@ -105,9 +120,7 @@ jQuery(document).ready(function($) {
 			<div class="actions clearfix">
 				<div class="pull-right">
 					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create</a>
-					<button type="submit" class="btn btn-large btn-primary btn-save-menu">
-						Save Changes
-					</button>
+					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>
 
