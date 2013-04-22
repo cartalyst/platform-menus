@@ -82,6 +82,34 @@
 
 			});
 
+			// Clean the root item name
+			$(base.options.form.root.name).on('change', function() {
+
+				$(base.options.form.root.name).val($.trim($(this).val()));
+
+			});
+
+			// Clean the root item slug
+			$(base.options.form.root.slug).on('change', function() {
+
+				$(base.options.form.root.slug).val($.trim($(this).val()));
+
+			});
+
+			// Clean the new item name
+			$(base.options.form.newItem.name).on('change', function() {
+
+				$(base.options.form.newItem.name).val($.trim($(this).val()));
+
+			});
+
+			// Clean the new item slug
+			$(base.options.form.newItem.slug).on('change', function() {
+
+				$(base.options.form.newItem.slug).val($.trim($(this).val()));
+
+			});
+
 			// When the main form is submited
 			base.$el.submit(function(e){
 
@@ -105,7 +133,7 @@
 			e.preventDefault();
 
 			// Get the new item data
-			name = $(base.options.form.newItem.name).val();
+			name = $.trim($(base.options.form.newItem.name).val());
 			slug = base.slugify($(base.options.form.newItem.slug).val());
 
 			// Make sure that both child name and slug
@@ -156,6 +184,13 @@
 				// Clean the new item inputs
 				$(base.options.form.newItem.name).val('');
 				$(base.options.form.newItem.slug).val(base.generateNewItemSlug());
+			}
+			else
+			{
+				$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+
+				return false;
 			}
 
 		};
@@ -309,7 +344,7 @@
 		base.slugify = function(string) {
 
 			// Make sure we have a slug separator
-			separator = base.options.slugSeparator;
+			separator = (typeof base.options.slugSeparator !== 'undefined' ? base.options.slugSeparator : '-');
 
 			// Converts a string to lowercase and
 			// removes spaces.
