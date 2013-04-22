@@ -115,7 +115,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		return Response::api(compact('menu'));
@@ -131,7 +131,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		//
@@ -152,6 +152,8 @@ class MenusController extends ApiController {
 		{
 			return Response::api(compact('menu'));
 		}
+
+		return Response::api(Lang::get('platform/menus:message.update.error'), 500);
 	}
 
 	/**
@@ -165,13 +167,13 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:messages.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		// Delete the menu
 		$menu->delete();
 
-		return Response::api(Lang::get('platform/menus::messages.delete.success'));
+		return Response::api(Lang::get('platform/menus::message.delete.success'));
 	}
 
 }

@@ -42,7 +42,7 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the root menus
-			$response = API::get('menus', array('root' => true));
+			$response = API::get('v1/menus', array('root' => true));
 			$menus    = $response['menus'];
 		}
 		catch (ApiHttpException $e)
@@ -68,7 +68,7 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the menu slugs
-			$response       = API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$response       = API::get('v1/menus', array('flat' => true, 'onlySlugs' => true));
 			$persistedSlugs = json_encode($response['menus']);
 		}
 		catch (ApiHttpException $e)
@@ -105,15 +105,15 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$response = API::get("menus/$menuSlug");
+			$response = API::get("v1/menus/$menuSlug");
 			$menu     = $response['menu'];
 
 			// Get this menu children
-			$response = API::get("menus/$menuSlug/children");
+			$response = API::get("v1/menus/$menuSlug/children");
 			$children = $response['children'];
 
 			// Get all the menu slugs
-			$response       = API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$response       = API::get('v1/menus', array('flat' => true, 'onlySlugs' => true));
 			$persistedSlugs = json_encode($response['menus']);
 		}
 		catch (ApiHttpException $e)
@@ -159,46 +159,50 @@ class MenusController extends AdminController {
 			$this->process_child_recursively($child, $children);
 		}
 
-		// Prepare data for the API
-		$data = array();
-
-		// Declare all the inputs we need to check
-		$input = array(
-			'name' => 'menu-name',
-			'slug' => 'menu-slug'
-		);
+		// Prepare the menu data for the API
+		$menu = array();
 
 		//
-		foreach ($input as $input => $slug)
-		{
-			if ($$input = Input::get($slug))
-			{
-				$data[$input] = $$input;
-			}
-		}
+		$menu['name'] = Input::get('menu-slug');
+		$menu['slug'] = Input::get('menu-slug');
 
 		// Do we have children?
 		if (count($children) > 0)
 		{
-			$data['children'] = $children;
+			$menu['children'] = $children;
 		}
 
 		try
 		{
-			// Update the menu
-			API::put("menus/$menuSlug", array('menu' => $data));
+			// Are we creating a menu?
+			if (is_null($menuSlug))
+			{
+				// Create the menu
+				$response = API::post('v1/menus', compact('menu'));
+				$menuSlug = $response['menu']->slug;
 
-			// Set the success message
-			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.update.success'));
+				// Prepare the success message
+				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.create.success'));
+			}
+
+			// No, we are updating the menu
+			else
+			{
+				// Update the menu
+				API::put("v1/menus/$menuSlug", compact('menu'));
+
+				// Prepare the success message
+				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.update.success'));
+			}
+
+			// Redirect to the menu edit page
+			return Redirect::toAdmin("menus/edit/$menuSlug")->with('messages', $messages);
 		}
 		catch (ApiHttpException $e)
 		{
-			// Set the error message
-			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.update.error'));
+			// Redirect to the appropriate page
+			return Redirect::back()->withInput()->withErrors($e->getErrors());
 		}
-
-		//
-		return Redirect::toAdmin("menus/edit/$menuSlug")->with('messages', $messages);
 	}
 
 	/**
@@ -212,7 +216,7 @@ class MenusController extends AdminController {
 		try
 		{
 			// Delete the menu
-			API::delete("menus/$menuSlug");
+			API::delete("v1/menus/$menuSlug");
 
 			// Set the success message
 			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.delete.success'));

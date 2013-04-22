@@ -184,6 +184,7 @@ return array(
 
 	'routes' => function(Cartalyst\Extensions\ExtensionInterface $extension, Illuminate\Foundation\Application $app)
 	{
+
 		// API Routes
 		Route::get('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
 		Route::put('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
