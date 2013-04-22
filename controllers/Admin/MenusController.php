@@ -163,7 +163,7 @@ class MenusController extends AdminController {
 		$menu = array();
 
 		//
-		$menu['name'] = Input::get('menu-slug');
+		$menu['name'] = Input::get('menu-name');
 		$menu['slug'] = Input::get('menu-slug');
 
 		// Do we have children?
