@@ -69,16 +69,16 @@
 
 			});
 
-			// Adds a new item
+			// Adds a new menu item
 			$(base.options.form.newItem.submit).on('click', base.addNewItem);
 
-			// Removes an item
-			$(base.options.children.itemRemove).live('click', base.removeItem);
+			// Removes a menu item
+			$(base.options.form.itemRemove).live('click', base.removeItem);
 
-			// Generates the new item slug
+			// Update the new menu item slug
 			$(base.options.form.newItem.name).keyup(function() {
 
-				$(base.options.form.newItem.slug).val(base.generateNewItemSlug($(this).val()));
+				base.updateNewItemSlug();
 
 			});
 
@@ -112,16 +112,19 @@
 			// are not empty.
 			if (name != '' && slug != '')
 			{
+				// Check if this slug already exists
 				if (($.inArray(slug, base.options.persistedSlugs) > -1))
 				{
-					alert('item with this slug already exists');
-					// show the error...
+					// Show the errors
+					$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+					$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
 
 					return false;
 				}
 
-
-				// remove the error...
+				// Remove the errors
+				$(base.options.form.newItem.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				$(base.options.form.newItem.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
 
 
 
@@ -167,11 +170,24 @@
 			// Get the new item name value
 			itemNameValue = $(base.options.form.newItem.name).val();
 
-			// Does this new menu item have a name?
-			if (itemNameValue.length == 0)
+			//
+			newSlug = base.generateNewItemSlug(itemNameValue);
+
+			// Update the new item slug
+			$(base.options.form.newItem.slug).val(newSlug);
+
+			//
+			if (($.inArray(newSlug, base.options.persistedSlugs) > -1))
 			{
-				// Update the new item slug
-				$(base.options.form.newItem.slug).val(base.generateNewItemSlug(itemNameValue));
+				// Show the errors
+				$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+			}
+			else
+			{
+				// Remove the errors
+				$(base.options.form.newItem.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				$(base.options.form.newItem.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
 			}
 
 		};
@@ -325,6 +341,11 @@
 
 	$.MenuManager.defaultOptions = {
 
+		// Selector for control groups that wrap inputs
+		controlGroupSelector : '.control-group',
+		//// leaving it here, for now...
+
+
 		// Holds all of the existing menu slugs
 		persistedSlugs : [],
 
@@ -345,13 +366,11 @@
 				name   : '#newitem-name',
 				slug   : '#newitem-slug',
 				submit : '#newitem-add'
-			}
+			},
 
-		},
-
-		// Children
-		children : {
+			// Selector for removing menu items
 			itemRemove : '.remove'
+
 		},
 
 		// Nestable settings
