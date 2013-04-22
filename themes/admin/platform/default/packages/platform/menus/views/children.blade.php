@@ -16,8 +16,17 @@
 
 			<div class="modal-body">
 				<fieldset id="item-details">
-					<input type="text" name="children[{{ $child->slug }}][name]" value="{{ $child->name }}"><br/>
-					<input type="text" name="children[{{ $child->slug }}][slug]" value="{{ $child->slug }}">
+					<!-- Children Name -->
+					<div class="control-group">
+						<label for="{{ $child->slug }}_name">Name</label>
+						<input type="text" name="children[{{ $child->slug }}][name]" id="{{ $child->slug }}_name" class="input-block-level" value="{{ $child->name }}" placeholder="">
+					</div>
+
+					<!--  Children Slug -->
+					<div class="control-group">
+						<label for="{{ $child->slug }}_slug">Slug</label>
+						<input type="text" name="children[{{ $child->slug }}][slug]" id="{{ $child->slug }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
+					</div>
 				</fieldset>
 			</div>
 

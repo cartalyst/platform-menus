@@ -27,19 +27,6 @@ jQuery(document).ready(function($) {
 	$('#menu').MenuManager({
 		persistedSlugs : {{ $persistedSlugs }}
 	});
-/*
-	$('#nestable-menu').on('click', function(e)
-	{
-		var target = $(e.target),
-			action = target.data('action');
-		if (action === 'expand-all') {
-			$('.dd').nestable('expandAll');
-		}
-		if (action === 'collapse-all') {
-			$('.dd').nestable('collapseAll');
-		}
-	});
-*/
 });
 </script>
 @stop
@@ -88,11 +75,13 @@ jQuery(document).ready(function($) {
 
 						<!-- Item Name -->
 						<div class="control-group">
+							<label for="newitem-name">Name</label>
 							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
 						</div>
 
-						<!-- Slug -->
+						<!-- Item Slug -->
 						<div class="control-group">
+							<label for="newitem-slug">Slug</label>
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
@@ -105,13 +94,6 @@ jQuery(document).ready(function($) {
 					</button>
 				</div>
 			</div>
-
-			<!--
-			<menu id="nestable-menu" style="padding: 0; padding: 10px; margin: 0 0 20px 0; background-color: rgba(0, 0, 0, 0.1);">
-				<button type="button" data-action="expand-all">Expand All</button>
-				<button type="button" data-action="collapse-all">Collapse All</button>
-			</menu>
-			-->
 
 			<div class="nestable" id="nestable">
 				@include('platform/menus::children', compact('children'))

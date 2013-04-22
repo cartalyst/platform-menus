@@ -82,13 +82,6 @@
 
 			});
 
-			// Show the children details
-			/*$(base.options.children.toggleSelector).live('click', function() {
-
-				$(this).parent().children(base.options.children.itemDetailsSelector).toggleClass('show');
-
-			});*/
-
 			// When the main form is submited
 			base.$el.submit(function(e){
 
@@ -201,8 +194,6 @@
 		 * Removes an item.
 		 *
 		 * @return void
-		 * @todo   When removing an item, check if it has children, if yes
-		 *         move the children to a new parent or to root !
 		 */
 		base.removeItem = function() {
 
@@ -215,8 +206,20 @@
 			// Remove the item from the array
 			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
 
+			// Find closest item
+			var $item = $(itemSelector + '[data-slug="' + itemSlug + '"]');
+			var $list = $item.children(base.options.nestable.listNodeName);
+
+			// Check if we have children
+			if ($list.length > 0)
+			{
+				// Grab the list's children items and put them after this item
+				$childItems = $list.children(base.options.nestable.itemNodeName);
+				$childItems.insertAfter($item);
+			}
+
 			// Remove the item from the menu
-			$(itemSelector + '[data-slug="' + itemSlug + '"]').remove();
+			$item.remove();
 
 		};
 
@@ -338,11 +341,7 @@
 
 		// Children
 		children : {
-			//toggleSelector : '.item-toggle',
-
-			itemRemove : '.remove',
-
-			itemDetailsSelector : '.item-details'
+			itemRemove : '.remove'
 		},
 
 		// Nestable settings
@@ -364,7 +363,6 @@
 			group           : 0,
 			maxDepth        : 100
 		},
-
 
 		hierarchyInputName: 'children_hierarchy'
 
