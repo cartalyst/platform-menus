@@ -19,13 +19,13 @@
 				<fieldset id="item-details">
 					<!-- Children Name -->
 					<div class="control-group">
-						<label for="{{ $child->slug }}_name">Name</label>
+						<label class="control-label" for="{{ $child->slug }}_name">Name</label>
 						<input type="text" name="children[{{ $child->slug }}][name]" id="{{ $child->slug }}_name" class="input-block-level" value="{{ $child->name }}" placeholder="">
 					</div>
 
 					<!--  Children Slug -->
 					<div class="control-group">
-						<label for="{{ $child->slug }}_slug">Slug</label>
+						<label class="control-label" for="{{ $child->slug }}_slug">Slug</label>
 						<input type="text" name="children[{{ $child->slug }}][slug]" id="{{ $child->slug }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
 					</div>
 
@@ -44,7 +44,7 @@
 
 					<!-- CSS Class -->
 					<div class="control-group">
-						<label for="{{ $child->slug }}_class">CSS Class</label>
+						<label class="control-label" for="{{ $child->slug }}_class">CSS Class</label>
 						<input type="text" name="children[{{ $child->slug }}][class]" id="{{ $child->slug }}_class" class="input-block-level" value="{{ $child->class }}" placeholder="">
 					</div>
 				</fieldset>

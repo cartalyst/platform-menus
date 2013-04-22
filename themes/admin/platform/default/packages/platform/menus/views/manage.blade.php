@@ -73,13 +73,13 @@ jQuery(document).ready(function($) {
 					<fieldset id="menu-new-child">
 						<!-- Item Name -->
 						<div class="control-group">
-							<label for="newitem-name">Name</label>
+							<label class="control-label" for="newitem-name">Name</label>
 							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
 						</div>
 
 						<!-- Item Slug -->
 						<div class="control-group">
-							<label for="newitem-slug">Slug</label>
+							<label class="control-label" for="newitem-slug">Slug</label>
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
