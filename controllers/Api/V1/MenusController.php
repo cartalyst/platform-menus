@@ -101,7 +101,18 @@ class MenusController extends ApiController {
 	 */
 	public function create()
 	{
+		$menu = new $this->model(array(
+			'name' => Input::get('menu.name'),
+			'slug' => $slug = Input::get('menu.slug'),
+		));
+		$menu->makeRoot();
 
+		if ($children = Input::get('menu.children'))
+		{
+			API::put("menus/$slug/children", compact('children'));
+		}
+
+		return Response::api(compact('menu'));
 	}
 
 	/**
@@ -115,7 +126,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		return Response::api(compact('menu'));
@@ -131,7 +142,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		//
@@ -153,7 +164,7 @@ class MenusController extends ApiController {
 			return Response::api(compact('menu'));
 		}
 
-		return Response::api(Lang::get('platform/menus:message.update.error'), 500);
+		return Response::api(Lang::get('platform/menus::message.update.error'), 500);
 	}
 
 	/**
@@ -167,7 +178,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($menuSlug))
 		{
-			return Response::api(Lang::get('platform/menus:message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
 		}
 
 		// Delete the menu
