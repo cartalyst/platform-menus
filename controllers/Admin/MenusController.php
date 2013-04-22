@@ -20,7 +20,9 @@
 
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
+use Illuminate\Support\MessageBag as Bag;
 use Input;
+use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
 use Redirect;
 use View;
@@ -45,11 +47,8 @@ class MenusController extends AdminController {
 		}
 		catch (ApiHttpException $e)
 		{
-			// Set the error message
-			# TODO !
-
 			// Redirect to the admin dashboard
-			return Redirect::toAdmin('');
+			return Redirect::toAdmin('/');
 		}
 
 		// Show the page
@@ -66,8 +65,19 @@ class MenusController extends AdminController {
 		// Set the current active menu
 		set_active_menu('admin-menus');
 
+		try
+		{
+			// Get all the menu slugs
+			$response       = API::get('menus', array('flat' => true, 'onlySlugs' => true));
+			$persistedSlugs = json_encode($response['menus']);
+		}
+		catch (ApiHttpException $e)
+		{
+			$persistedSlugs = '';
+		}
+
 		// Show the page
-		return View::make('platform/menus::manage');
+		return View::make('platform/menus::manage', compact('persistedSlugs'));
 	}
 
 	/**
@@ -95,11 +105,11 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$response = API::get('menus/'.$menuSlug);
+			$response = API::get("menus/$menuSlug");
 			$menu     = $response['menu'];
 
 			// Get this menu children
-			$response = API::get('menus/'.$menuSlug.'/children');
+			$response = API::get("menus/$menuSlug/children");
 			$children = $response['children'];
 
 			// Get all the menu slugs
@@ -109,14 +119,14 @@ class MenusController extends AdminController {
 		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			# TODO !
+			$messages = with(new Bag)->add('error', $e->getMessage());
 
 			// Return to the menus management page
-			return \Redirect::toAdmin('menus')->with('error', $e->getMessage());
+			return Redirect::toAdmin('menus')->with('messages', $messages);
 		}
 
 		// Show the page
-		return \View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs'));
+		return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs'));
 	}
 
 	/**
@@ -175,20 +185,20 @@ class MenusController extends AdminController {
 
 		try
 		{
-			// Make the request
-			API::put('menus/'.$menuSlug, array('menu' => $data));
+			// Update the menu
+			API::put("menus/$menuSlug", array('menu' => $data));
 
 			// Set the success message
-			# TODO !
+			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.update.success'));
 		}
-		catch (APIClientException $e)
+		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			# TODO !
+			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.update.error'));
 		}
 
 		//
-		return Redirect::toAdmin('menus/edit/'.$menuSlug);
+		return Redirect::toAdmin("menus/edit/$menuSlug")->with('messages', $messages);
 	}
 
 	/**
@@ -201,19 +211,20 @@ class MenusController extends AdminController {
 	{
 		try
 		{
-			API::delete('menus/'.$menuSlug);
+			// Delete the menu
+			API::delete("menus/$menuSlug");
 
 			// Set the success message
-			# TODO !
+			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.delete.success'));
 		}
 		catch (ApiHttpException $e)
 		{
-			// Set the error message.
-			# TODO !
+			// Set the error message
+			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.delete.error'));
 		}
 
 		// Redirect to the menus management page
-		return Redirect::toAdmin('menus');
+		return Redirect::toAdmin('menus')->with('messages', $messages);
 	}
 
 
@@ -223,8 +234,9 @@ class MenusController extends AdminController {
 	protected function process_child_recursively($child, &$children)
 	{
 		$new_child = array(
-			'name'                => \Input::get('children.' . $child['slug'] . '.name'),
-			'slug'                => \Input::get('children.' . $child['slug'] . '.slug'),
+			'name'                => Input::get("children.{$child['slug']}.name"),
+			'slug'                => Input::get("children.{$child['slug']}.slug"),
+			'driver'              => 'static',
 			// 'uri'              => Input::get('children.' . $child['id'] . '.uri'),
 			// 'page_id'          => Input::get('children.' . $child['id'] . '.page_id'),
 			// 'class'            => Input::get('children.' . $child['id'] . '.class'),

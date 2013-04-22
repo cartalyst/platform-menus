@@ -1,4 +1,5 @@
 <ol class="items">
+@if ( ! empty($children))
 @foreach ($children as $child)
 	<li class="item" data-slug="{{ $child->slug }}">
 		<div class="item-dd-handle">Drag</div>
@@ -42,4 +43,5 @@
 	@endif
 	</li>
 @endforeach
+@endif
 </ol>

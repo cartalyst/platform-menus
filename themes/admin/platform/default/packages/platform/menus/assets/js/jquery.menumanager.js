@@ -228,9 +228,16 @@
 		 *
 		 * @return string
 		 */
-		base.getRootSlug = function(string) {
+		base.getRootSlug = function() {
 
-			return $(base.options.form.root.slug).val() + base.options.slugSeparator;
+			rootSlug = $.trim($(base.options.form.root.slug).val());
+
+			if (rootSlug.length >= 1)
+			{
+				rootSlug += base.options.slugSeparator;
+			}
+
+			return rootSlug;
 
 		};
 
@@ -242,6 +249,9 @@
 		 * @return string
 		 */
 		base.generateSlug = function(string, includeSeparator) {
+
+			// Trim the string
+			string = $.trim(string);
 
 			// Make sure we have a string
 			string = base.slugify(typeof string !== 'undefined' ? string : '');

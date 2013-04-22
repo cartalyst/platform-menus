@@ -24,25 +24,19 @@ return array(
 	'does_not_exist' => 'Menu [:menuSlug] either not a root menu item or does not exist.',
 
 	'create' => array(
-
-		'error'   => 'Menu was not created, please try again.',
-		'success' => 'Menu created successfully.',
-
+		'error'   => 'There was an issue creating the menu. Please try again.',
+		'success' => 'Menu was successfully created.',
 	),
 
 	'update' => array(
-
-		'success'     => 'Menu :menuSlug was successfully updated.',
-		'error'       => 'Menu was not updated, please try again.',
 		'no_children' => 'No children hierarchy was provided.',
-
+		'error'       => 'There was an issue updating the menu. Please try again.',
+		'success'     => 'Menu was successfully updated.',
 	),
 
 	'delete' => array(
-
 		'error'   => 'There was an issue deleting the menu. Please try again.',
-		'success' => 'Menu was deleted successfully.',
-
+		'success' => 'Menu was successfully deleted.',
 	),
 
 );
