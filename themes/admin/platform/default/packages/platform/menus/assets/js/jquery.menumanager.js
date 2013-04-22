@@ -45,7 +45,7 @@
 			$(base.options.nestable.selector).nestable(base.options.nestable);
 
 			// Generate the initial children slug
-			$(base.options.form.newItem.slug).val(base.generateNewItemSlug());
+			$(base.options.form.children.slug).val(base.generateChildrenSlug());
 
 			// When the root menu name value changes
 			$(base.options.form.root.name).keyup(function() {
@@ -54,7 +54,7 @@
 				base.generateRootSlug($(this).val());
 
 				// Update the new menu item slug value
-				base.updateNewItemSlug();
+				base.updateChildrenSlug();
 
 			});
 
@@ -65,20 +65,20 @@
 				base.generateRootSlug($(this).val());
 
 				// Update the new menu item slug value
-				base.updateNewItemSlug();
+				base.updateChildrenSlug();
 
 			});
 
 			// Adds a new menu item
-			$(base.options.form.newItem.submit).on('click', base.addNewItem);
+			$(base.options.form.children.submit).on('click', base.addItem);
 
 			// Removes a menu item
 			$(base.options.form.itemRemove).live('click', base.removeItem);
 
 			// Update the new menu item slug
-			$(base.options.form.newItem.name).keyup(function() {
+			$(base.options.form.children.name).keyup(function() {
 
-				base.updateNewItemSlug();
+				base.updateChildrenSlug();
 
 			});
 
@@ -97,16 +97,16 @@
 			});
 
 			// Clean the new item name
-			$(base.options.form.newItem.name).on('change', function() {
+			$(base.options.form.children.name).on('change', function() {
 
-				$(base.options.form.newItem.name).val($.trim($(this).val()));
+				$(base.options.form.children.name).val($.trim($(this).val()));
 
 			});
 
 			// Clean the new item slug
-			$(base.options.form.newItem.slug).on('change', function() {
+			$(base.options.form.children.slug).on('change', function() {
 
-				$(base.options.form.newItem.slug).val($.trim($(this).val()));
+				$(base.options.form.children.slug).val(base.slugify($(this).val()));
 
 			});
 
@@ -121,20 +121,22 @@
 		};
 
 		/**
-		 * Adds a new item.
+		 * Adds a new menu item.
 		 *
 		 * @return void
 		 * @todo   Add TempoJs, so when we add a new item we
 		 *         use the template, instead of this messy code!
 		 */
-		base.addNewItem = function(e) {
+		base.addItem = function(e) {
 
 			// Prevent the form from being submited
 			e.preventDefault();
 
+			base.options.beforeAdd();
+
 			// Get the new item data
-			name = $.trim($(base.options.form.newItem.name).val());
-			slug = base.slugify($(base.options.form.newItem.slug).val());
+			name = $.trim($(base.options.form.children.name).val());
+			slug = base.slugify($(base.options.form.children.slug).val());
 
 			// Make sure that both child name and slug
 			// are not empty.
@@ -144,15 +146,15 @@
 				if (($.inArray(slug, base.options.persistedSlugs) > -1))
 				{
 					// Show the errors
-					$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-					$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+					$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+					$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
 
 					return false;
 				}
 
 				// Remove the errors
-				$(base.options.form.newItem.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-				$(base.options.form.newItem.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				$(base.options.form.children.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				$(base.options.form.children.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
 
 
 
@@ -182,71 +184,29 @@
 				base.options.persistedSlugs.push(slug);
 
 				// Clean the new item inputs
-				$(base.options.form.newItem.name).val('');
-				$(base.options.form.newItem.slug).val(base.generateNewItemSlug());
+				$(base.options.form.children.name).val('');
+				$(base.options.form.children.slug).val(base.generateChildrenSlug());
 			}
 			else
 			{
-				$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-				$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
 
 				return false;
 			}
 
-		};
-
-		/**
-		 * Updates the new item slug.
-		 *
-		 * @return void
-		 */
-		base.updateNewItemSlug = function() {
-
-			// Get the new item name value
-			itemNameValue = $(base.options.form.newItem.name).val();
-
-			//
-			newSlug = base.generateNewItemSlug(itemNameValue);
-
-			// Update the new item slug
-			$(base.options.form.newItem.slug).val(newSlug);
-
-			//
-			if (($.inArray(newSlug, base.options.persistedSlugs) > -1))
-			{
-				// Show the errors
-				$(base.options.form.newItem.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-				$(base.options.form.newItem.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-			}
-			else
-			{
-				// Remove the errors
-				$(base.options.form.newItem.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-				$(base.options.form.newItem.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-			}
+			base.options.afterAdd();
 
 		};
 
 		/**
-		 * Generates the root menu slug, after
-		 * the root menu name has been updated.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.generateRootSlug = function(value) {
-
-			// Update the current menu slug
-			$(base.options.form.root.slug).val(base.generateSlug(value));
-
-		};
-
-		/**
-		 * Removes an item.
+		 * Removes a menu item.
 		 *
 		 * @return void
 		 */
 		base.removeItem = function() {
+
+			base.options.beforeRemove();
 
 			// Get the item selector
 			itemSelector = '.' + base.options.nestable.itemClass;
@@ -272,6 +232,21 @@
 			// Remove the item from the menu
 			$item.remove();
 
+			base.options.afterRemove();
+
+		};
+
+		/**
+		 * Updates a menu item.
+		 *
+		 * @return void
+		 */
+		base.updateItem = function() {
+
+			base.options.beforeUpdate();
+
+			base.options.afterUpdate();
+
 		};
 
 		/**
@@ -293,28 +268,32 @@
 		};
 
 		/**
+		 * Generates the root menu slug, after
+		 * the root menu name has been updated.
+		 *
+		 * @param  string
+		 * @return void
+		 */
+		base.generateRootSlug = function(string) {
+
+			// Update the current menu slug
+			$(base.options.form.root.slug).val(base.generateSlug(string));
+
+		};
+
+		/**
 		 * Generates a slug.
 		 *
 		 * @param  string
-		 * @param  bool
 		 * @return string
 		 */
-		base.generateSlug = function(string, includeSeparator) {
+		base.generateSlug = function(string) {
 
 			// Trim the string
 			string = $.trim(string);
 
-			// Make sure we have a string
-			string = base.slugify(typeof string !== 'undefined' ? string : '');
-
-			// Do we want to include the slug separator?
-			if (typeof includeSeparator !== 'undefined' ? includeSeparator : false)
-			{
-				string += base.options.slugSeparator;
-			}
-
 			// Return the slugified string
-			return string;
+			return base.slugify(typeof string !== 'undefined' ? string : '');
 
 		};
 
@@ -325,13 +304,49 @@
 		 * @param  string
 		 * @return string
 		 */
-		base.generateNewItemSlug = function(string) {
+		base.generateChildrenSlug = function(string) {
 
 			// Make sure we have a string
 			string = typeof string !== 'undefined' ? string : '';
 
 			// Generate the slug and return it
 			return base.getRootSlug() + base.generateSlug(string);
+
+		};
+
+		/**
+		 * Updates the new item slug.
+		 *
+		 * @param  string
+		 * @return void
+		 */
+		base.updateChildrenSlug = function(string) {
+
+			if (typeof string == 'undefined')
+			{
+				// Get the new item name value
+				string = $(base.options.form.children.name).val();
+			}
+
+			// Generate the slug
+			slug = base.generateChildrenSlug(string);
+
+			// Update the new item slug
+			$(base.options.form.children.slug).val(slug);
+
+			// Check if the slug alread exists
+			if (($.inArray(slug, base.options.persistedSlugs) > -1))
+			{
+				// Show the errors
+				$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+			}
+			else
+			{
+				// Remove the errors
+				$(base.options.form.children.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				$(base.options.form.children.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+			}
 
 		};
 
@@ -396,8 +411,8 @@
 				slug : '#menu-slug'
 			},
 
-			// New item elements
-			newItem : {
+			// Children elements
+			children : {
 				name   : '#newitem-name',
 				slug   : '#newitem-slug',
 				submit : '#newitem-add'
@@ -428,7 +443,49 @@
 			maxDepth        : 100
 		},
 
-		hierarchyInputName: 'children_hierarchy'
+		hierarchyInputName: 'children_hierarchy',
+
+		/**
+		 * Event called before we add a new menu item.
+		 *
+		 * @return void
+		 */
+		beforeAdd : function() {},
+
+		/**
+		 * Event called after we add a new menu item.
+		 *
+		 * @return void
+		 */
+		afterAdd : function() {},
+
+		/**
+		 * Event called before we remove a menu item.
+		 *
+		 * @return void
+		 */
+		beforeRemove : function() {},
+
+		/**
+		 * Event called after we remove a menu item.
+		 *
+		 * @return void
+		 */
+		afterRemove : function() {},
+
+		/**
+		 * Event called before we update a menu item.
+		 *
+		 * @return void
+		 */
+		beforeUpdate : function() {},
+
+		/**
+		 * Event called after we update a menu item.
+		 *
+		 * @return void
+		 */
+		afterUpdate : function() {}
 
 	};
 
