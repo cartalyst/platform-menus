@@ -22,38 +22,56 @@ return array(
 
 	'legend' => 'Menu Properties',
 
+	'create' => array(
+		'legend' => 'Create Menu',
+	),
+
+	'update' => array(
+		'legend' => 'Update Menu',
+	),
+
 	'root' => array(
+		'name' => 'Name',
+		'slug' => 'Slug',
+	),
+
+	'child' => array(
+		'create' => array(
+			'legend' => 'New Child',
+		),
+
+		'update' => array(
+			'legend' => ':menu Details',
+		),
 
 		'name' => 'Name',
 		'slug' => 'Slug',
 
-	),
-
-	// Common
-	'child' => array(
-
-		'name'   => 'Name',
-		'slug'   => 'Slug',
-		'type'   => array(
-			'title'  => 'Type',
-			'static' => 'Static',
-			'page'   => 'Page',
-		),
-
-		'uri'    => 'Uri',
-		'secure' => 'Make Secure (HTTPS)',
-		'class'  => 'CSS class',
-
 		'target' => array(
-			'title'  => 'Target',
+			'title' => 'Target',
+
 			'self'   => 'Same Window',
 			'blank'  => 'New Window',
 			'parent' => 'Parent Frame',
 			'top'    => 'Top Frame (Main Document)',
 		),
 
+		'class' => 'CSS class',
+
+/*
+		'type'   => array(
+			'title' => 'Type',
+
+			'static' => 'Static',
+			'page'   => 'Page',
+		),
+
+		'uri'    => 'Uri',
+		'secure' => 'Make Secure (HTTPS)',
+
 		'visibility' => array(
-			'title'      => 'Visibility',
+			'title' => 'Visibility',
+
 			'always'     => 'Show Always',
 			'logged_in'  => 'Logged In',
 			'logged_out' => 'Logged Out',
@@ -63,21 +81,7 @@ return array(
 		'groups' => array(
 			'title' => 'Group Visibility',
 		),
-
-	),
-
-	// Create specific
-	'create' => array(
-		'child' => array(
-			'legend' => 'New Child',
-		),
-	),
-
-	// Update specific
-	'update' => array(
-		'child' => array(
-			'legend' => 'Edit Child',
-		),
+*/
 	),
 
 );

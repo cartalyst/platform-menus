@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 <section id="menus">
 
 	<header class="clearfix">
-		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ ! empty($menu) ? 'Update' : 'Create' }} Menu</h1>
+		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> @lang('platform/menus::form.'.(empty($menu) ? 'create' : 'update').'.legend')</h1>
 		<nav class="tertiary-navigation">
 			@widget('platform/ui::nav.show', array(2, 1, 'nav nav-pills', app('platform.admin.uri')))
 		</nav>
@@ -50,14 +50,14 @@ jQuery(document).ready(function($) {
 
 			<div class="actions clearfix">
 				<div class="form-inline pull-left">
-					<label class="control-label" for="menu-name">Name</label>
+					<label class="control-label" for="menu-name">@lang('platform/menus::form.root.name')</label>
 					<input type="text" name="menu-name" id="menu-name" class="" value="{{ ! empty($menu) ? $menu->name : '' }}" required>
 
-					<label class="control-label" for="menu-slug">Slug</label>
+					<label class="control-label" for="menu-slug">@lang('platform/menus::form.root.slug')</label>
 					<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : '' }}" required>
 				</div>
 				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create Child</a>
+					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">@lang('platform/menus::button.add_child')</a>
 					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>
@@ -67,47 +67,45 @@ jQuery(document).ready(function($) {
 			<div id="create-child" class="modal hide fade">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>New Child</h3>
+					<h3>@lang('platform/menus::form.child.create.legend')</h3>
 				</div>
 				<div class="modal-body">
 					<fieldset id="menu-new-child">
 						{{-- Item Name --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-name">Name</label>
+							<label class="control-label" for="newitem-name">@lang('platform/menus::form.child.name')</label>
 							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
 						</div>
 
 						{{-- Item Slug --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-slug">Slug</label>
+							<label class="control-label" for="newitem-slug">@lang('platform/menus::form.child.slug')</label>
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
 						{{-- Target --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-target">Target</label>
+							<label class="control-label" for="newitem-target">@lang('platform/menus::form.child.target.title')</label>
 							<div class="controls">
 								<select name="newitem-target" id="newitem-target" class="child-target">
-									<option value="0">Same Window</option>
-									<option value="1">New Window</option>
-									<option value="2">Parent Frame</option>
-									<option value="3">Top Frame (Main Document)</option>
+									<option value="0">@lang('platform/menus::form.child.target.self')</option>
+									<option value="1">@lang('platform/menus::form.child.target.blank')</option>
+									<option value="2">@lang('platform/menus::form.child.target.parent')</option>
+									<option value="3">@lang('platform/menus::form.child.target.top')</option>
 								</select>
 							</div>
 						</div>
 
 						{{-- CSS Class --}}
 						<div class="control-group">
-							<label for="newitem-css_class">CSS Class</label>
+							<label for="newitem-css_class">@lang('platform/menus::form.child.class')</label>
 							<input type="text" name="newitem-css_class" id="newitem-css_class" class="input-block-level" value="" placeholder="">
 						</div>
 					</fieldset>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
-					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-large btn-primary children-add-new" data-dismiss="modal">
-						Add Child
-					</button>
+					<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
+					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-large btn-primary children-add-new" data-dismiss="modal">@lang('platform/menus::button.add_child')</button>
 				</div>
 			</div>
 
@@ -125,7 +123,7 @@ jQuery(document).ready(function($) {
 
 			<div class="actions clearfix">
 				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create Child</a>
+					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">@lang('platform/menus::button.add_child')</a>
 					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>

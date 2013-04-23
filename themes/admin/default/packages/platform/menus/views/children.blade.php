@@ -1,7 +1,7 @@
 <li class="item" data-slug="{{ $child->slug }}">
-	<div class="item-dd-handle">Drag</div>
+	<div class="item-dd-handle">@lang('platform/menus::button.drag_children')</div>
 
-	<div href="#item-details-{{ $child->slug }}" class="item-toggle" data-toggle="modal">Toggle Details</div>
+	<div href="#item-details-{{ $child->slug }}" class="item-toggle" data-toggle="modal">@lang('platform/menus::button.toggle_child_details')</div>
 
 	<div class="item-name">{{ $child->name }}</div>
 
@@ -9,7 +9,7 @@
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3>{{ $child->name }} Details</h3>
+			<h3>@lang('platform/menus::form.child.update.legend', array('menu' => $child->name))</h3>
 		</div>
 
 		<div class="modal-body">
@@ -17,40 +17,40 @@
 
 				{{-- Name --}}
 				<div class="control-group">
-					<label class="control-label" for="{{ $child->slug }}_name">Name</label>
+					<label class="control-label" for="{{ $child->slug }}_name">@lang('platform/menus::form.child.name')</label>
 					<input type="text" name="children[{{ $child->slug }}][name]" id="{{ $child->slug }}_name" class="input-block-level" value="{{ $child->name }}" placeholder="">
 				</div>
 
 				{{-- Slug --}}
 				<div class="control-group">
-					<label class="control-label" for="{{ $child->slug }}_slug">Slug</label>
+					<label class="control-label" for="{{ $child->slug }}_slug">@lang('platform/menus::form.child.slug')</label>
 					<input type="text" name="children[{{ $child->slug }}][slug]" id="{{ $child->slug }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
 				</div>
 
 				{{-- Target --}}
 				<div class="control-group">
-					<label class="control-label" for="{{ $child->slug }}_target">Target</label>
+					<label class="control-label" for="{{ $child->slug }}_target">@lang('platform/menus::form.child.target.title')</label>
 					<div class="controls">
 						<select name="children[{{ $child->slug }}][target]" id="{{ $child->slug }}_target" class="child-target">
-							<option value="0"{{ $child->target == 0 ? ' selected="selected"' : '' }}>Same Window</option>
-							<option value="1"{{ $child->target == 1 ? ' selected="selected"' : '' }}>New Window</option>
-							<option value="2"{{ $child->target == 2 ? ' selected="selected"' : '' }}>Parent Frame</option>
-							<option value="3"{{ $child->target == 3 ? ' selected="selected"' : '' }}>Top Frame (Main Document)</option>
+							<option value="0"{{ $child->target == 0 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.self')</option>
+							<option value="1"{{ $child->target == 1 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.blank')</option>
+							<option value="2"{{ $child->target == 2 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.parent')</option>
+							<option value="3"{{ $child->target == 3 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.top')</option>
 						</select>
 					</div>
 				</div>
 
 				{{-- CSS Class --}}
 				<div class="control-group">
-					<label class="control-label" for="{{ $child->slug }}_class">CSS Class</label>
+					<label class="control-label" for="{{ $child->slug }}_class">@lang('platform/menus::form.child.class')</label>
 					<input type="text" name="children[{{ $child->slug }}][class]" id="{{ $child->slug }}_class" class="input-block-level" value="{{ $child->class }}" placeholder="">
 				</div>
 			</fieldset>
 		</div>
 
 		<div class="modal-footer">
-			<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
-			<button name="remove" class="remove btn btn-large btn-primary" data-dismiss="modal" aria-hidden="true">@lang('button.delete')</button>
+			<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
+			<button name="remove" class="remove btn btn-medium btn-primary" data-dismiss="modal" aria-hidden="true">@lang('platform/menus::button.remove_child')</button>
 		</div>
 
 	</div>

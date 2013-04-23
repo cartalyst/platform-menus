@@ -24,17 +24,13 @@ return array(
 	'description' => 'Manage all the menus throughout your website.',
 
 	'create' => array(
-
 		'title'       => 'Create Menu',
 		'description' => 'Please supply the following information.',
-
 	),
 
 	'update' => array(
-
 		'title'       => 'Update Menu',
 		'description' => 'Please update the following information.',
-
 	),
 
 );
