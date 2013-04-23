@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
 					<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : '' }}" required>
 				</div>
 				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create</a>
+					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create Child</a>
 					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
 
 			<div class="actions clearfix">
 				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create</a>
+					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">Create Child</a>
 					<button type="submit" class="btn btn-large btn-primary btn-save-menu">@lang('button.update')</button>
 				</div>
 			</div>
