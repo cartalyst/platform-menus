@@ -104,8 +104,8 @@ jQuery(document).ready(function($) {
 					</fieldset>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
-					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-large btn-primary children-add-new" data-dismiss="modal">@lang('platform/menus::button.add_child')</button>
+					<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
+					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">@lang('platform/menus::button.add_child')</button>
 				</div>
 			</div>
 
