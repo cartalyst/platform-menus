@@ -56,7 +56,7 @@
 	</div>
 
 	@if ($children = $child->getChildren())
-		<ol>
+		<ol class="items">
 			@each('platform/menus::children', $children, 'child')
 		</ol>
 	@endif
