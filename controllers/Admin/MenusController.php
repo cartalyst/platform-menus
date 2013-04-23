@@ -68,8 +68,11 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get all the menu slugs
-			$response       = API::get('v1/menus', array('flat' => true, 'onlySlugs' => true));
-			$persistedSlugs = json_encode($response['menus']);
+			$response       = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
+			$persistedSlugs = array_map(function($child)
+			{
+				return $child['slug'];
+			}, $response['menus']);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -116,7 +119,10 @@ class MenusController extends AdminController {
 
 			// Get all the menu slugs
 			$response       = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
-			$persistedSlugs = $response['menus'];
+			$persistedSlugs = array_map(function($child)
+			{
+				return $child['slug'];
+			}, $response['menus']);
 		}
 		catch (ApiHttpException $e)
 		{
