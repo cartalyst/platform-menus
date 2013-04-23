@@ -66,29 +66,27 @@ class MenusController extends ApiController {
 		// Get all the root menus
 		if (Input::get('root'))
 		{
-			$menus = $this->model->allRoot();
+			return array('menus' => $this->model->allRoot());
 		}
 
 		// Get all the menus on a flat array
-		elseif (Input::get('flat'))
+		if (Input::get('flat'))
 		{
-			if (Input::get('onlySlugs'))
-			{
-				$menus = array();
+			$menus = $this->model->findAll();
 
-				foreach ($this->model->findAll() as $menu)
-				{
-					$menus[] = $menu->slug;
-				}
-			}
-			else
+			if ($attributes = Input::get('attributes'))
 			{
-				$menus = $this->model->findAll();
+				$attributes = array_map('trim', explode(',', $attributes));
+
+				$menus = array_map(function($menu) use ($attributes)
+				{
+					return array_intersect_key($menu->toArray(), array_flip($attributes));
+				}, $menus);
 			}
 		}
 		else
 		{
-			$menus = $this->model->all(); # same as the above
+			$menus = $this->model->all();
 		}
 
 		return Response::api(compact('menus'));

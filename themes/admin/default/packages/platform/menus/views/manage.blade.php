@@ -25,7 +25,7 @@
 <script>
 jQuery(document).ready(function($) {
 	$('#menu').MenuManager({
-		persistedSlugs : {{ $persistedSlugs }}
+		persistedSlugs : {{ json_encode($persistedSlugs) }}
 	});
 });
 </script>
@@ -67,23 +67,23 @@ jQuery(document).ready(function($) {
 			<div id="create-child" class="modal hide fade">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>New Children</h3>
+					<h3>New Child</h3>
 				</div>
 				<div class="modal-body">
 					<fieldset id="menu-new-child">
-						<!-- Item Name -->
+						{{-- Item Name --}}
 						<div class="control-group">
 							<label class="control-label" for="newitem-name">Name</label>
 							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
 						</div>
 
-						<!-- Item Slug -->
+						{{-- Item Slug --}}
 						<div class="control-group">
 							<label class="control-label" for="newitem-slug">Slug</label>
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
-						<!-- Target -->
+						{{-- Target --}}
 						<div class="control-group">
 							<label class="control-label" for="newitem-target">Target</label>
 							<div class="controls">
@@ -96,7 +96,7 @@ jQuery(document).ready(function($) {
 							</div>
 						</div>
 
-						<!-- CSS Class -->
+						{{-- CSS Class --}}
 						<div class="control-group">
 							<label for="newitem-css_class">CSS Class</label>
 							<input type="text" name="newitem-css_class" id="newitem-css_class" class="input-block-level" value="" placeholder="">
@@ -106,13 +106,15 @@ jQuery(document).ready(function($) {
 				<div class="modal-footer">
 					<button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
 					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-large btn-primary children-add-new" data-dismiss="modal">
-						Add Children
+						Add Child
 					</button>
 				</div>
 			</div>
 
 			<div class="nestable" id="nestable">
-				@include('platform/menus::children', compact('children'))
+				<ol class="items">
+					@each('platform/menus::children', $children, 'child')
+				</ol>
 			</div>
 
 			<hr>

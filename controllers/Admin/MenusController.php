@@ -113,8 +113,8 @@ class MenusController extends AdminController {
 			$children = $response['children'];
 
 			// Get all the menu slugs
-			$response       = API::get('v1/menus', array('flat' => true, 'onlySlugs' => true));
-			$persistedSlugs = json_encode($response['menus']);
+			$response       = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
+			$persistedSlugs = $response['menus'];
 		}
 		catch (ApiHttpException $e)
 		{
