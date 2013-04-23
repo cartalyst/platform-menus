@@ -83,11 +83,17 @@ jQuery(document).ready(function($) {
 							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
+						{{-- Item Uri --}}
+						<div class="control-group">
+							<label class="control-label" for="newitem-uri">@lang('platform/menus::form.child.uri')</label>
+							<input type="text" name="newitem-uri" id="newitem-uri" class="input-block-level" value="" placeholder="">
+						</div>
+
 						{{-- Target --}}
 						<div class="control-group">
 							<label class="control-label" for="newitem-target">@lang('platform/menus::form.child.target.title')</label>
 							<div class="controls">
-								<select name="newitem-target" id="newitem-target" class="child-target">
+								<select name="newitem-target" id="newitem-target" class="input-block-level">
 									<option value="0">@lang('platform/menus::form.child.target.self')</option>
 									<option value="1">@lang('platform/menus::form.child.target.blank')</option>
 									<option value="2">@lang('platform/menus::form.child.target.parent')</option>

@@ -243,7 +243,7 @@ class MenusController extends AdminController {
 			'name'                => Input::get("children.{$child['slug']}.name"),
 			'slug'                => Input::get("children.{$child['slug']}.slug"),
 			'driver'              => 'static',
-			// 'uri'              => Input::get('children.' . $child['id'] . '.uri'),
+			'uri'                 => Input::get("children.{$child['slug']}.uri"),
 			// 'page_id'          => Input::get('children.' . $child['id'] . '.page_id'),
 			'class'               => Input::get("children.{$child['slug']}.class"),
 			'target'              => Input::get("children.{$child['slug']}.target", 0),

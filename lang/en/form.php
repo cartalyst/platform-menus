@@ -46,6 +46,7 @@ return array(
 
 		'name' => 'Name',
 		'slug' => 'Slug',
+		'uri'  => 'Uri',
 
 		'target' => array(
 			'title' => 'Target',
@@ -66,7 +67,6 @@ return array(
 			'page'   => 'Page',
 		),
 
-		'uri'    => 'Uri',
 		'secure' => 'Make Secure (HTTPS)',
 
 		'visibility' => array(

@@ -56,6 +56,8 @@
 				// Update the new menu item slug value
 				base.updateChildrenSlug();
 
+				base.updateChildrenUri();
+
 			});
 
 			// When the root menu slug value changes
@@ -66,6 +68,8 @@
 
 				// Update the new menu item slug value
 				base.updateChildrenSlug();
+
+				base.updateChildrenUri();
 
 			});
 
@@ -79,6 +83,8 @@
 			$(base.options.form.children.name).keyup(function() {
 
 				base.updateChildrenSlug();
+
+				base.updateChildrenUri();
 
 			});
 
@@ -144,6 +150,7 @@
 				// Get the new item data
 				name = $.trim($(base.options.form.children.name).val());
 				slug = base.slugify($(base.options.form.children.slug).val());
+				uri = base.slugify($(base.options.form.children.name).val());
 
 				$(base.options.noChildrenSelector).addClass('hide');
 
@@ -160,6 +167,7 @@
 					html += '<div class="item-details">';
 						html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
 						html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
+						html += '<input type="text" name="children[' + slug + '][uri]" value="' + uri + '">';
 						html += '<br ><br>';
 						html += '<button name="remove" class="remove">Delete</button>';
 					html += '</div>';
@@ -349,6 +357,23 @@
 
 		};
 
+		base.updateChildrenUri = function(string) {
+
+			//
+			if (typeof string == 'undefined')
+			{
+				// Get the new item name value
+				string = $(base.options.form.children.name).val();
+			}
+
+			// Generate the slug
+			slug = base.generateSlug(string);
+
+			// Update the new item uri
+			$(base.options.form.children.uri).val(slug);
+
+		};
+
 		/**
 		 * Slugify a string.
 		 *
@@ -496,6 +521,7 @@
 			children : {
 				name   : '#newitem-name',
 				slug   : '#newitem-slug',
+				uri    : '#newitem-uri',
 				submit : '#newitem-add'
 			},
 

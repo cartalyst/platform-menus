@@ -27,11 +27,17 @@
 					<input type="text" name="children[{{ $child->slug }}][slug]" id="{{ $child->slug }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
 				</div>
 
+				{{-- Item Uri --}}
+				<div class="control-group">
+					<label class="control-label" for="{{ $child->slug }}_uri">@lang('platform/menus::form.child.uri')</label>
+					<input type="text" name="children[{{ $child->slug }}][uri]" id="{{ $child->slug }}_uri" class="input-block-level" value="{{ $child->uri }}" placeholder="">
+				</div>
+
 				{{-- Target --}}
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->slug }}_target">@lang('platform/menus::form.child.target.title')</label>
 					<div class="controls">
-						<select name="children[{{ $child->slug }}][target]" id="{{ $child->slug }}_target" class="child-target">
+						<select name="children[{{ $child->slug }}][target]" id="{{ $child->slug }}_target" class="input-block-level">
 							<option value="0"{{ $child->target == 0 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.self')</option>
 							<option value="1"{{ $child->target == 1 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.blank')</option>
 							<option value="2"{{ $child->target == 2 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.parent')</option>
