@@ -108,6 +108,8 @@
 
 				$(base.options.form.children.slug).val(base.slugify($(this).val()));
 
+				base.validateChildSlug();
+
 			});
 
 			// When the main form is submited
@@ -132,30 +134,16 @@
 			// Prevent the form from being submited
 			e.preventDefault();
 
+			// Run the before callback
 			base.options.beforeAdd();
 
-			// Get the new item data
-			name = $.trim($(base.options.form.children.name).val());
-			slug = base.slugify($(base.options.form.children.slug).val());
-
-			// Make sure that both child name and slug
-			// are not empty.
-			if (name != '' && slug != '')
+			// Validate the new children name and the new children slug
+			if (base.validateChildName() & base.validateChildSlug())
 			{
-				// Check if this slug already exists
-				if (($.inArray(slug, base.options.persistedSlugs) > -1))
-				{
-					// Show the errors
-					$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-					$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
 
-					return false;
-				}
-
-				// Remove the errors
-				$(base.options.form.children.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-				$(base.options.form.children.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-
+				// Get the new item data
+				name = $.trim($(base.options.form.children.name).val());
+				slug = base.slugify($(base.options.form.children.slug).val());
 
 
 				// ###################################
@@ -186,16 +174,14 @@
 				// Clean the new item inputs
 				$(base.options.form.children.name).val('');
 				$(base.options.form.children.slug).val(base.generateChildrenSlug());
-			}
-			else
-			{
-				$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-				$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
 
-				return false;
+				// Run the after callback
+				base.options.afterAdd();
+
+				return true;
 			}
 
-			base.options.afterAdd();
+			return false;
 
 		};
 
@@ -206,6 +192,7 @@
 		 */
 		base.removeItem = function() {
 
+			// Run the before callback
 			base.options.beforeRemove();
 
 			// Get the item selector
@@ -232,6 +219,7 @@
 			// Remove the item from the menu
 			$item.remove();
 
+			// Run the after callback
 			base.options.afterRemove();
 
 		};
@@ -243,8 +231,12 @@
 		 */
 		base.updateItem = function() {
 
+			// Run the before callback
 			base.options.beforeUpdate();
 
+			// ...
+
+			// Run the after callback
 			base.options.afterUpdate();
 
 		};
@@ -322,6 +314,7 @@
 		 */
 		base.updateChildrenSlug = function(string) {
 
+			//
 			if (typeof string == 'undefined')
 			{
 				// Get the new item name value
@@ -337,15 +330,15 @@
 			// Check if the slug alread exists
 			if (($.inArray(slug, base.options.persistedSlugs) > -1))
 			{
-				// Show the errors
-				$(base.options.form.children.name).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-				$(base.options.form.children.slug).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+				// Shdow the errors
+				//base.showError(base.options.form.children.name);
+				base.showError(base.options.form.children.slug);
 			}
 			else
 			{
 				// Remove the errors
-				$(base.options.form.children.name).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-				$(base.options.form.children.slug).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
+				//base.hideError(base.options.form.children.name);
+				base.hideError(base.options.form.children.slug);
 			}
 
 		};
@@ -379,6 +372,87 @@
 					.replace(/-+/g, separator) // collapse dashes
 					.replace(new RegExp(separator + '+$'), '') // Trim separator from start
 					.replace(new RegExp('^' + separator + '+'), ''); // Trim separator from end
+
+		};
+
+		/**
+		 * Validates the children name.
+		 *
+		 * @return bool
+		 */
+		base.validateChildName = function(){
+
+			name = $.trim($(base.options.form.children.name).val());
+
+			if (name.length < 3)
+			{
+				// Show the error
+				base.showError(base.options.form.children.name);
+
+				return false;
+			}
+
+			// Hide the error
+			base.hideError(base.options.form.children.name);
+
+			return true;
+
+		};
+
+		/**
+		 * Validates the children slug.
+		 *
+		 * @return bool
+		 */
+		base.validateChildSlug = function(){
+
+			slug = base.slugify($(base.options.form.children.slug).val());
+
+			if (slug.length < 3)
+			{
+				// Show the error
+				base.showError(base.options.form.children.slug);
+
+				return false;
+			}
+
+			// Check if this slug already exists
+			if (($.inArray(slug, base.options.persistedSlugs) > -1))
+			{
+				// Show the error
+				base.showError(base.options.form.children.slug);
+
+				return false;
+			}
+
+			// Hide the error
+			base.hideError(base.options.form.children.slug);
+
+			return true;
+
+		};
+
+		/**
+		 * Show the error on an input.
+		 *
+		 * @param  string
+		 * @return void
+		 */
+		base.showError = function(input) {
+
+			$(input).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
+
+		};
+
+		/**
+		 * Hides the error on an input.
+		 *
+		 * @param  string
+		 * @return void
+		 */
+		base.hideError = function(input) {
+
+			$(input).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
 
 		};
 
