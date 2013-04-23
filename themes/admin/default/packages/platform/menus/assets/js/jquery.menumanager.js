@@ -145,6 +145,7 @@
 				name = $.trim($(base.options.form.children.name).val());
 				slug = base.slugify($(base.options.form.children.slug).val());
 
+				$(base.options.noChildrenSelector).addClass('hide');
 
 				// ###################################
 				// Add the children...
@@ -218,6 +219,11 @@
 
 			// Remove the item from the menu
 			$item.remove();
+
+			if ($(base.options.nestable.selector + ' > ol > li').length == 0)
+			{
+				$(base.options.noChildrenSelector).removeClass('hide');
+			}
 
 			// Run the after callback
 			base.options.afterRemove();
@@ -469,6 +475,7 @@
 		controlGroupSelector : '.control-group',
 		//// leaving it here, for now...
 
+		noChildrenSelector: '#no-children',
 
 		// Holds all of the existing menu slugs
 		persistedSlugs : [],

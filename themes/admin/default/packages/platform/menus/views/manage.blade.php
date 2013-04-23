@@ -117,6 +117,10 @@ jQuery(document).ready(function($) {
 				</ol>
 			</div>
 
+			<p id="no-children" class="{{ (count($children) > 0) ? 'hide' : '' }}">
+				No Children
+			</p>
+
 			<hr>
 
 			<div class="actions clearfix">
