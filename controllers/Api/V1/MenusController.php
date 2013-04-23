@@ -66,7 +66,7 @@ class MenusController extends ApiController {
 		// Get all the root menus
 		if (Input::get('root'))
 		{
-			return array('menus' => $this->model->allRoot());
+			return Response::api(array('menus' => $this->model->allRoot()));
 		}
 
 		// Get all the menus on a flat array
