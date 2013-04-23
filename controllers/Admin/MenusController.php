@@ -79,7 +79,7 @@ class MenusController extends AdminController {
 		$children = array();
 
 		// Show the page
-		return View::make('platform/menus::manage', compact('persistedSlugs'));
+		return View::make('platform/menus::manage', compact('persistedSlugs', 'children'));
 	}
 
 	/**
