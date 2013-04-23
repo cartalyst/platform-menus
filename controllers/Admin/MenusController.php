@@ -160,17 +160,11 @@ class MenusController extends AdminController {
 		}
 
 		// Prepare the menu data for the API
-		$menu = array();
-
-		//
-		$menu['name'] = Input::get('menu-name');
-		$menu['slug'] = Input::get('menu-slug');
-
-		// Do we have children?
-		if (count($children) > 0)
-		{
-			$menu['children'] = $children;
-		}
+		$menu = array(
+			'slug'     => Input::get('menu-slug'),
+			'name'     => Input::get('menu-name'),
+			'children' => $children,
+		);
 
 		try
 		{
