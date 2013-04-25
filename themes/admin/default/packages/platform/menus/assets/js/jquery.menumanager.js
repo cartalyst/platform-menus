@@ -151,6 +151,7 @@
 				name = $.trim($(base.options.form.children.name).val());
 				slug = base.slugify($(base.options.form.children.slug).val());
 				uri = base.slugify($(base.options.form.children.name).val());
+				css_class = $(base.options.form.children.css_class).val();
 
 				$(base.options.noChildrenSelector).addClass('hide');
 
@@ -168,6 +169,7 @@
 						html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
 						html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
 						html += '<input type="text" name="children[' + slug + '][uri]" value="' + uri + '">';
+						html += '<input type="text" name="children[' + slug + '][class]" value="' + css_class + '">';
 						html += '<br ><br>';
 						html += '<button name="remove" class="remove">Delete</button>';
 					html += '</div>';
@@ -183,6 +185,8 @@
 				// Clean the new item inputs
 				$(base.options.form.children.name).val('');
 				$(base.options.form.children.slug).val(base.generateChildrenSlug());
+				$(base.options.form.children.uri).val('');
+				$(base.options.form.children.css_class).val('');
 
 				// Run the after callback
 				base.options.afterAdd();
@@ -519,9 +523,11 @@
 
 			// Children elements
 			children : {
-				name   : '#newitem-name',
-				slug   : '#newitem-slug',
-				uri    : '#newitem-uri',
+				name      : '#newitem-name',
+				slug      : '#newitem-slug',
+				uri       : '#newitem-uri',
+				css_class : '#newitem-css_class',
+
 				submit : '#newitem-add'
 			},
 
