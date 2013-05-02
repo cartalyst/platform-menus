@@ -21,7 +21,7 @@
 return array(
 
 	'already_exists' => 'Menu already exists!',
-	'does_not_exist' => 'Menu [:menuSlug] either not a root menu item or does not exist.',
+	'does_not_exist' => 'Menu [:slug] either not a root menu item or does not exist.',
 
 	'create' => array(
 		'error'   => 'There was an issue creating the menu. Please try again.',

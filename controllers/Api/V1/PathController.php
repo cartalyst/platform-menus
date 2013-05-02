@@ -18,6 +18,7 @@
  * @link       http://cartalyst.com
  */
 
+use Lang;
 use Platform\Routing\Controllers\ApiController;
 use Response;
 
