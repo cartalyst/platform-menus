@@ -106,7 +106,7 @@ class MenusController extends ApiController {
 
 		if ($children = Input::get('menu.children'))
 		{
-			API::put("menus/$slug/children", compact('children'));
+			API::put("v1/menus/$slug/children", compact('children'));
 		}
 
 		return Response::api(compact('menu'));
@@ -115,15 +115,15 @@ class MenusController extends ApiController {
 	/**
 	 * Returns information about the given menu.
 	 *
-	 * @param  string  $menuSlug
+	 * @param  string  $slug
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($menuSlug)
+	public function show($slug)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($menuSlug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
 		}
 
 		return Response::api(compact('menu'));
@@ -134,12 +134,12 @@ class MenusController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function update($menuSlug)
+	public function update($slug)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($menuSlug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
 		}
 
 		//
@@ -147,7 +147,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				API::put("menus/$menuSlug/children", array('children' => $value));
+				API::put("v1/menus/$slug/children", array('children' => $value));
 			}
 			else
 			{
@@ -167,15 +167,15 @@ class MenusController extends ApiController {
 	/**
 	 * Deletes the provided menu.
 	 *
-	 * @param  int  $menuSlug
+	 * @param  int  $slug
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function destroy($menuSlug)
+	public function destroy($slug)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($menuSlug))
+		if ( ! $menu = $this->model->find($slug))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('menuSlug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
 		}
 
 		// Delete the menu

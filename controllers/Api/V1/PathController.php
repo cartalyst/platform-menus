@@ -51,7 +51,7 @@ class PathController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($slug))
 		{
-			return Response::api("Menu [$slug] does not exist.", 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
 		}
 
 		return Response::api(array('path' => $menu->getPath()));
