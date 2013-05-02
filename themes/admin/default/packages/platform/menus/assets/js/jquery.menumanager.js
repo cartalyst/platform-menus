@@ -34,7 +34,7 @@
 		/**
 		 * Initializer
 		 *
-		 * @retrun void
+		 * @return void
 		 */
 		base.Initializer = function() {
 

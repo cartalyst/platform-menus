@@ -22,7 +22,6 @@ use API;
 use Input;
 use Lang;
 use Platform\Routing\Controllers\ApiController;
-use Platform\Ui\Menu;
 use Response;
 
 class MenusController extends ApiController {
@@ -40,7 +39,7 @@ class MenusController extends ApiController {
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Ui\Model
+	 * @var Platform\Ui\Menu
 	 */
 	protected $model;
 

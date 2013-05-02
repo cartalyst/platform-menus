@@ -19,7 +19,6 @@
  */
 
 use Platform\Routing\Controllers\ApiController;
-use Platform\Ui\Menu;
 use Response;
 
 class PathController extends ApiController {
@@ -27,7 +26,7 @@ class PathController extends ApiController {
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Ui\Model
+	 * @var Platform\Ui\Menu
 	 */
 	protected $model;
 

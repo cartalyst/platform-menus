@@ -96,12 +96,11 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Update a menu
+	 * Update a menu.
 	 *
 	 * @param  string  $menuSlug
 	 * @return mixed
 	 */
-
 	public function getEdit($menuSlug = null)
 	{
 		// Set the current active menu
@@ -138,7 +137,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Menu update form processing page.
+	 * Update a menu form processing page.
 	 *
 	 * @param  string  $menuSlug
 	 * @return Redirect
