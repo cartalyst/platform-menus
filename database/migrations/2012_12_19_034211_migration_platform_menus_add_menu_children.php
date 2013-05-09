@@ -19,7 +19,7 @@
  */
 
 use Illuminate\Database\Migrations\Migration;
-use Platform\Ui\Menu;
+use Platform\Ui\Models\Menu;
 
 class MigrationPlatformMenusAddMenuChildren extends Migration {
 
