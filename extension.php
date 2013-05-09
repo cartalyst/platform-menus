@@ -220,7 +220,10 @@ return array(
 	|
 	*/
 
-	'permissions' => array(),
+	'permissions' => function()
+	{
+
+	},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -262,6 +265,9 @@ return array(
 	|
 	*/
 
-	'settings' => array(),
+	'settings' => function()
+	{
+
+	},
 
 );
