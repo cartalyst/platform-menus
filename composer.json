@@ -43,12 +43,10 @@
 		"mockery/mockery": "0.7.*"
 	},
 	"autoload": {
-		"psr-0": {
-			"Platform\\Menus" : "models"
-		},
 		"classmap": [
 			"controllers",
 			"database/migrations",
+			"models",
 			"plugins",
 			"tests",
 			"widgets"
