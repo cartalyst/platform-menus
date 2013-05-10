@@ -181,7 +181,7 @@ class MenusController extends ApiController {
 		// Delete the menu
 		$menu->deleteWithChildren();
 
-		return Response::api(Lang::get('platform/menus::message.delete.success'));
+		return Response::api(Lang::get('platform/menus::message.delete.success'), 204);
 	}
 
 }
