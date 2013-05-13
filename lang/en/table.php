@@ -27,4 +27,6 @@ return array(
 	'children_count' => 'Number of Children',
 	'children'       => ':count children',
 
+	'created_at'     => 'Created At',
+
 );

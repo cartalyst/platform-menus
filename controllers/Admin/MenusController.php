@@ -20,6 +20,7 @@
 
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
+use DataGrid;
 use Illuminate\Support\MessageBag as Bag;
 use Input;
 use Lang;
@@ -53,6 +54,32 @@ class MenusController extends AdminController {
 
 		// Show the page
 		return View::make('platform/menus::index', compact('menus'));
+	}
+
+	/**
+	 * Datasource for the users Data Grid.
+	 *
+	 * @return Cartalyst\DataGrid\DataGrid
+	 */
+	public function getGrid()
+	{
+		// Get all the root menus
+		$response = API::get('v1/menus', array('root' => true));
+		$menus    = array();
+
+		foreach ($response['menus'] as $menu)
+		{
+			$menus[] = array_merge($menu->toArray(), array(
+				'children_count' => $menu->getChildrenCount(),
+			));
+		}
+
+		return DataGrid::make($menus, array(
+			'name',
+			'slug',
+			'children_count',
+			'created_at',
+		));
 	}
 
 	/**

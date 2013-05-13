@@ -6,6 +6,22 @@
 @parent
 @stop
 
+{{-- Queue Assets --}}
+{{ Asset::queue('tempo', 'js/vendor/tempo/tempo.js', 'jquery') }}
+{{ Asset::queue('data-grid', 'js/vendor/cartalyst/data-grid.js', 'tempo') }}
+
+{{-- Inline Scripts --}}
+@section('scripts')
+@parent
+<script>
+jQuery(document).ready(function($){
+	$.datagrid('main', '.table', '.pagination', '.applied', {
+		loader: '.table-processing'
+	});
+});
+</script>
+@stop
+
 {{-- Page content --}}
 @section('content')
 <section id="menus">
@@ -27,29 +43,98 @@
 
 		<hr>
 
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>@lang('platform/menus::table.name')</th>
-					<th>@lang('platform/menus::table.slug')</th>
-					<th>@lang('platform/menus::table.children_count')</th>
-					<th class="span2">@lang('table.actions')</th>
-				</tr>
-			</thead>
-			<tbody>
-			@foreach ($menus as $menu)
-				<tr>
-					<td>{{ $menu->name }}</td>
-					<td>{{ $menu->slug }}</td>
-					<td>@lang('platform/menus::table.children', array('count' => $menu->getChildrenCount()))</td>
-					<td>
-						<a class="btn btn-small" href="{{ URL::toAdmin("menus/edit/{$menu->slug}") }}">@lang('button.edit')</a>
-						<a class="btn btn-small btn-danger" href="{{ URL::toAdmin("menus/delete/{$menu->slug}") }}">@lang('button.delete')</a>
-					</td>
-				</tr>
-			@endforeach
-			</tbody>
-		</table>
+		<div class="clearfix">
+
+			<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="form-inline pull-left">
+				<select name="column" class="input-medium">
+					<option value="all">All</option>
+					<option value="name">Name</option>
+					<option value="slug">Slug</option>
+				</select>
+				<input name="filter" type="text" placeholder="Filter All" class="input-large">
+				<button class="btn btn-medium">Add Filter</button>
+				<button class="btn btn-medium" data-reset data-grid="main">Reset</button>
+			</form>
+
+			<div class="processing pull-left">
+				<div class="table-processing" style="display: none;">Processing...</div>
+			</div>
+
+		</div>
+
+		<ul class="applied" data-grid="main">
+			<li data-template>
+				<a href="#" class="remove-filter btn btn-small">
+					[? if column == undefined ?]
+					[[ valueLabel ]]
+					[? else ?]
+					[[ valueLabel ]] in [[ columnLabel ]]
+					[? endif ?]
+					<span class="close" style="float: none;">&times;</span>
+				</a>
+			</li>
+		</ul>
+
+		<div id="table">
+
+			<div class="tabbable tabs-right">
+
+				<ul class="pagination nav nav-tabs" data-grid="main">
+					<li data-template data-if-infiniteload>
+						<a href="#" class="goto-page" data-page="[[ page ]]">
+							Load More
+						</a>
+					</li>
+					<li data-template data-if-throttle>
+						<a href="#" class="goto-page" data-throttle>
+							[[ label ]]
+						</a>
+					</li>
+					<li data-template class="[? if active ?]active[? endif ?]">
+						<a  href="#" data-page="[[ page ]]" class="goto-page">
+							[[ pageStart ]] - [[ pageLimit ]]
+						</a>
+					</li>
+				</ul>
+
+				<div class="tab-content">
+
+					<table class="table table-bordered table-striped" data-grid="main" data-source="{{ URL::toAdmin('menus/grid') }}">
+						<thead>
+							<tr>
+								<th data-sort="name" data-grid="main" class="sortable">@lang('platform/menus::table.name')</th>
+								<th data-sort="slug" data-grid="main" class="sortable">@lang('platform/menus::table.slug')</th>
+								<th data-sort="children_count" data-grid="main" class="sortable">@lang('platform/menus::table.children_count')</th>
+								<th data-sort="created_at" data-grid="main" class="sortable">@lang('platform/menus::table.created_at')</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-template>
+								<td>[[ name ]]</td>
+								<td>[[ slug ]]</td>
+								<td>[[ children_count ]]</td>
+								<td>[[ created_at ]]</td>
+								<td>
+									<div class="btn-group">
+										<a href="{{ URL::toAdmin('menus/edit/[[id]]') }}" class="btn btn-small">
+											@lang('button.edit')
+										</a>
+
+										<a href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-small btn-danger">
+											@lang('button.delete')
+										</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+
+		</div>
 
 	</section>
 
