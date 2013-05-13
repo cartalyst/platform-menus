@@ -161,17 +161,51 @@
 				html = '<li class="item" data-slug="' + slug + '">';
 					html += '<div class="item-dd-handle">Drag</div>';
 
-					html += '<div class="item-toggle">Toogle Details</div>';
-
 					html += '<div class="item-name">' + name + '</div>';
 
-					html += '<div class="item-details">';
-						html += '<input type="text" name="children[' + slug + '][name]" value="' + name + '"><br/>';
-						html += '<input type="text" name="children[' + slug + '][slug]" value="' + slug + '">';
-						html += '<input type="text" name="children[' + slug + '][uri]" value="' + uri + '">';
-						html += '<input type="text" name="children[' + slug + '][class]" value="' + css_class + '">';
-						html += '<br ><br>';
-						html += '<button name="remove" class="remove">Delete</button>';
+					html += '<div href="#item-details-' + slug + '" class="item-toggle" data-toggle="modal">Child details</div>';
+
+						html += '<div id="item-details-' + slug + '" class="modal hide fade">';
+
+							// header
+							html += '<div class="modal-header">';
+								html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+								html += '<h3>' + name + ' Details</h3>';
+							html += '</div>';
+
+							// body
+							html += '<div class="modal-body">';
+
+								html += '<div class="control-group">';
+									html += '<label class="control-label" for="' + slug + '_name">Name</label>';
+									html += '<input type="text" name="children[' + slug + '][name]" id="' + slug + '_name" class="input-block-level" value="' + name +'" placeholder="">';
+								html += '</div>';
+
+								html += '<div class="control-group">';
+									html += '<label class="control-label" for="' + slug + '_slug">Slug</label>';
+									html += '<input type="text" name="children[' + slug + '][slug]" id="' + slug + '_slug" class="input-block-level" value="' + slug +'" placeholder="">';
+								html += '</div>';
+
+								html += '<div class="control-group">';
+									html += '<label class="control-label" for="' + slug + '_uri">Uri</label>';
+									html += '<input type="text" name="children[' + slug + '][uri]" id="' + slug + '_uri" class="input-block-level" value="' + uri +'" placeholder="">';
+								html += '</div>';
+
+								html += '<div class="control-group">';
+									html += '<label class="control-label" for="' + slug + '_class">Class</label>';
+									html += '<input type="text" name="children[' + slug + '][class]" id="' + slug + '_class" class="input-block-level" value="' + css_class +'" placeholder="">';
+								html += '</div>';
+
+							html += '</div>';
+
+							// footer
+							html += '<div class="modal-footer">';
+								html += '<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">Close</button>';
+								html += '<button name="remove" class="remove btn btn-medium btn-primary" data-dismiss="modal" aria-hidden="true">Remove child</button>';
+							html += '</div>';
+
+						html += '</div>';
+
 					html += '</div>';
 				html += '</li>';
 				$(base.options.nestable.selector + ' > ol').append(html);
