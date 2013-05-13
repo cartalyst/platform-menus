@@ -211,14 +211,21 @@
 			// Get the item selector
 			itemSelector = '.' + base.options.nestable.itemClass;
 
+			// Get this item id
+			itemId = $(this).closest(itemSelector).data('id');
+
 			// Get this item slug
 			itemSlug = $(this).closest(itemSelector).data('slug');
 
 			// Remove the item from the array
 			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
 
+			// Get both data and item identifier
+			dataIdentifier = (typeof itemSlug == 'undefined' ? 'id' : 'slug');
+			itemIdentifier = (typeof itemSlug == 'undefined' ? itemId : itemSlug);
+
 			// Find closest item
-			var $item = $(itemSelector + '[data-slug="' + itemSlug + '"]');
+			var $item = $(itemSelector + '[data-' + dataIdentifier + '="' + itemIdentifier + '"]');
 			var $list = $item.children(base.options.nestable.listNodeName);
 
 			// Check if we have children
