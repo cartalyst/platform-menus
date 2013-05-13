@@ -95,10 +95,10 @@ jQuery(document).ready(function($) {
 							<label class="control-label" for="new-child-target">@lang('platform/menus::form.child.target.title')</label>
 							<div class="controls">
 								<select name="new-child-target" id="new-child-target" class="input-block-level">
-									<option value="0">@lang('platform/menus::form.child.target.self')</option>
-									<option value="1">@lang('platform/menus::form.child.target.blank')</option>
-									<option value="2">@lang('platform/menus::form.child.target.parent')</option>
-									<option value="3">@lang('platform/menus::form.child.target.top')</option>
+									<option value="self">@lang('platform/menus::form.child.target.self')</option>
+									<option value="new_window">@lang('platform/menus::form.child.target.blank')</option>
+									<option value="parent_frame">@lang('platform/menus::form.child.target.parent')</option>
+									<option value="top_frame">@lang('platform/menus::form.child.target.top')</option>
 								</select>
 							</div>
 						</div>

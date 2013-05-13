@@ -40,10 +40,10 @@
 					<label class="control-label" for="{{ $child->id }}_target">@lang('platform/menus::form.child.target.title')</label>
 					<div class="controls">
 						<select name="children[{{ $child->id }}][target]" id="{{ $child->id }}_target" class="input-block-level">
-							<option value="0"{{ $child->target == 0 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.self')</option>
-							<option value="1"{{ $child->target == 1 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.blank')</option>
-							<option value="2"{{ $child->target == 2 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.parent')</option>
-							<option value="3"{{ $child->target == 3 ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.top')</option>
+							<option value="self"{{ $child->target == 'self' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.self')</option>
+							<option value="new_children"{{ $child->target == 'new_children' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.blank')</option>
+							<option value="parent_frame"{{ $child->target == 'parent_frame' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.parent')</option>
+							<option value="top_frame"{{ $child->target == 'top_frame' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.top')</option>
 						</select>
 					</div>
 				</div>
