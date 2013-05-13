@@ -523,12 +523,12 @@
 
 			// Children elements
 			children : {
-				name      : '#newitem-name',
-				slug      : '#newitem-slug',
-				uri       : '#newitem-uri',
-				css_class : '#newitem-css_class',
+				name      : '#new-child-name',
+				slug      : '#new-child-slug',
+				uri       : '#new-child-uri',
+				css_class : '#new-child-css_class',
 
-				submit : '#newitem-add'
+				submit : '#new-child-add'
 			},
 
 			// Selector for removing menu items

@@ -71,29 +71,30 @@ jQuery(document).ready(function($) {
 				</div>
 				<div class="modal-body">
 					<fieldset id="menu-new-child">
+
 						{{-- Item Name --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-name">@lang('platform/menus::form.child.name')</label>
-							<input type="text" name="newitem-name" id="newitem-name" class="input-block-level" value="" placeholder="">
+							<label class="control-label" for="new-child-name">@lang('platform/menus::form.child.name')</label>
+							<input type="text" name="new-child-name" id="new-child-name" class="input-block-level" value="" placeholder="">
 						</div>
 
 						{{-- Item Slug --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-slug">@lang('platform/menus::form.child.slug')</label>
-							<input type="text" name="newitem-slug" id="newitem-slug" class="input-block-level" value="" placeholder="">
+							<label class="control-label" for="new-child-slug">@lang('platform/menus::form.child.slug')</label>
+							<input type="text" name="new-child-slug" id="new-child-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
 						{{-- Item Uri --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-uri">@lang('platform/menus::form.child.uri')</label>
-							<input type="text" name="newitem-uri" id="newitem-uri" class="input-block-level" value="" placeholder="">
+							<label class="control-label" for="new-child-uri">@lang('platform/menus::form.child.uri')</label>
+							<input type="text" name="new-child-uri" id="new-child-uri" class="input-block-level" value="" placeholder="">
 						</div>
 
 						{{-- Target --}}
 						<div class="control-group">
-							<label class="control-label" for="newitem-target">@lang('platform/menus::form.child.target.title')</label>
+							<label class="control-label" for="new-child-target">@lang('platform/menus::form.child.target.title')</label>
 							<div class="controls">
-								<select name="newitem-target" id="newitem-target" class="input-block-level">
+								<select name="new-child-target" id="new-child-target" class="input-block-level">
 									<option value="0">@lang('platform/menus::form.child.target.self')</option>
 									<option value="1">@lang('platform/menus::form.child.target.blank')</option>
 									<option value="2">@lang('platform/menus::form.child.target.parent')</option>
@@ -104,14 +105,15 @@ jQuery(document).ready(function($) {
 
 						{{-- CSS Class --}}
 						<div class="control-group">
-							<label for="newitem-css_class">@lang('platform/menus::form.child.class')</label>
-							<input type="text" name="newitem-css_class" id="newitem-css_class" class="input-block-level" value="" placeholder="">
+							<label for="new-child-css_class">@lang('platform/menus::form.child.class')</label>
+							<input type="text" name="new-child-css_class" id="new-child-css_class" class="input-block-level" value="" placeholder="">
 						</div>
+
 					</fieldset>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
-					<button type="button" name="newitem-add" id="newitem-add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">@lang('platform/menus::button.add_child')</button>
+					<button type="button" name="new-child-add" id="new-child-add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">@lang('platform/menus::button.add_child')</button>
 				</div>
 			</div>
 
