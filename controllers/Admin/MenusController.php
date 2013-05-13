@@ -75,6 +75,7 @@ class MenusController extends AdminController {
 		}
 
 		return DataGrid::make($menus, array(
+			'id',
 			'name',
 			'slug',
 			'children_count',
