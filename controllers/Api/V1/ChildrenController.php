@@ -48,11 +48,11 @@ class ChildrenController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($slug)
+	public function show($id)
 	{
-		if ( ! $menu = $this->model->find($slug))
+		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api("Could not find children for [$slug] menu as it does not exist.", 404);
+			return Response::api("Could not find children for [$id] menu as it does not exist.", 404);
 		}
 
 		// Hydrate the children to the depth required
@@ -66,16 +66,16 @@ class ChildrenController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function update($slug)
+	public function update($id)
 	{
-		if ( ! $menu = $this->model->find($slug))
+		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api("Could not update children for [$slug] menu as it does not exist.", 404);
+			return Response::api("Could not update children for [$id] menu as it does not exist.", 404);
 		}
 
 		$menu->mapTree(Input::get('children'));
 
-		return $this->show($slug);
+		return $this->show($id);
 	}
 
 }

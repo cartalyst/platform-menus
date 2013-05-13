@@ -556,7 +556,7 @@
 			maxDepth        : 100
 		},
 
-		hierarchyInputName: 'children_hierarchy',
+		hierarchyInputName: 'tree',
 
 		/**
 		 * Event called before we add a new menu item.

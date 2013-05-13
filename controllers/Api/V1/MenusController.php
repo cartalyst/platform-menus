@@ -100,13 +100,13 @@ class MenusController extends ApiController {
 	{
 		$menu = new $this->model(array(
 			'name' => Input::get('menu.name'),
-			'slug' => $slug = Input::get('menu.slug'),
+			'slug' => Input::get('menu.slug'),
 		));
 		$menu->makeRoot();
 
 		if ($children = Input::get('menu.children'))
 		{
-			API::put("v1/menus/$slug/children", compact('children'));
+			API::put("v1/menus/{$menu->getKey()}/children", compact('children'));
 		}
 
 		return Response::api(compact('menu'));
@@ -115,15 +115,15 @@ class MenusController extends ApiController {
 	/**
 	 * Returns information about the given menu.
 	 *
-	 * @param  string  $slug
+	 * @param  string  $id
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function show($slug)
+	public function show($id)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($slug))
+		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
 		}
 
 		return Response::api(compact('menu'));
@@ -134,12 +134,12 @@ class MenusController extends ApiController {
 	 *
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function update($slug)
+	public function update($id)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($slug))
+		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
 		}
 
 		//
@@ -147,7 +147,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				API::put("v1/menus/$slug/children", array('children' => $value));
+				API::put("v1/menus/$id/children", array('children' => $value));
 			}
 			else
 			{
@@ -167,15 +167,15 @@ class MenusController extends ApiController {
 	/**
 	 * Deletes the provided menu.
 	 *
-	 * @param  int  $slug
+	 * @param  int  $id
 	 * @return Cartalyst\Api\Http\Response
 	 */
-	public function destroy($slug)
+	public function destroy($id)
 	{
 		// Get this menu information
-		if ( ! $menu = $this->model->find($slug))
+		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('slug')), 404);
+			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
 		}
 
 		// Delete the menu

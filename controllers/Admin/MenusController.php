@@ -126,10 +126,10 @@ class MenusController extends AdminController {
 	/**
 	 * Update a menu.
 	 *
-	 * @param  string  $menuSlug
+	 * @param  int  $id
 	 * @return mixed
 	 */
-	public function getEdit($menuSlug = null)
+	public function getEdit($id = null)
 	{
 		// Set the current active menu
 		set_active_menu('admin-menus');
@@ -137,11 +137,11 @@ class MenusController extends AdminController {
 		try
 		{
 			// Get the menu information
-			$response = API::get("v1/menus/$menuSlug");
+			$response = API::get("v1/menus/$id");
 			$menu     = $response['menu'];
 
 			// Get this menu children
-			$response = API::get("v1/menus/$menuSlug/children");
+			$response = API::get("v1/menus/$id/children");
 			$children = $response['children'];
 
 			// Get all the menu slugs
@@ -167,23 +167,24 @@ class MenusController extends AdminController {
 	/**
 	 * Update a menu form processing page.
 	 *
-	 * @param  string  $menuSlug
+	 * @param  int  $id
 	 * @return Redirect
 	 */
-	public function postEdit($menuSlug = null)
+	public function postEdit($id = null)
 	{
-		// Get the children hierarchy.
-		$children_hierarchy = Input::get('children_hierarchy');
+		// Get the tree
+		$tree = Input::get('tree');
 
 		// JSON string on non-AJAX form.
-		if (is_string($children_hierarchy))
+		if (is_string($tree))
 		{
-			$children_hierarchy = json_decode($children_hierarchy, true);
+			$tree = json_decode($tree, true);
 		}
+
 		// Prepare our children
 		$children = array();
 
-		foreach ($children_hierarchy as $child)
+		foreach ($tree as $child)
 		{
 			// Ensure no bad data is coming through from POST
 			if ( ! is_array($child))
@@ -191,7 +192,7 @@ class MenusController extends AdminController {
 				continue;
 			}
 
-			$this->process_child_recursively($child, $children);
+			$this->processChildRecursively($child, $children);
 		}
 
 		// Prepare the menu data for the API
@@ -204,11 +205,11 @@ class MenusController extends AdminController {
 		try
 		{
 			// Are we creating a menu?
-			if (is_null($menuSlug))
+			if (is_null($id))
 			{
 				// Create the menu
 				$response = API::post('v1/menus', compact('menu'));
-				$menuSlug = $response['menu']->slug;
+				$id = $response['menu']->slug;
 
 				// Prepare the success message
 				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.create.success'));
@@ -218,14 +219,14 @@ class MenusController extends AdminController {
 			else
 			{
 				// Update the menu
-				API::put("v1/menus/$menuSlug", compact('menu'));
+				API::put("v1/menus/$id", compact('menu'));
 
 				// Prepare the success message
 				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.update.success'));
 			}
 
 			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/$menuSlug")->with('messages', $messages);
+			return Redirect::toAdmin("menus/edit/$id")->with('messages', $messages);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -237,15 +238,15 @@ class MenusController extends AdminController {
 	/**
 	 * Delete a menu.
 	 *
-	 * @param  string  $menuSlug
+	 * @param  int  $id
 	 * @return Redirect
 	 */
-	public function getDelete($menuSlug)
+	public function getDelete($id)
 	{
 		try
 		{
 			// Delete the menu
-			API::delete("v1/menus/$menuSlug");
+			API::delete("v1/menus/$id");
 
 			// Set the success message
 			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.delete.success'));
@@ -260,20 +261,33 @@ class MenusController extends AdminController {
 		return Redirect::toAdmin('menus')->with('messages', $messages);
 	}
 
-
-
-
-
-	protected function process_child_recursively($child, &$children)
+	/**
+	 * Recursively processes a child node by extracting POST data
+	 * from the admin UI so that we may structure a nice tree of
+	 * pure data to send off to the API.
+	 *
+	 * @param  array  $child
+	 * @param  array  $children
+	 * @return void
+	 */
+	protected function processChildRecursively($child, &$children)
 	{
+		// Existing menu children will pass an ID through to us.
+		// This is advantageous to use as the slug may change
+		// without anything being messed up. For new items, we'll
+		// resort to using the slug that has been passed through to
+		// us.
+		$index = isset($child['id']) ? $child['id'] : $child['slug'];
+
 		$new_child = array(
-			'name'                => Input::get("children.{$child['slug']}.name"),
-			'slug'                => Input::get("children.{$child['slug']}.slug"),
+			'id'                  => Input::get("children.$index.id"),
+			'name'                => Input::get("children.$index.name"),
+			'slug'                => Input::get("children.$index.slug"),
 			'driver'              => 'static',
-			'uri'                 => Input::get("children.{$child['slug']}.uri"),
+			'uri'                 => Input::get("children.$index.uri"),
 			// 'page_id'          => Input::get('children.' . $child['id'] . '.page_id'),
-			'class'               => Input::get("children.{$child['slug']}.class"),
-			'target'              => Input::get("children.{$child['slug']}.target", 0),
+			'class'               => Input::get("children.$index.class"),
+			'target'              => Input::get("children.$index.target", 0),
 			// 'visibility'       => Input::get('children.' . $child['id'] . '.visibility', Menu::VISIBILITY_ALWAYS),
 			// 'group_visibility' => (array) Input::get('children.' . $child['id'] . '.group_visibility'),
 			// 'status'           => Input::get('children.' . $child['id'] . '.status', 1),
@@ -310,7 +324,7 @@ class MenusController extends AdminController {
 
 			foreach ($child['children'] as $child)
 			{
-				$this->process_child_recursively($child, $grand_children);
+				$this->processChildRecursively($child, $grand_children);
 			}
 
 			$new_child['children'] = $grand_children;
