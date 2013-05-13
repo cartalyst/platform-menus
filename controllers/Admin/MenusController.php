@@ -212,7 +212,7 @@ class MenusController extends AdminController {
 				$id = $response['menu']->slug;
 
 				// Prepare the success message
-				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.create.success'));
+				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.create'));
 			}
 
 			// No, we are updating the menu
@@ -222,7 +222,7 @@ class MenusController extends AdminController {
 				API::put("v1/menus/$id", compact('menu'));
 
 				// Prepare the success message
-				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.update.success'));
+				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.update'));
 			}
 
 			// Redirect to the menu edit page
@@ -249,12 +249,12 @@ class MenusController extends AdminController {
 			API::delete("v1/menus/$id");
 
 			// Set the success message
-			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.delete.success'));
+			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
 		}
 		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.delete.error'));
+			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
 		}
 
 		// Redirect to the menus management page

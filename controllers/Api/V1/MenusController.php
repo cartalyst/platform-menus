@@ -161,7 +161,7 @@ class MenusController extends ApiController {
 			return Response::api(compact('menu'));
 		}
 
-		return Response::api(Lang::get('platform/menus::message.update.error'), 500);
+		return Response::api(Lang::get('platform/menus::message.error.update'), 500);
 	}
 
 	/**

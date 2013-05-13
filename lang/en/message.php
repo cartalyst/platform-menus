@@ -23,20 +23,16 @@ return array(
 	'already_exists' => 'Menu already exists!',
 	'does_not_exist' => 'Menu [:id] either not a root menu item or does not exist.',
 
-	'create' => array(
-		'error'   => 'There was an issue creating the menu. Please try again.',
-		'success' => 'Menu was successfully created.',
+	'success' => array(
+		'create' => 'Menu was successfully created.',
+		'update' => 'Menu was successfully updated.',
+		'delete' => 'Menu was successfully deleted.',
 	),
 
-	'update' => array(
-		'no_children' => 'No children hierarchy was provided.',
-		'error'       => 'There was an issue updating the menu. Please try again.',
-		'success'     => 'Menu was successfully updated.',
-	),
-
-	'delete' => array(
-		'error'   => 'There was an issue deleting the menu. Please try again.',
-		'success' => 'Menu was successfully deleted.',
+	'error' => array(
+		'create' => 'There was an issue creating the menu. Please try again.',
+		'update' => 'There was an issue updating the menu. Please try again.',
+		'delete' => 'There was an issue deleting the menu. Please try again.',
 	),
 
 );
