@@ -20,13 +20,13 @@
 				{{-- Name --}}
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->id }}_name">@lang('platform/menus::form.child.name')</label>
-					<input type="text" name="children[{{ $child->id }}][name]" id="{{ $child->id }}_name" class="input-block-level" value="{{ $child->name }}" placeholder="">
+					<input type="text" data-children="{{ $child->id }}" name="children[{{ $child->id }}][name]" id="{{ $child->id }}_name" class="input-block-level" value="{{ $child->name }}" placeholder="">
 				</div>
 
 				{{-- Slug --}}
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->id }}_slug">@lang('platform/menus::form.child.slug')</label>
-					<input type="text" name="children[{{ $child->id }}][slug]" id="{{ $child->id }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
+					<input type="text" data-children="{{ $child->id }}" name="children[{{ $child->id }}][slug]" id="{{ $child->id }}_slug" class="input-block-level" value="{{ $child->slug }}" placeholder="">
 				</div>
 
 				{{-- Item Uri --}}
@@ -34,7 +34,7 @@
 					<label class="control-label" for="{{ $child->id }}_uri">@lang('platform/menus::form.child.uri')</label>
 					<div class="input-prepend">
 						<span class="add-on">{{ str_finish(URL::to('/'), '/') }}</span>
-						<input type="text" name="children[{{ $child->id }}][uri]" id="{{ $child->id }}_uri" class="input-block-level" value="{{ $child->uri }}" placeholder="">
+						<input type="text" data-children="{{ $child->id }}" name="children[{{ $child->id }}][uri]" id="{{ $child->id }}_uri" class="input-block-level" value="{{ $child->uri }}" placeholder="">
 					</div>
 				</div>
 
@@ -42,7 +42,7 @@
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->id }}_target">@lang('platform/menus::form.child.target.title')</label>
 					<div class="controls">
-						<select name="children[{{ $child->id }}][target]" id="{{ $child->id }}_target" class="input-block-level">
+						<select data-children="{{ $child->id }}" name="children[{{ $child->id }}][target]" id="{{ $child->id }}_target" class="input-block-level">
 							<option value="self"{{ $child->target == 'self' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.self')</option>
 							<option value="new_children"{{ $child->target == 'new_children' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.blank')</option>
 							<option value="parent_frame"{{ $child->target == 'parent_frame' ? ' selected="selected"' : '' }}>@lang('platform/menus::form.child.target.parent')</option>
@@ -54,14 +54,14 @@
 				{{-- CSS Class --}}
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->id }}_class">@lang('platform/menus::form.child.class')</label>
-					<input type="text" name="children[{{ $child->id }}][class]" id="{{ $child->id }}_class" class="input-block-level" value="{{ $child->class }}" placeholder="">
+					<input type="text" data-children="{{ $child->id }}" name="children[{{ $child->id }}][class]" id="{{ $child->id }}_class" class="input-block-level" value="{{ $child->class }}" placeholder="">
 				</div>
 			</fieldset>
 		</div>
 
 		<div class="modal-footer">
-			<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">@lang('button.close')</button>
-			<button name="remove" class="remove btn btn-medium btn-primary" data-dismiss="modal" aria-hidden="true">@lang('platform/menus::button.remove_child')</button>
+			<button name="remove" class="remove btn btn-mini btn-primary" data-dismiss="modal" aria-hidden="true">@lang('platform/menus::button.remove_child')</button>
+			<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">*Update Children</button>
 		</div>
 
 	</div>
