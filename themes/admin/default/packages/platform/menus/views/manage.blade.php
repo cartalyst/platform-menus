@@ -87,7 +87,10 @@ jQuery(document).ready(function($) {
 						{{-- Item Uri --}}
 						<div class="control-group">
 							<label class="control-label" for="new-child-uri">@lang('platform/menus::form.child.uri')</label>
-							<input type="text" name="new-child-uri" id="new-child-uri" class="input-block-level" value="" placeholder="">
+							<div class="input-prepend">
+								<span class="add-on">{{ str_finish(URL::to('/'), '/') }}</span>
+								<input type="text" name="new-child-uri" id="new-child-uri" class="input-block-level" value="" placeholder="">
+							</div>
 						</div>
 
 						{{-- Target --}}

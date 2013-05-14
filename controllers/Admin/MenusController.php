@@ -173,7 +173,7 @@ class MenusController extends AdminController {
 	public function postEdit($id = null)
 	{
 		// Get the tree
-		$tree = Input::get('tree');
+		$tree = Input::get('tree', array());
 
 		// JSON string on non-AJAX form.
 		if (is_string($tree))

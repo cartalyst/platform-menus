@@ -32,7 +32,10 @@
 				{{-- Item Uri --}}
 				<div class="control-group">
 					<label class="control-label" for="{{ $child->id }}_uri">@lang('platform/menus::form.child.uri')</label>
-					<input type="text" name="children[{{ $child->id }}][uri]" id="{{ $child->id }}_uri" class="input-block-level" value="{{ $child->uri }}" placeholder="">
+					<div class="input-prepend">
+						<span class="add-on">{{ str_finish(URL::to('/'), '/') }}</span>
+						<input type="text" name="children[{{ $child->id }}][uri]" id="{{ $child->id }}_uri" class="input-block-level" value="{{ $child->uri }}" placeholder="">
+					</div>
 				</div>
 
 				{{-- Target --}}
