@@ -38,6 +38,25 @@
 		 */
 		base.Initializer = function() {
 
+			/////// WIP
+			$('input[type="text"]').keyup(function()
+			{
+
+				childrenId = $(this).data('children');
+
+				if (typeof childrenId !== 'undefined')
+				{
+					$("[data-id='" + childrenId + "']")
+						.find(".item-name")
+						.html($('#' + childrenId + '_name').val());
+				}
+
+			});
+			///////
+
+
+
+
 			// Extend the default options with the provided options
 			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
 
@@ -79,15 +98,6 @@
 			// Removes a menu item
 			$(base.options.form.itemRemove).live('click', base.removeItem);
 
-			// Update the new menu item slug
-			$(base.options.form.children.name).keyup(function() {
-
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
 			// Clean the root item name
 			$(base.options.form.root.name).on('change', function() {
 
@@ -102,17 +112,26 @@
 
 			});
 
+			// Update the new menu item slug
+			$(base.options.form.children.name).keyup(function() {
+
+				base.updateChildrenSlug();
+
+				base.updateChildrenUri();
+
+			});
+
 			// Clean the new item name
 			$(base.options.form.children.name).on('change', function() {
 
-				$(base.options.form.children.name).val($.trim($(this).val()));
+				$(this).val($.trim($(this).val()));
 
 			});
 
 			// Clean the new item slug
 			$(base.options.form.children.slug).on('change', function() {
 
-				$(base.options.form.children.slug).val(base.slugify($(this).val()));
+				$(this).val(base.slugify($(this).val()));
 
 				base.validateChildSlug();
 
@@ -562,7 +581,7 @@
 				slug : '#menu-slug'
 			},
 
-			// Children elements
+			// New Children elements
 			children : {
 				name      : '#new-child-name',
 				slug      : '#new-child-slug',
