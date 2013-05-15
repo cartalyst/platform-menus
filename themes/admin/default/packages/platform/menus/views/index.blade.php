@@ -37,12 +37,6 @@ jQuery(document).ready(function($){
 
 	<section class="content">
 
-		<div class="actions clearfix">
-			<a class="btn btn-large btn-primary pull-right" href="{{ URL::toAdmin('menus/create') }}">@lang('button.create')</a>
-		</div>
-
-		<hr>
-
 		<div class="clearfix">
 
 			<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="form-inline pull-left">
@@ -79,6 +73,8 @@ jQuery(document).ready(function($){
 
 			<div class="tabbable tabs-right">
 
+				<a href="{{ URL::toAdmin('menus/create') }}" class="btn btn-large btn-primary pull-right create">@lang('button.create')</a>
+
 				<ul class="pagination nav nav-tabs" data-grid="main">
 					<li data-template data-if-infiniteload>
 						<a href="#" class="goto-page" data-page="[[ page ]]">
@@ -106,7 +102,7 @@ jQuery(document).ready(function($){
 								<th data-sort="slug" data-grid="main" class="sortable">@lang('platform/menus::table.slug')</th>
 								<th data-sort="children_count" data-grid="main" class="sortable">@lang('platform/menus::table.children_count')</th>
 								<th data-sort="created_at" data-grid="main" class="sortable">@lang('platform/menus::table.created_at')</th>
-								<th></th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -117,12 +113,12 @@ jQuery(document).ready(function($){
 								<td>[[ created_at ]]</td>
 								<td>
 									<div class="btn-group">
-										<a href="{{ URL::toAdmin('menus/edit/[[id]]') }}" class="btn btn-small">
-											@lang('button.edit')
+										<a href="{{ URL::toAdmin('menus/edit/[[id]]') }}" class="btn" title="Edit">
+											<i class="icon-edit"></i>
 										</a>
 
-										<a href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-small btn-danger">
-											@lang('button.delete')
+										<a href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-danger" title="Delete">
+											<i class="icon-trash"></i>
 										</a>
 									</div>
 								</td>
