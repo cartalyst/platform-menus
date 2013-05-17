@@ -41,9 +41,9 @@ jQuery(document).ready(function($){
 
 			<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="form-inline pull-left">
 				<select name="column" class="input-medium">
-					<option value="all">All</option>
-					<option value="name">Name</option>
-					<option value="slug">Slug</option>
+					<option value="all">@lang('general.all')</option>
+					<option value="name">@lang('platform/menus::table.name')</option>
+					<option value="slug">@lang('platform/menus::table.slug')</option>
 				</select>
 				<input name="filter" type="text" placeholder="Filter All" class="input-large">
 				<button class="btn btn-medium">Add Filter</button>
@@ -98,11 +98,11 @@ jQuery(document).ready(function($){
 					<table class="table table-bordered table-striped" data-grid="main" data-source="{{ URL::toAdmin('menus/grid') }}">
 						<thead>
 							<tr>
-								<th data-sort="name" data-grid="main" class="sortable">@lang('platform/menus::table.name')</th>
+								<th data-sort="name" data-grid="main" class="span1 sortable">@lang('platform/menus::table.name')</th>
 								<th data-sort="slug" data-grid="main" class="sortable">@lang('platform/menus::table.slug')</th>
 								<th data-sort="children_count" data-grid="main" class="sortable">@lang('platform/menus::table.children_count')</th>
 								<th data-sort="created_at" data-grid="main" class="sortable">@lang('platform/menus::table.created_at')</th>
-								<th>Actions</th>
+								<th class="span1">@lang('table.actions')</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -113,11 +113,11 @@ jQuery(document).ready(function($){
 								<td>[[ created_at ]]</td>
 								<td>
 									<div class="btn-group">
-										<a href="{{ URL::toAdmin('menus/edit/[[id]]') }}" class="btn" title="Edit">
+										<a href="{{ URL::toAdmin('menus/edit/[[ id ]]') }}" class="btn" title="@lang('button.edit')">
 											<i class="icon-edit"></i>
 										</a>
 
-										<a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-danger" title="Delete">
+										<a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ id ]]') }}" class="btn btn-danger" title="@lang('button.delete')">
 											<i class="icon-trash"></i>
 										</a>
 									</div>
