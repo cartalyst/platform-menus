@@ -275,7 +275,7 @@ return array(
 	| Settings
 	|--------------------------------------------------------------------------
 	|
-	| Register any settings for your extension. You may can also configure
+	| Register any settings for your extension. You can also configure
 	| the namespace and group that a setting belongs to.
 	|
 	*/
