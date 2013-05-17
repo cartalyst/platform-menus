@@ -117,7 +117,7 @@ jQuery(document).ready(function($){
 											<i class="icon-edit"></i>
 										</a>
 
-										<a data-toggle="modal" data-target="#platform-modal-confirm" data-remote="false" href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-danger" title="Delete">
+										<a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[id]]') }}" class="btn btn-danger" title="Delete">
 											<i class="icon-trash"></i>
 										</a>
 									</div>
