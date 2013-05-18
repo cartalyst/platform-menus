@@ -24,7 +24,7 @@ return array(
 	'slug' => 'Slug',
 
 	// Children specific
-	'children_count' => 'Number of Children',
+	'children_count' => '# of Children',
 	'children'       => ':count children',
 
 	'created_at'     => 'Created At',

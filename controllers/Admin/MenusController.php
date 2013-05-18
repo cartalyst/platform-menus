@@ -69,8 +69,10 @@ class MenusController extends AdminController {
 
 		foreach ($response['menus'] as $menu)
 		{
+			$count = $menu->getChildrenCount();
+
 			$menus[] = array_merge($menu->toArray(), array(
-				'children_count' => $menu->getChildrenCount(),
+				'children_count' => Lang::get('platform/menus::table.children', compact('count'))
 			));
 		}
 
