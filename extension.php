@@ -155,11 +155,6 @@ return array(
 	'register' => function(ExtensionInterface $extension, Application $app)
 	{
 
-		$app['platform/menus::menu'] = function($app)
-		{
-			return new Platform\Ui\Models\Menu;
-		};
-
 	},
 
 	/*
@@ -199,11 +194,6 @@ return array(
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-
-		// API Routes
-		Route::get('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
-		Route::put('{api}/v1/menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
-		Route::get('{api}/v1/menus/{slug}/path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
 
 	},
 
