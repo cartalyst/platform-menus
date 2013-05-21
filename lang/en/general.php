@@ -20,7 +20,7 @@
 
 return array(
 
-	'title'       => 'Menus Management',
+	'title'       => 'Menu Management',
 	'description' => 'Manage all the menus throughout your website.',
 
 	'create' => array(
