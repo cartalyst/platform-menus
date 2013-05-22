@@ -285,7 +285,6 @@ class MenusController extends AdminController {
 			'id'               => Input::get("children.$index.id"),
 			'name'             => Input::get("children.$index.name"),
 			'slug'             => Input::get("children.$index.slug"),
-			'driver'           => 'static',
 			'uri'              => Input::get("children.$index.uri"),
 			// 'page_id'          => Input::get("children.$index.page_id"),
 			'class'            => Input::get("children.$index.class"),

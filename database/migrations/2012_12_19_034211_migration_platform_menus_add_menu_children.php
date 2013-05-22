@@ -38,7 +38,7 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 			'slug'      => 'admin-menus',
 			'extension' => 'platform/menus',
 			'name'      => 'Menus',
-			'driver'    => 'static',
+			'type'      => 'static',
 			'class'     => 'icon-th-list',
 			'uri'       => 'menus',
 			'enabled'   => true,
