@@ -78,6 +78,8 @@ return array(
 
 		'class' => 'CSS class',
 
+		'enabled' => 'Status',
+
 /*
 		'groups' => array(
 			'title' => 'Group Visibility',

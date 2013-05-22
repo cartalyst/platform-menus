@@ -91,6 +91,17 @@
 					<label class="control-label" for="{{ $child->id }}_class">@lang('platform/menus::form.child.class')</label>
 					<input type="text" data-children="{{ $child->id }}" name="children[{{ $child->id }}][class]" id="{{ $child->id }}_class" class="input-block-level" value="{{ $child->class }}" placeholder="">
 				</div>
+
+				{{-- Enabled --}}
+				<div class="control-group">
+					<label class="control-label" for="new-child-enabled">@lang('platform/menus::form.child.enabled')</label>
+					<div class="controls">
+						<select data-children="{{ $child->id }}" name="children[{{ $child->id }}][enabled]" id="{{ $child->id }}_enabled" class="input-block-level">
+							<option value="1"{{ $child->enabled == 1 ? ' selected="selected"' : '' }}>@lang('general.enabled')</option>
+							<option value="0"{{ $child->enabled == 0 ? ' selected="selected"' : '' }}>@lang('general.disabled')</option>
+						</select>
+					</div>
+				</div>
 			</fieldset>
 		</div>
 
