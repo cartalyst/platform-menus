@@ -96,7 +96,7 @@
 			$(base.options.form.children.submit).on('click', base.addItem);
 
 			// Removes a menu item
-			$(base.options.form.itemRemove).live('click', base.removeItem);
+			$(base.options.form.itemRemove).on('click', base.removeItem);
 
 			// Clean the root item name
 			$(base.options.form.root.name).on('change', function() {
