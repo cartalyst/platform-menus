@@ -41,6 +41,7 @@ class MigrationPlatformMenusAddMenuChildren extends Migration {
 			'driver'    => 'static',
 			'class'     => 'icon-th-list',
 			'uri'       => 'menus',
+			'enabled'   => true,
 		));
 		$menu->makeLastChildOf($admin);
 	}
