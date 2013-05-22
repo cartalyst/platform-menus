@@ -18,6 +18,7 @@
  * @link       http://cartalyst.com
  */
 
+use API;
 use Cartalyst\Extensions\ExtensionInterface;
 use Platform\Ui\Models\Menu;
 
@@ -31,11 +32,12 @@ class Observer {
 	 */
 	public function afterEnable(ExtensionInterface $extension)
 	{
-		$menus = API::get('menus', array('extension' => $extension->getSlug()));
+		$response = API::get('menus', array('extension' => $extension->getSlug()));
+		$menus = $response['menus'];
 
 		foreach ($menus as $menu)
 		{
-			API::put("menus/{$menu->id}", array('enabled' => false));
+			API::put("menus/{$menu->id}", array('menu' => array('enabled' => true)));
 		}
 	}
 
@@ -47,11 +49,12 @@ class Observer {
 	 */
 	public function afterDisable(ExtensionInterface $extension)
 	{
-		$menus = API::get('menus', array('extension' => $extension->getSlug()));
+		$response = API::get('menus', array('extension' => $extension->getSlug()));
+		$menus = $response['menus'];
 
 		foreach ($menus as $menu)
 		{
-			API::put("menus/{$menu->id}", array('enabled' => true));
+			API::put("menus/{$menu->id}", array('menu' => array('enabled' => false)));
 		}
 	}
 
