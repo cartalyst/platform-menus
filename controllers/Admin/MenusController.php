@@ -282,18 +282,18 @@ class MenusController extends AdminController {
 		$index = isset($child['id']) ? $child['id'] : $child['slug'];
 
 		$new_child = array(
-			'id'                  => Input::get("children.$index.id"),
-			'name'                => Input::get("children.$index.name"),
-			'slug'                => Input::get("children.$index.slug"),
-			'driver'              => 'static',
-			'uri'                 => Input::get("children.$index.uri"),
-			// 'page_id'          => Input::get('children.' . $child['id'] . '.page_id'),
-			'class'               => Input::get("children.$index.class"),
-			'target'              => Input::get("children.$index.target", 0),
-			// 'visibility'       => Input::get('children.' . $child['id'] . '.visibility', Menu::VISIBILITY_ALWAYS),
-			// 'group_visibility' => (array) Input::get('children.' . $child['id'] . '.group_visibility'),
-			// 'status'           => Input::get('children.' . $child['id'] . '.status', 1),
-			// 'type'             => Input::get('children.' . $child['id'] . '.type', Menu::TYPE_STATIC),
+			'id'               => Input::get("children.$index.id"),
+			'name'             => Input::get("children.$index.name"),
+			'slug'             => Input::get("children.$index.slug"),
+			'driver'           => 'static',
+			'uri'              => Input::get("children.$index.uri"),
+			// 'page_id'          => Input::get("children.$index.page_id"),
+			'class'            => Input::get("children.$index.class"),
+			'target'           => Input::get("children.$index.target", 0),
+			'visibility'       => Input::get("children.$index.visibility", 'always'),
+			// 'group_visibility' => (array) Input::get("children.$index.group_visibility"),
+			'type'             => Input::get("children.$index.type", 'static'),
+			'secure'           => Input::get("children.$index.secure", 0),
 		);
 
 		// Determine if we're a new child or not. If we're

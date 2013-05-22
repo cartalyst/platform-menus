@@ -46,7 +46,26 @@ return array(
 
 		'name' => 'Name',
 		'slug' => 'Slug',
+
+		'type'   => array(
+			'title' => 'Type',
+
+			'static' => 'Static',
+			'page'   => 'Page',
+		),
+
 		'uri'  => 'Uri',
+
+		'secure' => 'Make Secure (HTTPS)',
+
+		'visibility' => array(
+			'title' => 'Visibility',
+
+			'always'     => 'Show Always',
+			'logged_in'  => 'Logged In',
+			'logged_out' => 'Logged Out',
+			'admin'      => 'Admin Only',
+		),
 
 		'target' => array(
 			'title' => 'Target',
@@ -60,24 +79,6 @@ return array(
 		'class' => 'CSS class',
 
 /*
-		'type'   => array(
-			'title' => 'Type',
-
-			'static' => 'Static',
-			'page'   => 'Page',
-		),
-
-		'secure' => 'Make Secure (HTTPS)',
-
-		'visibility' => array(
-			'title' => 'Visibility',
-
-			'always'     => 'Show Always',
-			'logged_in'  => 'Logged In',
-			'logged_out' => 'Logged Out',
-			'admin'      => 'Admin Only',
-		),
-
 		'groups' => array(
 			'title' => 'Group Visibility',
 		),

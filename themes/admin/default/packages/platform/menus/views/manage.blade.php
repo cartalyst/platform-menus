@@ -84,12 +84,47 @@ jQuery(document).ready(function($) {
 							<input type="text" name="new-child-slug" id="new-child-slug" class="input-block-level" value="" placeholder="">
 						</div>
 
+						{{-- Item Type --}}
+						<div class="control-group">
+							<label class="control-label" for="new-child-type">@lang('platform/menus::form.child.type.title')</label>
+							<div class="controls">
+								<select name="new-child-type" id="new-child-type" class="input-block-level" required>
+									<option value="static" selected>@lang('platform/menus::form.child.type.static')</option>
+									<option value="page">@lang('platform/menus::form.child.type.page')</option>
+								</select>
+							</div>
+						</div>
+
 						{{-- Item Uri --}}
 						<div class="control-group">
 							<label class="control-label" for="new-child-uri">@lang('platform/menus::form.child.uri')</label>
 							<div class="input-prepend">
 								<span class="add-on">{{ str_finish(URL::to('/'), '/') }}</span>
 								<input type="text" name="new-child-uri" id="new-child-uri" class="input-block-level" value="" placeholder="">
+							</div>
+						</div>
+
+						{{-- Secure --}}
+						<div class="control-group">
+							<label class="control-label" for="new-child-secure">@lang('platform/menus::form.child.secure')</label>
+							<div class="controls">
+								<select name="new-child-secure" id="new-child-secure" class="input-block-level" required>
+									<option value="1">@lang('general.yes')</option>
+									<option value="0">@lang('general.no')</option>
+								</select>
+							</div>
+						</div>
+
+						{{-- Visibility --}}
+						<div class="control-group">
+							<label class="control-label" for="new-child-visibility">@lang('platform/menus::form.child.visibility.title')</label>
+							<div class="controls">
+								<select name="new-child-visibility" id="new-child-visibility" class="input-block-level" required>
+									<option value="always">@lang('platform/menus::form.child.visibility.always')</option>
+									<option value="logged_in">@lang('platform/menus::form.child.visibility.logged_in')</option>
+									<option value="logged_out">@lang('platform/menus::form.child.visibility.logged_out')</option>
+									<option value="admin">@lang('platform/menus::form.child.visibility.admin')</option>
+								</select>
 							</div>
 						</div>
 
