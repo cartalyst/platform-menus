@@ -294,6 +294,7 @@ class MenusController extends AdminController {
 			// 'group_visibility' => (array) Input::get("children.$index.group_visibility"),
 			'type'             => Input::get("children.$index.type", 'static'),
 			'secure'           => Input::get("children.$index.secure", 0),
+			'enabled'          => Input::get("children.$index.enabled", 1),
 		);
 
 		// Determine if we're a new child or not. If we're

@@ -147,6 +147,17 @@ jQuery(document).ready(function($) {
 							<input type="text" name="new-child-css_class" id="new-child-css_class" class="input-block-level" value="" placeholder="">
 						</div>
 
+						{{-- Enabled --}}
+						<div class="control-group">
+							<label class="control-label" for="new-child-enabled">@lang('platform/menus::form.child.enabled')</label>
+							<div class="controls">
+								<select name="new-child-enabled" id="new-child-enabled" class="input-block-level" required>
+									<option value="1">@lang('general.enabled')</option>
+									<option value="0">@lang('general.disabled')</option>
+								</select>
+							</div>
+						</div>
+
 					</fieldset>
 				</div>
 				<div class="modal-footer">
