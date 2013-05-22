@@ -19,6 +19,7 @@
  */
 
 use Cartalyst\Extensions\ExtensionInterface;
+use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
 
 return array(
@@ -174,6 +175,18 @@ return array(
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
+
+		// When an extension is enabled or disabled, we will observe that
+		// so we can modify any menu items associated with it.
+		Extension::enabled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterEnable($extension);
+		});
+
+		Extension::disabled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterDisable($extension);
+		});
 
 	},
 

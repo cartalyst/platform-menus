@@ -50,7 +50,10 @@
 			"plugins",
 			"tests",
 			"widgets"
-		]
+		],
+		"psr-0": {
+			"Platform\\Menus" : "src/"
+		}
 	},
 	"extra": {
 		"component": "extension",
