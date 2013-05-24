@@ -180,7 +180,7 @@ class MenusController extends AdminController {
 		// JSON string on non-AJAX form.
 		if (is_string($tree))
 		{
-			$tree = json_decode($tree, true);
+			$tree = json_decode(stripslashes($tree), true);
 		}
 
 		// Prepare our children
