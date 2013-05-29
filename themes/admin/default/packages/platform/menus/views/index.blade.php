@@ -127,7 +127,7 @@ jQuery(document).ready(function($) {
 					</td>
 				</tr>
 				<tr data-results-fallback style="display: none;">
-					<td colspan="">
+					<td colspan="5">
 						<center><strong>{{ trans('table.no_results') }}</strong></center>
 					</td>
 				</tr>
