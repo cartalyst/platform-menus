@@ -167,17 +167,16 @@ class Nav {
 				break;
 		}
 
-		switch($child->visibility)
+		switch ($child->visibility)
 		{
 			case "logged_in":
 				$child->visible = Sentry::check();
 				break;
 			case "logged_out":
-				$child->visible = !Sentry::check();
+				$child->visible = ! Sentry::check();
 				break;
 			case "admin":
 				$child->visible = (Sentry::check() && Sentry::hasAccess('admin'));
-				break;
 				break;
 			default:
 				$child->visible = true;
@@ -203,7 +202,7 @@ class Nav {
 		{
 			$attributes = $children[$key]->getAttributes();
 
-			if (isset($attributes['visible']) && ! $attributes['visible'])
+			if (isset($attributes['visible']) and ! $attributes['visible'])
 			{
 				unset($children[$key]);
 			}
