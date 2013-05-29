@@ -19,7 +19,6 @@
  */
 
 use Illuminate\Database\Migrations\Migration;
-use Platform\Ui\Models\Menu;
 
 class MigrationPlatformMenusInstallMenus extends Migration {
 
@@ -101,12 +100,6 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			$table->unique(array('lft', 'rgt', 'menu'));
 		});
 
-		// Create the admin menu
-		$admin = new Menu(array(
-			'slug' => 'admin',
-			'name' => 'Admin',
-		));
-		$admin->makeRoot();
 	}
 
 	/**
