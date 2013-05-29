@@ -20,6 +20,7 @@
 
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
+use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use View;
 
 class Nav {
@@ -95,6 +96,9 @@ class Nav {
 			{
 				$this->prepareChildRecursively($child, $beforeUri, $activePath);
 			}
+
+			// Remove children that are hidden from stack
+			$children = $this->removeInvisibleChildrenRecursively($children);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -163,11 +167,53 @@ class Nav {
 				break;
 		}
 
+		switch($child->visibility)
+        {
+            case "logged_in":
+                $child->visible = Sentry::check();
+                break;
+            case "logged_out":
+                $child->visible = !Sentry::check();
+                break;
+            case "admin":
+                $child->visible = (Sentry::check() && Sentry::hasAccess('admin'));
+                break;
+                break;
+            default:
+                $child->visible = true;
+                break;
+        }
+
 		// Recursive!
 		foreach ($child->getChildren() as $grandChild)
 		{
 			$this->prepareChildRecursively($grandChild, $beforeUri, $activePath);
 		}
 	}
+
+	 /**
+     * Recursively remove any menu child that should not be
+     * visible
+     *
+     * @param $children
+     * @return mixed
+     */
+    protected function removeInvisibleChildrenRecursively($children)
+    {
+        foreach( $children as $key => $child )
+        {
+            $attributes = $children[$key]->getAttributes();
+            if ( isset($attributes['visible']) && !$attributes['visible']) {
+                unset($children[$key]);
+            } else {
+                if (sizeof($child->getChildren())) {
+                    $children[$key] = $this->removeInvisibleChildrenRecursively($child->getChildren());
+                }
+            }
+        }
+        return $children;
+    }
+
+}
 
 }
