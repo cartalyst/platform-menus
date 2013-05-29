@@ -173,7 +173,8 @@ class Observer {
 	{
 		$children = with(new Menu)
 		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug());
+		    ->where('extension', '=', $extension->getSlug())
+		    ->get();
 
 		foreach ($children as $child)
 		{
@@ -192,7 +193,8 @@ class Observer {
 	{
 		$children = with(new Menu)
 		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug());
+		    ->where('extension', '=', $extension->getSlug())
+		    ->get();
 
 		foreach ($children as $child)
 		{
