@@ -80,10 +80,31 @@ class Menu extends EloquentNode {
 	}
 
 	/**
+	 * Filters children and returns an array of children
+	 * which satisfy any of the visibilities, wtih
+	 *
+	 * @param  array  $visibilities
+	 * @param  bool   $enabled
+	 * @param  int    $depth
+	 */
+	public function findDisplayableChildren(array $visibilities, $enabled = null, $depth = 0)
+	{
+		return $this->filterChildren(function($query) use ($visibilities, $enabled)
+		{
+			$query->whereIn('node.visibility', $visibilities);
+
+			if ($enabled !== null)
+			{
+				$query->where('node.enabled', '=', $enabled);
+			}
+		}, $depth);
+	}
+
+	/**
 	 * Filters children and returns an array of enabled
 	 * children only.
 	 *
-	 * @param  int  $depth
+	 * @param  int   $depth
 	 */
 	public function findEnabledChildren($depth = 0)
 	{

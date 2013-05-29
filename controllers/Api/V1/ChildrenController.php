@@ -55,9 +55,15 @@ class ChildrenController extends ApiController {
 			return Response::api("Could not find children for [$id] menu as it does not exist.", 404);
 		}
 
-		$depth = (int) Input::get('depth', 0);
+		$visibilities = Input::get('visibilities');
+		$enabled      = Input::get('enabled');
+		$depth        = (int) Input::get('depth', 0);
 
-		if (Input::get('enabled'))
+		if ($visibilities and is_array($visibilities))
+		{
+			$children = $menu->findDisplayableChildren($visibilities, $enabled, $depth);
+		}
+		elseif ($enabled)
 		{
 			$children = $menu->findEnabledChildren($depth);
 		}

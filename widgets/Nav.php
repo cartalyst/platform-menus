@@ -96,9 +96,6 @@ class Nav {
 			{
 				$this->prepareChildRecursively($child, $beforeUri, $activePath);
 			}
-
-			// Remove children that are hidden from stack
-			$children = $this->removeInvisibleChildrenRecursively($children);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -123,8 +120,15 @@ class Nav {
 			throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 		}
 
-		$enabled  = true;
-		$response = API::get("v1/menus/$slug/children", compact('depth', 'enabled'));
+		$visibilities = array(
+			'always',
+			Sentry::check() ? 'logged_in' : 'logged_out',
+		);
+
+		if (Sentry::hasAccess('admin')) $visibilities[] = 'admin';
+		$enabled = true;
+
+		$response = API::get("v1/menus/$slug/children", compact('depth', 'visibilities', 'enabled'));
 		$children = $response['children'];
 
 		return $children;
@@ -167,56 +171,11 @@ class Nav {
 				break;
 		}
 
-		switch($child->visibility)
-		{
-			case "logged_in":
-				$child->visible = Sentry::check();
-				break;
-			case "logged_out":
-				$child->visible = !Sentry::check();
-				break;
-			case "admin":
-				$child->visible = (Sentry::check() && Sentry::hasAccess('admin'));
-				break;
-				break;
-			default:
-				$child->visible = true;
-				break;
-		}
-
 		// Recursive!
 		foreach ($child->getChildren() as $grandChild)
 		{
 			$this->prepareChildRecursively($grandChild, $beforeUri, $activePath);
 		}
-	}
-
-	 /**
-	 * Recursively remove any menu child that should not be visible.
-	 *
-	 * @param  array  $children
-	 * @return mixed
-	 */
-	protected function removeInvisibleChildrenRecursively($children)
-	{
-		foreach( $children as $key => $child )
-		{
-			$attributes = $children[$key]->getAttributes();
-
-			if (isset($attributes['visible']) && ! $attributes['visible'])
-			{
-				unset($children[$key]);
-			}
-			else
-			{
-				if (sizeof($child->getChildren()))
-				{
-					$children[$key] = $this->removeInvisibleChildrenRecursively($child->getChildren());
-				}
-			}
-		}
-
-		return $children;
 	}
 
 }

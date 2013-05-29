@@ -115,8 +115,9 @@ class Observer {
 
 			$child['extension'] = $extension->getSlug();
 
-			if ( ! isset($child['type'])) $child['type']         = 'static';
-			if ( ! isset($child['children'])) $child['children'] = array();
+			if ( ! isset($child['type'])) $child['type']             = 'static';
+			if ( ! isset($child['visibility'])) $child['visibility'] = 'always';
+			if ( ! isset($child['children'])) $child['children']     = array();
 
 			if ( ! is_array($child['children']))
 			{
