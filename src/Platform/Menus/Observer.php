@@ -36,10 +36,18 @@ class Observer {
 	{
 		$children = $extension->menu;
 
+		// If the attribute physically doesn't exist, we'll just
+		// skip. They may have chosen to create the items progamatically
+		// so we won't want to remove everything they've done.
+		if ( ! is_array($children))
+		{
+			return;
+		}
+
 		// If there's no children, we'll observe an uninstall
 		// event for the child. This'll remove any children
 		// in the database.
-		if ( ! is_array($children) or empty($children))
+		if (empty($children))
 		{
 			return $this->afterUninstall($extension);
 		}
@@ -131,18 +139,24 @@ class Observer {
 
 		$slugs = array();
 
-		array_walk_recursive($children, function($value, $key) use (&$slugs)
+		if (is_array($children) and ! empty($children))
 		{
-			if ($key == 'slug') $slugs[] = $value;
-		});
+			array_walk_recursive($children, function($value, $key) use (&$slugs)
+			{
+				if ($key == 'slug') $slugs[] = $value;
+			});
+		}
 
-		$existing = with(new Menu)
+		$query = with(new Menu)
 		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug())
-		    ->orWhereIn('slug', $slugs)
-		    ->get();
+		    ->where('extension', '=', $extension->getSlug());
 
-		foreach ($existing as $child)
+		if (count($slugs) > 0)
+		{
+			$query->orWhereIn('slug', $slugs);
+		}
+
+		foreach ($query->get() as $child)
 		{
 			$child->refresh();
 			$child->delete();
@@ -157,12 +171,14 @@ class Observer {
 	 */
 	public function afterEnable(Extension $extension)
 	{
-		$response = API::get('menus', array('extension' => $extension->getSlug()));
-		$menus = $response['menus'];
+		$children = with(new Menu)
+		    ->newQuery()
+		    ->where('extension', '=', $extension->getSlug());
 
-		foreach ($menus as $menu)
+		foreach ($children as $child)
 		{
-			API::put("menus/{$menu->id}", array('menu' => array('enabled' => true)));
+			$child->enabled = true;
+			$child->save();
 		}
 	}
 
@@ -174,12 +190,14 @@ class Observer {
 	 */
 	public function afterDisable(Extension $extension)
 	{
-		$response = API::get('menus', array('extension' => $extension->getSlug()));
-		$menus = $response['menus'];
+		$children = with(new Menu)
+		    ->newQuery()
+		    ->where('extension', '=', $extension->getSlug());
 
-		foreach ($menus as $menu)
+		foreach ($children as $child)
 		{
-			API::put("menus/{$menu->id}", array('menu' => array('enabled' => false)));
+			$child->enabled = false;
+			$child->save();
 		}
 	}
 

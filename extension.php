@@ -140,6 +140,47 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
+	| Before Platform Install Callback
+	|--------------------------------------------------------------------------
+	|
+	| Closure that is called before Platform is installed, and only then. This
+	| function is called on every extension to be installed, before any is
+	| installed. An example of where this is useful is if you want to hook into
+	| an event on an extension which may be installed before you (becuase it
+	| doesn't require you).
+	|
+	| The closure parameters are:
+	|
+	|	object Cartalyst\Extensions\ExtensionInterface
+	|	object Illuminate\Foundation\Application
+	|
+	*/
+
+	'before_platform_install' => function(ExtensionInterface $extension, Application $app)
+	{
+		Extension::installed(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterInstall($extension);
+		});
+
+		Extension::uninstalled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterUninstall($extension);
+		});
+
+		Extension::enabled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterEnable($extension);
+		});
+
+		Extension::disabled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterDisable($extension);
+		});
+	},
+
+	/*
+	|--------------------------------------------------------------------------
 	| Register Callback
 	|--------------------------------------------------------------------------
 	|
@@ -175,9 +216,16 @@ return array(
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
+		Extension::installed(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterInstall($extension);
+		});
 
-		// When an extension is enabled or disabled, we will observe that
-		// so we can modify any menu items associated with it.
+		Extension::uninstalled(function($extension) use ($app)
+		{
+			app('Platform\Menus\Observer')->afterUninstall($extension);
+		});
+
 		Extension::enabled(function($extension) use ($app)
 		{
 			app('Platform\Menus\Observer')->afterEnable($extension);
@@ -187,7 +235,6 @@ return array(
 		{
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
-
 	},
 
 	/*
@@ -287,5 +334,34 @@ return array(
 	{
 
 	},
+
+	/*
+	|--------------------------------------------------------------------------
+	| Menus
+	|--------------------------------------------------------------------------
+	|
+	| You may specify the default admin menu hierarchy for your extension. You
+	| can provide a recursive array of menu children and their children. These
+	| will be created upon installation, synchronized upon upgrading and
+	| removed upon uninstallation.
+	|
+	| Menu children are automatically put at the end of the menu for extensions
+	| installed through the Operations extension.
+	|
+	| The default order (for extensions installed initially) can be
+	| found by editing app/config/platform.php.
+	|
+	*/
+
+	'menu' => array(
+
+		array(
+			'slug'  => 'admin-menus',
+			'name'  => 'Menus',
+			'class' => 'icon-th-list',
+			'uri'   => 'menus',
+		),
+
+	),
 
 );
