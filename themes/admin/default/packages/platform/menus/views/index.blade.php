@@ -37,7 +37,7 @@ jQuery(document).ready(function($){
 	<header class="clearfix">
 		<h1>@lang('platform/menus::general.title')</h1>
 		<nav class="tertiary-navigation">
-			@widget('platform/ui::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
+			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
 		</nav>
 	</header>
 

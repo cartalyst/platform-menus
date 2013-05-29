@@ -140,47 +140,6 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Before Platform Install Callback
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called before Platform is installed, and only then. This
-	| function is called on every extension to be installed, before any is
-	| installed. An example of where this is useful is if you want to hook into
-	| an event on an extension which may be installed before you (becuase it
-	| doesn't require you).
-	|
-	| The closure parameters are:
-	|
-	|	object Cartalyst\Extensions\ExtensionInterface
-	|	object Illuminate\Foundation\Application
-	|
-	*/
-
-	'before_platform_install' => function(ExtensionInterface $extension, Application $app)
-	{
-		Extension::installed(function($extension) use ($app)
-		{
-			app('Platform\Menus\Observer')->afterInstall($extension);
-		});
-
-		Extension::uninstalled(function($extension) use ($app)
-		{
-			app('Platform\Menus\Observer')->afterUninstall($extension);
-		});
-
-		Extension::enabled(function($extension) use ($app)
-		{
-			app('Platform\Menus\Observer')->afterEnable($extension);
-		});
-
-		Extension::disabled(function($extension) use ($app)
-		{
-			app('Platform\Menus\Observer')->afterDisable($extension);
-		});
-	},
-
-	/*
-	|--------------------------------------------------------------------------
 	| Register Callback
 	|--------------------------------------------------------------------------
 	|
@@ -196,6 +155,22 @@ return array(
 
 	'register' => function(ExtensionInterface $extension, Application $app)
 	{
+
+		// After the installer has finished, we'll loop through
+		// each extension that exists and apply our instal and enable
+		// filters to it.
+		Installer::after(function()
+		{
+			foreach (Extensions::allEnabled() as $extension)
+			{
+				app('Platform\Menus\Observer')->afterInstall($extension);
+			}
+
+			foreach (Extensions::allEnabled() as $extension)
+			{
+				app('Platform\Menus\Observer')->afterEnable($extension);
+			}
+		});
 
 	},
 
@@ -254,7 +229,12 @@ return array(
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-
+		Route::group(array('prefix' => '{api}/v1'), function()
+		{
+			Route::get('menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
+			Route::put('menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
+			Route::get('menus/{slug}/path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
+		});
 	},
 
 	/*

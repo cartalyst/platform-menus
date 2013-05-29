@@ -20,7 +20,7 @@
 
 use API;
 use Cartalyst\Extensions\Extension;
-use Platform\Ui\Models\Menu;
+use Platform\Menus\Models\Menu;
 
 class Observer {
 

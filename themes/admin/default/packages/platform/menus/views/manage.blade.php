@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
 	<header class="clearfix">
 		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> @lang('platform/menus::form.'.(empty($menu) ? 'create' : 'update').'.legend')</h1>
 		<nav class="tertiary-navigation">
-			@widget('platform/ui::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
+			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
 		</nav>
 	</header>
 
