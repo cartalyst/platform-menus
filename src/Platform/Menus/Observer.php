@@ -250,12 +250,6 @@ class Observer {
 			if ($child['slug'] == $existingChild['slug'])
 			{
 				return $existingChild = array_merge($existingChild, array_except($child, 'children'));
-
-				// Because we are reverse-iterating, we know that any children
-				// associate with the child we're currently on are new, otherwise
-				// they'd have been assigned and removed. So, we just append
-				// our children to those of the existing child.
-				// $existingChild['children'] = array_merge($existingChild['children'], $child['children']);
 			}
 		}
 
