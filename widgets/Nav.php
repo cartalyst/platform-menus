@@ -168,21 +168,21 @@ class Nav {
 		}
 
 		switch($child->visibility)
-        {
-            case "logged_in":
-                $child->visible = Sentry::check();
-                break;
-            case "logged_out":
-                $child->visible = !Sentry::check();
-                break;
-            case "admin":
-                $child->visible = (Sentry::check() && Sentry::hasAccess('admin'));
-                break;
-                break;
-            default:
-                $child->visible = true;
-                break;
-        }
+		{
+			case "logged_in":
+				$child->visible = Sentry::check();
+				break;
+			case "logged_out":
+				$child->visible = !Sentry::check();
+				break;
+			case "admin":
+				$child->visible = (Sentry::check() && Sentry::hasAccess('admin'));
+				break;
+				break;
+			default:
+				$child->visible = true;
+				break;
+		}
 
 		// Recursive!
 		foreach ($child->getChildren() as $grandChild)
@@ -192,28 +192,31 @@ class Nav {
 	}
 
 	 /**
-     * Recursively remove any menu child that should not be
-     * visible
-     *
-     * @param $children
-     * @return mixed
-     */
-    protected function removeInvisibleChildrenRecursively($children)
-    {
-        foreach( $children as $key => $child )
-        {
-            $attributes = $children[$key]->getAttributes();
-            if ( isset($attributes['visible']) && !$attributes['visible']) {
-                unset($children[$key]);
-            } else {
-                if (sizeof($child->getChildren())) {
-                    $children[$key] = $this->removeInvisibleChildrenRecursively($child->getChildren());
-                }
-            }
-        }
-        return $children;
-    }
+	 * Recursively remove any menu child that should not be visible.
+	 *
+	 * @param  array  $children
+	 * @return mixed
+	 */
+	protected function removeInvisibleChildrenRecursively($children)
+	{
+		foreach( $children as $key => $child )
+		{
+			$attributes = $children[$key]->getAttributes();
 
-}
+			if (isset($attributes['visible']) && ! $attributes['visible'])
+			{
+				unset($children[$key]);
+			}
+			else
+			{
+				if (sizeof($child->getChildren()))
+				{
+					$children[$key] = $this->removeInvisibleChildrenRecursively($child->getChildren());
+				}
+			}
+		}
+
+		return $children;
+	}
 
 }
