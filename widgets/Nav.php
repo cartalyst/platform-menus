@@ -21,6 +21,7 @@
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
+use Event;
 use View;
 
 class Nav {
@@ -38,6 +39,8 @@ class Nav {
 	 * @param  string      $depth
 	 * @param  string      $cssClass
 	 * @param  string      $beforeUri
+	 * @return View
+	 * @throws RuntimeException
 	 */
 	public function show($identifier = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
@@ -96,13 +99,13 @@ class Nav {
 			{
 				$this->prepareChildRecursively($child, $beforeUri, $activePath);
 			}
+
+			return View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
 		}
 		catch (ApiHttpException $e)
 		{
 			return '';
 		}
-
-		return View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
 	}
 
 	/**
@@ -110,11 +113,12 @@ class Nav {
 	 *
 	 * @param  string  $slug
 	 * @param  int     $depth
-	 * @return array   $children
+	 * @return array
+	 * @throws InvalidArgumentException
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
-		// Validate the start compontent
+		// Validate the start component
 		if ( ! strlen($slug))
 		{
 			throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
@@ -125,7 +129,8 @@ class Nav {
 			Sentry::check() ? 'logged_in' : 'logged_out',
 		);
 
-		if (Sentry::hasAccess('admin')) $visibilities[] = 'admin';
+		if (Sentry::check() and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
+
 		$enabled = true;
 
 		$response = API::get("v1/menus/$slug/children", compact('depth', 'visibilities', 'enabled'));
@@ -151,11 +156,10 @@ class Nav {
 	{
 		switch ($child->type)
 		{
-			// If the child is static, we are able to prepare it right away.
+			// If the child is static, we are able to prepare it right away
 			case 'static':
 
-				// We'll modify the URI only if
-				// necessary.
+				// We'll modify the URI only if necessary
 				if (isset($beforeUri))
 				{
 					$child->uri = "{$beforeUri}/{$child->uri}";
@@ -165,9 +169,11 @@ class Nav {
 
 				break;
 
-			// We'll fire an event for the logic to be handled by the correct type.
+			// We'll fire an event for the logic to be handled by the correct type
 			default:
-				\Event::fire("platform.menus.nav.prepare_child.{$child->type}", array('child' => $child, 'beforeUri' => $beforeUri));
+
+				Event::fire("platform.menus.nav.prepare_child.{$child->type}", array('child' => $child, 'beforeUri' => $beforeUri));
+
 				break;
 		}
 
