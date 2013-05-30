@@ -375,7 +375,7 @@ return array(
 				'name'       => 'Logout',
 				'class'      => 'icon-home',
 				'uri'        => 'logout',
-				'visibility' => 'logged_out',
+				'visibility' => 'logged_in',
 			),
 
 		),
