@@ -110,13 +110,23 @@ return array(
 	| Autoload Logic
 	|--------------------------------------------------------------------------
 	|
-	| Autoloading Logic for the Extension. It may either be 'composer', where
-	| your composer.json file specifies the autoloading logic, 'platform',
-	| where your extension receives convention autoloading based on Platform
-	| standards, or a closure which takes two parameters, first is an instance of
-	| Composer\Autoload\ClassLoader and second is Cartalyst\Extensions\ExtensionInterface.
-	| The autoload must set appropriate classes and namespaces available when the
-	| extension is started.
+	| You can define here your extension autoloading logic, it may either
+	| be 'composer', 'platform' or a 'Closure'.
+	|
+	| If composer is defined, your composer.json file specifies the autoloading
+	| logic.
+	|
+	| If platform is defined, your extension receives convetion autoloading
+	| based on the Platform standards.
+	|
+	| If a Closure is defined, it should take two parameters as defined
+	| bellow:
+	|
+	|	object Composer\Autoload\ClassLoader      $loader
+	|	object Illuminate\Foundation\Application  $app
+	|
+	|
+	| Supported: "composer", "platform", "Closure"
 	|
 	*/
 
@@ -127,12 +137,17 @@ return array(
 	| URI
 	|--------------------------------------------------------------------------
 	|
-	| Specify the URI that this extension will respond to. You can choose to
-	| specify a single string, where the URI will be matched on the admin and
-	| public sections of Platform. You can provide an array with keys 'admin'
-	| and 'public' to specify a different URI for admin and public sections and
-	| even provide an 'override' which is an array of Extensions this extension
-	| overrides it's URI from.
+	| You can specify the URI that this extension will respond to.
+	|
+	| You can choose to specify a single string, where the URI will be matched
+	| on the 'admin' and 'public' sections of Platform.
+	|
+	| You can provide an array with the 'admin' and 'public' keys to specify
+	| a different URI for admin and public sections, you can have as many
+	| keys as you need in case your applications needs them.
+	|
+	| You can provide an 'override' which is an array of extensions this
+	| extension overrides it's URI from.
 	|
 	*/
 
@@ -155,7 +170,6 @@ return array(
 
 	'register' => function(ExtensionInterface $extension, Application $app)
 	{
-
 		// After the installer has finished, we'll loop through
 		// each extension that exists and apply our instal and enable
 		// filters to it.
@@ -171,7 +185,6 @@ return array(
 				app('Platform\Menus\Observer')->afterEnable($extension);
 			}
 		});
-
 	},
 
 	/*
@@ -269,7 +282,14 @@ return array(
 
 	'permissions' => function()
 	{
+		return array(
 
+			'platform/menus::admin.menusController@index'  => Lang::get('platform/menus::permissions.index'),
+			'platform/menus::admin.menusController@create' => Lang::get('platform/menus::permissions.create'),
+			'platform/menus::admin.menusController@edit'   => Lang::get('platform/menus::permissions.edit'),
+			'platform/menus::admin.menusController@delete' => Lang::get('platform/menus::permissions.delete'),
+
+		);
 	},
 
 	/*
