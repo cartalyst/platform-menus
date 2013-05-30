@@ -101,7 +101,7 @@ jQuery(document).ready(function($) {
 				<div data-template style="display: none;">
 					<span class="page-meta">[[ pageStart ]] - [[ pageLimit ]] {{ trans('general.of') }} <span id="total"></span></span>
 					[? if prevPage !== null ?]
-					<a  href="#" data-page="[[ prevPage ]]" class="btn">
+					<a href="#" data-page="[[ prevPage ]]" class="btn">
 						<i class="icon-chevron-left"></i>
 					</a>
 					[? else ?]
