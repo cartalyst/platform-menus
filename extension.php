@@ -322,10 +322,10 @@ return array(
 	| Menus
 	|--------------------------------------------------------------------------
 	|
-	| You may specify the default admin menu hierarchy for your extension. You
-	| can provide a recursive array of menu children and their children. These
-	| will be created upon installation, synchronized upon upgrading and
-	| removed upon uninstallation.
+	| You may specify the default various menu hierarchy for your extension.
+	| You can provide a recursive array of menu children and their children.
+	| These will be created upon installation, synchronized upon upgrading
+	| and removed upon uninstallation.
 	|
 	| Menu children are automatically put at the end of the menu for extensions
 	| installed through the Operations extension.
