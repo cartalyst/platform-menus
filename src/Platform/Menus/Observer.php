@@ -79,8 +79,6 @@ class Observer {
 			$tree = array_merge($existing, $children);
 			$this->recursivelyStripAttributes($tree);
 
-			var_dump($tree);
-
 			// Because we have just taken our existing hierarchy
 			// and added to it, we can save on the overhead of
 			// orphaning or deleting children as there'll never
