@@ -10,13 +10,23 @@
 {{ Asset::queue('tempo', 'js/vendor/tempo/tempo.js', 'jquery') }}
 {{ Asset::queue('data-grid', 'js/vendor/cartalyst/data-grid.js', 'tempo') }}
 
+{{-- Partial Assets --}}
+@section('assets')
+@parent
+@stop
+
+{{-- Inline Styles --}}
+@section('styles')
+@parent
+@stop
+
 {{-- Inline Scripts --}}
 @section('scripts')
 @parent
 <script>
 jQuery(document).ready(function($) {
 	$.datagrid('main', '#grid', '.grid-pagination', '.applied', {
-		loader: '.table-processing',
+		loader: '.loading',
 		type: 'single',
 		sort: {
 			column: 'created_at',
@@ -103,36 +113,46 @@ jQuery(document).ready(function($) {
 
 		</div>
 
-		<table id="grid" data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="table">
-			<thead>
-				<tr>
-					<th data-sort="name" data-grid="main" class="sortable">{{ trans('platform/menus::table.name') }}</th>
-					<th data-sort="slug" data-grid="main" class="sortable">{{ trans('platform/menus::table.slug') }}</th>
-					<th data-sort="children_count" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.children_count') }}</th>
-					<th data-sort="created_at" data-grid="main" class="sortable">{{ trans('platform/menus::table.created_at') }}</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr data-template style="display: none;">
-					<td>[[ name ]]</td>
-					<td>[[ slug ]]</td>
-					<td>[[ children_count ]]</td>
-					<td>[[ created_at ]]</td>
-					<td>
-						<div class="actions">
-							<a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ id ]]') }}" title="{{ trans('button.delete') }}"><i class="icon-trash"></i> {{ trans('button.delete') }}</a>
-							<a href="{{ URL::toAdmin('menus/edit/[[ id ]]') }}" title="{{ trans('button.edit') }}"><i class="icon-edit"></i> {{ trans('button.edit') }}</a>
-						</div>
-					</td>
-				</tr>
-				<tr data-results-fallback style="display: none;">
-					<td colspan="5">
-						<center><strong>{{ trans('table.no_results') }}</strong></center>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="grid-wrap clearfix">
+
+			<div class="loading">
+				<div>
+					<span><img src="{{ Asset::getUrl('img/loader.gif') }}" /> {{ trans('general.loading') }}</span>
+				</div>
+			</div>
+
+			<table id="grid" data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="table">
+				<thead>
+					<tr>
+						<th data-sort="name" data-grid="main" class="sortable">{{ trans('platform/menus::table.name') }}</th>
+						<th data-sort="slug" data-grid="main" class="sortable">{{ trans('platform/menus::table.slug') }}</th>
+						<th data-sort="children_count" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.children_count') }}</th>
+						<th data-sort="created_at" data-grid="main" class="sortable">{{ trans('platform/menus::table.created_at') }}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-template style="display: none;">
+						<td>[[ name ]]</td>
+						<td>[[ slug ]]</td>
+						<td>[[ children_count ]]</td>
+						<td>[[ created_at ]]</td>
+						<td>
+							<div class="actions">
+								<a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ id ]]') }}" title="{{ trans('button.delete') }}"><i class="icon-trash"></i> {{ trans('button.delete') }}</a>
+								<a href="{{ URL::toAdmin('menus/edit/[[ id ]]') }}" title="{{ trans('button.edit') }}"><i class="icon-edit"></i> {{ trans('button.edit') }}</a>
+							</div>
+						</td>
+					</tr>
+					<tr data-results-fallback style="display: none;">
+						<td colspan="5">
+							<center><strong>{{ trans('table.no_results') }}</strong></center>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
 
 	</section>
 
