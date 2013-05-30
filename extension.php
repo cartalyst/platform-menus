@@ -408,6 +408,14 @@ return array(
 				'visibility' => 'logged_out',
 			),
 
+			array(
+				'slug'       => 'main-dashboard',
+				'name'       => 'Admin',
+				'class'      => 'icon-dashboard',
+				'uri'        => 'admin',
+				'visibility' => 'admin',
+			),
+
 		),
 
 	),
