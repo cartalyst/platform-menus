@@ -156,10 +156,10 @@ class MenusController extends AdminController {
 		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			$messages = with(new Bag)->add('error', $e->getMessage());
+			$notifications = with(new Bag)->add('error', $e->getMessage());
 
 			// Return to the menus management page
-			return Redirect::toAdmin('menus')->with('messages', $messages);
+			return Redirect::toAdmin('menus')->with('notifications', $notifications);
 		}
 
 		// Show the page
@@ -214,7 +214,7 @@ class MenusController extends AdminController {
 				$id = $response['menu']->slug;
 
 				// Prepare the success message
-				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.create'));
+				$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.create'));
 			}
 
 			// No, we are updating the menu
@@ -224,11 +224,11 @@ class MenusController extends AdminController {
 				API::put("v1/menus/$id", compact('menu'));
 
 				// Prepare the success message
-				$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.update'));
+				$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.update'));
 			}
 
 			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/$id")->with('messages', $messages);
+			return Redirect::toAdmin("menus/edit/$id")->with('notifications', $notifications);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -251,16 +251,16 @@ class MenusController extends AdminController {
 			API::delete("v1/menus/$id");
 
 			// Set the success message
-			$messages = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
+			$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
 		}
 		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			$messages = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
+			$notifications = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
 		}
 
 		// Redirect to the menus management page
-		return Redirect::toAdmin('menus')->with('messages', $messages);
+		return Redirect::toAdmin('menus')->with('notifications', $notifications);
 	}
 
 	/**
