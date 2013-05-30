@@ -335,13 +335,25 @@ return array(
 	|
 	*/
 
-	'menu' => array(
+	'menus' => array(
 
-		array(
-			'slug'  => 'admin-menus',
-			'name'  => 'Menus',
-			'class' => 'icon-th-list',
-			'uri'   => 'menus',
+		'admin' => array(
+
+			array(
+				'slug'  => 'admin-menus',
+				'name'  => 'Menus',
+				'class' => 'icon-th-list',
+				'uri'   => 'menus',
+			),
+
+		),
+
+		'system' => array(
+
+		),
+
+		'main' => array(
+
 		),
 
 	),
