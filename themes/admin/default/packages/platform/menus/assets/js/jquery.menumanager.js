@@ -222,6 +222,9 @@
 		 */
 		base.removeItem = function() {
 
+			//Close Bootstrap Modal
+			$('.modal-backdrop').remove();
+
 			// Run the before callback
 			base.options.beforeRemove();
 
