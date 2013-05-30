@@ -110,7 +110,7 @@ jQuery(document).ready(function($) {
 							<div class="controls">
 								<select name="new-child-secure" id="new-child-secure" class="input-block-level" required>
 									<option value="1">@lang('general.yes')</option>
-									<option value="0">@lang('general.no')</option>
+									<option value="0" selected="selected">@lang('general.no')</option>
 								</select>
 							</div>
 						</div>
@@ -120,7 +120,7 @@ jQuery(document).ready(function($) {
 							<label class="control-label" for="new-child-visibility">@lang('platform/menus::form.child.visibility.title')</label>
 							<div class="controls">
 								<select name="new-child-visibility" id="new-child-visibility" class="input-block-level" required>
-									<option value="always">@lang('platform/menus::form.child.visibility.always')</option>
+									<option value="always" selected="selected">@lang('platform/menus::form.child.visibility.always')</option>
 									<option value="logged_in">@lang('platform/menus::form.child.visibility.logged_in')</option>
 									<option value="logged_out">@lang('platform/menus::form.child.visibility.logged_out')</option>
 									<option value="admin">@lang('platform/menus::form.child.visibility.admin')</option>
@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
 							<label class="control-label" for="new-child-target">@lang('platform/menus::form.child.target.title')</label>
 							<div class="controls">
 								<select name="new-child-target" id="new-child-target" class="input-block-level">
-									<option value="self">@lang('platform/menus::form.child.target.self')</option>
+									<option value="self" selected="selected">@lang('platform/menus::form.child.target.self')</option>
 									<option value="new_window">@lang('platform/menus::form.child.target.blank')</option>
 									<option value="parent_frame">@lang('platform/menus::form.child.target.parent')</option>
 									<option value="top_frame">@lang('platform/menus::form.child.target.top')</option>

@@ -60,6 +60,9 @@
 			// Extend the default options with the provided options
 			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
 
+			// Initialize Tempo js
+			base.options.Tempo = Tempo.prepare('nestable', base.options.tempoSettings);
+
 			// Activate Nestable
 			$(base.options.nestable.selector).nestable(base.options.nestable);
 
@@ -172,65 +175,26 @@
 				uri = base.slugify($(base.options.form.children.name).val());
 				css_class = $(base.options.form.children.css_class).val();
 
+				// Hide the no children div
 				$(base.options.noChildrenSelector).addClass('hide');
 
-				// ###################################
-				// Add the children...
-				// ### find another clean way to do this
-				html = '<li class="item" data-slug="' + slug + '">';
-					html += '<div class="item-dd-handle">Drag</div>';
+				//
+				var data = [
+					{
+						'name'       : name,
+						'slug'       : slug,
+						'type'       : $('#new-child-type').val(),
+						'uri'        : uri,
+						'visibility' : $('#new-child-visibility').val(),
+						'secure'     : $('#new-child-secure').val(),
+						'target'     : $('#new-child-target').val(),
+						'css_class'  : css_class,
+						'enabled'    : $('#new-child-enabled').val()
+					}
+				];
 
-					html += '<div class="item-name">' + name + '</div>';
-
-					html += '<div href="#item-details-' + slug + '" class="item-toggle" data-toggle="modal">Child details</div>';
-
-						html += '<div id="item-details-' + slug + '" class="modal hide fade">';
-
-							// header
-							html += '<div class="modal-header">';
-								html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
-								html += '<h3>' + name + ' Details</h3>';
-							html += '</div>';
-
-							// body
-							html += '<div class="modal-body">';
-
-								html += '<div class="control-group">';
-									html += '<label class="control-label" for="' + slug + '_name">Name</label>';
-									html += '<input type="text" name="children[' + slug + '][name]" id="' + slug + '_name" class="input-block-level" value="' + name +'" placeholder="">';
-								html += '</div>';
-
-								html += '<div class="control-group">';
-									html += '<label class="control-label" for="' + slug + '_slug">Slug</label>';
-									html += '<input type="text" name="children[' + slug + '][slug]" id="' + slug + '_slug" class="input-block-level" value="' + slug +'" placeholder="">';
-								html += '</div>';
-
-								html += '<div class="control-group">';
-									html += '<label class="control-label" for="' + slug + '_uri">Uri</label>';
-									html += '<input type="text" name="children[' + slug + '][uri]" id="' + slug + '_uri" class="input-block-level" value="' + uri +'" placeholder="">';
-								html += '</div>';
-
-								html += '<div class="control-group">';
-									html += '<label class="control-label" for="' + slug + '_class">Class</label>';
-									html += '<input type="text" name="children[' + slug + '][class]" id="' + slug + '_class" class="input-block-level" value="' + css_class +'" placeholder="">';
-								html += '</div>';
-
-							html += '</div>';
-
-							// footer
-							html += '<div class="modal-footer">';
-								html += '<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">Close</button>';
-								html += '<button name="remove" class="remove btn btn-medium btn-primary" data-dismiss="modal" aria-hidden="true">Remove child</button>';
-							html += '</div>';
-
-						html += '</div>';
-
-					html += '</div>';
-				html += '</li>';
-				$(base.options.nestable.selector + ' > ol').append(html);
-				// ###################################
-
-
+				//
+				base.options.Tempo.append(data);
 
 				// Add the item to the array
 				base.options.persistedSlugs.push(slug);
@@ -594,6 +558,15 @@
 			// Selector for removing menu items
 			itemRemove : '.remove'
 
+		},
+
+		// Tempo object
+		Tempo : null,
+
+		// Tempo settings
+		tempoSettings : {
+			'var_braces': '\\[\\[\\]\\]',
+			'tag_braces': '\\[\\?\\?\\]'
 		},
 
 		// Nestable settings
