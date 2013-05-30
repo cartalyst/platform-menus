@@ -350,6 +350,28 @@ return array(
 
 		'system' => array(
 
+			array(
+				'slug'       => 'system-preview',
+				'name'       => 'Preview',
+				'class'      => 'icon-home',
+				'uri'        => '/',
+			),
+
+			array(
+				'slug'       => 'system-settings',
+				'name'       => 'Settings',
+				'class'      => 'icon-cog',
+				'uri'        => 'settings',
+			),
+
+
+			array(
+				'slug'       => 'system-logout',
+				'name'       => 'Sign Out',
+				'class'      => 'icon-signout',
+				'uri'        => '/',
+			),
+
 		),
 
 		'main' => array(
@@ -364,8 +386,8 @@ return array(
 
 			array(
 				'slug'       => 'main-login',
-				'name'       => 'Login',
-				'class'      => 'icon-home',
+				'name'       => 'Sign In',
+				'class'      => 'icon-signin',
 				'uri'        => 'login',
 				'visibility' => 'logged_out',
 			),
@@ -376,6 +398,14 @@ return array(
 				'class'      => 'icon-home',
 				'uri'        => 'logout',
 				'visibility' => 'logged_in',
+			),
+
+			array(
+				'slug'       => 'main-register',
+				'name'       => 'Register',
+				'class'      => 'icon-pencil',
+				'uri'        => 'register',
+				'visibility' => 'logged_out',
 			),
 
 		),
