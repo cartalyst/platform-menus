@@ -52,14 +52,18 @@ class Observer {
 				if ($key == 'slug') $slugs[] = $value;
 			});
 
-			$existing = with(new Menu)
+			$query = with(new Menu)
 			    ->newQuery()
-			    ->where('extension', '=', $extension->getSlug())
-			    ->whereNotIn('slug', $slugs)
-			    ->get();
+			    ->where('extension', '=', $extension->getSlug());
 
-			foreach ($existing as $child)
+			if (count($slugs))
 			{
+				$query->whereNotIn('slug', $slugs);
+			}
+
+			foreach ($query->get() as $child)
+			{
+				$child->refresh();
 				$child->delete();
 			}
 
@@ -189,13 +193,10 @@ class Observer {
 		// If there's no children, we'll observe an uninstall
 		// event for the child. This'll remove any children
 		// in the database.
-		if (empty($menus))
+		foreach ($menus as $slug => $menu)
 		{
-			foreach ($menus as $slug => $menu)
-			{
-				if ( ! is_array($menus)) continue;
-				$valid[$slug] = $menu;
-			}
+			if ( ! is_array($menus)) continue;
+			$valid[$slug] = $menu;
 		}
 
 		return $valid;

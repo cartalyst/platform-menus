@@ -354,6 +354,30 @@ return array(
 
 		'main' => array(
 
+			array(
+				'slug'       => 'main-home',
+				'name'       => 'Home',
+				'class'      => 'icon-home',
+				'uri'        => '/',
+				'visibility' => 'logged_out',
+			),
+
+			array(
+				'slug'       => 'main-login',
+				'name'       => 'Login',
+				'class'      => 'icon-home',
+				'uri'        => 'login',
+				'visibility' => 'logged_out',
+			),
+
+			array(
+				'slug'       => 'main-logout',
+				'name'       => 'Logout',
+				'class'      => 'icon-home',
+				'uri'        => 'logout',
+				'visibility' => 'logged_out',
+			),
+
 		),
 
 	),
