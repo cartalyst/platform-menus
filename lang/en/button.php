@@ -22,7 +22,8 @@ return array(
 
 	'add_child'            => 'Create Child',
 	'remove_child'         => 'Remove Child',
-	// 'remove_child_disabled' => 'Uneditable Child',
+	'update_child'         => 'Update Children',
+
 	'toggle_child_details' => 'Toggle Details',
 	'drag_children'        => 'Drag',
 
