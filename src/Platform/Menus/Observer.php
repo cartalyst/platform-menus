@@ -54,7 +54,8 @@ class Observer {
 
 			$query = with(new Menu)
 			    ->newQuery()
-			    ->where('extension', '=', $extension->getSlug());
+			    ->where('extension', '=', $extension->getSlug())
+			    ->where('slug', 'like', "{$slug}-");
 
 			if (count($slugs))
 			{
@@ -78,6 +79,8 @@ class Observer {
 			$tree = array_merge($existing, $children);
 			$this->recursivelyStripAttributes($tree);
 
+			var_dump($tree);
+
 			// Because we have just taken our existing hierarchy
 			// and added to it, we can save on the overhead of
 			// orphaning or deleting children as there'll never
@@ -97,34 +100,31 @@ class Observer {
 	{
 		if ( ! $menus = $this->extractMenus($extension)) return;
 
-		foreach ($menus as $slug => $children)
+		// Build up an array of all the slugs present in the children array
+		$slugs = array();
+		if (is_array($children) and ! empty($children))
 		{
-			// Build up an array of all the slugs present in the children array
-			$slugs = array();
-			if (is_array($children) and ! empty($children))
+			array_walk_recursive($children, function($value, $key) use (&$slugs)
 			{
-				array_walk_recursive($children, function($value, $key) use (&$slugs)
-				{
-					if ($key == 'slug') $slugs[] = $value;
-				});
-			}
+				if ($key == 'slug') $slugs[] = $value;
+			});
+		}
 
-			$query = with(new Menu)
-			    ->newQuery()
-			    ->where('extension', '=', $extension->getSlug());
+		$query = with(new Menu)
+		    ->newQuery()
+		    ->where('extension', '=', $extension->getSlug());
 
-			if (count($slugs) > 0)
-			{
-				$query->orWhereIn('slug', $slugs);
-			}
+		if (count($slugs) > 0)
+		{
+			$query->orWhereIn('slug', $slugs);
+		}
 
-			// Refresh our nodes so they're not affected by deletions and
-			// remove them.
-			foreach ($query->get() as $child)
-			{
-				$child->refresh();
-				$child->delete();
-			}
+		// Refresh our nodes so they're not affected by deletions and
+		// remove them.
+		foreach ($query->get() as $child)
+		{
+			$child->refresh();
+			$child->delete();
 		}
 	}
 
