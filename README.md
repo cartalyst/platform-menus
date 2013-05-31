@@ -1,4 +1,0 @@
-menus
-=====
-
-Platform Extension - Menus
