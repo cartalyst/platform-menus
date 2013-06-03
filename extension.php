@@ -381,7 +381,7 @@ return array(
 				'slug'       => 'system-settings',
 				'name'       => 'Settings',
 				'class'      => 'icon-cog',
-				'uri'        => 'settings',
+				'uri'        => 'admin/settings',
 			),
 
 
@@ -389,7 +389,7 @@ return array(
 				'slug'       => 'system-logout',
 				'name'       => 'Sign Out',
 				'class'      => 'icon-signout',
-				'uri'        => '/',
+				'uri'        => 'logout',
 			),
 
 		),
@@ -401,7 +401,7 @@ return array(
 				'name'       => 'Home',
 				'class'      => 'icon-home',
 				'uri'        => '/',
-				'visibility' => 'logged_out',
+				'visibility' => 'always',
 			),
 
 			array(
