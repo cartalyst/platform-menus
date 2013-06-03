@@ -371,25 +371,25 @@ return array(
 		'system' => array(
 
 			array(
-				'slug'       => 'system-preview',
-				'name'       => 'Preview',
-				'class'      => 'icon-home',
-				'uri'        => '/',
+				'slug'  => 'system-preview',
+				'name'  => 'Preview',
+				'class' => 'icon-home',
+				'uri'   => '/',
 			),
 
 			array(
-				'slug'       => 'system-settings',
-				'name'       => 'Settings',
-				'class'      => 'icon-cog',
-				'uri'        => 'admin/settings',
+				'slug'  => 'system-settings',
+				'name'  => 'Settings',
+				'class' => 'icon-cog',
+				'uri'   => 'admin/settings',
 			),
 
 
 			array(
-				'slug'       => 'system-logout',
-				'name'       => 'Sign Out',
-				'class'      => 'icon-signout',
-				'uri'        => 'logout',
+				'slug'  => 'system-logout',
+				'name'  => 'Sign Out',
+				'class' => 'icon-signout',
+				'uri'   => 'logout',
 			),
 
 		),
