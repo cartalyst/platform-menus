@@ -88,7 +88,7 @@ class ChildrenController extends ApiController {
 			return Response::api("Could not update children for [$id] menu as it does not exist.", 404);
 		}
 
-		$menu->mapTreeAndOrphan(Input::get('children'));
+		$menu->mapTree(Input::get('children'));
 
 		return $this->show($id);
 	}
