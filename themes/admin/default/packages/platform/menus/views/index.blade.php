@@ -142,7 +142,7 @@ jQuery(document).ready(function($) {
 						<th data-sort="name" data-grid="main" class="sortable">{{ trans('platform/menus::table.name') }}</th>
 						<th data-sort="slug" data-grid="main" class="sortable">{{ trans('platform/menus::table.slug') }}</th>
 						<th data-sort="children_count" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.children_count') }}</th>
-						<th data-sort="created_at" data-grid="main" class="sortable">{{ trans('platform/menus::table.created_at') }}</th>
+						<th data-sort="created_at" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.created_at') }}</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -151,7 +151,7 @@ jQuery(document).ready(function($) {
 						<td>[[ name ]]</td>
 						<td>[[ slug ]]</td>
 						<td>[[ children_count ]]</td>
-						<td>[[ created_at ]]</td>
+						<td>[[ created_at | date 'DD MMMM YYYY' ]]</td>
 						<td>
 							<div class="actions">
 								<a class="btn btn-action" data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ id ]]') }}"  data-title="{{ trans('button.delete') }}"><i class="icon-trash"></i></a>
