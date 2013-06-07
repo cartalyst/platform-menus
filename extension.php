@@ -244,11 +244,11 @@ return array(
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(array('prefix' => '{api}/v1'), function()
+		Route::group(array('prefix' => '{api}/v1/menus/{slug}'), function()
 		{
-			Route::get('menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
-			Route::put('menus/{slug}/children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
-			Route::get('menus/{slug}/path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
+			Route::get('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
+			Route::put('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
+			Route::get('path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
 		});
 	},
 
