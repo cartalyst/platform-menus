@@ -39,8 +39,9 @@
 		base.Initializer = function() {
 
 			/////// WIP
-			$('input[type="text"]').keyup(function()
+			$(document).on('keyup', 'input[type="text"]', function()
 			{
+				// need to tweak this so that it works with new children items!!
 
 				childrenId = $(this).data('children');
 
@@ -70,7 +71,7 @@
 			$(base.options.form.children.slug).val(base.generateChildrenSlug());
 
 			// When the root menu name value changes
-			$(base.options.form.root.name).keyup(function() {
+			$(document).on('keyup', base.options.form.root.name, function() {
 
 				// Clean the root menu slug value
 				base.generateRootSlug($(this).val());
@@ -83,7 +84,7 @@
 			});
 
 			// When the root menu slug value changes
-			$(base.options.form.root.slug).on('change', function() {
+			$(document).on('change', base.options.form.root.slug, function() {
 
 				// Clean the root menu slug value
 				base.generateRootSlug($(this).val());
@@ -96,27 +97,27 @@
 			});
 
 			// Adds a new menu item
-			$(base.options.form.children.submit).on('click', base.addItem);
+			$(document).on('click', base.options.form.children.submit, base.addItem);
 
 			// Removes a menu item
-			$(base.options.form.itemRemove).on('click', base.removeItem);
+			$(document).on('click', base.options.form.itemRemove, base.removeItem);
 
 			// Clean the root item name
-			$(base.options.form.root.name).on('change', function() {
+			$(document).on('change', base.options.form.root.name, function() {
 
 				$(base.options.form.root.name).val($.trim($(this).val()));
 
 			});
 
 			// Clean the root item slug
-			$(base.options.form.root.slug).on('change', function() {
+			$(document).on('change', base.options.form.root.slug, function() {
 
 				$(base.options.form.root.slug).val($.trim($(this).val()));
 
 			});
 
 			// Update the new menu item slug
-			$(base.options.form.children.name).keyup(function() {
+			$(document).on('keyup', base.options.form.children.name, function() {
 
 				base.updateChildrenSlug();
 
@@ -125,14 +126,14 @@
 			});
 
 			// Clean the new item name
-			$(base.options.form.children.name).on('change', function() {
+			$(document).on('change', base.options.form.children.name, function() {
 
 				$(this).val($.trim($(this).val()));
 
 			});
 
 			// Clean the new item slug
-			$(base.options.form.children.slug).on('change', function() {
+			$(document).on('change', base.options.form.children.slug, function() {
 
 				$(this).val(base.slugify($(this).val()));
 
