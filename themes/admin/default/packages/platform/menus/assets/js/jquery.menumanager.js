@@ -550,10 +550,10 @@
 
 			// New Children elements
 			children : {
-				name      : '#new-child-name',
-				slug      : '#new-child-slug',
-				uri       : '#new-child-uri',
-				css_class : '#new-child-css_class',
+				name      : '#new-child_name',
+				slug      : '#new-child_slug',
+				uri       : '#new-child_uri',
+				css_class : '#new-child_css_class',
 
 				submit : '#new-child-add'
 			},
