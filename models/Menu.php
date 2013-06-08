@@ -44,9 +44,8 @@ class Menu extends EloquentNode {
 	protected $guarded = array('lft', 'rgt', 'menu', 'depth', 'created_at', 'updated_at');
 
 	/**
-	 * Array of attributes reserved for the
-	 * worker. These attributes cannot be set
-	 * publically, only internally and shouldn't
+	 * Array of attributes reserved for the worker. These attributes
+	 * cannot be set publically, only internally and shouldn't
 	 * really be set outside this class.
 	 *
 	 * @var array
@@ -81,11 +80,12 @@ class Menu extends EloquentNode {
 
 	/**
 	 * Filters children and returns an array of children
-	 * which satisfy any of the visibilities, wtih
+	 * which satisfy any of the provided visibilities.
 	 *
 	 * @param  array  $visibilities
 	 * @param  bool   $enabled
 	 * @param  int    $depth
+	 * @return array
 	 */
 	public function findDisplayableChildren(array $visibilities, $enabled = null, $depth = 0)
 	{
@@ -93,7 +93,7 @@ class Menu extends EloquentNode {
 		{
 			$query->whereIn('node.visibility', $visibilities);
 
-			if ($enabled !== null)
+			if ( ! is_null($enabled))
 			{
 				$query->where('node.enabled', '=', $enabled);
 			}
@@ -104,7 +104,8 @@ class Menu extends EloquentNode {
 	 * Filters children and returns an array of enabled
 	 * children only.
 	 *
-	 * @param  int   $depth
+	 * @param  int  $depth
+	 * @return array
 	 */
 	public function findEnabledChildren($depth = 0)
 	{
