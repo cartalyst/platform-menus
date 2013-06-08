@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
 		loader: '.loading',
 		type: 'single',
 		sort: {
-			column: 'created_at',
+			column: 'name',
 			direction: 'desc'
 		},
 		callback: function(obj) {
@@ -74,7 +74,7 @@ jQuery(document).ready(function($) {
 						<option value="all">{{ trans('general.all') }}</option>
 						<option value="name">{{ trans('platform/menus::table.name') }}</option>
 						<option value="slug">{{ trans('platform/menus::table.slug') }}</option>
-						<option value="created_at">{{ trans('platform/content::table.created_at') }}</option>
+						<option value="created_at">{{ trans('platform/menus::table.created_at') }}</option>
 					</select>
 				</div>
 

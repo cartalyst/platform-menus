@@ -22,6 +22,7 @@ return array(
 
 	'already_exists' => 'Menu already exists!',
 	'does_not_exist' => 'Menu [:id] either not a root menu item or does not exist.',
+	'no_children'    => 'No children.',
 
 	'success' => array(
 		'create' => 'Menu was successfully created.',

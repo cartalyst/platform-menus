@@ -290,8 +290,8 @@ jQuery(document).ready(function($) {
 				</ol>
 			</div>
 
-			<p id="no-children" class="{{ (count($children) > 0) ? 'hide' : '' }}">
-				No Children
+			<p id="no-children"{{ (count($children) > 0) ? ' class="hide"' : '' }}>
+				{{ trans('platform/menus::message.no_children') }}
 			</p>
 
 			<hr>
@@ -304,6 +304,8 @@ jQuery(document).ready(function($) {
 			</div>
 
 		</form>
+
 	</section>
+
 </section>
 @stop
