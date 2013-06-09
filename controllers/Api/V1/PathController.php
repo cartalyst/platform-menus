@@ -27,7 +27,7 @@ class PathController extends ApiController {
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Menus\Menu
+	 * @var Platform\Menus\Models\Menu
 	 */
 	protected $model;
 

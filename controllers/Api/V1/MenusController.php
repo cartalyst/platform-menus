@@ -39,7 +39,7 @@ class MenusController extends ApiController {
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Menus\Menu
+	 * @var Platform\Menus\Models\Menu
 	 */
 	protected $model;
 
@@ -151,7 +151,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				API::put("v1/menus/$id/children", array('children' => $value));
+				API::put("v1/menus/{$id}/children", array('children' => $value));
 			}
 			else
 			{
