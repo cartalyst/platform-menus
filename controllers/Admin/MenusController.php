@@ -40,18 +40,6 @@ class MenusController extends AdminController {
 		// Set the current active menu
 		set_active_menu('admin-menus');
 
-		try
-		{
-			// Get all the root menus
-			$response = API::get('v1/menus', array('root' => true));
-			$menus    = $response['menus'];
-		}
-		catch (ApiHttpException $e)
-		{
-			// Redirect to the admin dashboard
-			return Redirect::toAdmin('/');
-		}
-
 		// Show the page
 		return View::make('platform/menus::index', compact('menus'));
 	}
@@ -92,27 +80,7 @@ class MenusController extends AdminController {
 	 */
 	public function getCreate()
 	{
-		// Set the current active menu
-		set_active_menu('admin-menus');
-
-		try
-		{
-			// Get all the menu slugs
-			$response       = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
-			$persistedSlugs = array_map(function($child)
-			{
-				return $child['slug'];
-			}, $response['menus']);
-		}
-		catch (ApiHttpException $e)
-		{
-			$persistedSlugs = '';
-		}
-
-		$children = array();
-
-		// Show the page
-		return View::make('platform/menus::manage', compact('persistedSlugs', 'children'));
+		return $this->showForm(null, 'create');
 	}
 
 	/**
@@ -122,7 +90,7 @@ class MenusController extends AdminController {
 	 */
 	public function postCreate()
 	{
-		return $this->postEdit();
+		return $this->processForm();
 	}
 
 	/**
@@ -133,37 +101,7 @@ class MenusController extends AdminController {
 	 */
 	public function getEdit($id = null)
 	{
-		// Set the current active menu
-		set_active_menu('admin-menus');
-
-		try
-		{
-			// Get the menu information
-			$response = API::get("v1/menus/$id");
-			$menu     = $response['menu'];
-
-			// Get this menu children
-			$response = API::get("v1/menus/$id/children");
-			$children = $response['children'];
-
-			// Get all the menu slugs
-			$response       = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
-			$persistedSlugs = array_map(function($child)
-			{
-				return $child['slug'];
-			}, $response['menus']);
-		}
-		catch (ApiHttpException $e)
-		{
-			// Set the error message
-			$notifications = with(new Bag)->add('error', $e->getMessage());
-
-			// Return to the menus management page
-			return Redirect::toAdmin('menus')->with('notifications', $notifications);
-		}
-
-		// Show the page
-		return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs'));
+		return $this->showForm($id, 'update');
 	}
 
 	/**
@@ -174,10 +112,100 @@ class MenusController extends AdminController {
 	 */
 	public function postEdit($id = null)
 	{
+		return $this->processForm($id);
+	}
+
+	/**
+	 * Delete a menu.
+	 *
+	 * @param  int  $id
+	 * @return Redirect
+	 */
+	public function getDelete($id)
+	{
+		try
+		{
+			// Delete the menu
+			API::delete("v1/menus/{$id}");
+
+			// Set the success message
+			$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
+		}
+		catch (ApiHttpException $e)
+		{
+			// Set the error message
+			$notifications = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
+		}
+
+		// Redirect to the menus management page
+		return Redirect::toAdmin('menus')->with('notifications', $notifications);
+	}
+
+	/**
+	 * Shows the form.
+	 *
+	 * @param  mixed   $id
+	 * @param  string  $pageSegment
+	 * @return mixed
+	 */
+	protected function showForm($id = null, $pageSegment = null)
+	{
+		try
+		{
+			// Set the current active menu
+			set_active_menu('admin-menus');
+
+			// Fallback data
+			$menu     = null;
+			$children = null;
+
+			// Do we have a menu id?
+			if ( ! is_null($id))
+			{
+				// Get the menu information
+				$response = API::get("v1/menus/{$id}");
+				$menu     = $response['menu'];
+
+				// Get this menu children
+				$response = API::get("v1/menus/{$id}/children");
+				$children = $response['children'];
+			}
+
+			// Get all the menu slugs
+			$response = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
+
+			// Prepare the persisted slugs, so that we
+			// don't end up with repeated slugs.
+			$persistedSlugs = array_map(function($child)
+			{
+				return $child['slug'];
+			}, $response['menus']);
+
+			// Show the page
+			return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs', 'pageSegment'));
+		}
+		catch (ApiHttpException $e)
+		{
+			// Set the error message
+			$notifications = with(new Bag)->add('error', $e->getMessage());
+
+			// Return to the menus management page
+			return Redirect::toAdmin('menus')->with('notifications', $notifications);
+		}
+	}
+
+	/**
+	 * Processes the form.
+	 *
+	 * @param  mixed  $id
+	 * @return Redirect
+	 */
+	protected function processForm($id = null)
+	{
 		// Get the tree
 		$tree = Input::get('tree', array());
 
-		// JSON string on non-AJAX form.
+		// JSON string on non-AJAX form
 		if (is_string($tree))
 		{
 			$tree = json_decode($tree, true);
@@ -214,53 +242,30 @@ class MenusController extends AdminController {
 				$id = $response['menu']->slug;
 
 				// Prepare the success message
-				$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.create'));
+				$success = Lang::get('platform/menus::message.success.create');
 			}
 
 			// No, we are updating the menu
 			else
 			{
 				// Update the menu
-				API::put("v1/menus/$id", compact('menu'));
+				API::put("v1/menus/{$id}", compact('menu'));
 
 				// Prepare the success message
-				$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.update'));
+				$success = Lang::get('platform/menus::message.success.update');
 			}
 
+			// Set the success message
+			$notifications = with(new Bag)->add('success', $success);
+
 			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/$id")->with('notifications', $notifications);
+			return Redirect::toAdmin("menus/edit/{$id}")->with('notifications', $notifications);
 		}
 		catch (ApiHttpException $e)
 		{
 			// Redirect to the appropriate page
 			return Redirect::back()->withInput()->withErrors($e->getErrors());
 		}
-	}
-
-	/**
-	 * Delete a menu.
-	 *
-	 * @param  int  $id
-	 * @return Redirect
-	 */
-	public function getDelete($id)
-	{
-		try
-		{
-			// Delete the menu
-			API::delete("v1/menus/$id");
-
-			// Set the success message
-			$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
-		}
-		catch (ApiHttpException $e)
-		{
-			// Set the error message
-			$notifications = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
-		}
-
-		// Redirect to the menus management page
-		return Redirect::toAdmin('menus')->with('notifications', $notifications);
 	}
 
 	/**
@@ -274,52 +279,27 @@ class MenusController extends AdminController {
 	 */
 	protected function processChildRecursively($child, &$children)
 	{
-		// Existing menu children will pass an ID through to us.
-		// This is advantageous to use as the slug may change
-		// without anything being messed up. For new items, we'll
-		// resort to using the slug that has been passed through to
-		// us.
+		// Existing menu children will pass an ID through to us. This is
+		// advantageous to use as the slug may change without anything
+		// being messed up. For new items, we'll resort to using the
+		// slug that has been passed through to us.
 		$index = isset($child['id']) ? $child['id'] : $child['slug'];
 
 		$new_child = array(
-			'id'               => Input::get("children.$index.id"),
-			'name'             => Input::get("children.$index.name"),
-			'slug'             => Input::get("children.$index.slug"),
-			'uri'              => Input::get("children.$index.uri"),
-			// 'page_id'          => Input::get("children.$index.page_id"),
-			'class'            => Input::get("children.$index.class"),
-			'target'           => Input::get("children.$index.target", 0),
-			'visibility'       => Input::get("children.$index.visibility", 'always'),
-			// 'group_visibility' => (array) Input::get("children.$index.group_visibility"),
-			'type'             => Input::get("children.$index.type", 'static'),
-			'secure'           => Input::get("children.$index.secure", 0),
-			'enabled'          => Input::get("children.$index.enabled", 1),
+			'id'         => Input::get("children.{$index}.id"),
+			'name'       => Input::get("children.{$index}.name"),
+			'slug'       => Input::get("children.{$index}.slug"),
+			'uri'        => Input::get("children.{$index}.uri"),
+			'page_id'    => Input::get("children.{$index}.page_id"),
+			'class'      => Input::get("children.{$index}.class"),
+			'target'     => Input::get("children.{$index}.target", 0),
+			'visibility' => Input::get("children.{$index}.visibility", 'always'),
+			'type'       => Input::get("children.{$index}.type", 'static'),
+			'secure'     => Input::get("children.{$index}.secure", 0),
+			'enabled'    => Input::get("children.{$index}.enabled", 1),
 		);
 
-		// Determine if we're a new child or not. If we're
-		// new, we don't attach an ID. Nesty will handle the
-		// rest.
-		/*
-		if ( ! Input::get('children.' . $child['id'] . '.is_new'))
-		{
-			$new_child['id'] = $child['id'];
-		}
-
-		// Now, look for secure URLs
-		if ($new_child['type'] == Menu::TYPE_STATIC and URL::valid($new_child['uri']))
-		{
-			$new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
-		}
-
-		// Relative URL, look in the POST data
-		else
-		{
-			$new_child['secure'] = \Input::get('children.' . $child['id'] . '.secure', 0);
-		}
-		*/
-
-		// If we have children, call the function again.
-		//
+		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		{
 			$grand_children = array();

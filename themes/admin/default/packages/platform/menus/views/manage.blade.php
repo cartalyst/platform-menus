@@ -83,7 +83,9 @@ jQuery(document).ready(function($) {
 
 			<div class="nestable" id="nestable">
 				<ol class="items">
+					@if ( ! empty($children))
 					@each('platform/menus::children', $children, 'child')
+					@endif
 
 					<li data-template class="item" data-slug="[[ slug ]]" style="display: none;">
 						<div class="item-dd-handle">{{ trans('platform/menus::button.drag_children') }}</div>
@@ -200,7 +202,7 @@ jQuery(document).ready(function($) {
 				</ol>
 			</div>
 
-			<p id="no-children"{{ (count($children) > 0) ? ' class="hide"' : null }}>
+			<p id="no-children"{{ ! empty($children) ? ' class="hide"' : null }}>
 				{{ trans('platform/menus::message.no_children') }}
 			</p>
 

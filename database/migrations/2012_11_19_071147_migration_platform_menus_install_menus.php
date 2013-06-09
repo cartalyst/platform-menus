@@ -31,11 +31,10 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 	{
 		Schema::create('menus', function($table)
 		{
-			// Menu children are type based. You can add
-			// multiple types for how each child is rendered.
-			// We're going to firstly add all core fields to the
-			// menus that are common across all types. When a
-			// menu item has a custom type, an event is fired
+			// Menu children are type based. You can add multiple types for how
+			// each child is rendered. We're going to firstly add all core
+			// fields to the menus that are common across all types.
+			// When a menu item has a custom type, an event is fired
 			// so the type can do whatever it needs to do.
 			$table->increments('id');
 
@@ -43,25 +42,24 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// on the menus table. This will be the primary key
 			$table->string('slug');
 
-			// Modify Preorder Tree Traversal algorithm.
+			// Modified Preorder Tree Traversal algorithm.
 			// See http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/
 			$table->integer('lft');
 			$table->integer('rgt');
 			$table->integer('menu');
 
-			// Extension that is responsible for a menu
-			// child. We use this to disable all menu children
-			// with extnesions
+			// Extension that is responsible for a menu child. We use this to
+			// disable all menu children with extensions.
 			$table->string('extension')->nullable();
 
 			// Name of the child
 			$table->string('name')->nullable();
 
-			// Type for each menu child
+			// Type of the child
 			$table->string('type')->default('static');
 
-			// Target for clicked item, 'self',
-			// 'parent', 'blank' etc
+			// Target for clicked item,
+			// 'self', 'parent', 'blank' etc
 			$table->string('target')->nullable();
 
 			// User visibility flag
@@ -94,12 +92,11 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// Let's add an index on the MPTT fields. This will speed up the
 			// reading process even further. We'll need to ensure that
-			// MySQL uses the InnoDB engine to  support the indexes,
+			// MySQL uses the InnoDB engine to support the indexes,
 			// other engines aren't affected.
 			$table->engine = 'InnoDB';
 			$table->unique(array('lft', 'rgt', 'menu'));
 		});
-
 	}
 
 	/**
