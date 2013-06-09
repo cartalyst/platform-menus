@@ -41,7 +41,7 @@ class MenusController extends AdminController {
 		set_active_menu('admin-menus');
 
 		// Show the page
-		return View::make('platform/menus::index', compact('menus'));
+		return View::make('platform/menus::index');
 	}
 
 	/**
