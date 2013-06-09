@@ -52,7 +52,7 @@ class PathController extends ApiController {
 	{
 		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
+			return Response::api(Lang::get('platform/menus::message.not_found', compact('id')), 404);
 		}
 
 		return Response::api(array('path' => $menu->getPath()));

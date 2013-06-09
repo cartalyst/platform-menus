@@ -127,7 +127,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
+			return Response::api(Lang::get('platform/menus::message.not_found', compact('id')), 404);
 		}
 
 		return Response::api(compact('menu'));
@@ -143,7 +143,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
+			return Response::api(Lang::get('platform/menus::message.not_found', compact('id')), 404);
 		}
 
 		//
@@ -179,7 +179,7 @@ class MenusController extends ApiController {
 		// Get this menu information
 		if ( ! $menu = $this->model->find($id))
 		{
-			return Response::api(Lang::get('platform/menus::message.does_not_exist', compact('id')), 404);
+			return Response::api(Lang::get('platform/menus::message.not_found', compact('id')), 404);
 		}
 
 		// Delete the menu
