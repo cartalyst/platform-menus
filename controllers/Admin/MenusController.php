@@ -279,10 +279,10 @@ class MenusController extends AdminController {
 	 */
 	protected function processChildRecursively($child, &$children)
 	{
-		// Existing menu children will pass an ID through to us. This is
-		// advantageous to use as the slug may change without anything
-		// being messed up. For new items, we'll resort to using the
-		// slug that has been passed through to us.
+		// Existing menu children will be passing an ID to us. This
+		// is advantageous to us, since a menu slug can be changed
+		// without anything being messed up. For new items, we'll
+		// use the slug that has been passed to us.
 		$index = isset($child['id']) ? $child['id'] : $child['slug'];
 
 		$new_child = array(
