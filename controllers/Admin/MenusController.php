@@ -286,7 +286,7 @@ class MenusController extends AdminController {
 		$index = isset($child['id']) ? $child['id'] : $child['slug'];
 
 		$new_child = array(
-			'id'         => Input::get("children.{$index}.id"),
+			'id'         => isset($child['id']) ? Input::get("children.{$index}.id") : null,
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
 			'uri'        => Input::get("children.{$index}.uri"),
