@@ -37,7 +37,7 @@
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_visibility">{{ trans('platform/menus::form.child.visibility.title') }}</label>
 	<div class="controls">
-		<select{{ $dataChild }} name="{{ sprintf($childName, 'visibillity') }}" id="{{ $childId }}_visibility" class="input-block-level">
+		<select{{ $dataChild }} name="{{ sprintf($childName, 'visibility') }}" id="{{ $childId }}_visibility" class="input-block-level">
 			<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.always') }}</option>
 			<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
 			<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
