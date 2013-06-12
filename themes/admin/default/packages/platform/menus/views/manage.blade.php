@@ -2,7 +2,7 @@
 
 {{-- Page title --}}
 @section('title')
-{{ trans('platform/menus::general.title') }} ::
+{{ trans("platform/menus::general.{$pageSegment}.title") }} ::
 @parent
 @stop
 
@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 <section id="menus">
 
 	<header class="clearfix">
-		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans('platform/menus::form.'.(empty($menu) ? 'create' : 'update').'.legend') }}</h1>
+		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans("platform/menus::form.{$pageSegment}.legend") }}</h1>
 
 		<nav class="tertiary-navigation">
 			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
