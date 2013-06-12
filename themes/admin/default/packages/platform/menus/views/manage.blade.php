@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">{{ trans('button.close') }}</button>
-					<button type="button" name="new-child-add" id="new-child-add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">{{ trans('platform/menus::button.add_child') }}</button>
+					<button type="button" name="new-child_add" id="new-child_add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">{{ trans('platform/menus::button.add_child') }}</button>
 				</div>
 			</div>
 
@@ -109,22 +109,22 @@ jQuery(document).ready(function($) {
 									{{-- Name --}}
 									<div class="control-group">
 										<label class="control-label" for="[[ slug ]]_name">{{ trans('platform/menus::form.child.name') }}</label>
-										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][name]" id="[[ slug ]]_name" class="input-block-level" value="[[ name ]]" placeholder="">
+										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][name]" id="[[ slug ]]_name" class="input-block-level" value="[[ name ]]">
 									</div>
 
 									{{-- Slug --}}
 									<div class="control-group">
 										<label class="control-label" for="[[ slug ]]_slug">{{ trans('platform/menus::form.child.slug') }}</label>
-										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][slug]" id="[[ slug ]]_slug" class="input-block-level" value="[[ slug ]]" placeholder="">
+										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][slug]" id="[[ slug ]]_slug" class="input-block-level" value="[[ slug ]]">
 									</div>
 
 									{{-- Item Type --}}
 									<div class="control-group">
-										<label class="control-label" for="[[ slug ]]-type">{{ trans('platform/menus::form.child.type.title') }}</label>
+										<label class="control-label" for="[[ slug ]]_type">{{ trans('platform/menus::form.child.type.title') }}</label>
 										<div class="controls">
 											<select data-children="[[ slug ]]" name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="input-block-level">
-												<option value="static" [? if type == 'static' ?] selected="selected" [? endif ?]>{{ trans('platform/menus::form.child.type.static') }}</option>
-												<option value="page" [? if type == 'page' ?] selected="selected" [? endif ?]>{{ trans('platform/menus::form.child.type.page') }}</option>
+												<option value="static" [? if type == 'static' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.type.static') }}</option>
+												<option value="page" [? if type == 'page' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.type.page') }}</option>
 											</select>
 										</div>
 									</div>
@@ -132,29 +132,29 @@ jQuery(document).ready(function($) {
 									{{-- Item Uri --}}
 									<div class="control-group">
 										<label class="control-label" for="[[ slug ]]_uri">{{ trans('platform/menus::form.child.uri') }}</label>
-										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][uri]" id="[[ slug ]]_uri" class="input-block-level" value="[[ uri ]]" placeholder="">
+										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][uri]" id="[[ slug ]]_uri" class="input-block-level" value="[[ uri ]]">
 									</div>
 
 									{{-- Visibility --}}
 									<div class="control-group">
-										<label class="control-label" for="[[ slug ]]-visibility">{{ trans('platform/menus::form.child.visibility.title') }}</label>
+										<label class="control-label" for="[[ slug ]]_visibility">{{ trans('platform/menus::form.child.visibility.title') }}</label>
 										<div class="controls">
 											<select data-children="[[ slug ]]" name="children[[[ slug ]]][visibility]" id="[[ slug ]]_visibility" class="input-block-level">
-												<option value="always">{{ trans('platform/menus::form.child.visibility.always') }}</option>
-												<option value="logged_in" >{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
-												<option value="logged_out">{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
-												<option value="admin">{{ trans('platform/menus::form.child.visibility.admin') }}</option>
+												<option value="always"[? if visibility == 'always' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.visibility.always') }}</option>
+												<option value="logged_in"[? if visibility == 'logged_in' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
+												<option value="logged_out"[? if visibility == 'logged_out' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
+												<option value="admin"[? if visibility == 'admin' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.visibility.admin') }}</option>
 											</select>
 										</div>
 									</div>
 
 									{{-- Secure --}}
 									<div class="control-group">
-										<label class="control-label" for="new-child-secure">{{ trans('platform/menus::form.child.secure') }}</label>
+										<label class="control-label" for="[[ slug ]]_secure">{{ trans('platform/menus::form.child.secure') }}</label>
 										<div class="controls">
 											<select data-children="[[ slug ]]" name="children[[[ slug ]]][secure]" id="[[ slug ]]_secure" class="input-block-level">
-												<option value="1">{{ trans('general.yes') }}</option>
-												<option value="0">{{ trans('general.no') }}</option>
+												<option value="1"[? if secure == '1' ?] selected="selected"[? endif ?]>{{ trans('general.yes') }}</option>
+												<option value="0"[? if secure == '0' ?] selected="selected"[? endif ?]>{{ trans('general.no') }}</option>
 											</select>
 										</div>
 									</div>
@@ -164,10 +164,10 @@ jQuery(document).ready(function($) {
 										<label class="control-label" for="[[ slug ]]_target">{{ trans('platform/menus::form.child.target.title') }}</label>
 										<div class="controls">
 											<select data-children="[[ slug ]]" name="children[[[ slug ]]][target]" id="[[ slug ]]_target" class="input-block-level">
-												<option value="self">{{ trans('platform/menus::form.child.target.self') }}</option>
-												<option value="new_children">{{ trans('platform/menus::form.child.target.blank') }}</option>
-												<option value="parent_frame">{{ trans('platform/menus::form.child.target.parent') }}</option>
-												<option value="top_frame">{{ trans('platform/menus::form.child.target.top') }}</option>
+												<option value="self"[? if target == 'self' ?] selected="selected" [? endif ?]>{{ trans('platform/menus::form.child.target.self') }}</option>
+												<option value="new_children"[? if target == 'new_children' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.target.blank') }}</option>
+												<option value="parent_frame"[? if target == 'parent_frame' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.target.parent') }}</option>
+												<option value="top_frame"[? if target == 'top_frame' ?] selected="selected"[? endif ?]>{{ trans('platform/menus::form.child.target.top') }}</option>
 											</select>
 										</div>
 									</div>
@@ -175,16 +175,16 @@ jQuery(document).ready(function($) {
 									{{-- CSS Class --}}
 									<div class="control-group">
 										<label class="control-label" for="[[ slug ]]_class">{{ trans('platform/menus::form.child.class') }}</label>
-										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][class]" id="[[ slug ]]_class" class="input-block-level" value="[[ css_class ]]" placeholder="">
+										<input type="text" data-children="[[ slug ]]" name="children[[[ slug ]]][class]" id="[[ slug ]]_class" class="input-block-level" value="[[ class ]]">
 									</div>
 
 									{{-- Enabled --}}
 									<div class="control-group">
-										<label class="control-label" for="new-child-enabled">{{ trans('platform/menus::form.child.enabled') }}</label>
+										<label class="control-label" for="[[ slug ]]_enabled">{{ trans('platform/menus::form.child.enabled') }}</label>
 										<div class="controls">
 											<select data-children="[[ slug ]]" name="children[[[ slug ]]][enabled]" id="[[ slug ]]_enabled" class="input-block-level">
-												<option value="1">{{ trans('general.enabled') }}</option>
-												<option value="0">{{ trans('general.disabled') }}</option>
+												<option value="1"[? if enabled == '1' ?] selected="selected"[? endif ?]>{{ trans('general.enabled') }}</option>
+												<option value="0"[? if enabled == '0' ?] selected="selected"[? endif ?]>{{ trans('general.disabled') }}</option>
 											</select>
 										</div>
 									</div>

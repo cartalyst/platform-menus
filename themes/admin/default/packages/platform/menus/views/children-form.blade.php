@@ -7,13 +7,13 @@
 {{-- Item Name --}}
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_name">{{ trans('platform/menus::form.child.name') }}</label>
-	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'name') }}" id="{{ $childId }}_name" class="input-block-level" value="{{ ! empty($child) ? $child->name : null }}" placeholder="">
+	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'name') }}" id="{{ $childId }}_name" class="input-block-level" value="{{ ! empty($child) ? $child->name : null }}">
 </div>
 
 {{-- Item Slug --}}
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_slug">{{ trans('platform/menus::form.child.slug') }}</label>
-	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'slug') }}" id="{{ $childId }}_slug" class="input-block-level" value="{{ ! empty($child) ? $child->slug : null }}" placeholder="">
+	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'slug') }}" id="{{ $childId }}_slug" class="input-block-level" value="{{ ! empty($child) ? $child->slug : null }}">
 </div>
 
 {{-- Item Type --}}
@@ -30,14 +30,14 @@
 {{-- Item Uri --}}
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_uri">{{ trans('platform/menus::form.child.uri') }}</label>
-	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'uri') }} id="{{ $childId }}_uri" class="input-block-level" value="{{ ! empty($child) ? $child->uri : null }}" placeholder="">
+	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'uri') }}" id="{{ $childId }}_uri" class="input-block-level" value="{{ ! empty($child) ? $child->uri : null }}">
 </div>
 
 {{-- Visibility --}}
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_visibility">{{ trans('platform/menus::form.child.visibility.title') }}</label>
 	<div class="controls">
-		<select{{ $dataChild }} name="{{ sprintf($childName, 'visibillity') }}" id="{{ $childId }}_visibility" class="input-block-level">
+		<select{{ $dataChild }} name="{{ sprintf($childName, 'visibility') }}" id="{{ $childId }}_visibility" class="input-block-level">
 			<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.always') }}</option>
 			<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
 			<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
@@ -73,7 +73,7 @@
 {{-- CSS Class --}}
 <div class="control-group">
 	<label class="control-label" for="{{ $childId }}_class">{{ trans('platform/menus::form.child.class') }}</label>
-	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'class') }}" id="{{ $childId }}_class" class="input-block-level" value="{{ ! empty($child) ? $child->class : null }}" placeholder="">
+	<input type="text"{{ $dataChild }} name="{{ sprintf($childName, 'class') }}" id="{{ $childId }}_class" class="input-block-level" value="{{ ! empty($child) ? $child->class : null }}">
 </div>
 
 {{-- Enabled --}}

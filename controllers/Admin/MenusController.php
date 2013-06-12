@@ -289,13 +289,13 @@ class MenusController extends AdminController {
 			'id'         => Input::get("children.{$index}.id"),
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
+			'type'       => Input::get("children.{$index}.type", 'static'),
 			'uri'        => Input::get("children.{$index}.uri"),
 			'page_id'    => Input::get("children.{$index}.page_id"),
-			'class'      => Input::get("children.{$index}.class"),
-			'target'     => Input::get("children.{$index}.target", 0),
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
-			'type'       => Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
+			'target'     => Input::get("children.{$index}.target", 0),
+			'class'      => Input::get("children.{$index}.class"),
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
 		);
 

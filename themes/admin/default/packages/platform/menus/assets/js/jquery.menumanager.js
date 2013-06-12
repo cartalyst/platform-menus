@@ -169,30 +169,32 @@
 			// Validate the new children name and the new children slug
 			if (base.validateChildName() & base.validateChildSlug())
 			{
-
 				// Get the new item data
-				name = $.trim($(base.options.form.children.name).val());
-				slug = base.slugify($(base.options.form.children.slug).val());
-				uri = base.slugify($(base.options.form.children.name).val());
-				css_class = $(base.options.form.children.css_class).val();
+				name       = $.trim($(base.options.form.children.name).val());
+				slug       = base.slugify($(base.options.form.children.slug).val());
+				type       = $(base.options.form.children.type).val();
+				uri        = $.trim($(base.options.form.children.uri).val());
+				visibility = $(base.options.form.children.visibility).val();
+				secure     = $(base.options.form.children.secure).val();
+				target     = $(base.options.form.children.target).val();
+				klass      = $.trim($(base.options.form.children.klass).val());
+				enabled    = $(base.options.form.children.enabled).val();
 
 				// Hide the no children div
 				$(base.options.noChildrenSelector).addClass('hide');
 
 				//
-				var data = [
-					{
-						'name'       : name,
-						'slug'       : slug,
-						'type'       : $('#new-child-type').val(),
-						'uri'        : uri,
-						'visibility' : $('#new-child-visibility').val(),
-						'secure'     : $('#new-child-secure').val(),
-						'target'     : $('#new-child-target').val(),
-						'css_class'  : css_class,
-						'enabled'    : $('#new-child-enabled').val()
-					}
-				];
+				var data = {
+					'name'       : name,
+					'slug'       : slug,
+					'type'       : type,
+					'uri'        : uri,
+					'visibility' : visibility,
+					'secure'     : secure,
+					'target'     : target,
+					'class'      : klass,
+					'enabled'    : enabled
+				};
 
 				//
 				base.options.Tempo.append(data);
@@ -204,7 +206,7 @@
 				$(base.options.form.children.name).val('');
 				$(base.options.form.children.slug).val(base.generateChildrenSlug());
 				$(base.options.form.children.uri).val('');
-				$(base.options.form.children.css_class).val('');
+				$(base.options.form.children.klass).val('');
 
 				// Run the after callback
 				base.options.afterAdd();
@@ -551,12 +553,17 @@
 
 			// New Children elements
 			children : {
-				name      : '#new-child_name',
-				slug      : '#new-child_slug',
-				uri       : '#new-child_uri',
-				css_class : '#new-child_css_class',
+				name       : '#new-child_name',
+				slug       : '#new-child_slug',
+				type       : '#new-child_type',
+				uri        : '#new-child_uri',
+				visibility : '#new-child_visibility',
+				secure     : '#new-child_secure',
+				target     : '#new-child_target',
+				klass      : '#new-child_class',
+				enabled    : '#new-child_enabled',
 
-				submit : '#new-child-add'
+				submit : '#new-child_add'
 			},
 
 			// Selector for removing menu items
