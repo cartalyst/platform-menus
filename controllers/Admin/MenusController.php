@@ -60,10 +60,11 @@ class MenusController extends AdminController {
 			$count = $menu->getChildrenCount();
 
 			$menus[] = array_merge($menu->toArray(), array(
-				'children_count' => Lang::get('platform/menus::table.children', compact('count'))
+				'children_count' => Lang::choice('platform/menus::table.children', $count, compact('count'))
 			));
 		}
 
+		// Return the Data Grid object
 		return DataGrid::make($menus, array(
 			'id',
 			'name',

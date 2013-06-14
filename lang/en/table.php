@@ -25,7 +25,7 @@ return array(
 
 	// Children specific
 	'children_count' => '# of Children',
-	'children'       => ':count children',
+	'children'       => '{0} No children.|[1,Inf] :count children',
 
 	'created_at'     => 'Created At',
 
