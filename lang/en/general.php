@@ -29,7 +29,7 @@ return array(
 	),
 
 	'update' => array(
-		'title'       => 'Update Menu',
+		'title'       => 'Update :menu menu',
 		'description' => 'Please update the following information.',
 	),
 

@@ -27,7 +27,7 @@ return array(
 	),
 
 	'update' => array(
-		'legend' => 'Update Menu',
+		'legend' => 'Update :menu',
 	),
 
 	'root' => array(
@@ -41,20 +41,20 @@ return array(
 		),
 
 		'update' => array(
-			'legend' => ':menu Details',
+			'legend' => ':menu details',
 		),
 
 		'name' => 'Name',
 		'slug' => 'Slug',
 
-		'type'   => array(
+		'type' => array(
 			'title' => 'Type',
 
 			'static' => 'Static',
 			'page'   => 'Page',
 		),
 
-		'uri'  => 'Uri',
+		'uri' => 'Uri',
 
 		'secure' => 'Make Secure (HTTPS)',
 
@@ -80,11 +80,6 @@ return array(
 
 		'enabled' => 'Status',
 
-/*
-		'groups' => array(
-			'title' => 'Group Visibility',
-		),
-*/
 	),
 
 );

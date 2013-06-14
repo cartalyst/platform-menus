@@ -20,13 +20,11 @@
 
 return array(
 
-	'name' => 'Menu Name',
-	'slug' => 'Slug',
+	'name'       => 'Menu Name',
+	'slug'       => 'Slug',
+	'created_at' => 'Created At',
 
-	// Children specific
 	'children_count' => '# of Children',
 	'children'       => '{0} No children.|[1,Inf] :count children',
-
-	'created_at'     => 'Created At',
 
 );
