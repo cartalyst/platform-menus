@@ -49,14 +49,9 @@ if ( ! function_exists('get_active_menu'))
 		// menu for the admin area only.
 		if ( ! isset($app['platform.menus.active']))
 		{
-			if (is_admin())
-			{
-				$app['platform.menus.active'] = 'admin';
-			}
-			else
-			{
-				return;
-			}
+			if ( ! is_admin()) return;
+
+			$app['platform.menus.active'] = 'admin';
 		}
 
 		return $app['platform.menus.active'];
