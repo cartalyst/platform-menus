@@ -19,6 +19,7 @@
  */
 
 use Cartalyst\NestedSets\Nodes\EloquentNode;
+use Illuminate\Database\Query\Expression;
 
 class Menu extends EloquentNode {
 
@@ -89,13 +90,22 @@ class Menu extends EloquentNode {
 	 */
 	public function findDisplayableChildren(array $visibilities, $enabled = null, $depth = 0)
 	{
-		return $this->filterChildren(function($query) use ($visibilities, $enabled)
+		$worker = $this->createWorker();
+
+		return $this->filterChildren(function($query) use ($visibilities, $enabled, $worker)
 		{
-			$query->whereIn('node.visibility', $visibilities);
+			$query->whereIn(
+				new Expression($worker->wrapColumn('node.visibility')),
+				$visibilities
+			);
 
 			if ( ! is_null($enabled))
 			{
-				$query->where('node.enabled', '=', $enabled);
+				$query->where(
+					new Expression($worker->wrapColumn('node.enabled')),
+					'=',
+					$enabled
+				);
 			}
 		}, $depth);
 	}
@@ -109,9 +119,15 @@ class Menu extends EloquentNode {
 	 */
 	public function findEnabledChildren($depth = 0)
 	{
-		return $this->filterChildren(function($query)
+		$worker = $this->createWorker();
+
+		return $this->filterChildren(function($query) use ($worker)
 		{
-			$query->where('node.enabled', '=', 1);
+			$query->where(
+				new Expression($worker->wrapColumn('node.enabled')),
+				'=',
+				1
+			);
 		}, $depth);
 	}
 
