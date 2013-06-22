@@ -1,10 +1,7 @@
 @extends('templates/default')
 
 {{-- Page title --}}
-@section('title')
-{{ trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)) }} ::
-@parent
-@stop
+@section('title', trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)))
 
 {{-- Queue Assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css') }}
@@ -23,31 +20,38 @@
 @section('scripts')
 @parent
 <script>
-jQuery(document).ready(function($) {
-	$('#menu').MenuManager({
+$(function() {
+
+	$('#menu-form').MenuManager({
 		persistedSlugs : {{ json_encode($persistedSlugs) }}
 	});
+
 });
 </script>
 @stop
 
 {{-- Page content --}}
 @section('content')
-<section id="menus">
+<form id="menu-form" class="form-horizontal" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
-	<header class="clearfix">
-		<h1><a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans("platform/menus::form.{$pageSegment}.legend", array('menu' => ! empty($menu) ? $menu->name : null)) }}</h1>
+	{{-- CSRF Token --}}
+	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-		<nav class="tertiary-navigation">
+	<header class="page__header">
+
+		<nav class="page__navigation">
 			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
 		</nav>
+
+		<div class="page__actions">
+			<h1>
+				<a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)) }}
+			</h1>
+		</div>
+
 	</header>
 
-	<hr>
-
-	<section class="content">
-
-		<form id="menu" method="post" action="">
+	<section class="page__content">
 
 			<div class="actions clearfix">
 				<div class="form-inline pull-left">
@@ -57,13 +61,9 @@ jQuery(document).ready(function($) {
 					<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.root.slug') }}</label>
 					<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : null }}" required>
 				</div>
-				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">{{ trans('platform/menus::button.add_child') }}</a>
-					<button type="submit" class="btn btn-large btn-primary btn-save-menu">{{ trans('button.update') }}</button>
-				</div>
 			</div>
 
-			<hr>
+
 
 			<div id="create-child" class="modal hide fade">
 				<div class="modal-header">
@@ -271,18 +271,21 @@ jQuery(document).ready(function($) {
 				{{ trans('platform/menus::message.no_children') }}
 			</p>
 
-			<hr>
-
-			<div class="actions clearfix">
-				<div class="pull-right">
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">{{ trans('platform/menus::button.add_child') }}</a>
-					<button type="submit" class="btn btn-large btn-primary btn-save-menu">{{ trans('button.update') }}</button>
-				</div>
-			</div>
-
-		</form>
-
 	</section>
 
-</section>
+	<footer class="page__footer">
+
+		<nav class="actions actions--right">
+			<ul class="navigation navigation--inline-circle">
+				<li>
+					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">{{ trans('platform/menus::button.add_child') }}</a>
+				</li>
+				<li>
+					<button class="tip" data-placement="top" title="{{ trans('button.save') }}" type="submit"><i class="icon-save"></i></button>
+				</li>
+			</ul>
+		</nav>
+
+	</footer>
+</form>
 @stop
