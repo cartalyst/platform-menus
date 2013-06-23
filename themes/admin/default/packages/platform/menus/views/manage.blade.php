@@ -278,7 +278,7 @@ $(function() {
 		<nav class="actions actions--right">
 			<ul class="navigation navigation--inline-circle">
 				<li>
-					<a href="#create-child" role="button" class="btn btn-large" data-toggle="modal">{{ trans('platform/menus::button.add_child') }}</a>
+					<a href="#create-child" role="button" data-toggle="modal" title="{{ trans('platform/menus::button.add_child') }}"><i class="icon-plus"></i></a>
 				</li>
 				<li>
 					<button class="tip" data-placement="top" title="{{ trans('button.save') }}" type="submit"><i class="icon-save"></i></button>
