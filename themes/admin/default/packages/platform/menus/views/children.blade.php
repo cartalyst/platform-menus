@@ -21,8 +21,11 @@
 		</div>
 
 		<div class="modal-footer">
-			<button name="remove" class="remove btn btn-mini btn-primary" data-dismiss="modal" aria-hidden="true">{{ trans('platform/menus::button.remove_child') }}</button>
-			<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">{{ trans('platform/menus::button.update_child') }}</button>
+			<a class="btn btn-mini btn-inverse" data-dismiss="modal">&times; {{ trans('button.close') }}</a>
+
+			<a class="btn btn-mini btn-danger remove" data-dismiss="modal"><i class="icon-trash"></i> {{ trans('platform/menus::button.remove_child') }}</a>
+
+			<a class="btn btn-mini btn-success" data-dismiss="modal"><i class="icon-pencil"></i> {{ trans('platform/menus::button.update_child') }}</a>
 		</div>
 
 	</div>

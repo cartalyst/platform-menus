@@ -32,7 +32,7 @@ $(function() {
 
 {{-- Page content --}}
 @section('content')
-<form id="menu-form" class="form-horizontal" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
+<form id="menu-form" class="form-inline" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
 	{{-- CSRF Token --}}
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -54,20 +54,20 @@ $(function() {
 	<section class="page__content">
 
 		{{-- Root form --}}
-		<div class="actions clearfix">
-			<div class="form-inline pull-left">
+		<div class="xactions clearfix">
+			<div class="form-inline xpull-left">
 				<label class="control-label" for="menu-name">{{ trans('platform/menus::form.root.name') }}</label>
-				<input type="text" name="menu-name" id="menu-name" class="" value="{{ ! empty($menu) ? $menu->name : null }}" required>
+				<input type="text" name="menu-name" id="menu-name" class="" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
 
 				<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.root.slug') }}</label>
-				<input type="text" name="menu-slug" id="menu-slug" class="" value="{{ ! empty($menu) ? $menu->slug : null }}" required>
+				<input type="text" name="menu-slug" id="menu-slug" class="" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
 			</div>
 		</div>
 
 		{{-- Children create modal --}}
 		<div id="create-child" class="modal hide fade">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
 
 				<h3>{{ trans('platform/menus::form.child.create.legend') }}</h3>
 			</div>
@@ -77,12 +77,13 @@ $(function() {
 				</fieldset>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-medium" data-dismiss="modal" aria-hidden="true">{{ trans('button.close') }}</button>
-				<button type="button" name="new-child_add" id="new-child_add" class="btn btn-medium btn-primary children-add-new" data-dismiss="modal">{{ trans('platform/menus::button.add_child') }}</button>
+				<a class="btn btn-mini btn-inverse" data-dismiss="modal">&times; {{ trans('button.close') }}</a>
+
+				<a name="new-child_add" id="new-child_add" class="btn btn-mini btn-success children-add-new" __data-dismiss="modal">{{ trans('platform/menus::button.add_child') }}</a>
 			</div>
 		</div>
 
-		{{-- Childrens --}}
+		{{-- Children --}}
 		<div class="nestable" id="nestable">
 			<ol class="items">
 				@if ( ! empty($children))

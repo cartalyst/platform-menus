@@ -122,8 +122,8 @@ $(function() {
 					<td>
 						<nav class="actions actions--hidden">
 							<ul class="navigation navigation--inline-circle">
-								<li><a class="btn btn-action" data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ id ]]') }}"  data-title="{{ trans('button.delete') }}"><i class="icon-trash"></i></a></li>
-								<li><a class="btn btn-action" href="{{ URL::toAdmin('menus/edit/[[ id ]]') }}" data-title="{{ trans('button.edit') }}"><i class="icon-edit"></i></a></li>
+								<li><a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ slug ]]') }}"  data-title="{{ trans('button.delete') }}"><i class="icon-trash"></i></a></li>
+								<li><a href="{{ URL::toAdmin('menus/edit/[[ slug ]]') }}" data-title="{{ trans('button.edit') }}"><i class="icon-pencil"></i></a></li>
 							</ul>
 						</nav>
 					</td>
