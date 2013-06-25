@@ -97,37 +97,37 @@ class MenusController extends AdminController {
 	/**
 	 * Update a menu.
 	 *
-	 * @param  int  $id
+	 * @param  mixed  $slug
 	 * @return mixed
 	 */
-	public function getEdit($id = null)
+	public function getEdit($slug = null)
 	{
-		return $this->showForm($id, 'update');
+		return $this->showForm($slug, 'update');
 	}
 
 	/**
 	 * Update a menu form processing page.
 	 *
-	 * @param  int  $id
+	 * @param  mixed  $slug
 	 * @return Redirect
 	 */
-	public function postEdit($id = null)
+	public function postEdit($slug = null)
 	{
-		return $this->processForm($id);
+		return $this->processForm($slug);
 	}
 
 	/**
 	 * Delete a menu.
 	 *
-	 * @param  int  $id
+	 * @param  mixed  $slug
 	 * @return Redirect
 	 */
-	public function getDelete($id)
+	public function getDelete($slug)
 	{
 		try
 		{
 			// Delete the menu
-			API::delete("v1/menus/{$id}");
+			API::delete("v1/menus/{$slug}");
 
 			// Set the success message
 			$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
@@ -145,11 +145,11 @@ class MenusController extends AdminController {
 	/**
 	 * Shows the form.
 	 *
-	 * @param  mixed   $id
+	 * @param  mixed   $slug
 	 * @param  string  $pageSegment
 	 * @return mixed
 	 */
-	protected function showForm($id = null, $pageSegment = null)
+	protected function showForm($slug = null, $pageSegment = null)
 	{
 		try
 		{
@@ -160,15 +160,15 @@ class MenusController extends AdminController {
 			$menu     = null;
 			$children = null;
 
-			// Do we have a menu id?
-			if ( ! is_null($id))
+			// Do we have a menu identifier?
+			if ( ! is_null($slug))
 			{
 				// Get the menu information
-				$response = API::get("v1/menus/{$id}");
+				$response = API::get("v1/menus/{$slug}");
 				$menu     = $response['menu'];
 
 				// Get this menu children
-				$response = API::get("v1/menus/{$id}/children");
+				$response = API::get("v1/menus/{$slug}/children");
 				$children = $response['children'];
 			}
 
@@ -198,10 +198,10 @@ class MenusController extends AdminController {
 	/**
 	 * Processes the form.
 	 *
-	 * @param  mixed  $id
+	 * @param  mixed  $slug
 	 * @return Redirect
 	 */
-	protected function processForm($id = null)
+	protected function processForm($slug = null)
 	{
 		// Get the tree
 		$tree = Input::get('tree', array());
@@ -235,12 +235,12 @@ class MenusController extends AdminController {
 
 		try
 		{
-			// Are we creating a menu?
-			if (is_null($id))
+			// Do we have a menu identifier?
+			if (is_null($slug))
 			{
 				// Create the menu
 				$response = API::post('v1/menus', compact('menu'));
-				$id = $response['menu']->slug;
+				$slug     = $response['menu']->slug;
 
 				// Prepare the success message
 				$success = Lang::get('platform/menus::message.success.create');
@@ -250,7 +250,8 @@ class MenusController extends AdminController {
 			else
 			{
 				// Update the menu
-				API::put("v1/menus/{$id}", compact('menu'));
+				$response = API::put("v1/menus/{$slug}", compact('menu'));
+				$slug     = $response['menu']->slug;
 
 				// Prepare the success message
 				$success = Lang::get('platform/menus::message.success.update');
@@ -260,7 +261,7 @@ class MenusController extends AdminController {
 			$notifications = with(new Bag)->add('success', $success);
 
 			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/{$id}")->with('notifications', $notifications);
+			return Redirect::toAdmin("menus/edit/{$slug}")->with('notifications', $notifications);
 		}
 		catch (ApiHttpException $e)
 		{
