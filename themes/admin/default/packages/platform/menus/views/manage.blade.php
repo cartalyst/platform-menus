@@ -54,7 +54,7 @@ $(function() {
 	<section class="page__content">
 
 		{{-- Root form --}}
-		<div class="xactions clearfix">
+		<div class="clearfix">
 			<div class="form-inline">
 				<label class="control-label" for="menu-name">{{ trans('platform/menus::form.root.name') }}</label>
 				<input type="text" name="menu-name" id="menu-name" class="" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
