@@ -38,25 +38,19 @@
 		 */
 		base.Initializer = function() {
 
-			/////// WIP
 			$(document).on('keyup', 'input[type="text"]', function()
 			{
-				// need to tweak this so that it works with new children items!!
 
 				childrenId = $(this).data('children');
 
 				if (typeof childrenId !== 'undefined')
 				{
-					$("[data-id='" + childrenId + "']")
-						.find(".item-name")
+					$("[data-id='" + childrenId + "'], [data-slug='" + childrenId + "']")
+						.find(".item-name:eq(0)")
 						.html($('#' + childrenId + '_name').val());
 				}
 
 			});
-			///////
-
-
-
 
 			// Extend the default options with the provided options
 			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
