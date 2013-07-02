@@ -45,7 +45,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Datasource for the categories Data Grid.
+	 * Datasource for the menus Data Grid.
 	 *
 	 * @return Cartalyst\DataGrid\DataGrid
 	 */
