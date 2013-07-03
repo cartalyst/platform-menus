@@ -285,6 +285,7 @@ return array(
 		return array(
 
 			'platform/menus::admin.menusController@index'  => Lang::get('platform/menus::permissions.index'),
+			'platform/menus::admin.menusController@grid'   => Lang::get('platform/menus::permissions.grid'),
 			'platform/menus::admin.menusController@create' => Lang::get('platform/menus::permissions.create'),
 			'platform/menus::admin.menusController@edit'   => Lang::get('platform/menus::permissions.edit'),
 			'platform/menus::admin.menusController@delete' => Lang::get('platform/menus::permissions.delete'),
