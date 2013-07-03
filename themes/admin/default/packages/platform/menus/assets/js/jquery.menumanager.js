@@ -205,6 +205,8 @@
 				// Run the after callback
 				base.options.afterAdd();
 
+				$('#create-child').modal('hide');
+
 				return true;
 			}
 
