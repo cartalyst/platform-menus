@@ -171,7 +171,9 @@
 							<div class="modal-footer">
 								<a class="btn btn-mini btn-inverse" data-dismiss="modal">&times; {{ trans('button.close') }}</a>
 
-								<a name="new-child_add" id="new-child_add" class="btn btn-mini btn-success children-add-new" __data-dismiss="modal">{{ trans('platform/menus::button.add_child') }}</a>
+								<a class="btn btn-mini btn-danger remove" data-dismiss="modal"><i class="icon-trash"></i> {{ trans('platform/menus::button.remove_child') }}</a>
+
+								<a class="btn btn-mini btn-success children-add-new" name="new-child_add" id="new-child_add">{{ trans('platform/menus::button.add_child') }}</a>
 							</div>
 
 						</div>
