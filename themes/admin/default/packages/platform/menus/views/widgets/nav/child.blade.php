@@ -1,6 +1,10 @@
 <li class="{{ $child->in_active_path ? 'active' : null }}">
 	<a href="{{ URL::to($child->uri) }}">
-		<i class="{{ $child->class }}"></i>
+		@if ( $child->class == '' )
+			<i class="icon-circle-blank"></i>
+		@else
+			<i class="{{ $child->class }}"></i>
+		@endif
 		<span>{{ $child->name }}</span>
 	</a>
 
