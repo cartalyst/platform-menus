@@ -31,7 +31,7 @@ use View;
 class MenusController extends AdminController {
 
 	/**
-	 * Menu management main page.
+	 * Display a listing of menus.
 	 *
 	 * @return mixed
 	 */
@@ -75,7 +75,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Create a new menu.
+	 * Show the form for creating a new menu.
 	 *
 	 * @return View
 	 */
@@ -85,7 +85,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Create a new menu form processing page.
+	 * Handle posting of the form for creating a new menu.
 	 *
 	 * @return Redirect
 	 */
@@ -95,7 +95,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Update a menu.
+	 * Show the form for updating a menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return mixed
@@ -106,7 +106,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Update a menu form processing page.
+	 * Handle posting of the form for updating a menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return Redirect
@@ -117,29 +117,32 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Delete a menu.
+	 * Remove the specified menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return Redirect
 	 */
 	public function getDelete($slug)
 	{
+		// Instantiate a new message bag
+		$bag = new Bag;
+
 		try
 		{
 			// Delete the menu
 			API::delete("v1/menus/{$slug}");
 
 			// Set the success message
-			$notifications = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
+			$bag->add('success', Lang::get('platform/menus::message.success.delete'));
 		}
 		catch (ApiHttpException $e)
 		{
 			// Set the error message
-			$notifications = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
+			$bag->add('error', Lang::get('platform/menus::message.error.delete'));
 		}
 
 		// Redirect to the menus management page
-		return Redirect::toAdmin('menus')->with('notifications', $notifications);
+		return Redirect::toAdmin('menus')->with('notifications', $bag);
 	}
 
 	/**
@@ -235,6 +238,9 @@ class MenusController extends AdminController {
 
 		try
 		{
+			// Instantiate a new message bag
+			$bag = new Bag;
+
 			// Do we have a menu identifier?
 			if (is_null($slug))
 			{
@@ -242,8 +248,8 @@ class MenusController extends AdminController {
 				$response = API::post('v1/menus', compact('menu'));
 				$slug     = $response['menu']->slug;
 
-				// Prepare the success message
-				$success = Lang::get('platform/menus::message.success.create');
+				// Set the success message
+				$bag->add('success', Lang::get('platform/menus::message.success.create'));
 			}
 
 			// No, we are updating the menu
@@ -253,15 +259,12 @@ class MenusController extends AdminController {
 				$response = API::put("v1/menus/{$slug}", compact('menu'));
 				$slug     = $response['menu']->slug;
 
-				// Prepare the success message
-				$success = Lang::get('platform/menus::message.success.update');
+				// Set the success message
+				$bag->add('success', Lang::get('platform/menus::message.success.update'));
 			}
 
-			// Set the success message
-			$notifications = with(new Bag)->add('success', $success);
-
 			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/{$slug}")->with('notifications', $notifications);
+			return Redirect::toAdmin("menus/edit/{$slug}")->with('notifications', $bag);
 		}
 		catch (ApiHttpException $e)
 		{
