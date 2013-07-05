@@ -56,7 +56,7 @@ class ChildrenController extends ApiController {
 		}
 
 		$visibilities = Input::get('visibilities');
-		$enabled      = Input::get('enabled');
+		$enabled      = (bool) Input::get('enabled');
 		$depth        = (int) Input::get('depth', 0);
 
 		if ($visibilities and is_array($visibilities))
@@ -69,7 +69,6 @@ class ChildrenController extends ApiController {
 		}
 		else
 		{
-			// Hydrate the children to the depth required
 			$children = $menu->findChildren($depth);
 		}
 
