@@ -52,8 +52,13 @@ class Nav {
 			if ( ! is_numeric($identifier))
 			{
 				// If we have an active menu, we'll fill out the path now
-				if ($activeMenu = get_active_menu())
+				if (is_array($activeMenu = get_active_menu()))
 				{
+					foreach ($activeMenu as $activeChild) {
+						$response   = API::get("v1/menus/$activeChild/path");
+						$activePath = $response['path'];
+					}
+				} else {
 					$response   = API::get("v1/menus/$activeMenu/path");
 					$activePath = $response['path'];
 				}
@@ -165,7 +170,16 @@ class Nav {
 					$child->uri = "{$beforeUri}/{$child->uri}";
 				}
 
-				$child->in_active_path = in_array($child->id, $activePath);
+				if (is_array($activePath[0]))
+				{
+					foreach ($activePath as $currentPath)
+					{
+						if(in_array($child->id, $currentPath))
+							$child->in_active_path = in_array($child->id, $currentPath);
+					}
+				} else {
+					$child->in_active_path = in_array($child->id, $activePath);
+				}
 
 				break;
 
