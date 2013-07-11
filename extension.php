@@ -390,7 +390,7 @@ return array(
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
 				'class' => 'icon-signout',
-				'uri'   => 'logout',
+				'uri'   => '/logout',
 			),
 
 		),
