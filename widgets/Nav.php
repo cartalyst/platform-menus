@@ -59,8 +59,10 @@ class Nav {
 						$activePath = $response['path'];
 					}
 				} else {
-					$response   = API::get("v1/menus/$activeMenu/path");
-					$activePath = $response['path'];
+					if($activeMenu) {
+						$response   = API::get("v1/menus/$activeMenu/path");
+						$activePath = $response['path'];
+					}
 				}
 
 				// If the "start" property is a string, it's
@@ -170,7 +172,7 @@ class Nav {
 					$child->uri = "{$beforeUri}/{$child->uri}";
 				}
 
-				if (is_array($activePath[0]))
+				if ($activePath && is_array($activePath[0]))
 				{
 					foreach ($activePath as $currentPath)
 					{
