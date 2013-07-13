@@ -56,7 +56,7 @@ class Nav {
 				{
 					foreach ($activeMenu as $activeChild) {
 						$response   = API::get("v1/menus/$activeChild/path");
-						$activePath = $response['path'];
+						$activePath[] = $response['path'];
 					}
 				} else {
 					if($activeMenu) {
