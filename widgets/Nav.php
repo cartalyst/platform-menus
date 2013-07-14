@@ -22,6 +22,9 @@ use API;
 use Cartalyst\Api\Http\ApiHttpException;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Event;
+use InvalidArgumentException;
+use Request;
+use RuntimeException;
 use View;
 
 class Nav {
@@ -54,19 +57,23 @@ class Nav {
 				// If we have an active menu, we'll fill out the path now
 				if (is_array($activeMenu = get_active_menu()))
 				{
-					foreach ($activeMenu as $activeChild) {
-						$response   = API::get("v1/menus/$activeChild/path");
+					foreach ($activeMenu as $activeChild)
+					{
+						$response     = API::get("v1/menus/{$activeChild}/path");
 						$activePath[] = $response['path'];
 					}
-				} else {
-					if($activeMenu) {
-						$response   = API::get("v1/menus/$activeMenu/path");
+				}
+				else
+				{
+					if($activeMenu)
+					{
+						$response   = API::get("v1/menus/{$activeMenu}/path");
 						$activePath = $response['path'];
 					}
 				}
 
 				// If the "start" property is a string, it's
-				// the slug of the menu which to render
+				// the slug of the menu which to render.
 				$children = $this->getChildrenForSlug($identifier, $depth);
 			}
 			else
@@ -74,28 +81,15 @@ class Nav {
 				// Active menu is required for path based output
 				if ( ! $activeMenu = get_active_menu())
 				{
-					throw new \RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
+					throw new RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
 				}
 
-				$response   = API::get("v1/menus/$activeMenu/path");
+				$response   = API::get("v1/menus/{$activeMenu}/path");
 				$activePath = $response['path'];
 
 				if ( ! isset($activePath[$identifier]))
 				{
 					return '';
-
-					// Let's help the user out by formatting the path
-					// for them.
-					array_walk($activePath, function(&$slug, $index)
-					{
-						$slug = "$index => '$slug'";
-					});
-
-					throw new \InvalidArgumentException(sprintf(
-						'Path index of [%d] does not exist on active menu path [%s].',
-						$identifier,
-						implode(', ', $activePath)
-					));
 				}
 
 				$children = $this->getChildrenForSlug($activePath[$identifier], $depth);
@@ -140,7 +134,7 @@ class Nav {
 
 		$enabled = true;
 
-		$response = API::get("v1/menus/$slug/children", compact('depth', 'visibilities', 'enabled'));
+		$response = API::get("v1/menus/{$slug}/children", compact('depth', 'visibilities', 'enabled'));
 		$children = $response['children'];
 
 		return $children;
@@ -161,6 +155,8 @@ class Nav {
 	 */
 	protected function prepareChildRecursively($child, $beforeUri = null, array $activePath = array())
 	{
+		$path = Request::getPathInfo();
+
 		switch ($child->type)
 		{
 			// If the child is static, we are able to prepare it right away
@@ -172,15 +168,32 @@ class Nav {
 					$child->uri = "{$beforeUri}/{$child->uri}";
 				}
 
-				if ($activePath && is_array($activePath[0]))
+				if ($activePath and is_array($activePath[0]))
 				{
 					foreach ($activePath as $currentPath)
 					{
-						if(in_array($child->id, $currentPath))
+						if (in_array($child->id, $currentPath))
+						{
 							$child->in_active_path = in_array($child->id, $currentPath);
+						}
 					}
-				} else {
+				}
+				elseif ($child->uri === '/' and $path === '/')
+				{
+					$child->in_active_path = true;
+				}
+				else
+				{
 					$child->in_active_path = in_array($child->id, $activePath);
+				}
+
+				break;
+
+			case 'page':
+
+				if ($child->uri != '/' and preg_match("/{$child->uri}/i", $path))
+				{
+					$child->in_active_path = true;
 				}
 
 				break;
