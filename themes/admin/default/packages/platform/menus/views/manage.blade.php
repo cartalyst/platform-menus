@@ -31,7 +31,7 @@ $(function() {
 @stop
 
 {{-- Page content --}}
-@section('content')
+@section('page')
 <form id="menu-form" class="form-inline" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
 	{{-- CSRF Token --}}
@@ -43,7 +43,7 @@ $(function() {
 			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
 		</nav>
 
-		<div class="page__actions">
+		<div class="page__title">
 			<h1>
 				<a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)) }}
 			</h1>
@@ -99,8 +99,9 @@ $(function() {
 		</p>
 
 	</section>
+@stop
 
-	<footer class="page__footer">
+@section('page__footer')
 
 		<nav class="actions actions--right">
 			<ul class="navigation navigation--inline-circle">
@@ -113,6 +114,5 @@ $(function() {
 			</ul>
 		</nav>
 
-	</footer>
 </form>
 @stop
