@@ -141,7 +141,7 @@ $(function() {
 
 	<nav class="actions actions--right">
 		<ul class="navigation navigation--inline-circle">
-			<li><a data-placement="right" href="{{ URL::toAdmin('menus/create') }}" data-title="{{ trans('button.create') }}"><i class="icon-plus"></i></a></li>
+			<li><a data-placement="bottom" href="{{ URL::toAdmin('menus/create') }}" data-title="{{ trans('button.create') }}"><i class="icon-plus"></i></a></li>
 		</ul>
 	</nav>
 
