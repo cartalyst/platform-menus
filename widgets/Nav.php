@@ -191,7 +191,9 @@ class Nav {
 
 			case 'page':
 
-				if ($child->uri != '/' and preg_match("/{$child->uri}/i", $path))
+				$childUri = str_replace('/', '\/', $child->uri);
+
+				if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
 				{
 					$child->in_active_path = true;
 				}
