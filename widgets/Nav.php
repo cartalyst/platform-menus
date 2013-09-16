@@ -184,7 +184,16 @@ class Nav {
 				}
 				else
 				{
-					$child->in_active_path = in_array($child->id, $activePath);
+					$childUri = str_replace('/', '\/', $child->uri);
+
+					if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
+					{
+						$child->in_active_path = true;
+					}
+					else
+					{
+						$child->in_active_path = in_array($child->id, $activePath);
+					}
 				}
 
 				break;
