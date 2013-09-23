@@ -12,6 +12,7 @@ Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.md). Code well, roc
 
 ####Complete
 
+- *xx-xx-13* - v0.9.0
 	- User can create new menus.
 	- User can set menu name.
 	- User can set menu slug.
