@@ -1,6 +1,8 @@
 #Menus
 
-Manage all the menus throughout your website. Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.md). Code well, rock on.
+Manage all the menus throughout your website.
+
+Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.md). Code well, rock on.
 
 ##Package Story
 
@@ -10,23 +12,23 @@ Manage all the menus throughout your website. Part of the Cartalyst Arsenal & li
 
 ####Complete
 
-- User can create new menus.
-- User can set menu name.
-- User can set menu slug.
-- User can create menu items.
-- User can set the menu item name.
-- User can set the menu item slug.
-- User can set the menu item url.
-- User can set the menu item visibility.
-- User can set the menu item link target.
-- User can set the menu css class.
-- User can set the menu item status.
-- User can update menu items.
-- User can delete menu items.
-- User can sort the menu items.
-- User can make a menu item children of another menu item.
-- User can update menus.
-- User can delete menus.
+	- User can create new menus.
+	- User can set menu name.
+	- User can set menu slug.
+	- User can create menu items.
+	- User can set the menu item name.
+	- User can set the menu item slug.
+	- User can set the menu item url.
+	- User can set the menu item visibility.
+	- User can set the menu item link target.
+	- User can set the menu css class.
+	- User can set the menu item status.
+	- User can update menu items.
+	- User can delete menu items.
+	- User can sort the menu items.
+	- User can make a menu item children of another menu item.
+	- User can update menus.
+	- User can delete menus.
 
 Versioning
 ----------
