@@ -37,7 +37,7 @@
 		"cartalyst/composer-installers": "1.0.*",
 		"cartalyst/nested-sets": "dev-master",
 
-		"platform/admin": "1.0.*"
+		"platform/admin": "dev-develop"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.7.*"
