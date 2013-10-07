@@ -1,5 +1,5 @@
 <li class="{{ $child->in_active_path ? 'active' : null }}">
-	<a target="{{ $child->target }}" href="{{ URL::to($child->uri) }}">
+	<a target="_{{ $child->target }}" href="{{ URL::to($child->uri) }}">
 		@if ( $child->class == '' )
 			<i class="icon-circle-blank"></i>
 		@else
