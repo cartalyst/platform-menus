@@ -25,6 +25,7 @@ use Event;
 use InvalidArgumentException;
 use Request;
 use RuntimeException;
+use URL;
 use View;
 
 class Nav {
@@ -196,6 +197,15 @@ class Nav {
 					}
 				}
 
+				if ($child->secure)
+				{
+					$child->uri = URL::secure($child->uri);
+				}
+				else
+				{
+					$child->uri = URL::to($child->uri);
+				}
+
 				break;
 
 			case 'page':
@@ -205,6 +215,15 @@ class Nav {
 				if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
 				{
 					$child->in_active_path = true;
+				}
+
+				if ($child->secure)
+				{
+					$child->uri = URL::secure($child->uri);
+				}
+				else
+				{
+					$child->uri = URL::to($child->uri);
 				}
 
 				break;
