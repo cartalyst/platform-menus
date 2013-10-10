@@ -158,16 +158,16 @@ class Nav {
 	{
 		$path = Request::getPathInfo();
 
+		// We'll modify the URI only if necessary
+		if (isset($beforeUri))
+		{
+			$child->uri = "{$beforeUri}/{$child->uri}";
+		}
+
 		switch ($child->type)
 		{
 			// If the child is static, we are able to prepare it right away
 			case 'static':
-
-				// We'll modify the URI only if necessary
-				if (isset($beforeUri))
-				{
-					$child->uri = "{$beforeUri}/{$child->uri}";
-				}
 
 				if ($activePath and is_array($activePath[0]))
 				{
@@ -175,13 +175,13 @@ class Nav {
 					{
 						if (in_array($child->id, $currentPath))
 						{
-							$child->in_active_path = in_array($child->id, $currentPath);
+							$child->isActive = in_array($child->id, $currentPath);
 						}
 					}
 				}
 				elseif ($child->uri === '/' and $path === '/')
 				{
-					$child->in_active_path = true;
+					$child->isActive = true;
 				}
 				else
 				{
@@ -189,21 +189,12 @@ class Nav {
 
 					if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
 					{
-						$child->in_active_path = true;
+						$child->isActive = true;
 					}
 					else
 					{
-						$child->in_active_path = in_array($child->id, $activePath);
+						$child->isActive = in_array($child->id, $activePath);
 					}
-				}
-
-				if ($child->secure)
-				{
-					$child->uri = URL::secure($child->uri);
-				}
-				else
-				{
-					$child->uri = URL::to($child->uri);
 				}
 
 				break;
@@ -214,16 +205,7 @@ class Nav {
 
 				if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
 				{
-					$child->in_active_path = true;
-				}
-
-				if ($child->secure)
-				{
-					$child->uri = URL::secure($child->uri);
-				}
-				else
-				{
-					$child->uri = URL::to($child->uri);
+					$child->isActive = true;
 				}
 
 				break;
@@ -231,10 +213,13 @@ class Nav {
 			// We'll fire an event for the logic to be handled by the correct type
 			default:
 
-				Event::fire("platform.menus.nav.prepare_child.{$child->type}", array('child' => $child, 'beforeUri' => $beforeUri));
+				Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
 
 				break;
 		}
+
+		// Generate the full url
+		$child->uri = $child->secure ? URL::secure($child->uri) : URL::to($child->uri);
 
 		// Recursive!
 		foreach ($child->getChildren() as $grandChild)
