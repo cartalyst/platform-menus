@@ -60,7 +60,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// Target for clicked item,
 			// 'self', 'parent', 'blank' etc
-			$table->string('target')->nullable();
+			$table->string('target')->default('self');
 
 			// User visibility flag
 			$table->string('visibility')->nullable();
