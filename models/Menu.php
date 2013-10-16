@@ -87,7 +87,7 @@ class Menu extends EloquentNode {
 	 */
 	public function getTargetAttribute($target)
 	{
-		return "_{$target}";
+		return $target ? "_{$target}" : null;
 	}
 
 	/**
