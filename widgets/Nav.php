@@ -158,6 +158,9 @@ class Nav {
 	{
 		$path = Request::getPathInfo();
 
+		// Prepare the target
+		$child->target = '_' . $child->target;
+
 		// We'll modify the URI only if necessary
 		if (isset($beforeUri))
 		{

@@ -80,17 +80,6 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Get mutator for the target attribute.
-	 *
-	 * @param  string  $target
-	 * @return string
-	 */
-	public function getTargetAttribute($target)
-	{
-		return $target ? "_{$target}" : null;
-	}
-
-	/**
 	 * Filters children and returns an array of children
 	 * which satisfy any of the provided visibilities.
 	 *

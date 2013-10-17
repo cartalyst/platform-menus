@@ -1,22 +1,25 @@
-@extends('templates/default')
+@extends('layouts/default')
 
 {{-- Page title --}}
-@section('title', trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)))
+@section('title')
+{{{ trans("platform/menus::general.{$pageSegment}.title") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}} ::
+@parent
+@stop
 
-{{-- Queue Assets --}}
+{{-- Queue assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css') }}
-{{ Asset::queue('tab', 'js/vendor/bootstrap/tab.js', 'jquery') }}
-{{ Asset::queue('modal', 'js/vendor/bootstrap/modal.js', 'jquery') }}
-{{ Asset::queue('tempo', 'js/vendor/tempo/tempo.js', 'jquery') }}
+{{ Asset::queue('tab', 'js/bootstrap/tab.js', 'jquery') }}
+{{ Asset::queue('modal', 'js/bootstrap/modal.js', 'jquery') }}
+{{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
 {{ Asset::queue('nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
 {{ Asset::queue('menumanager', 'platform/menus::js/jquery.menumanager.js', 'nestable') }}
 
-{{-- Partial Assets --}}
+{{-- Inline assets --}}
 @section('assets')
 @parent
 @stop
 
-{{-- Inline Scripts --}}
+{{-- Inline scripts --}}
 @section('scripts')
 @parent
 <script>
@@ -31,7 +34,22 @@ $(function() {
 @stop
 
 {{-- Page content --}}
-@section('page')
+@section('content')
+
+
+<div class="row">
+
+	<div class="col-md-2">
+
+	</div>
+
+	<div class="col-md-10">
+
+	</div>
+
+</div>
+
+
 <form id="menu-form" class="form-inline" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
 	{{-- CSRF Token --}}
@@ -99,9 +117,7 @@ $(function() {
 		</p>
 
 	</section>
-@stop
 
-@section('page__footer')
 
 		<nav class="actions actions--right">
 			<ul class="navigation navigation--inline-circle">
