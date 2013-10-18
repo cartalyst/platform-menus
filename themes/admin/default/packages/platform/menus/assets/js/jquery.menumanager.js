@@ -17,518 +17,16 @@
  * @link       http://cartalyst.com
  */
 
-(function($){
-
-	$.MenuManager = function(el, options) {
-		// To avoid scope issues, we use 'base' instead of 'this' to
-		// reference this class from internal events and functions.
-		var base = this;
-
-		// Access to jQuery and DOM versions of element
-		base.$el = $(el);
-		base.el  = el;
-
-		// Add a reverse reference to the DOM object
-		base.$el.data('MenuManager', base);
-
-		/**
-		 * Initializer
-		 *
-		 * @return void
-		 */
-		base.Initializer = function() {
-
-			$(document).on('keyup', 'input[type="text"]', function()
-			{
-
-				childrenId = $(this).data('children');
-
-				if (typeof childrenId !== 'undefined')
-				{
-					$("[data-id='" + childrenId + "'], [data-slug='" + childrenId + "']")
-						.find(".item-name:eq(0)")
-						.html($('#' + childrenId + '_name').val());
-				}
-
-			});
-
-			// Extend the default options with the provided options
-			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
-
-			// Initialize Tempo js
-			base.options.Tempo = Tempo.prepare('nestable', base.options.tempoSettings);
-
-			// Activate Nestable
-			$(base.options.nestable.selector).nestable(base.options.nestable);
-
-			// Generate the initial children slug
-			$(base.options.form.children.slug).val(base.generateChildrenSlug());
-
-			// When the root menu name value changes
-			$(document).on('keyup', base.options.form.root.name, function() {
-
-				// Clean the root menu slug value
-				base.generateRootSlug($(this).val());
-
-				// Update the new menu item slug value
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// When the root menu slug value changes
-			$(document).on('change', base.options.form.root.slug, function() {
-
-				// Clean the root menu slug value
-				base.generateRootSlug($(this).val());
-
-				// Update the new menu item slug value
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// Adds a new menu item
-			$(document).on('click', base.options.form.children.submit, base.addItem);
-
-			// Removes a menu item
-			$(document).on('click', base.options.form.itemRemove, base.removeItem);
-
-			// Clean the root item name
-			$(document).on('change', base.options.form.root.name, function() {
-
-				$(base.options.form.root.name).val($.trim($(this).val()));
-
-			});
-
-			// Clean the root item slug
-			$(document).on('change', base.options.form.root.slug, function() {
-
-				$(base.options.form.root.slug).val($.trim($(this).val()));
-
-			});
-
-			// Update the new menu item slug
-			$(document).on('keyup', base.options.form.children.name, function() {
-
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// Clean the new item name
-			$(document).on('change', base.options.form.children.name, function() {
-
-				$(this).val($.trim($(this).val()));
-
-			});
-
-			// Clean the new item slug
-			$(document).on('change', base.options.form.children.slug, function() {
-
-				$(this).val(base.slugify($(this).val()));
-
-				base.validateChildSlug();
-
-			});
-
-			// When the main form is submited
-			base.$el.submit(function(e){
-
-				// Append input to the form. It's values are JSON encoded..
-				return base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestable.selector).nestable('serialize')) + '\'>');
-
-			});
-
-		};
-
-		/**
-		 * Adds a new menu item.
-		 *
-		 * @return void
-		 * @todo   Add TempoJs, so when we add a new item we
-		 *         use the template, instead of this messy code!
-		 */
-		base.addItem = function(e) {
-
-			// Prevent the form from being submited
-			e.preventDefault();
-
-			// Run the before callback
-			base.options.beforeAdd();
-
-			// Validate the new children name and the new children slug
-			if (base.validateChildName() & base.validateChildSlug())
-			{
-				// Get the new item data
-				name       = $.trim($(base.options.form.children.name).val());
-				slug       = base.slugify($(base.options.form.children.slug).val());
-				type       = $(base.options.form.children.type).val();
-				uri        = $.trim($(base.options.form.children.uri).val());
-				visibility = $(base.options.form.children.visibility).val();
-				secure     = $(base.options.form.children.secure).val();
-				target     = $(base.options.form.children.target).val();
-				klass      = $.trim($(base.options.form.children.klass).val());
-				enabled    = $(base.options.form.children.enabled).val();
-
-				// Hide the no children div
-				$(base.options.noChildrenSelector).addClass('hide');
-
-				//
-				var data = {
-					'name'       : name,
-					'slug'       : slug,
-					'type'       : type,
-					'uri'        : uri,
-					'visibility' : visibility,
-					'secure'     : secure,
-					'target'     : target,
-					'class'      : klass,
-					'enabled'    : enabled
-				};
-
-				//
-				base.options.Tempo.append(data);
-
-				// Add the item to the array
-				base.options.persistedSlugs.push(slug);
-
-				// Clean the new item inputs
-				$(base.options.form.children.name).val('');
-				$(base.options.form.children.slug).val(base.generateChildrenSlug());
-				$(base.options.form.children.uri).val('');
-				$(base.options.form.children.klass).val('');
-
-				// Run the after callback
-				base.options.afterAdd();
-
-				$('#create-child').modal('hide');
-
-				return true;
-			}
-
-			return false;
-
-		};
-
-		/**
-		 * Removes a menu item.
-		 *
-		 * @return void
-		 */
-		base.removeItem = function() {
-
-			//Close Bootstrap Modal
-			$('.modal-backdrop').remove();
-
-			// Run the before callback
-			base.options.beforeRemove();
-
-			// Get the item selector
-			itemSelector = '.' + base.options.nestable.itemClass;
-
-			// Get this item id
-			itemId = $(this).closest(itemSelector).data('id');
-
-			// Get this item slug
-			itemSlug = $(this).closest(itemSelector).data('slug');
-
-			// Remove the item from the array
-			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
-
-			// Get both data and item identifier
-			dataIdentifier = (typeof itemSlug == 'undefined' ? 'id' : 'slug');
-			itemIdentifier = (typeof itemSlug == 'undefined' ? itemId : itemSlug);
-
-			// Find closest item
-			var $item = $(itemSelector + '[data-' + dataIdentifier + '="' + itemIdentifier + '"]');
-			var $list = $item.children(base.options.nestable.listNodeName);
-
-			// Check if we have children
-			if ($list.length > 0)
-			{
-				// Grab the list's children items and put them after this item
-				$childItems = $list.children(base.options.nestable.itemNodeName);
-				$childItems.insertAfter($item);
-			}
-
-			// Remove the item from the menu
-			$item.remove();
-
-			if ($(base.options.nestable.selector + ' > ol > li').length == 0)
-			{
-				$(base.options.noChildrenSelector).removeClass('hide');
-			}
-
-			// Run the after callback
-			base.options.afterRemove();
-
-		};
-
-		/**
-		 * Updates a menu item.
-		 *
-		 * @return void
-		 */
-		base.updateItem = function() {
-
-			// Run the before callback
-			base.options.beforeUpdate();
-
-			// ...
-
-			// Run the after callback
-			base.options.afterUpdate();
-
-		};
-
-		/**
-		 * Returns the current `Root item` slug.
-		 *
-		 * @return string
-		 */
-		base.getRootSlug = function() {
-
-			rootSlug = $.trim($(base.options.form.root.slug).val());
-
-			if (rootSlug.length >= 1)
-			{
-				rootSlug += base.options.slugSeparator;
-			}
-
-			return rootSlug;
-
-		};
-
-		/**
-		 * Generates the root menu slug, after
-		 * the root menu name has been updated.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.generateRootSlug = function(string) {
-
-			// Update the current menu slug
-			$(base.options.form.root.slug).val(base.generateSlug(string));
-
-		};
-
-		/**
-		 * Generates a slug.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.generateSlug = function(string) {
-
-			// Trim the string
-			string = $.trim(string);
-
-			// Return the slugified string
-			return base.slugify(typeof string !== 'undefined' ? string : '');
-
-		};
-
-		/**
-		 * Generates a new item slug based
-		 * on the root item slug.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.generateChildrenSlug = function(string) {
-
-			// Make sure we have a string
-			string = typeof string !== 'undefined' ? string : '';
-
-			// Generate the slug and return it
-			return base.getRootSlug() + base.generateSlug(string);
-
-		};
-
-		/**
-		 * Updates the new item slug.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.updateChildrenSlug = function(string) {
-
-			//
-			if (typeof string == 'undefined')
-			{
-				// Get the new item name value
-				string = $(base.options.form.children.name).val();
-			}
-
-			// Generate the slug
-			slug = base.generateChildrenSlug(string);
-
-			// Update the new item slug
-			$(base.options.form.children.slug).val(slug);
-
-			// Check if the slug alread exists
-			if (($.inArray(slug, base.options.persistedSlugs) > -1))
-			{
-				// Shdow the errors
-				//base.showError(base.options.form.children.name);
-				base.showError(base.options.form.children.slug);
-			}
-			else
-			{
-				// Remove the errors
-				//base.hideError(base.options.form.children.name);
-				base.hideError(base.options.form.children.slug);
-			}
-
-		};
-
-		base.updateChildrenUri = function(string) {
-
-			//
-			if (typeof string == 'undefined')
-			{
-				// Get the new item name value
-				string = $(base.options.form.children.name).val();
-			}
-
-			// Generate the slug
-			slug = base.generateSlug(string);
-
-			// Update the new item uri
-			$(base.options.form.children.uri).val(slug);
-
-		};
-
-		/**
-		 * Slugify a string.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.slugify = function(string) {
-
-			// Make sure we have a slug separator
-			separator = (typeof base.options.slugSeparator !== 'undefined' ? base.options.slugSeparator : '-');
-
-			// Converts a string to lowercase and
-			// removes spaces.
-			string = string.toLowerCase().replace(/^\s+|\s+$/g, '');
-
-			// Remove accents
-			var from = 'ĺěščřžýťňďàáäâèéëêìíïîòóöôùůúüûñç·/_,:;';
-			var to   = 'lescrzytndaaaaeeeeiiiioooouuuuunc------';
-			for (var i = 0, l = from.length; i < l; i++)
-			{
-				string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-			}
-
-			// Return the slugified string
-			return string.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-					.replace(/\s+/g, separator) // collapse whitespace and replace by _
-					.replace(/-+/g, separator) // collapse dashes
-					.replace(new RegExp(separator + '+$'), '') // Trim separator from start
-					.replace(new RegExp('^' + separator + '+'), ''); // Trim separator from end
-
-		};
-
-		/**
-		 * Validates the children name.
-		 *
-		 * @return bool
-		 */
-		base.validateChildName = function(){
-
-			name = $.trim($(base.options.form.children.name).val());
-
-			if (name.length < 3)
-			{
-				// Show the error
-				base.showError(base.options.form.children.name);
-
-				return false;
-			}
-
-			// Hide the error
-			base.hideError(base.options.form.children.name);
-
-			return true;
-
-		};
-
-		/**
-		 * Validates the children slug.
-		 *
-		 * @return bool
-		 */
-		base.validateChildSlug = function(){
-
-			slug = base.slugify($(base.options.form.children.slug).val());
-
-			if (slug.length < 3)
-			{
-				// Show the error
-				base.showError(base.options.form.children.slug);
-
-				return false;
-			}
-
-			// Check if this slug already exists
-			if (($.inArray(slug, base.options.persistedSlugs) > -1))
-			{
-				// Show the error
-				base.showError(base.options.form.children.slug);
-
-				return false;
-			}
-
-			// Hide the error
-			base.hideError(base.options.form.children.slug);
-
-			return true;
-
-		};
-
-		/**
-		 * Show the error on an input.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.showError = function(input) {
-
-			$(input).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-
-		};
-
-		/**
-		 * Hides the error on an input.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.hideError = function(input) {
-
-			$(input).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-
-		};
-
-		// Run initializer
-		base.Initializer();
-
-	};
-
-
-
-	$.MenuManager.defaultOptions = {
-
-		// Selector for control groups that wrap inputs
-		controlGroupSelector : '.control-group',
-		//// leaving it here, for now...
+;(function($, window, document, undefined) {
+
+	'use strict';
+
+	/**
+	 * Default settings
+	 *
+	 * @var array
+	 */
+	var defaults = {
 
 		noChildrenSelector: '#no-children',
 
@@ -541,25 +39,69 @@
 		// Form elements
 		form : {
 
+			// This is the name of the input that is submitted with the
+			// children items, this contains the children hierarchy.
+			tree : 'menu-tree',
+
 			// Root elements
 			root : {
+
 				name : '#menu-name',
-				slug : '#menu-slug'
+				slug : '#menu-slug',
+
+				submit : '#menu-save'
+
 			},
 
-			// New Children elements
+			// New children elements
 			children : {
-				name       : '#new-child_name',
-				slug       : '#new-child_slug',
-				type       : '#new-child_type',
-				uri        : '#new-child_uri',
-				visibility : '#new-child_visibility',
-				secure     : '#new-child_secure',
-				target     : '#new-child_target',
-				klass      : '#new-child_class',
-				enabled    : '#new-child_enabled',
+
+				//error_class : 'error',
+
+				name : {
+					input: '#new-child_name',
+					rules :	['required']
+				},
+
+				slug : {
+					input : '#new-child_slug',
+					rules :	['required']
+				},
+
+				////////////////////////////////////////////////////////
+				// this needs to be changed to something more dynamic,
+				// since we can have as many types..
+				type : {
+					input : '#new-child_type'
+				},
+
+				uri : {
+					input : '#new-child_uri'
+				},
+				////////////////////////////////////////////////////////
+
+				visibility : {
+					input : '#new-child_visibility'
+				},
+
+				secure : {
+					input : '#new-child_secure'
+				},
+
+				target : {
+					input : '#new-child_target'
+				},
+
+				klass : {
+					input : '#new-child_class'
+				},
+
+				enabled : {
+					input : '#new-child_enabled'
+				},
 
 				submit : '#new-child_add'
+
 			},
 
 			// Selector for removing menu items
@@ -567,17 +109,9 @@
 
 		},
 
-		// Tempo object
-		Tempo : null,
-
-		// Tempo settings
-		tempoSettings : {
-			'var_braces': '\\[\\[\\]\\]',
-			'tag_braces': '\\[\\?\\?\\]'
-		},
-
 		// Nestable settings
 		nestable : {
+
 			selector        : '#nestable',
 			listNodeName    : 'ol',
 			itemNodeName    : 'li',
@@ -594,62 +128,383 @@
 			collapseBtnHTML : false,
 			group           : 0,
 			maxDepth        : 100
+
 		},
 
-		hierarchyInputName: 'tree',
+		// TempoJS settings
+		tempo : {
 
-		/**
-		 * Event called before we add a new menu item.
-		 *
-		 * @return void
-		 */
-		beforeAdd : function() {},
+			selector : 'nestable',
 
-		/**
-		 * Event called after we add a new menu item.
-		 *
-		 * @return void
-		 */
-		afterAdd : function() {},
+			var_braces : '\\[\\[\\]\\]',
+			tag_braces : '\\[\\?\\?\\]'
 
-		/**
-		 * Event called before we remove a menu item.
-		 *
-		 * @return void
-		 */
-		beforeRemove : function() {},
+		},
 
-		/**
-		 * Event called after we remove a menu item.
-		 *
-		 * @return void
-		 */
-		afterRemove : function() {},
+		// Modal window elements
+		modal : {
 
-		/**
-		 * Event called before we update a menu item.
-		 *
-		 * @return void
-		 */
-		beforeUpdate : function() {},
 
-		/**
-		 * Event called after we update a menu item.
-		 *
-		 * @return void
-		 */
-		afterUpdate : function() {}
+		}
 
 	};
 
+	function MenuManager(menu, options) {
+
+		// Extend the default options with the provided options
+		this.opt = $.extend({}, defaults, options);
+
+		// Cache the form selector
+		this.$form = menu;
+
+		// Initialize the Menu Manager
+		this.initializer();
+
+	}
+
+	MenuManager.prototype = {
+
+		/**
+		 * Initializes the Menu Manager.
+		 *
+		 * @return void
+		 */
+		initializer : function() {
+
+			// Check dependencies
+			this.checkDependencies();
+
+			// Prepare TempoJS
+			this.TempoJs = Tempo.prepare(this.opt.tempo.selector, this.opt.tempo);
+
+			// Activate Nestable
+			$(this.opt.nestable.selector).nestable(this.opt.nestable);
+
+			// Initialize the event listeners
+			this.events();
+
+		},
+
+		/**
+		 * Checks if the required dependencies are available.
+		 *
+		 * @return void
+		 */
+		checkDependencies : function() {
+
+			if ( ! String.prototype.slugify)
+			{
+				// bahh Slugify is not defined
+			}
+
+		},
+
+		/**
+		 * Initializes all the event listeners
+		 *
+		 * @return void
+		 */
+		events : function() {
+
+			// Avoid scope issues
+			var self = this;
+
+			var $document = $(document);
+
+			// Get the options
+			var options = self.opt;
+
+			// Get the form options
+			var formOpt = options.form
+
+			// Generate the initial children slug
+			self.slugifyValue($(formOpt.root.slug).val(), formOpt.children.slug.input);
+
+			// When menu children data get's updated
+			$document.on('keyup', 'input[type="text"]', function() {
+
+				// need to fix this so it doesn't detect the new children inputs, not the ones
+				// we added, but the one we are adding!!
+				/*
+				if ($(this).data('children'))
+				{
+					// Get the children identifier
+					var childrenId = $(this).data('children');
+
+					//
+					if (typeof childrenId !== 'undefined')
+					{
+						$('[data-id="' + childrenId + '"], [data-slug="' + childrenId + '"]')
+							.find(".item-name:eq(0)")
+							.html($('#' + childrenId + '_name').val());
+					}
+				}
+				*/
+
+			});
+
+			// Clean the input values.
+			$document.on('change', 'input[type="text"]', function() {
+
+				$(this).val($.trim($(this).val()));
+
+			});
+
+			// When the value of the root name input changes
+			$document.on('keyup', formOpt.root.name, function() {
+
+				// Update the root slug value
+				self.slugifyValue($(this).val(), formOpt.root.slug);
+
+				// Update the new menu item inputs
+				self.updateNewItem();
+
+			})
+
+			// When the value of the root slug input changes
+			$document.on('change', formOpt.root.slug, function() {
+
+				// Clean the root slug value
+				self.slugifyValue($(this).val(), formOpt.root.slug);
+
+				// Update the new menu item inputs
+				self.updateNewItem();
+
+			});
 
 
-	$.fn.MenuManager = function(options) {
 
-		return this.each(function(){
-			(new $.MenuManager(this, options));
-		});
+			// Validate children items
+			/*
+			$document.on('change', 'input[data-children]', function()
+			{
+				alert('y');
+			});
+			*/
+
+
+
+
+			/**
+			 * Adds a new menu item.
+			 *
+			 */
+			$document.on('click', formOpt.children.submit, function(e) {
+
+				// Prevent the form from being submited
+				e.preventDefault();
+
+				// Check if form is validated
+				if (self.validateInputs(formOpt.children))
+				{
+					// Hide the no children div
+					$(options.noChildrenSelector).addClass('hide');
+
+					// Generate the children slug
+					var slug = $(formOpt.children.slug.input).val().slugify();
+
+					// Prepare the new item data
+					var data = {
+						'name'       : $.trim($(formOpt.children.name.input).val()),
+						'slug'       : slug,
+						'type'       : $(formOpt.children.type.input).val(),
+						'uri'        : $.trim($(formOpt.children.uri.input).val()),
+						'visibility' : $(formOpt.children.visibility.input).val(),
+						'secure'     : $(formOpt.children.secure.input).val(),
+						'target'     : $(formOpt.children.target.input).val(),
+						'class'      : $.trim($(formOpt.children.klass.input).val()),
+						'enabled'    : $(formOpt.children.enabled.input).val()
+					};
+
+					// Append the new menu item
+					self.TempoJs.append(data);
+
+					// Add the item to the array
+					options.persistedSlugs.push(slug);
+
+					// Clean the new item inputs
+					$(formOpt.children.name.input).val('');
+					//$(formOpt.children.slug.input).val(base.generateChildrenSlug());
+					$(formOpt.children.uri.input).val('');
+					$(formOpt.children.klass.input).val('');
+
+					// Close the modal window
+					$('#create-child').modal('hide');
+
+					return true;
+				}
+
+				return false;
+
+			});
+
+			// Removes a menu item
+			$document.on('click', formOpt.itemRemove, function() {
+
+				// Confirmation message
+				var message = "Are you sure you want to delete this menu item?";
+
+				// Confirm if the user wants to remove the item
+				if (confirm(message) == true)
+				{
+					// Get the item selector
+					var itemSelector = '.' + options.nestable.itemClass;
+
+					// Get this item id
+					var itemId = $(this).closest(itemSelector).data('id');
+
+					// Get this item slug
+					var itemSlug = $(this).closest(itemSelector).data('slug');
+
+					// Remove the item from the array
+					options.persistedSlugs.splice($.inArray(itemSlug, options.persistedSlugs), 1);
+
+					// Get both data and item identifier
+					var dataIdentifier = (typeof itemSlug == 'undefined' ? 'id' : 'slug');
+					var itemIdentifier = (typeof itemSlug == 'undefined' ? itemId : itemSlug);
+
+					// Find closest item
+					var $item = $(itemSelector + '[data-' + dataIdentifier + '="' + itemIdentifier + '"]');
+					var $list = $item.children(options.nestable.listNodeName);
+
+					// Check if we have children
+					if ($list.length > 0)
+					{
+						// Grab the list's children items and put them after this item
+						$childItems = $list.children(options.nestable.itemNodeName);
+						$childItems.insertAfter($item);
+					}
+
+					// Remove the item from the menu
+					$item.remove();
+
+					if ($(options.nestable.selector + ' > ol > li').length == 0)
+					{
+						$(options.noChildrenSelector).removeClass('hide');
+					}
+
+					// Close Bootstrap Modal
+					$('.modal-backdrop').remove();
+
+				}
+
+			});
+
+			// When the main form is submited
+			$document.on('submit', self.$form, function(e) {
+
+				// for now...
+				e.preventDefault();
+
+				// Append input to the form. It's values are JSON encoded..
+				//return this.$form.append('<input type="hidden" name="' + this.opt.hierarchyInputName + '" value=\'' + window.JSON.stringify($(this.opt.nestable.selector).nestable('serialize')) + '\'>');
+
+			});
+
+		},
+
+		/**
+		 *
+		 *
+		 * @return void
+		 */
+		updateNewItem : function() {
+
+			var self = this;
+
+			var options = self.opt.form.children;
+
+			// Generate a new slug based on the root menu slug
+			var newSlug = self.getRootSlug() + ' ' + $(options.name.input).val();
+
+			// Update the new item slug
+			self.slugifyValue(newSlug, options.slug.input);
+
+		},
+
+		/**
+		 * Returns the root slug.
+		 *
+		 * @return string
+		 */
+		getRootSlug : function() {
+
+			var self = this;
+
+			return $(self.opt.form.root.slug).val();
+
+		},
+
+		/**
+		 * Slugifies the provided value and stores it on the provided input.
+		 *
+		 * @param  string  value
+		 * @param  string  input
+		 * @return void
+		 */
+		slugifyValue : function(value, input) {
+
+			$(input).val(value.slugify());
+
+		},
+
+		/**
+		 * Validates the provided inputs with the provided rules.
+		 *
+		 * @param  array  inputs
+		 * @return bool
+		 */
+		validateInputs : function(inputs) {
+
+			var self = this;
+
+			var failedInputs = [];
+
+			// Loop through the inputs
+			$.each(inputs, function(input, value)
+			{
+				// Does this input have rules?
+				if (typeof value.rules !== 'undefined')
+				{
+					// Loop through the rules
+					$.each(value.rules, function(key, rule)
+					{
+						if (rule == 'required' && $(value.input).val() == '')
+						{
+							self.showError(value.input);
+
+							failedInputs.push(value.input)
+						}
+						else
+						{
+							self.hideError(value.input);
+						}
+					});
+				}
+			});
+
+			return failedInputs.length >= 1 ? false : true;
+
+		},
+
+		showError : function(input) {
+
+			var self = this;
+
+			$(input).parent().addClass('error');
+
+		},
+
+		hideError : function(input) {
+
+			$(input).parent().removeClass('error');
+
+		}
 
 	};
 
-})(jQuery);
+	$.menumanager = function(menu, options) {
+		return new MenuManager(menu, options);
+	};
+
+})(jQuery, window, document);

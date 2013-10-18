@@ -22,14 +22,6 @@ return array(
 
 	'legend' => 'Menu Properties',
 
-	'create' => array(
-		'legend' => 'Create Menu',
-	),
-
-	'update' => array(
-		'legend' => 'Update :menu',
-	),
-
 	'root' => array(
 		'name' => 'Name',
 		'slug' => 'Slug',
@@ -40,7 +32,7 @@ return array(
 			'legend' => 'New Child',
 		),
 
-		'update' => array(
+		'edit' => array(
 			'legend' => ':menu details',
 		),
 

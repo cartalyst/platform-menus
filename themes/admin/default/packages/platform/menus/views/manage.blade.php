@@ -25,7 +25,7 @@
 <script>
 $(function() {
 
-	$('#menu-form').MenuManager({
+	$.menumanager('#menu-form', {
 		persistedSlugs : {{ json_encode($persistedSlugs) }}
 	});
 
@@ -36,99 +36,93 @@ $(function() {
 {{-- Page content --}}
 @section('content')
 
-
-<div class="row">
-
-	<div class="col-md-2">
-
-	</div>
-
-	<div class="col-md-10">
-
-	</div>
-
-</div>
-
-
-<form id="menu-form" class="form-inline" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
+<form id="menu-form" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
 	{{-- CSRF Token --}}
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-	<header class="page__header">
+	<div class="row">
 
-		<nav class="page__navigation">
-			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
-		</nav>
+		<div class="col-md-12">
 
-		<div class="page__title">
-			<h1>
-				<a class="icon-reply" href="{{ URL::toAdmin('menus') }}"></a> {{ trans("platform/menus::general.{$pageSegment}.title", array('menu' => ! empty($menu) ? $menu->name : null)) }}
-			</h1>
+			{{-- Page header --}}
+			<div class="page-header">
+
+				<div class="pull-right">
+					<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{ trans('platform/menus::button.save') }}</button>
+				</div>
+
+				<h1>{{{ trans("platform/menus::general.{$pageSegment}.title") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
+
+			</div>
+
 		</div>
 
-	</header>
+		{{-- Menu Items --}}
+		<div class="col-md-7">
 
-	<section class="page__content">
+			<div class="nestable" id="nestable">
+				<ol class="items">
+					@if ( ! empty($children))
+					@each('platform/menus::children', $children, 'child')
+					@endif
 
-		{{-- Root form --}}
-		<div class="clearfix">
-			<div class="form-inline">
-				<label class="control-label" for="menu-name">{{ trans('platform/menus::form.root.name') }}</label>
-				<input type="text" name="menu-name" id="menu-name" class="" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
-
-				<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.root.slug') }}</label>
-				<input type="text" name="menu-slug" id="menu-slug" class="" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
+					@include('platform/menus::children-form-tempojs')
+				</ol>
 			</div>
+
+			<div class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
+
+				<div class="container" id="no-children">
+
+					<h1>{{ trans('platform/menus::message.no_children') }}</h1>
+
+					<p>&nbsp;</p>
+
+					<p><a class="btn btn-primary btn-md" href="#create-child"><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</a></p>
+
+				</div>
+
+			</div>
+
 		</div>
 
-		{{-- Children create modal --}}
-		<div id="create-child" class="modal hide fade">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+		{{-- Sidebar --}}
+		<div class="col-md-5">
 
-				<h3>{{ trans('platform/menus::form.child.create.legend') }}</h3>
-			</div>
-			<div class="modal-body">
-				<fieldset id="menu-new-child">
-					@include('platform/menus::children-form')
+			{{-- Root form --}}
+			<div class="well well-md" id="root-details">
+
+				<fieldset>
+
+					<legend>Menu Details</legend>
+
+					<div class="form-group">
+						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.root.name') }}</label>
+						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.root.slug') }}</label>
+						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
+					</div>
+
 				</fieldset>
-			</div>
-			<div class="modal-footer">
-				<a class="btn btn-mini btn-inverse" data-dismiss="modal">&times; {{ trans('button.close') }}</a>
 
-				<a class="btn btn-mini btn-success children-add-new" name="new-child_add" id="new-child_add">{{ trans('platform/menus::button.add_child') }}</a>
 			</div>
+
+			{{-- Items form --}}
+			@if ( ! empty($children))
+			@each('platform/menus::form', $children, 'child')
+			@endif
+
+			{{-- New children form --}}
+			@include('platform/menus::form')
+
 		</div>
 
-		{{-- Children --}}
-		<div class="nestable" id="nestable">
-			<ol class="items">
-				@if ( ! empty($children))
-				@each('platform/menus::children', $children, 'child')
-				@endif
-
-				@include('platform/menus::children-form-tempojs')
-			</ol>
-		</div>
-
-		<p id="no-children"{{ ! empty($children) ? ' class="hide"' : null }}>
-			{{ trans('platform/menus::message.no_children') }}
-		</p>
-
-	</section>
-
-
-		<nav class="actions actions--right">
-			<ul class="navigation navigation--inline-circle">
-				<li>
-					<a class="tip" data-placement="top" href="#create-child" data-toggle="modal" title="{{ trans('platform/menus::button.add_child') }}"><i class="icon-plus"></i></a>
-				</li>
-				<li>
-					<button class="tip" data-placement="top" title="{{ trans('button.save') }}" type="submit"><i class="icon-save"></i></button>
-				</li>
-			</ul>
-		</nav>
+	</div>
 
 </form>
+
 @stop

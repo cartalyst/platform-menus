@@ -20,11 +20,10 @@
 
 return array(
 
-	'add_child'            => 'Create Child',
-	'remove_child'         => 'Remove Child',
-	'update_child'         => 'Update Children',
+	'save' => 'Save Menu',
 
-	'toggle_child_details' => 'Toggle Details',
-	'drag_children'        => 'Drag',
+	'add_item'    => 'Add Item',
+	'remove_item' => 'Remove Item',
+	'update_item' => 'Update Item',
 
 );
