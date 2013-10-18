@@ -254,7 +254,9 @@
 			});
 
 			// This shows the add item form
-			$document.on('click', '[data-item-add]', function() {
+			$document.on('click', '[data-item-add]', function(e) {
+
+				e.preventDefault();
 
 				// Hide the root form
 				self.hideRootForm();
