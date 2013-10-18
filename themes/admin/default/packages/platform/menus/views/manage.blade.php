@@ -64,19 +64,20 @@ $(function() {
 
 			<div class="nestable" id="nestable">
 				<ol class="items">
+					<li class="item item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
+						<div data-item class="item-name">{{ trans('platform/menus::button.add_item') }}</div>
+					</li>
+
 					@if ( ! empty($children))
 					@each('platform/menus::children', $children, 'child')
 					@endif
 
-					@include('platform/menus::children-form-tempojs')
+					{{-- TempoJs Template --}}
+					@include('platform/menus::children')
 				</ol>
-
-				@if ( ! empty($children))
-				<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</button></p>
-				@endif
 			</div>
 
-			<div class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
+			<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
 
 				<div class="container" id="no-children">
 
@@ -123,6 +124,9 @@ $(function() {
 
 			{{-- New children form --}}
 			@include('platform/menus::form')
+
+			{{-- TempoJs form --}}
+			@include('platform/menus::form-tempojs')
 
 		</div>
 

@@ -1,9 +1,9 @@
-<li class="item" data-item-id="{{ $child->id }}">
-	<div class="item-dd-handle">{{ trans('platform/menus::button.drag_children') }}</div>
+<li class="item" data-item-id="{{ ! empty($child) ? $child->id : '[[ slug ]]' }}"{{ empty($child) ? ' data-template style="display: none;"' : null }}>
+	<div class="item-dd-handle"></div>
 
-	<div class="item-name">{{ $child->name }}</div>
+	<div data-item class="item-name">{{ ! empty($child) ? $child->name : '[[ name ]]' }}</div>
 
-	@if ($children = $child->getChildren())
+	@if ( ! empty($child) and $children = $child->getChildren())
 	<ol class="items">
 		@each('platform/menus::children', $children, 'child')
 	</ol>

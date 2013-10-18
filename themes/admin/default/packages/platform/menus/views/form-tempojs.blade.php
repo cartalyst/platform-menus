@@ -1,11 +1,4 @@
-					<li data-template class="item" data-slug="[[ slug ]]" style="display: none;">
-						<div class="item-dd-handle">{{ trans('platform/menus::button.drag_children') }}</div>
-
-						<div href="#item-details-[[ slug ]]" class="item-toggle" data-toggle="modal">{{ trans('platform/menus::button.toggle_child_details') }}</div>
-
-						<div class="item-name">[[ name ]]</div>
-
-						<div id="item-details-[[ slug ]]" class="modal hide fade">
+<div data-template class="well well-md hide" data-item-form="[[ slug ]]">
 
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -176,5 +169,4 @@
 								<a class="btn btn-mini btn-success children-add-new" name="new-child_add" id="new-child_add">{{ trans('platform/menus::button.add_child') }}</a>
 							</div>
 
-						</div>
-					</li>
+</div>

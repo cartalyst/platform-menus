@@ -4,7 +4,6 @@
 	$dataChild = ! empty($child) ? ' data-children="' . $child->id . '"' : null;
 	$segment = ! empty($child) ? 'edit' : 'create';
 ?>
-
 <div class="well well-md hide" data-item-form="{{ $childId }}">
 
 	<fieldset>
@@ -100,7 +99,11 @@
 
 	</fieldset>
 
+	@if ( ! empty($child))
 	<a class="btn btn-sm btn-success" data-item-update>{{{ trans('button.update') }}}</a>
+	@else
+	<a class="btn btn-sm btn-success" data-item-create>{{{ trans('button.create') }}}</a>
+	@endif
 
 	<a class="btn btn-sm btn-danger" data-item-remove>{{{ trans('button.remove') }}}</a>
 

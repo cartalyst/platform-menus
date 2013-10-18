@@ -225,19 +225,20 @@
 
 			// Set a bind to check if we have unsaved changes when
 			// we are about to leave the page.
-			$(window).bind('beforeunload', function()
-			{
+			$(window).bind('beforeunload', function() {
+
 				if (options.unsaved_changes)
 				{
 					return 'You have unsaved changes.';
 				}
+
 			});
 
 
 			// When we click on an item, we should show up his
 			// form box on the sidebar.
-			$document.on('click', '.item-name', function()
-			{
+			$document.on('click', '[data-item]', function() {
+
 				// Hide the root form
 				self.hideRootForm();
 
@@ -249,22 +250,28 @@
 
 				// Show the form item box
 				$('[data-item-form=' + id + ']').removeClass('hide');
+
 			});
 
+			// This shows the add item form
+			$document.on('click', '[data-item-add]', function() {
 
-			$document.on('click', '[data-item-add]', function()
-			{
 				// Hide the root form
 				self.hideRootForm();
 
-				///////// add the item
+				// Show the add item form
+				$('[data-item-form=new-child]').removeClass('hide');
+
 			});
 
 
-			$document.on('click', '[data-item-update]', function()
-			{
+
+			$document.on('click', '[data-item-update]', function() {
+
 				// Show the root form
 				self.showRootForm();
+
+				options.unsaved_changes = true;
 
 				// Get the item id
 				var id = $(this).closest('[data-item-form]').data('item-form');
@@ -273,28 +280,33 @@
 
 				// Hide the form item box
 				$('[data-item-form=' + id + ']').addClass('hide');
+
 			});
 
 
-			$document.on('click', '[data-item-remove]', function()
-			{
+			$document.on('click', '[data-item-remove]', function() {
+
 				// Show the root form
 				self.showRootForm();
+
+				options.unsaved_changes = true;
 
 				///////// remove the item
 
 				//// leave this for now, i will be removing the div later on
 				$(this).closest('[data-item-form]').addClass('hide');
+
 			});
 
 			///// This is used to close an item form box
-			$document.on('click', '[data-item-close]', function()
-			{
+			$document.on('click', '[data-item-close]', function() {
+
 				// Show the root form
 				self.showRootForm();
 
 				// Close the item form box
 				$(this).closest('[data-item-form]').addClass('hide');
+
 			});
 
 
@@ -369,7 +381,7 @@
 			 * Adds a new menu item.
 			 *
 			 */
-			$document.on('click', formOpt.children.submit, function(e) {
+			$document.on('click', '[data-item-create]', function(e) {
 
 				// Prevent the form from being submited
 				e.preventDefault();
@@ -377,9 +389,6 @@
 				// Check if form is validated
 				if (self.validateInputs(formOpt.children))
 				{
-					// Hide the no children div
-					$(options.noChildrenSelector).addClass('hide');
-
 					// Generate the children slug
 					var slug = $(formOpt.children.slug.input).val().slugify();
 
@@ -408,8 +417,19 @@
 					$(formOpt.children.uri.input).val('');
 					$(formOpt.children.klass.input).val('');
 
-					// Close the modal window
-					$('#create-child').modal('hide');
+					options.unsaved_changes = true;
+
+					// Show the root form
+					self.showRootForm();
+
+					// Show the add button
+					$('[data-item-add]').removeClass('hide');
+
+					// Hide
+					$('[data-no-items]').addClass('hide');
+
+					//
+					$('[data-item-form=new-child').addClass('hide');
 
 					return true;
 				}

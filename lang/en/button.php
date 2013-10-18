@@ -22,7 +22,7 @@ return array(
 
 	'save' => 'Save Menu',
 
-	'add_item'    => 'Add Item',
+	'add_item'    => 'Add a new Item',
 	'remove_item' => 'Remove Item',
 	'update_item' => 'Update Item',
 
