@@ -5,11 +5,15 @@
 	$segment = ! empty($child) ? 'edit' : 'create';
 ?>
 
-<div class="well well-md" id="{{ $childId }}">
+<div class="well well-md hide" data-item-form="{{ $childId }}">
 
 	<fieldset>
 
-		<legend>{{ trans("platform/menus::form.child.{$segment}.legend", array('menu' => ! empty($child) ? $child->name : null)) }}</legend>
+		<legend>
+			{{ trans("platform/menus::form.child.{$segment}.legend", array('menu' => ! empty($child) ? $child->name : null)) }}
+
+			<span class="pull-right"><small class="item-close" data-item="{{ $childId }}" data-item-close>&times;</small></span>
+		</legend>
 
 		{{-- Item Name --}}
 		<div class="form-group">
@@ -96,8 +100,12 @@
 
 	</fieldset>
 
-	<a class="btn btn-sm btn-success" data-item-add>{{{ trans('button.update') }}}</a>
+	<a class="btn btn-sm btn-success" data-item-update>{{{ trans('button.update') }}}</a>
 
 	<a class="btn btn-sm btn-danger" data-item-remove>{{{ trans('button.remove') }}}</a>
 
 </div>
+
+@if ( ! empty($child) and $children = $child->getChildren())
+@each('platform/menus::form', $children, 'child')
+@endif

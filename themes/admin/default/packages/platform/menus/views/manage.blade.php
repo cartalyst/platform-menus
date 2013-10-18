@@ -11,6 +11,7 @@
 {{ Asset::queue('tab', 'js/bootstrap/tab.js', 'jquery') }}
 {{ Asset::queue('modal', 'js/bootstrap/modal.js', 'jquery') }}
 {{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
+{{ Asset::queue('slugify', 'js/platform/slugify.js', 'jquery') }}
 {{ Asset::queue('nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
 {{ Asset::queue('menumanager', 'platform/menus::js/jquery.menumanager.js', 'nestable') }}
 
@@ -69,6 +70,10 @@ $(function() {
 
 					@include('platform/menus::children-form-tempojs')
 				</ol>
+
+				@if ( ! empty($children))
+				<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</button></p>
+				@endif
 			</div>
 
 			<div class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
@@ -79,7 +84,7 @@ $(function() {
 
 					<p>&nbsp;</p>
 
-					<p><a class="btn btn-primary btn-md" href="#create-child"><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</a></p>
+					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</button></p>
 
 				</div>
 

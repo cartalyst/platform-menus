@@ -1,3 +1,7 @@
+.item-close { cursor: pointer; }
+
+
+
 .nestable {
 	display: block;
 	font-size: 13px;
@@ -91,7 +95,7 @@
 	background: 		linear-gradient(top, #dddddd 0%, #bbbbbb 100%);
 	border: 1px solid #aaaaaa;
 	color: #ffffff;
-	cursor: pointer;
+	cursor: move;
 	display: block;
 	font-weight: bold;
 	height: 30px;
@@ -199,7 +203,7 @@
 }
 	.item-name:hover {
 		background: #fff;
-		color: #2ea8e5;
+		cursor: pointer;
 	}
 
 

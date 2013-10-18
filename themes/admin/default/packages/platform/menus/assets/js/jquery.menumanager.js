@@ -145,7 +145,10 @@
 		modal : {
 
 
-		}
+		},
+
+		// Do we have unsaved changes?
+		unsaved_changes : false
 
 	};
 
@@ -200,7 +203,7 @@
 		},
 
 		/**
-		 * Initializes all the event listeners
+		 * Initializes all the event listeners.
 		 *
 		 * @return void
 		 */
@@ -219,6 +222,83 @@
 
 			// Generate the initial children slug
 			self.slugifyValue($(formOpt.root.slug).val(), formOpt.children.slug.input);
+
+			// Set a bind to check if we have unsaved changes when
+			// we are about to leave the page.
+			$(window).bind('beforeunload', function()
+			{
+				if (options.unsaved_changes)
+				{
+					return 'You have unsaved changes.';
+				}
+			});
+
+
+			// When we click on an item, we should show up his
+			// form box on the sidebar.
+			$document.on('click', '.item-name', function()
+			{
+				// Hide the root form
+				self.hideRootForm();
+
+				// Close all the other item forms  boxes
+				$('[data-item-form]').addClass('hide');
+
+				// Get the item id
+				var id = $(this).closest('[data-item-id]').data('item-id');
+
+				// Show the form item box
+				$('[data-item-form=' + id + ']').removeClass('hide');
+			});
+
+
+			$document.on('click', '[data-item-add]', function()
+			{
+				// Hide the root form
+				self.hideRootForm();
+
+				///////// add the item
+			});
+
+
+			$document.on('click', '[data-item-update]', function()
+			{
+				// Show the root form
+				self.showRootForm();
+
+				// Get the item id
+				var id = $(this).closest('[data-item-form]').data('item-form');
+
+				///////// update the item
+
+				// Hide the form item box
+				$('[data-item-form=' + id + ']').addClass('hide');
+			});
+
+
+			$document.on('click', '[data-item-remove]', function()
+			{
+				// Show the root form
+				self.showRootForm();
+
+				///////// remove the item
+
+				//// leave this for now, i will be removing the div later on
+				$(this).closest('[data-item-form]').addClass('hide');
+			});
+
+			///// This is used to close an item form box
+			$document.on('click', '[data-item-close]', function()
+			{
+				// Show the root form
+				self.showRootForm();
+
+				// Close the item form box
+				$(this).closest('[data-item-form]').addClass('hide');
+			});
+
+
+
 
 			// When menu children data get's updated
 			$document.on('keyup', 'input[type="text"]', function() {
@@ -243,7 +323,7 @@
 
 			});
 
-			// Clean the input values.
+			// Clean the input values when there are changes
 			$document.on('change', 'input[type="text"]', function() {
 
 				$(this).val($.trim($(this).val()));
@@ -487,9 +567,19 @@
 
 		},
 
-		showError : function(input) {
+		showRootForm : function() {
 
-			var self = this;
+			$('#root-details').removeClass('hide');
+
+		},
+
+		hideRootForm : function() {
+
+			$('#root-details').addClass('hide');
+
+		},
+
+		showError : function(input) {
 
 			$(input).parent().addClass('error');
 

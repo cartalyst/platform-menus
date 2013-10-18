@@ -1,4 +1,4 @@
-<li class="item" data-id="{{ $child->id }}">
+<li class="item" data-item-id="{{ $child->id }}">
 	<div class="item-dd-handle">{{ trans('platform/menus::button.drag_children') }}</div>
 
 	<div class="item-name">{{ $child->name }}</div>
