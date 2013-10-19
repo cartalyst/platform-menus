@@ -1,7 +1,7 @@
 <?php
 $children = $child->getChildren();
 ?>
-<li class="{{ $child->in_active_path ? 'active' : null }}{{ $children ? ' dropdown' : null }}">
+<li class="{{ $child->in_active_path ? 'active' : null }}{{ !$children ? null : $child['attributes']['depth'] > 1 ? 'dropdown-submenu' : 'dropdown' }}">
 	<a target="_{{ $child->target }}" href="{{ URL::to($child->uri) }}"@if ($children) id="drop-{{ $child->slug }}" role="button" class="dropdown-toggle" data-toggle="dropdown"@endif>
 		<i class="{{ $child->class }}"></i>
 		<span>{{ $child->name }}</span>
@@ -10,7 +10,7 @@ $children = $child->getChildren();
 		@endif
 	</a>
 
-	@if ($children)
+	@if ($children && $child['attributes']['depth'] == 1)
 		<ul class="dropdown-menu" role="menu"  aria-labelledby="drop-{{ $child->slug }}">
 		@each('platform/menus::widgets/nav/child', $children, 'child')
 		</ul>
