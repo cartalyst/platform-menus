@@ -134,7 +134,8 @@
 		// TempoJS settings
 		tempo : {
 
-			selector : 'nestable',
+			mainSelector : 'nestable',
+			formsSelector : 'forms',
 
 			var_braces : '\\[\\[\\]\\]',
 			tag_braces : '\\[\\?\\?\\]'
@@ -178,7 +179,8 @@
 			this.checkDependencies();
 
 			// Prepare TempoJS
-			this.TempoJs = Tempo.prepare(this.opt.tempo.selector, this.opt.tempo);
+			this.TempoJsMain = Tempo.prepare(this.opt.tempo.mainSelector, this.opt.tempo);
+			this.TempoJsForms = Tempo.prepare(this.opt.tempo.formsSelector, this.opt.tempo);
 
 			// Activate Nestable
 			$(this.opt.nestable.selector).nestable(this.opt.nestable);
@@ -286,19 +288,7 @@
 			});
 
 
-			$document.on('click', '[data-item-remove]', function() {
 
-				// Show the root form
-				self.showRootForm();
-
-				options.unsaved_changes = true;
-
-				///////// remove the item
-
-				//// leave this for now, i will be removing the div later on
-				$(this).closest('[data-item-form]').addClass('hide');
-
-			});
 
 			///// This is used to close an item form box
 			$document.on('click', '[data-item-close]', function() {
@@ -408,7 +398,8 @@
 					};
 
 					// Append the new menu item
-					self.TempoJs.append(data);
+					self.TempoJsMain.append(data);
+					self.TempoJsForms.append(data);
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
@@ -441,7 +432,9 @@
 			});
 
 			// Removes a menu item
-			$document.on('click', formOpt.itemRemove, function() {
+			$document.on('click', '[data-item-remove]', function(e) {
+
+				e.preventDefault();
 
 				// Confirmation message
 				var message = "Are you sure you want to delete this menu item?";
@@ -449,44 +442,42 @@
 				// Confirm if the user wants to remove the item
 				if (confirm(message) == true)
 				{
-					// Get the item selector
-					var itemSelector = '.' + options.nestable.itemClass;
-
 					// Get this item id
-					var itemId = $(this).closest(itemSelector).data('id');
-
-					// Get this item slug
-					var itemSlug = $(this).closest(itemSelector).data('slug');
+					var itemId = $(this).data('item-form');
 
 					// Remove the item from the array
-					options.persistedSlugs.splice($.inArray(itemSlug, options.persistedSlugs), 1);
-
-					// Get both data and item identifier
-					var dataIdentifier = (typeof itemSlug == 'undefined' ? 'id' : 'slug');
-					var itemIdentifier = (typeof itemSlug == 'undefined' ? itemId : itemSlug);
+					options.persistedSlugs.splice($.inArray(itemId, options.persistedSlugs), 1);
 
 					// Find closest item
-					var $item = $(itemSelector + '[data-' + dataIdentifier + '="' + itemIdentifier + '"]');
+					var $item = $('[data-item-id="' + itemId + '"]');
 					var $list = $item.children(options.nestable.listNodeName);
 
 					// Check if we have children
 					if ($list.length > 0)
 					{
 						// Grab the list's children items and put them after this item
-						$childItems = $list.children(options.nestable.itemNodeName);
+						var $childItems = $list.children(options.nestable.itemNodeName);
 						$childItems.insertAfter($item);
 					}
 
 					// Remove the item from the menu
 					$item.remove();
 
-					if ($(options.nestable.selector + ' > ol > li').length == 0)
+					// Check if we have children
+					if ($(options.nestable.selector + ' > ol > li').length == 1)
 					{
-						$(options.noChildrenSelector).removeClass('hide');
+						$(options.nestable.selector).find('[data-item-add]').addClass('hide');
+						$('[data-no-items]').removeClass('hide');
 					}
 
-					// Close Bootstrap Modal
-					$('.modal-backdrop').remove();
+					// Remove the item form
+					$('[data-item-form="' + itemId + '"]').remove();
+
+					// Show the root form
+					self.showRootForm();
+
+					// We have unsaved changes
+					options.unsaved_changes = true;
 
 				}
 

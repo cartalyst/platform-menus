@@ -9,7 +9,7 @@
 	<fieldset>
 
 		<legend>
-			{{ trans("platform/menus::form.child.{$segment}.legend", array('menu' => ! empty($child) ? $child->name : null)) }}
+			{{ ! empty($child) ? $child->name : null }}{{ trans("platform/menus::form.child.{$segment}.legend") }}
 
 			<span class="pull-right"><small class="item-close" data-item="{{ $childId }}" data-item-close>&times;</small></span>
 		</legend>
@@ -100,12 +100,11 @@
 	</fieldset>
 
 	@if ( ! empty($child))
-	<a class="btn btn-sm btn-success" data-item-update>{{{ trans('button.update') }}}</a>
+	<button class="btn btn-sm btn-success" data-item-update>{{{ trans('button.update') }}}</button>
+	<button class="btn btn-sm btn-danger" data-item-remove data-item-form="{{{ $child->id }}}">{{{ trans('button.remove') }}}</button>
 	@else
-	<a class="btn btn-sm btn-success" data-item-create>{{{ trans('button.create') }}}</a>
+	<button class="btn btn-sm btn-success" data-item-create>{{{ trans('button.create') }}}</button>
 	@endif
-
-	<a class="btn btn-sm btn-danger" data-item-remove>{{{ trans('button.remove') }}}</a>
 
 </div>
 

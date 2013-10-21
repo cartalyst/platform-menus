@@ -33,7 +33,7 @@ return array(
 		),
 
 		'edit' => array(
-			'legend' => ':menu details',
+			'legend' => ' details',
 		),
 
 		'name' => 'Name',
