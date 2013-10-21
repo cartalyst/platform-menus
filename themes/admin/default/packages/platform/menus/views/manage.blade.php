@@ -62,12 +62,14 @@ $(function() {
 		{{-- Menu Items --}}
 		<div class="col-md-7">
 
+			<ol class="items">
+				<li class="item item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
+					<div data-item class="item-name">{{ trans('platform/menus::button.add_item') }}</div>
+				</li>
+			</ol>
+
 			<div class="nestable" id="nestable">
 				<ol class="items">
-					<li class="item item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
-						<div data-item class="item-name">{{ trans('platform/menus::button.add_item') }}</div>
-					</li>
-
 					@if ( ! empty($children))
 					@each('platform/menus::children', $children, 'child')
 					@endif

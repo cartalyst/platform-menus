@@ -4,7 +4,7 @@
 	$dataChild = ! empty($child) ? ' data-children="' . $child->id . '"' : null;
 	$segment = ! empty($child) ? 'edit' : 'create';
 ?>
-<div class="well well-md hide" data-item-form="{{ $childId }}">
+<div class="well well-md hide" {{ empty($child) ? 'data-new-item-form' : 'data-item-form="' . $childId . '"' }}>
 
 	<fieldset>
 

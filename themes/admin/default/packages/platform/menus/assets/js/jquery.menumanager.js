@@ -17,6 +17,17 @@
  * @link       http://cartalyst.com
  */
 
+
+/**
+ *
+ * TODO LIST:
+ * 	- Adding / Updating : Do the check to see if the slug already exists on the persistent slugs array!!
+ * 	- Updating : Add validation to the inputs
+ *  - Updating : Make sure it generates a new slug
+ *
+ */
+
+
 ;(function($, window, document, undefined) {
 
 	'use strict';
@@ -27,8 +38,6 @@
 	 * @var array
 	 */
 	var defaults = {
-
-		noChildrenSelector: '#no-children',
 
 		// Holds all of the existing menu slugs
 		persistedSlugs : [],
@@ -100,12 +109,8 @@
 					input : '#new-child_enabled'
 				},
 
-				submit : '#new-child_add'
-
 			},
 
-			// Selector for removing menu items
-			itemRemove : '.remove'
 
 		},
 
@@ -223,10 +228,10 @@
 			var formOpt = options.form
 
 			// Generate the initial children slug
-			self.slugifyValue($(formOpt.root.slug).val(), formOpt.children.slug.input);
+			self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
 
 			// Set a bind to check if we have unsaved changes when
-			// we are about to leave the page.
+			// we are about to leave the menu manager page.
 			$(window).bind('beforeunload', function() {
 
 				if (options.unsaved_changes)
@@ -237,72 +242,20 @@
 			});
 
 
-			// When we click on an item, we should show up his
-			// form box on the sidebar.
-			$document.on('click', '[data-item]', function() {
 
-				// Hide the root form
-				self.hideRootForm();
 
-				// Close all the other item forms  boxes
-				$('[data-item-form]').addClass('hide');
 
-				// Get the item id
-				var id = $(this).closest('[data-item-id]').data('item-id');
 
-				// Show the form item box
-				$('[data-item-form=' + id + ']').removeClass('hide');
+
+
+
+
+			// Clean the input values when there are changes
+			$document.on('change', 'input[type="text"]', function() {
+
+				$(this).val($.trim($(this).val()));
 
 			});
-
-			// This shows the add item form
-			$document.on('click', '[data-item-add]', function(e) {
-
-				e.preventDefault();
-
-				// Hide the root form
-				self.hideRootForm();
-
-				// Show the add item form
-				$('[data-item-form=new-child]').removeClass('hide');
-
-			});
-
-
-
-			$document.on('click', '[data-item-update]', function() {
-
-				// Show the root form
-				self.showRootForm();
-
-				options.unsaved_changes = true;
-
-				// Get the item id
-				var id = $(this).closest('[data-item-form]').data('item-form');
-
-				///////// update the item
-
-				// Hide the form item box
-				$('[data-item-form=' + id + ']').addClass('hide');
-
-			});
-
-
-
-
-			///// This is used to close an item form box
-			$document.on('click', '[data-item-close]', function() {
-
-				// Show the root form
-				self.showRootForm();
-
-				// Close the item form box
-				$(this).closest('[data-item-form]').addClass('hide');
-
-			});
-
-
-
 
 			// When menu children data get's updated
 			$document.on('keyup', 'input[type="text"]', function() {
@@ -327,18 +280,12 @@
 
 			});
 
-			// Clean the input values when there are changes
-			$document.on('change', 'input[type="text"]', function() {
-
-				$(this).val($.trim($(this).val()));
-
-			});
 
 			// When the value of the root name input changes
 			$document.on('keyup', formOpt.root.name, function() {
 
 				// Update the root slug value
-				self.slugifyValue($(this).val(), formOpt.root.slug);
+				self.slugify($(this).val(), formOpt.root.slug);
 
 				// Update the new menu item inputs
 				self.updateNewItem();
@@ -349,7 +296,7 @@
 			$document.on('change', formOpt.root.slug, function() {
 
 				// Clean the root slug value
-				self.slugifyValue($(this).val(), formOpt.root.slug);
+				self.slugify($(this).val(), formOpt.root.slug);
 
 				// Update the new menu item inputs
 				self.updateNewItem();
@@ -367,11 +314,67 @@
 			*/
 
 
+			/**
+			 * Show a menu item form box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item]', function() {
+
+				// Hide the root form
+				self.hideRootForm();
+
+				// Close all the other item forms  boxes
+				$('[data-item-form]').addClass('hide');
+
+				// Get the item id
+				var id = $(this).closest('[data-item-id]').data('item-id');
+
+				// Show the form item box
+				$('[data-item-form=' + id + ']').removeClass('hide');
+
+			});
+
+
+			/**
+			 * Hide a menu item form box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-close]', function() {
+
+				// Show the root form
+				self.showRootForm();
+
+				// Close the item form box
+				$(this).closest('[data-item-form]').addClass('hide');
+
+			});
+
+
+			/**
+			 * Show the add new item form box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-add]', function(e) {
+
+				// Prevent the form from being submited
+				e.preventDefault();
+
+				// Hide the root form
+				self.hideRootForm();
+
+				// Show the add item form
+				$('[data-new-item-form]').removeClass('hide');
+
+			});
 
 
 			/**
 			 * Adds a new menu item.
 			 *
+			 * @return void
 			 */
 			$document.on('click', '[data-item-create]', function(e) {
 
@@ -406,7 +409,7 @@
 
 					// Clean the new item inputs
 					$(formOpt.children.name.input).val('');
-					//$(formOpt.children.slug.input).val(base.generateChildrenSlug());
+					self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
 					$(formOpt.children.uri.input).val('');
 					$(formOpt.children.klass.input).val('');
 
@@ -422,18 +425,46 @@
 					$('[data-no-items]').addClass('hide');
 
 					//
-					$('[data-item-form=new-child').addClass('hide');
+					$('[data-new-item-form]').addClass('hide');
 
-					return true;
 				}
-
-				return false;
 
 			});
 
-			// Removes a menu item
+
+			/**
+			 * Updates a menu item.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-update]', function(e) {
+
+				// Prevent the form from being submited
+				e.preventDefault();
+
+				// Show the root form
+				self.showRootForm();
+
+				// We have unsaved changes
+				options.unsaved_changes = true;
+
+				// Get the item id
+				var id = $(this).closest('[data-item-form]').data('item-form');
+
+				// Hide the form item box
+				$('[data-item-form=' + id + ']').addClass('hide');
+
+			});
+
+
+			/**
+			 * Removes a menu item.
+			 *
+			 * @return void
+			 */
 			$document.on('click', '[data-item-remove]', function(e) {
 
+				// Prevent the form from being submited
 				e.preventDefault();
 
 				// Confirmation message
@@ -464,10 +495,10 @@
 					$item.remove();
 
 					// Check if we have children
-					if ($(options.nestable.selector + ' > ol > li').length == 1)
+					if ($(options.nestable.selector + ' > ol > li').length == 0)
 					{
-						$(options.nestable.selector).find('[data-item-add]').addClass('hide');
-						$('[data-no-items]').removeClass('hide');
+						$('[data-item-add]').addClass('hide');
+						$('[data-no-items]').removeClass('hide').find('[data-item-add]').removeClass('hide');
 					}
 
 					// Remove the item form
@@ -483,14 +514,21 @@
 
 			});
 
-			// When the main form is submited
+
+			/**
+			 * Process the whole form.
+			 *
+			 * @return object
+			 */
 			$document.on('submit', self.$form, function(e) {
 
 				// for now...
 				e.preventDefault();
 
+				console.log(window.JSON.stringify($(options.nestable.selector).nestable('serialize')));
+
 				// Append input to the form. It's values are JSON encoded..
-				//return this.$form.append('<input type="hidden" name="' + this.opt.hierarchyInputName + '" value=\'' + window.JSON.stringify($(this.opt.nestable.selector).nestable('serialize')) + '\'>');
+				//return this.$form.append('<input type="hidden" name="' + options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
 
 			});
 
@@ -511,7 +549,7 @@
 			var newSlug = self.getRootSlug() + ' ' + $(options.name.input).val();
 
 			// Update the new item slug
-			self.slugifyValue(newSlug, options.slug.input);
+			self.slugify(newSlug, options.slug.input);
 
 		},
 
@@ -535,7 +573,7 @@
 		 * @param  string  input
 		 * @return void
 		 */
-		slugifyValue : function(value, input) {
+		slugify : function(value, input) {
 
 			$(input).val(value.slugify());
 
@@ -580,12 +618,22 @@
 
 		},
 
+		/**
+		 * Shows the root form box.
+		 *
+		 * @return void
+		 */
 		showRootForm : function() {
 
 			$('#root-details').removeClass('hide');
 
 		},
 
+		/**
+		 * Hides the root form box.
+		 *
+		 * @return void
+		 */
 		hideRootForm : function() {
 
 			$('#root-details').addClass('hide');
