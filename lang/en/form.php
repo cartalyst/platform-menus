@@ -29,11 +29,11 @@ return array(
 
 	'child' => array(
 		'create' => array(
-			'legend' => 'New Child',
+			'legend' => 'New Item',
 		),
 
 		'edit' => array(
-			'legend' => ' details',
+			'legend' => 'Item details',
 		),
 
 		'name' => 'Name',
@@ -48,7 +48,7 @@ return array(
 
 		'uri' => 'Uri',
 
-		'secure' => 'Make Secure (HTTPS)',
+		'secure' => 'HTTPS',
 
 		'visibility' => array(
 			'title' => 'Visibility',

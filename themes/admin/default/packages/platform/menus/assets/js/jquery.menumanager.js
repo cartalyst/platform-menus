@@ -288,7 +288,7 @@
 				self.slugify($(this).val(), formOpt.root.slug);
 
 				// Update the new menu item inputs
-				self.updateNewItem();
+				self.updateNewFormInputs();
 
 			})
 
@@ -299,7 +299,7 @@
 				self.slugify($(this).val(), formOpt.root.slug);
 
 				// Update the new menu item inputs
-				self.updateNewItem();
+				self.updateNewFormInputs();
 
 			});
 
@@ -325,7 +325,7 @@
 				self.hideRootForm();
 
 				// Close all the other item forms  boxes
-				$('[data-item-form]').addClass('hide');
+				$('[data-item-form], [data-new-item-form]').addClass('hide');
 
 				// Get the item id
 				var id = $(this).closest('[data-item-id]').data('item-id');
@@ -347,7 +347,7 @@
 				self.showRootForm();
 
 				// Close the item form box
-				$(this).closest('[data-item-form]').addClass('hide');
+				$(this).closest('[data-item-form], [data-new-item-form]').addClass('hide');
 
 			});
 
@@ -359,7 +359,7 @@
 			 */
 			$document.on('click', '[data-item-add]', function(e) {
 
-				// Prevent the form from being submited
+				// Prevent the form from being submitted
 				e.preventDefault();
 
 				// Hide the root form
@@ -378,15 +378,21 @@
 			 */
 			$document.on('click', '[data-item-create]', function(e) {
 
-				// Prevent the form from being submited
+				// Prevent the form from being submitted
 				e.preventDefault();
 
-				// Check if form is validated
-				if (self.validateInputs(formOpt.children))
-				{
-					// Generate the children slug
-					var slug = $(formOpt.children.slug.input).val().slugify();
+				// Generate the children slug
+				var slug = $(formOpt.children.slug.input).val().slugify();
 
+				// Check if this an unique slug
+				if ( ! self.isUniqueSlug(slug))
+				{
+					alert('Unique slug, fix it...');
+				}
+
+				// Check if the form is valid
+				else if (self.validateInputs(formOpt.children) )
+				{
 					// Prepare the new item data
 					var data = {
 						'name'       : $.trim($(formOpt.children.name.input).val()),
@@ -413,6 +419,7 @@
 					$(formOpt.children.uri.input).val('');
 					$(formOpt.children.klass.input).val('');
 
+					// We have unsaved changes
 					options.unsaved_changes = true;
 
 					// Show the root form
@@ -421,10 +428,10 @@
 					// Show the add button
 					$('[data-item-add]').removeClass('hide');
 
-					// Hide
+					// Hide the no items container
 					$('[data-no-items]').addClass('hide');
 
-					//
+					// Hide the add new item form
 					$('[data-new-item-form]').addClass('hide');
 
 				}
@@ -439,20 +446,47 @@
 			 */
 			$document.on('click', '[data-item-update]', function(e) {
 
-				// Prevent the form from being submited
+				// Prevent the form from being submitted
 				e.preventDefault();
 
-				// Show the root form
-				self.showRootForm();
+				// Get the form id
+				var formId = $(this).data('item-form');
 
-				// We have unsaved changes
-				options.unsaved_changes = true;
+				// Get the current slug
+				var currentSlug = $('#' + formId + '_current_slug').val();
 
-				// Get the item id
-				var id = $(this).closest('[data-item-form]').data('item-form');
+				// Get the new slug
+				var slug = $('#' + formId + '_slug').val().slugify();
 
-				// Hide the form item box
-				$('[data-item-form=' + id + ']').addClass('hide');
+				// Check if this an unique slug
+				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
+				{
+					alert('Unique slug, fix it...');
+				}
+
+				else
+				{
+					// Remove the item from the array
+					options.persistedSlugs.splice($.inArray(slug, options.persistedSlugs), 1);
+
+					// Add the item to the array
+					options.persistedSlugs.push(slug);
+
+					// Update the current slug input value
+					$('#' + formId + '_current_slug').val(slug);
+
+					// Show the root form
+					self.showRootForm();
+
+					// We have unsaved changes
+					options.unsaved_changes = true;
+
+					// Get the item id
+					var id = $(this).closest('[data-item-form]').data('item-form');
+
+					// Hide the form item box
+					$('[data-item-form=' + id + ']').addClass('hide');
+				}
 
 			});
 
@@ -464,7 +498,7 @@
 			 */
 			$document.on('click', '[data-item-remove]', function(e) {
 
-				// Prevent the form from being submited
+				// Prevent the form from being submitted
 				e.preventDefault();
 
 				// Confirmation message
@@ -535,11 +569,38 @@
 		},
 
 		/**
+		 * Compares if the provided slugs are the same.
+		 *
+		 * @param  string  currentSlug
+		 * @param  string  newSlug
+		 * @return bool
+		 */
+		isSameSlug : function(currentSlug, newSlug) {
+
+			return currentSlug === newSlug ? true : false;
+
+		},
+
+		/**
+		 * Checks if the provided slug is unique on the system.
+		 *
+		 * @param  string  slug
+		 * @return bool
+		 */
+		isUniqueSlug : function(slug) {
+
+			var self = this;
+
+			return $.inArray(slug, self.opt.persistedSlugs) > -1 ? false : true;
+
+		},
+
+		/**
 		 *
 		 *
 		 * @return void
 		 */
-		updateNewItem : function() {
+		updateNewFormInputs : function() {
 
 			var self = this;
 
