@@ -363,7 +363,7 @@ return array(
 			array(
 				'slug'  => 'admin-menus',
 				'name'  => 'Menus',
-				'class' => 'icon-th-list',
+				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
 			),
 
@@ -374,14 +374,14 @@ return array(
 			array(
 				'slug'  => 'system-preview',
 				'name'  => 'Preview',
-				'class' => 'icon-home',
+				'class' => 'fa fa-home',
 				'uri'   => '/',
 			),
 
 			array(
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
-				'class' => 'icon-cog',
+				'class' => 'fa fa-cog',
 				'uri'   => 'admin/settings',
 			),
 
@@ -389,7 +389,7 @@ return array(
 			array(
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
-				'class' => 'icon-signout',
+				'class' => 'fa fa-signout',
 				'uri'   => '/logout',
 			),
 
@@ -400,7 +400,7 @@ return array(
 			array(
 				'slug'       => 'main-home',
 				'name'       => 'Home',
-				'class'      => 'icon-home',
+				'class'      => 'fa fa-home',
 				'uri'        => '/',
 				'visibility' => 'always',
 			),
@@ -408,7 +408,7 @@ return array(
 			array(
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
-				'class'      => 'icon-signin',
+				'class'      => 'fa fa-signin',
 				'uri'        => 'login',
 				'visibility' => 'logged_out',
 			),
@@ -416,7 +416,7 @@ return array(
 			array(
 				'slug'       => 'main-logout',
 				'name'       => 'Logout',
-				'class'      => 'icon-home',
+				'class'      => 'fa fa-home',
 				'uri'        => 'logout',
 				'visibility' => 'logged_in',
 			),
@@ -424,7 +424,7 @@ return array(
 			array(
 				'slug'       => 'main-register',
 				'name'       => 'Register',
-				'class'      => 'icon-pencil',
+				'class'      => 'fa fa-pencil',
 				'uri'        => 'register',
 				'visibility' => 'logged_out',
 			),
@@ -432,7 +432,7 @@ return array(
 			array(
 				'slug'       => 'main-dashboard',
 				'name'       => 'Admin',
-				'class'      => 'icon-dashboard',
+				'class'      => 'fa fa-dashboard',
 				'uri'        => 'admin',
 				'visibility' => 'admin',
 			),

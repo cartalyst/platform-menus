@@ -1,193 +1,276 @@
-<div data-template class="well well-md hide" data-item-form="[[ slug ]]">
+<div data-template class="well well-md hide" style="background: #fff" data-item-form="[[ slug ]]" style="border: none; border-radius: none; box-shadow: none;">
 
 	<input type="hidden" name="children[[[ slug ]]][id]" value="[[ slug ]]">
 
 	<input type="hidden" id="[[ slug ]]_current_slug" value="[[ slug ]]">
 
-	<fieldset>
+	<h4>
+		{{{ trans('platform/menus::form.edit.legend') }}}
 
-		<legend>
-			{{{ trans('platform/menus::form.child.edit.legend') }}}
+		<span class="pull-right"><small class="item-close" data-item-close="[[ slug ]]">&times;</small></span>
+	</h4>
 
-			<span class="pull-right"><small class="item-close" data-item="[[ slug ]]" data-item-close>&times;</small></span>
-		</legend>
+	<p>{{{ trans('platform/menus::form.edit.description') }}}</p>
 
-		{{-- Item Name --}}
-		<div class="form-group">
-			<label class="control-label" for="[[ slug ]]_name">{{{ trans('platform/menus::form.child.name') }}}</label>
-			<input type="text" name="children[[[ slug ]]][name]" id="[[ slug ]]_name" class="form-control" value="[[ name ]]">
-		</div>
+	{{-- Item details --}}
+	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 
-		{{-- Item Slug --}}
-		<div class="form-group">
-			<label class="control-label" for="[[ slug ]]_slug">{{{ trans('platform/menus::form.child.slug') }}}</label>
-			<input type="text" name="children[[[ slug ]]][slug]" id="[[ slug ]]_slug" class="form-control" value="[[ slug ]]">
-		</div>
+		<fieldset>
 
-		<div class="row">
+			<legend>Item details</legend>
 
-			<div class="col-md-4">
+			{{-- Item Name --}}
+			<div class="form-group">
+				<label class="control-label" for="[[ slug ]]_name">{{{ trans('platform/menus::form.name') }}}</label>
 
-				{{-- Item Type --}}
+				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
+
+				<input type="text" name="children[[[ slug ]]][name]" id="[[ slug ]]_name" class="form-control" value="[[ name ]]">
+			</div>
+
+			{{-- Item Slug --}}
+			<div class="form-group">
+				<label class="control-label" for="[[ slug ]]_slug">{{{ trans('platform/menus::form.slug') }}}</label>
+
+				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
+
+				<input type="text" name="children[[[ slug ]]][slug]" id="[[ slug ]]_slug" class="form-control" value="[[ slug ]]">
+			</div>
+
+			{{-- Enabled --}}
+			<div class="form-group">
+				<label class="control-label" for="[[ slug ]]_enabled">{{ trans('platform/menus::form.enabled') }}</label>
+				<div class="controls">
+					<select name="children[[[ slug ]]][enabled]" id="[[ slug ]]_enabled" class="form-control">
+						[? if enabled == '1' ?]
+						<option value="1" selected="selected">{{ trans('general.enabled') }}</option>
+						[? else ?]
+						<option value="1">{{ trans('general.enabled') }}</option>
+						[? endif ?]
+
+						[? if enabled == '0' ?]
+						<option value="0" selected="selected">{{ trans('general.disabled') }}</option>
+						[? else ?]
+						<option value="0">{{ trans('general.disabled') }}</option>
+						[? endif ?]
+					</select>
+				</div>
+			</div>
+
+		</fieldset>
+
+	</div>
+
+	{{-- Item URL --}}
+	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+
+		<fieldset>
+
+			<legend>Item URL</legend>
+
+			<div class="row">
+
+				<div class="col-md-4">
+
+					{{-- Item Type --}}
+					<div class="form-group">
+						<label class="control-label" for="[[ slug ]]_type">{{{ trans('platform/menus::form.type.title') }}}</label>
+
+						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
+
+						<div class="controls">
+							<select name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="form-control">
+								[? if type == 'static' ?]
+								<option value="static"  selected="selected">{{{ trans('platform/menus::form.type.static') }}}</option>
+								[? else ?]
+								<option value="static">{{{ trans('platform/menus::form.type.static') }}}</option>
+								[? endif ?]
+
+								[? if type == 'page' ?]
+								<option value="page" selected="selected">{{{ trans('platform/menus::form.type.page') }}}</option>
+								[? else ?]
+								<option value="page">{{{ trans('platform/menus::form.type.page') }}}</option>
+								[? endif ?]
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-md-8">
+
+					{{-- Item Uri --}}
+					<div class="form-group">
+						<label class="control-label" for="[[ slug ]]_uri">{{{ trans('platform/menus::form.uri') }}}</label>
+
+						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
+
+						<input type="text" name="children[[[ slug ]]][uri]" id="[[ slug ]]_uri" class="form-control" value="[[ uri ]]">
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="row">
+
+				<div class="col-md-6">
+
+					{{-- Secure --}}
+					<div class="form-group">
+						<label class="control-label" for="[[ slug ]]_secure">{{{ trans('platform/menus::form.child.secure') }}}</label>
+						<div class="controls">
+							<select name="children[[[ slug ]]][secure]" id="[[ slug ]]_secure" class="form-control">
+								[? if secure == '1' ?]
+								<option value="1" selected="selected">{{{ trans('general.yes') }}}</option>
+								[? else ?]
+								<option value="1">{{{ trans('general.yes') }}}</option>
+								[? endif ?]
+
+								[? if secure == '0' ?]
+								<option value="0" selected="selected">{{{ trans('general.no') }}}</option>
+								[? else ?]
+								<option value="0">{{{ trans('general.no') }}}</option>
+								[? endif ?]
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-md-6">
+
+				</div>
+
+			</div>
+
+		</fieldset>
+
+	</div>
+
+	<button type="button" class="btn btn-sm btn-info" data-toggle-options="[[ slug ]]">More options</button>
+
+	<span class="pull-right">
+		<button class="btn btn-sm btn-success" data-item-update"[[ slug ]]">{{{ trans('button.update') }}}</button>
+
+		<button class="btn btn-sm btn-danger" data-item-remove"[[ slug ]]">{{{ trans('button.remove') }}}</button>
+	</span>
+
+	{{-- Options --}}
+	<div class="hide" style="padding-top: 20px;" data-options>
+
+		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+
+			<fieldset>
+
+				<legend>{{{ trans('platform/menus::form.visibility') }}}</legend>
+
+				{{-- Visibility --}}
 				<div class="form-group">
-					<label class="control-label" for="[[ slug ]]_type">{{{ trans('platform/menus::form.child.type.title') }}}</label>
+					<label class="control-label" for="[[ slug ]]_visibility">{{ trans('platform/menus::form.visibility') }}</label>
+
+					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
+
 					<div class="controls">
-						<select name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="form-control">
-							[? if type == 'static' ?]
-							<option value="static"  selected="selected">{{{ trans('platform/menus::form.child.type.static') }}}</option>
+						<select name="children[[[ slug ]]][visibility]" id="[[ slug ]]_visibility" class="form-control">
+							[? if visibility == 'always' ?]
+							<option value="always" selected="selected">{{ trans('platform/menus::form.visibilities.always') }}</option>
 							[? else ?]
-							<option value="static">{{{ trans('platform/menus::form.child.type.static') }}}</option>
+							<option value="always">{{ trans('platform/menus::form.visibilities.always') }}</option>
 							[? endif ?]
 
-							[? if type == 'page' ?]
-							<option value="page" selected="selected">{{{ trans('platform/menus::form.child.type.page') }}}</option>
+							[? if visibility == 'logged_in' ?]
+							<option value="logged_in" selected="selected">{{ trans('platform/menus::form.visibilities.logged_in') }}</option>
 							[? else ?]
-							<option value="page">{{{ trans('platform/menus::form.child.type.page') }}}</option>
+							<option value="logged_in">{{ trans('platform/menus::form.visibilities.logged_in') }}</option>
+							[? endif ?]
+
+							[? if visibility == 'logged_out' ?]
+							<option value="logged_out" selected="selected">{{ trans('platform/menus::form.visibilities.logged_out') }}</option>
+							[? else ?]
+							<option value="logged_out">{{ trans('platform/menus::form.visibilities.logged_out') }}</option>
+							[? endif ?]
+
+							[? if visibility == 'admin' ?]
+							<option value="admin" selected="selected">{{ trans('platform/menus::form.visibilities.admin') }}</option>
+							[? else ?]
+							<option value="admin">{{ trans('platform/menus::form.visibilities.admin') }}</option>
 							[? endif ?]
 						</select>
 					</div>
 				</div>
 
-			</div>
-
-			<div class="col-md-8">
-
-				{{-- Item Uri --}}
-				<div class="form-group">
-					<label class="control-label" for="[[ slug ]]_uri">{{{ trans('platform/menus::form.child.uri') }}}</label>
-					<input type="text" name="children[[[ slug ]]][uri]" id="[[ slug ]]_uri" class="form-control" value="[[ uri ]]">
-				</div>
-
-			</div>
+			</fieldset>
 
 		</div>
 
-		<div class="row">
+		{{-- Attributes --}}
+		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 
-			<div class="col-md-6">
+			<fieldset>
 
-				{{-- Secure --}}
+				<legend>Attributes</legend>
+
+				{{-- ID --}}
 				<div class="form-group">
-					<label class="control-label" for="[[ slug ]]_secure">{{{ trans('platform/menus::form.child.secure') }}}</label>
-					<div class="controls">
-						<select name="children[[[ slug ]]][secure]" id="[[ slug ]]_secure" class="form-control">
-							[? if secure == '1' ?]
-							<option value="1" selected="selected">{{{ trans('general.yes') }}}</option>
-							[? else ?]
-							<option value="1">{{{ trans('general.yes') }}}</option>
-							[? endif ?]
-
-							[? if secure == '0' ?]
-							<option value="0" selected="selected">{{{ trans('general.no') }}}</option>
-							[? else ?]
-							<option value="0">{{{ trans('general.no') }}}</option>
-							[? endif ?]
-						</select>
-					</div>
+					<label class="control-label" for="[[ slug ]]_attribute_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
+					<input type="text" name="children[[[ slug ]]][attribute_id]" id="[[ slug ]]_attribute_id" class="form-control" value="[[ attribute_id ]]">
 				</div>
 
-			</div>
+				{{-- Name --}}
+				<div class="form-group">
+					<label class="control-label" for="[[ slug ]]_attribute_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
+					<input type="text" name="children[[[ slug ]]][attribute_name]" id="[[ slug ]]_attribute_name" class="form-control" value="[[ attribute_name ]]">
+				</div>
 
-			<div class="col-md-6">
+				{{-- Class --}}
+				<div class="form-group">
+					<label class="control-label" for="[[ slug ]]_attribute_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
+					<input type="text" name="children[[[ slug ]]][attribute_class]" id="[[ slug ]]_attribute_class" class="form-control" value="[[ attribute_class ]]">
+				</div>
+
+				{{-- Title --}}
+				<div class="form-group">
+					<label class="control-label" for="[[ slug ]]_attribute_title">{{{ trans('platform/menus::form.attributes.title') }}}</label>
+					<input type="text" name="children[[[ slug ]]][attribute_title]" id="[[ slug ]]_attribute_title" class="form-control" value="[[ attribute_title ]]">
+				</div>
 
 				{{-- Target --}}
 				<div class="form-group">
-					<label class="control-label" for="[[ slug ]]_target">{{{ trans('platform/menus::form.child.target.title') }}}</label>
+					<label class="control-label" for="[[ slug ]]_attribute_target">{{{ trans('platform/menus::form.attributes.target.title') }}}</label>
 					<div class="controls">
-						<select name="children[[[ slug ]]][target]" id="[[ slug ]]_target" class="form-control">
-							[? if target == 'self' ?]
-							<option value="self" selected="selected">{{{ trans('platform/menus::form.child.target.self') }}}</option>
+						<select name="children[[[ slug ]]][attribute_target]" id="[[ slug ]]_attribute_target" class="form-control">
+							[? if attribute_target == 'self' ?]
+							<option value="self" selected="selected">{{{ trans('platform/menus::form.attributes.target.self') }}}</option>
 							[? else ?]
-							<option value="self">{{{ trans('platform/menus::form.child.target.self') }}}</option>
+							<option value="self">{{{ trans('platform/menus::form.attributes.target.self') }}}</option>
 							[? endif ?]
 
-							[? if target == 'new_children' ?]
-							<option value="new_children" selected="selected">{{{ trans('platform/menus::form.child.target.blank') }}}</option>
+							[? if attribute_target == 'new_children' ?]
+							<option value="new_children" selected="selected">{{{ trans('platform/menus::form.attributes.target.blank') }}}</option>
 							[? else ?]
-							<option value="new_children">{{{ trans('platform/menus::form.child.target.blank') }}}</option>
+							<option value="new_children">{{{ trans('platform/menus::form.attributes.target.blank') }}}</option>
 							[? endif ?]
 
-							[? if target == 'parent_frame' ?]
-							<option value="parent_frame" selected="selected">{{{ trans('platform/menus::form.child.target.parent') }}}</option>
+							[? if attribute_target == 'parent_frame' ?]
+							<option value="parent_frame" selected="selected">{{{ trans('platform/menus::form.attributes.target.parent') }}}</option>
 							[? else ?]
-							<option value="parent_frame">{{{ trans('platform/menus::form.child.target.parent') }}}</option>
+							<option value="parent_frame">{{{ trans('platform/menus::form.attributes.target.parent') }}}</option>
 							[? endif ?]
 
-							[? if target == 'top_frame' ?]
-							<option value="top_frame" selected="selected">{{{ trans('platform/menus::form.child.target.top') }}}</option>
+							[? if attribute_target == 'top_frame' ?]
+							<option value="top_frame" selected="selected">{{{ trans('platform/menus::form.attributes.target.top') }}}</option>
 							[? else ?]
-							<option value="top_frame">{{{ trans('platform/menus::form.child.target.top') }}}</option>
+							<option value="top_frame">{{{ trans('platform/menus::form.attributes.target.top') }}}</option>
 							[? endif ?]
 						</select>
 					</div>
 				</div>
 
-			</div>
+			</fieldset>
 
 		</div>
 
-		{{-- Visibility --}}
-		<div class="form-group">
-			<label class="control-label" for="[[ slug ]]_visibility">{{ trans('platform/menus::form.child.visibility.title') }}</label>
-			<div class="controls">
-				<select name="children[[[ slug ]]][visibility]" id="[[ slug ]]_visibility" class="form-control">
-					[? if visibility == 'always' ?]
-					<option value="always" selected="selected">{{ trans('platform/menus::form.child.visibility.always') }}</option>
-					[? else ?]
-					<option value="always">{{ trans('platform/menus::form.child.visibility.always') }}</option>
-					[? endif ?]
-
-					[? if visibility == 'logged_in' ?]
-					<option value="logged_in" selected="selected">{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
-					[? else ?]
-					<option value="logged_in">{{ trans('platform/menus::form.child.visibility.logged_in') }}</option>
-					[? endif ?]
-
-					[? if visibility == 'logged_out' ?]
-					<option value="logged_out" selected="selected">{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
-					[? else ?]
-					<option value="logged_out">{{ trans('platform/menus::form.child.visibility.logged_out') }}</option>
-					[? endif ?]
-
-					[? if visibility == 'admin' ?]
-					<option value="admin" selected="selected">{{ trans('platform/menus::form.child.visibility.admin') }}</option>
-					[? else ?]
-					<option value="admin">{{ trans('platform/menus::form.child.visibility.admin') }}</option>
-					[? endif ?]
-				</select>
-			</div>
-		</div>
-
-		{{-- CSS Class --}}
-		<div class="form-group">
-			<label class="control-label" for="[[ slug ]]_class">{{ trans('platform/menus::form.child.class') }}</label>
-			<input type="text" name="children[[[ slug ]]][class]" id="[[ slug ]]_class" class="form-control" value="[[ class ]]">
-		</div>
-
-		{{-- Enabled --}}
-		<div class="form-group">
-			<label class="control-label" for="[[ slug ]]_enabled">{{ trans('platform/menus::form.child.enabled') }}</label>
-			<div class="controls">
-				<select name="children[[[ slug ]]][enabled]" id="[[ slug ]]_enabled" class="form-control">
-					[? if enabled == '1' ?]
-					<option value="1" selected="selected">{{ trans('general.enabled') }}</option>
-					[? else ?]
-					<option value="1">{{ trans('general.enabled') }}</option>
-					[? endif ?]
-
-					[? if enabled == '0' ?]
-					<option value="0" selected="selected">{{ trans('general.disabled') }}</option>
-					[? else ?]
-					<option value="0">{{ trans('general.disabled') }}</option>
-					[? endif ?]
-				</select>
-			</div>
-		</div>
-
-		<button class="btn btn-sm btn-success" data-item-update data-item-form="[[ slug ]]">{{ trans('button.update') }}</button>
-
-		<button class="btn btn-sm btn-danger" data-item-remove data-item-form="[[ slug ]]">{{ trans('button.remove') }}</button>
-
-	</fieldset>
+	</div>
 
 </div>

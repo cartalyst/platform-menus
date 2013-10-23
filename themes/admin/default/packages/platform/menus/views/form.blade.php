@@ -15,6 +15,7 @@
 
 	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
 
+	{{-- Item Details --}}
 	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 
 		<fieldset>
@@ -39,23 +40,6 @@
 				<input type="text" name="{{ sprintf($childName, 'slug') }}" id="{{ $childId }}_slug" class="form-control" value="{{ ! empty($child) ? $child->slug : null }}">
 			</div>
 
-			{{-- Visibility --}}
-			<div class="form-group">
-				<label class="control-label" for="{{ $childId }}_visibility">{{{ trans('platform/menus::form.visibility.title') }}}</label>
-
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
-
-				<div class="controls">
-					<select name="{{ sprintf($childName, 'visibility') }}" id="{{ $childId }}_visibility" class="form-control">
-						<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibility.always') }}}</option>
-						<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibility.logged_in') }}}</option>
-						<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibility.logged_out') }}}</option>
-						<option value="admin"{{ ( ! empty($child) ? $child->visibility : null) == 'admin' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibility.admin') }}}</option>
-					</select>
-				</div>
-			</div>
-
-
 			{{-- Enabled --}}
 			<div class="form-group">
 				<label class="control-label" for="{{ $childId }}_enabled">{{{ trans('platform/menus::form.enabled') }}}</label>
@@ -71,79 +55,79 @@
 
 	</div>
 
+	{{-- Item URL --}}
 	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 
-			<fieldset>
+		<fieldset>
 
-				<legend>Item URL</legend>
+			<legend>Item URL</legend>
 
-				<div class="row">
+			<div class="row">
 
-					<div class="col-md-4">
+				<div class="col-md-4">
 
-						{{-- Item Type --}}
-						<div class="form-group">
-							<label class="control-label" for="{{ $childId }}_type">{{{ trans('platform/menus::form.type.title') }}}</label>
+					{{-- Item Type --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ $childId }}_type">{{{ trans('platform/menus::form.type.title') }}}</label>
 
-							<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
+						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
-							<div class="controls">
-								<select name="{{ sprintf($childName, 'type') }}" id="{{ $childId }}_type" class="form-control">
-									<option value="static"{{ ( ! empty($child) ? $child->type : null) == 'static' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.type.static') }}}</option>
-									<option value="page"{{ ( ! empty($child) ? $child->type : null) == 'page' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.type.page') }}}</option>
-								</select>
-							</div>
+						<div class="controls">
+							<select name="{{ sprintf($childName, 'type') }}" id="{{ $childId }}_type" class="form-control">
+								<option value="static"{{ ( ! empty($child) ? $child->type : null) == 'static' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.type.static') }}}</option>
+								<option value="page"{{ ( ! empty($child) ? $child->type : null) == 'page' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.type.page') }}}</option>
+							</select>
 						</div>
-
-					</div>
-
-					<div class="col-md-8">
-
-						{{-- Item Uri --}}
-						<div class="form-group">
-							<label class="control-label" for="{{ $childId }}_uri">{{{ trans('platform/menus::form.uri') }}}</label>
-
-							<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
-
-							<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ $childId }}_uri" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
-						</div>
-
 					</div>
 
 				</div>
 
-				<div class="row">
+				<div class="col-md-8">
 
-					<div class="col-md-6">
+					{{-- Item Uri --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ $childId }}_uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
-						{{-- Secure --}}
-						<div class="form-group">
-							<label class="control-label" for="{{ $childId }}_secure">{{{ trans('platform/menus::form.secure') }}}</label>
+						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-							<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.secure_help') }}}"></i>
-
-							<div class="controls">
-								<select name="{{ sprintf($childName, 'secure') }}" id="{{ $childId }}_secure" class="form-control">
-									<option value="1"{{ ( ! empty($child) ? $child->secure : null) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.yes') }}}</option>
-									<option value="0"{{ ( ! empty($child) ? $child->secure : null) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.no') }}}</option>
-								</select>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="col-md-6">
-
+						<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ $childId }}_uri" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
 					</div>
 
 				</div>
 
+			</div>
 
-			</fieldset>
+			<div class="row">
 
-		</div>
+				<div class="col-md-6">
 
-	<button type="button" class="btn btn-sm btn-inverse" data-toggle-options="{{{ $childId }}}">More options</button>
+					{{-- Secure --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ $childId }}_secure">{{{ trans('platform/menus::form.secure') }}}</label>
+
+						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.secure_help') }}}"></i>
+
+						<div class="controls">
+							<select name="{{ sprintf($childName, 'secure') }}" id="{{ $childId }}_secure" class="form-control">
+								<option value="1"{{ ( ! empty($child) ? $child->secure : null) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.yes') }}}</option>
+								<option value="0"{{ ( ! empty($child) ? $child->secure : null) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.no') }}}</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-md-6">
+
+				</div>
+
+			</div>
+
+		</fieldset>
+
+	</div>
+
+	<button type="button" class="btn btn-sm btn-info" data-toggle-options="{{{ $childId }}}">More options</button>
 
 	<span class="pull-right">
 	@if ( ! empty($child))
@@ -154,8 +138,36 @@
 	@endif
 	</span>
 
+	{{-- Options --}}
 	<div class="hide" style="padding-top: 20px;" data-options>
 
+		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+
+			<fieldset>
+
+				<legend>{{{ trans('platform/menus::form.visibility') }}}</legend>
+
+				{{-- Visibility --}}
+				<div class="form-group">
+					<label class="control-label" for="{{ $childId }}_visibility">{{{ trans('platform/menus::form.visibility') }}}</label>
+
+					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
+
+					<div class="controls">
+						<select name="{{ sprintf($childName, 'visibility') }}" id="{{ $childId }}_visibility" class="form-control">
+							<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.always') }}}</option>
+							<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_in') }}}</option>
+							<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_out') }}}</option>
+							<option value="admin"{{ ( ! empty($child) ? $child->visibility : null) == 'admin' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.admin') }}}</option>
+						</select>
+					</div>
+				</div>
+
+			</fieldset>
+
+		</div>
+
+		{{-- Attributes --}}
 		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 
 			<fieldset>
@@ -164,13 +176,13 @@
 
 				{{-- ID --}}
 				<div class="form-group">
-					<label class="control-label" for="{{ $childId }}_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
+					<label class="control-label" for="{{ $childId }}_attribute_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
 					<input type="text" name="{{ sprintf($childName, 'attribute_id') }}" id="{{ $childId }}_attribute_id" class="form-control" value="{{ ! empty($child) ? $child->attribute_id : null }}">
 				</div>
 
 				{{-- Name --}}
 				<div class="form-group">
-					<label class="control-label" for="{{ $childId }}_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
+					<label class="control-label" for="{{ $childId }}_attribute_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
 					<input type="text" name="{{ sprintf($childName, 'attribute_name') }}" id="{{ $childId }}_attribute_name" class="form-control" value="{{ ! empty($child) ? $child->attribute_name : null }}">
 				</div>
 

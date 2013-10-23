@@ -59,6 +59,10 @@ $(function() {
 
 		</div>
 
+	</div>
+
+	<div class="row">
+
 		{{-- Menu Items --}}
 		<div class="col-md-7">
 

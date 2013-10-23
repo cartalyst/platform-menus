@@ -36,6 +36,20 @@ return array(
 	'slug'      => 'Slug',
 	'slug_help' => '..',
 
+	'enabled'      => 'Status',
+	'enabled_help' => '..',
+
+
+	'visibility' => 'Visibility',
+	'visibility_help' => '',
+
+	'visibilities' => array(
+		'always'     => 'Show Always',
+		'logged_in'  => 'Logged In',
+		'logged_out' => 'Logged Out',
+		'admin'      => 'Admin Only',
+	),
+
 
 	'attributes' => array(
 
@@ -59,15 +73,6 @@ return array(
 	),
 
 
-	'visibility' => array(
-		'title' => 'Visibility',
-
-		'always'     => 'Show Always',
-		'logged_in'  => 'Logged In',
-		'logged_out' => 'Logged Out',
-		'admin'      => 'Admin Only',
-	),
-
 
 
 	'type' => array(
@@ -81,8 +86,6 @@ return array(
 
 		'secure' => 'HTTPS',
 
-
-		'enabled' => 'Status',
 
 
 

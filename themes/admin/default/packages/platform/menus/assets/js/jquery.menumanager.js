@@ -152,8 +152,11 @@
 
 		},
 
+		// Are we saving the whole menu?
+		isSaving : false,
+
 		// Do we have unsaved changes?
-		unsaved_changes : false
+		unsavedChanges : false
 
 	};
 
@@ -233,16 +236,12 @@
 			// we are about to leave the menu manager page.
 			$(window).bind('beforeunload', function() {
 
-				if (options.unsaved_changes)
+				if (options.unsavedChanges & ! options.isSaving)
 				{
 					return 'You have unsaved changes.';
 				}
 
 			});
-
-
-			// Remove that nasty focus border
-			$('input, textarea, select, button').focus(function() { this.blur(); });
 
 
 
@@ -414,13 +413,19 @@
 					var data = {
 						'name'       : $.trim($(formOpt.children.name.input).val()),
 						'slug'       : slug,
+						'enabled'    : $(formOpt.children.enabled.input).val(),
+
 						'type'       : $(formOpt.children.type.input).val(),
 						'uri'        : $.trim($(formOpt.children.uri.input).val()),
-						'visibility' : $(formOpt.children.visibility.input).val(),
 						'secure'     : $(formOpt.children.secure.input).val(),
-						'target'     : $(formOpt.children.target.input).val(),
-						'class'      : $.trim($(formOpt.children.klass.input).val()),
-						'enabled'    : $(formOpt.children.enabled.input).val()
+
+						'visibility' : $(formOpt.children.visibility.input).val(),
+
+						'attribute_id'         : '',
+						'attribute_name'       : '',
+						'attribute_class'      : $.trim($(formOpt.children.klass.input).val()),
+						'attribute_title'      : '',
+						'attribute_target'     : $(formOpt.children.target.input).val()
 					};
 
 					// Append the new menu item
@@ -437,7 +442,7 @@
 					$(formOpt.children.klass.input).val('');
 
 					// We have unsaved changes
-					options.unsaved_changes = true;
+					options.unsavedChanges = true;
 
 					// Show the root form
 					self.showRootForm();
@@ -450,7 +455,6 @@
 
 					// Hide the add new item form
 					$('[data-item-form="new-child"]').addClass('hide');
-
 				}
 
 			});
@@ -497,7 +501,7 @@
 					self.showRootForm();
 
 					// We have unsaved changes
-					options.unsaved_changes = true;
+					options.unsavedChanges = true;
 
 					// Get the item id
 					var id = $(this).closest('[data-item-form]').data('item-form');
@@ -560,7 +564,7 @@
 					self.showRootForm();
 
 					// We have unsaved changes
-					options.unsaved_changes = true;
+					options.unsavedChanges = true;
 
 				}
 
@@ -573,6 +577,9 @@
 			 * @return object
 			 */
 			$document.on('submit', self.$form, function() {
+
+				// We are submitting the form
+				options.isSaving = true;
 
 				// Append input to the form. It's values are JSON encoded..
 				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
