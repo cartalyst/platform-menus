@@ -182,8 +182,12 @@ class MenusController extends AdminController {
 				return $child['slug'];
 			}, $response['menus']);
 
+			// Get a list of all the available groups
+			$response = API::get('v1/users/groups');
+			$groups   = $response['groups'];
+
 			// Show the page
-			return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs', 'pageSegment'));
+			return View::make('platform/menus::manage', compact('menu', 'children', 'groups', 'persistedSlugs', 'pageSegment'));
 		}
 		catch (ApiHttpException $e)
 		{
@@ -204,7 +208,12 @@ class MenusController extends AdminController {
 	protected function processForm($slug = null)
 	{
 		// Get the tree
-		$tree = Input::get('tree', array());
+		$tree = Input::get('menu-tree', array());
+
+		var_dump($tree);
+
+
+		die;
 
 		// JSON string on non-AJAX form
 		if (is_string($tree))

@@ -99,19 +99,19 @@ $(function() {
 		<div class="col-md-5">
 
 			{{-- Root form --}}
-			<div class="well well-md" id="root-details">
+			<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;" data-root-form>
 
 				<fieldset>
 
 					<legend>Menu Details</legend>
 
 					<div class="form-group">
-						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.root.name') }}</label>
+						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
 						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
 					</div>
 
 					<div class="form-group">
-						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.root.slug') }}</label>
+						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
 						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
 					</div>
 

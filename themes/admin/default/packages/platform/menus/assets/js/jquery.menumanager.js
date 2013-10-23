@@ -21,9 +21,10 @@
 /**
  *
  * TODO LIST:
- * 	- Adding / Updating : Do the check to see if the slug already exists on the persistent slugs array!!
  * 	- Updating : Add validation to the inputs
  *  - Updating : Make sure it generates a new slug
+ *  - Adding / Updating : Show users groups when visibility is "logged in" or "admin only"
+ *  - Adding / Updating : Show pages list dropdown when the Item type is set to Page
  *
  */
 
@@ -57,8 +58,6 @@
 
 				name : '#menu-name',
 				slug : '#menu-slug',
-
-				submit : '#menu-save'
 
 			},
 
@@ -242,9 +241,31 @@
 			});
 
 
+			// Remove that nasty focus border
+			$('input, textarea, select, button').focus(function() {
+
+				this.blur();
+
+			});
 
 
 
+			$document.on('click', '[data-more-options-toggle]', function(e) {
+
+				e.preventDefault();
+
+				var element = $('[data-more-options]');
+
+				if (element.hasClass('hide'))
+				{
+					element.removeClass('hide');
+				}
+				else
+				{
+					element.addClass('hide');
+				}
+
+			})
 
 
 
@@ -305,17 +326,8 @@
 
 
 
-			// Validate children items
-			/*
-			$document.on('change', 'input[data-children]', function()
-			{
-				alert('y');
-			});
-			*/
-
-
 			/**
-			 * Show a menu item form box.
+			 * Shows a menu item form box.
 			 *
 			 * @return void
 			 */
@@ -337,7 +349,7 @@
 
 
 			/**
-			 * Hide a menu item form box.
+			 * Hides a menu item form box.
 			 *
 			 * @return void
 			 */
@@ -353,7 +365,7 @@
 
 
 			/**
-			 * Show the add new item form box.
+			 * Shows the add new item form box.
 			 *
 			 * @return void
 			 */
@@ -413,7 +425,7 @@
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
 
-					// Clean the new item inputs
+					// Clean the new form item inputs
 					$(formOpt.children.name.input).val('');
 					self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
 					$(formOpt.children.uri.input).val('');
@@ -466,10 +478,11 @@
 
 				else
 				{
-					// Remove the item from the array
+					// Remove the item from the array, because we
+					// might have changed the slug.
 					options.persistedSlugs.splice($.inArray(slug, options.persistedSlugs), 1);
 
-					// Add the item to the array
+					// Add the item slug to the array
 					options.persistedSlugs.push(slug);
 
 					// Update the current slug input value
@@ -502,7 +515,7 @@
 				e.preventDefault();
 
 				// Confirmation message
-				var message = "Are you sure you want to delete this menu item?";
+				var message = 'Are you sure you want to delete this menu item?';
 
 				// Confirm if the user wants to remove the item
 				if (confirm(message) == true)
@@ -510,23 +523,23 @@
 					// Get this item id
 					var itemId = $(this).data('item-form');
 
+					// Find the item
+					var item = $('[data-item-id="' + itemId + '"]');
+					var list = item.children(options.nestable.listNodeName);
+
+					// Check if we have children
+					if (list.length > 0)
+					{
+						// Grab the list's children items and put them after this item
+						var childItems = list.children(options.nestable.itemNodeName);
+						childItems.insertAfter(item);
+					}
+
 					// Remove the item from the array
 					options.persistedSlugs.splice($.inArray(itemId, options.persistedSlugs), 1);
 
-					// Find closest item
-					var $item = $('[data-item-id="' + itemId + '"]');
-					var $list = $item.children(options.nestable.listNodeName);
-
-					// Check if we have children
-					if ($list.length > 0)
-					{
-						// Grab the list's children items and put them after this item
-						var $childItems = $list.children(options.nestable.itemNodeName);
-						$childItems.insertAfter($item);
-					}
-
 					// Remove the item from the menu
-					$item.remove();
+					item.remove();
 
 					// Check if we have children
 					if ($(options.nestable.selector + ' > ol > li').length == 0)
@@ -554,15 +567,10 @@
 			 *
 			 * @return object
 			 */
-			$document.on('submit', self.$form, function(e) {
-
-				// for now...
-				e.preventDefault();
-
-				console.log(window.JSON.stringify($(options.nestable.selector).nestable('serialize')));
+			$document.on('submit', self.$form, function() {
 
 				// Append input to the form. It's values are JSON encoded..
-				//return this.$form.append('<input type="hidden" name="' + options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
+				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
 
 			});
 
@@ -686,7 +694,7 @@
 		 */
 		showRootForm : function() {
 
-			$('#root-details').removeClass('hide');
+			$('[data-root-form]').removeClass('hide');
 
 		},
 
@@ -697,7 +705,7 @@
 		 */
 		hideRootForm : function() {
 
-			$('#root-details').addClass('hide');
+			$('[data-root-form]').addClass('hide');
 
 		},
 

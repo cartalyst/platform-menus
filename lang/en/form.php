@@ -20,44 +20,32 @@
 
 return array(
 
-	'legend' => 'Menu Properties',
-
-	'root' => array(
-		'name' => 'Name',
-		'slug' => 'Slug',
+	'create' => array(
+		'legend'      => 'New Item',
+		'description' => 'Add a new navigation item.',
 	),
 
-	'child' => array(
-		'create' => array(
-			'legend' => 'New Item',
-		),
+	'edit' => array(
+		'legend'      => 'Edit Item',
+		'description' => 'Update an existing navigation item.',
+	),
 
-		'edit' => array(
-			'legend' => 'Item details',
-		),
+	'name'      => 'Name',
+	'name_help' => '..',
+
+	'slug'      => 'Slug',
+	'slug_help' => '..',
+
+
+	'attributes' => array(
+
+		'id' => 'Id',
 
 		'name' => 'Name',
-		'slug' => 'Slug',
 
-		'type' => array(
-			'title' => 'Type',
+		'class' => 'Class',
 
-			'static' => 'Static',
-			'page'   => 'Page',
-		),
-
-		'uri' => 'Uri',
-
-		'secure' => 'HTTPS',
-
-		'visibility' => array(
-			'title' => 'Visibility',
-
-			'always'     => 'Show Always',
-			'logged_in'  => 'Logged In',
-			'logged_out' => 'Logged Out',
-			'admin'      => 'Admin Only',
-		),
+		'title' => 'Title',
 
 		'target' => array(
 			'title' => 'Target',
@@ -68,10 +56,34 @@ return array(
 			'top'    => 'Top Frame (Main Document)',
 		),
 
-		'class' => 'CSS class',
+	),
+
+
+	'visibility' => array(
+		'title' => 'Visibility',
+
+		'always'     => 'Show Always',
+		'logged_in'  => 'Logged In',
+		'logged_out' => 'Logged Out',
+		'admin'      => 'Admin Only',
+	),
+
+
+
+	'type' => array(
+			'title' => 'Type',
+
+			'static' => 'Static',
+			'page'   => 'Page',
+		),
+
+		'uri' => 'Uri',
+
+		'secure' => 'HTTPS',
+
 
 		'enabled' => 'Status',
 
-	),
+
 
 );
