@@ -389,7 +389,7 @@ return array(
 			array(
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
-				'class' => 'fa fa-signout',
+				'class' => 'fa fa-sign-out',
 				'uri'   => '/logout',
 			),
 
@@ -408,7 +408,7 @@ return array(
 			array(
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
-				'class'      => 'fa fa-signin',
+				'class'      => 'fa fa-sign-in',
 				'uri'        => 'login',
 				'visibility' => 'logged_out',
 			),
