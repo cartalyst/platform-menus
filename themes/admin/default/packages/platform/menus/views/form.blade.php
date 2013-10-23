@@ -3,14 +3,14 @@
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 	$segment = ! empty($child) ? 'edit' : 'create';
 ?>
-<div class="well well-md hide" style="background: #fff" {{ empty($child) ? 'data-new-item-form' : 'data-item-form="' . $childId . '"' }}>
+<div class="well well-md hide" style="background: #fff" data-item-form="{{{ $childId }}}">
 
 	<input type="hidden" id="{{ $childId }}_current_slug" value="{{ ! empty($child) ? $child->slug : null }}">
 
 	<h4>
 		{{{ trans("platform/menus::form.{$segment}.legend") }}}
 
-		<span class="pull-right"><small class="item-close" data-item="{{ $childId }}" data-item-close>&times;</small></span>
+		<span class="pull-right"><small class="item-close" data-item-close="{{{ $childId }}}">&times;</small></span>
 	</h4>
 
 	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
@@ -143,20 +143,18 @@
 
 		</div>
 
-	<button type="button" class="btn btn-sm btn-inverse" data-more-options-toggle>More options</button>
+	<button type="button" class="btn btn-sm btn-inverse" data-toggle-options="{{{ $childId }}}">More options</button>
 
 	<span class="pull-right">
 	@if ( ! empty($child))
-	<button class="btn btn-sm btn-success" data-item-update data-item-form="{{{ $child->id }}}">{{{ trans('button.update') }}}</button>
-	<button class="btn btn-sm btn-danger" data-item-remove data-item-form="{{{ $child->id }}}">{{{ trans('button.remove') }}}</button>
+	<button class="btn btn-sm btn-success" data-item-update="{{{ $child->id }}}">{{{ trans('button.update') }}}</button>
+	<button class="btn btn-sm btn-danger" data-item-remove="{{{ $child->id }}}">{{{ trans('button.remove') }}}</button>
 	@else
 	<button class="btn btn-sm btn-success" data-item-create>{{{ trans('button.add') }}}</button>
 	@endif
 	</span>
 
-	<div class="hide" style="padding-top: 20px;" data-more-options>
-
-
+	<div class="hide" style="padding-top: 20px;" data-options>
 
 		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
 

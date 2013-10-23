@@ -242,20 +242,22 @@
 
 
 			// Remove that nasty focus border
-			$('input, textarea, select, button').focus(function() {
-
-				this.blur();
-
-			});
+			$('input, textarea, select, button').focus(function() { this.blur(); });
 
 
 
-			$document.on('click', '[data-more-options-toggle]', function(e) {
+			$document.on('click', '[data-toggle-options]', function(e) {
 
+				// Prevent the form from being submitted
 				e.preventDefault();
 
-				var element = $('[data-more-options]');
+				// Get the item id
+				var itemId = $(this).data('toggle-options');
 
+				//
+				var element = $('[data-item-form="' + itemId + '"]').find('[data-options]');
+
+				//
 				if (element.hasClass('hide'))
 				{
 					element.removeClass('hide');
@@ -337,13 +339,13 @@
 				self.hideRootForm();
 
 				// Close all the other item forms  boxes
-				$('[data-item-form], [data-new-item-form]').addClass('hide');
+				$('[data-item-form]').addClass('hide');
 
 				// Get the item id
-				var id = $(this).closest('[data-item-id]').data('item-id');
+				var itemId = $(this).data('item');
 
 				// Show the form item box
-				$('[data-item-form=' + id + ']').removeClass('hide');
+				$('[data-item-form=' + itemId + ']').removeClass('hide');
 
 			});
 
@@ -358,8 +360,11 @@
 				// Show the root form
 				self.showRootForm();
 
+				// Get the item id
+				var itemId = $(this).data('item-close');
+
 				// Close the item form box
-				$(this).closest('[data-item-form], [data-new-item-form]').addClass('hide');
+				$('[data-item-form="' + itemId + '"]').addClass('hide');
 
 			});
 
@@ -378,7 +383,7 @@
 				self.hideRootForm();
 
 				// Show the add item form
-				$('[data-new-item-form]').removeClass('hide');
+				$('[data-item-form="new-child"]').removeClass('hide');
 
 			});
 
@@ -444,7 +449,7 @@
 					$('[data-no-items]').addClass('hide');
 
 					// Hide the add new item form
-					$('[data-new-item-form]').addClass('hide');
+					$('[data-item-form="new-child"]').addClass('hide');
 
 				}
 
@@ -462,7 +467,7 @@
 				e.preventDefault();
 
 				// Get the form id
-				var formId = $(this).data('item-form');
+				var formId = $(this).data('item-update');
 
 				// Get the current slug
 				var currentSlug = $('#' + formId + '_current_slug').val();
@@ -521,10 +526,10 @@
 				if (confirm(message) == true)
 				{
 					// Get this item id
-					var itemId = $(this).data('item-form');
+					var itemId = $(this).data('item-remove');
 
 					// Find the item
-					var item = $('[data-item-id="' + itemId + '"]');
+					var item = $('[data-item="' + itemId + '"]').closest('li');
 					var list = item.children(options.nestable.listNodeName);
 
 					// Check if we have children
