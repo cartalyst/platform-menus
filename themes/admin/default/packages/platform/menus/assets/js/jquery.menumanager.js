@@ -191,7 +191,7 @@
 			this.TempoJsForms = Tempo.prepare(this.opt.tempo.formsSelector, this.opt.tempo);
 
 			// Activate Nestable
-			$(this.opt.nestable.selector).nestable(this.opt.nestable);
+			$(this.opt.nestable.selector).nestable(this.opt.nestable).on('change', this.nestableChangeCallback);
 
 			// Initialize the event listeners
 			this.events();
@@ -213,16 +213,28 @@
 		},
 
 
+
+		nestableChangeCallback : function(e) {
+
+			// once an item moves, we need to update it's parent id and
+			// repopulate all the dropdowns again, just to make sure
+			// they are all with the correct information.
+
+			console.log(e);
+
+		},
+
+
 		spacers : function(level) {
 
-			var localSpacers = '';
+			var spacers = '';
 
 			for(var j=0; j < level * 3; j++)
 			{
-				localSpacers += '&nbsp;';
+				spacers += '&nbsp;';
 			}
 
-			return localSpacers;
+			return spacers;
 
 		},
 
@@ -241,9 +253,11 @@
 
 				dropdown += '<option value="' + id + '">' + text + '</option>';
 
-				if ($(this).children('ol').length > 0)
+				var children = $(this).children('ol');
+
+				if (children.length > 0)
 				{
-					dropdown += self.convertToDropdown($(this).children('ol'), level + 1);
+					dropdown += self.convertToDropdown(children, level + 1);
 				}
 			});
 
@@ -285,36 +299,7 @@
 
 
 			// Pre-render the parents dropdown
-			$('[data-parents]').html('<option>-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' ol'), 0));
-
-
-
-			$document.on('click', '[data-toggle-options]', function(e) {
-
-				// Prevent the form from being submitted
-				e.preventDefault();
-
-				// Get the item id
-				var itemId = $(this).data('toggle-options');
-
-				//
-				var element = $('[data-item-form="' + itemId + '"]').find('[data-options]');
-
-				//
-				if (element.hasClass('hide'))
-				{
-					element.removeClass('hide');
-				}
-				else
-				{
-					element.addClass('hide');
-				}
-
-			})
-
-
-
-
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' > ol'), 0));
 
 			// Clean the input values when there are changes
 			$document.on('change', 'input[type="text"]', function() {
@@ -346,7 +331,6 @@
 
 			});
 
-
 			// When the value of the root name input changes
 			$document.on('keyup', formOpt.root.name, function() {
 
@@ -371,6 +355,7 @@
 
 
 
+
 			/**
 			 * Shows a menu item form box.
 			 *
@@ -387,8 +372,46 @@
 				// Get the item id
 				var itemId = $(this).data('item');
 
+				// Get the item form box
+				var itemBox = $('[data-item-form=' + itemId + ']');
+
+				// Get the parent id
+				var parentId = itemBox.data('item-parent');
+
 				// Show the form item box
-				$('[data-item-form=' + itemId + ']').removeClass('hide');
+				itemBox.removeClass('hide');
+
+				// Change the selected item on the dropdown
+				itemBox.find('[data-parents]').val(parentId);
+
+			});
+
+
+			/**
+			 * Toggle the options on an item box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-toggle-options]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Get the item id
+				var itemId = $(this).data('toggle-options');
+
+				// Get the element options
+				var element = $('[data-item-form="' + itemId + '"]').find('[data-options]');
+
+				// Should we hide or show the options element?
+				if (element.hasClass('hide'))
+				{
+					element.removeClass('hide');
+				}
+				else
+				{
+					element.addClass('hide');
+				}
 
 			});
 

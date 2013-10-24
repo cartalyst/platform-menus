@@ -2,8 +2,9 @@
 	$childId   = ! empty($child) ? $child->id : 'new-child';
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 	$segment = ! empty($child) ? 'edit' : 'create';
+	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 ?>
-<div class="well well-md hide" style="background: #fff" data-item-form="{{{ $childId }}}">
+<div class="well well-md hide" style="background: #fff" data-item-form="{{{ $childId }}}" data-item-parent="{{{ $parentId }}}">
 
 	<input type="hidden" id="{{ $childId }}_current_slug" value="{{ ! empty($child) ? $child->slug : null }}">
 
