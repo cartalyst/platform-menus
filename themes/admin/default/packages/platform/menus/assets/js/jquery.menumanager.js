@@ -25,6 +25,7 @@
  *  - Updating : Make sure it generates a new slug
  *  - Adding / Updating : Show users groups when visibility is "logged in" or "admin only"
  *  - Adding / Updating : Show pages list dropdown when the Item type is set to Page
+ *  - Updating : Make sure the parent is selected correctly on the dropdown
  *
  */
 
@@ -211,6 +212,45 @@
 
 		},
 
+
+		spacers : function(level) {
+
+			var localSpacers = '';
+
+			for(var j=0; j < level * 3; j++)
+			{
+				localSpacers += '&nbsp;';
+			}
+
+			return localSpacers;
+
+		},
+
+		convertToDropdown : function(UL, level) {
+
+			// Avoid scope issues
+			var self = this;
+
+			var dropdown = '';
+
+			UL.children('li').each(function () {
+
+				var id = $(this).data('id');
+
+				var text = self.spacers(level) + $(this).find('[data-item="' + id + '"]').text();
+
+				dropdown += '<option value="' + id + '">' + text + '</option>';
+
+				if ($(this).children('ol').length > 0)
+				{
+					dropdown += self.convertToDropdown($(this).children('ol'), level + 1);
+				}
+			});
+
+			return dropdown;
+
+		},
+
 		/**
 		 * Initializes all the event listeners.
 		 *
@@ -242,6 +282,10 @@
 				}
 
 			});
+
+
+			// Pre-render the parents dropdown
+			$('[data-parents]').html('<option>-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' ol'), 0));
 
 
 

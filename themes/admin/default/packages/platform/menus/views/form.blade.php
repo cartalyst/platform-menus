@@ -26,7 +26,7 @@
 			<div class="form-group">
 				<label class="control-label" for="{{ $childId }}_name">{{{ trans('platform/menus::form.name') }}}</label>
 
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
 
 				<input type="text" name="{{ sprintf($childName, 'name') }}" id="{{ $childId }}_name" class="form-control" value="{{ ! empty($child) ? $child->name : null }}">
 			</div>
@@ -35,7 +35,7 @@
 			<div class="form-group">
 				<label class="control-label" for="{{ $childId }}_slug">{{{ trans('platform/menus::form.slug') }}}</label>
 
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
 
 				<input type="text" name="{{ sprintf($childName, 'slug') }}" id="{{ $childId }}_slug" class="form-control" value="{{ ! empty($child) ? $child->slug : null }}">
 			</div>
@@ -43,11 +43,25 @@
 			{{-- Enabled --}}
 			<div class="form-group">
 				<label class="control-label" for="{{ $childId }}_enabled">{{{ trans('platform/menus::form.enabled') }}}</label>
+
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.enabled_help') }}}"></i>
+
 				<div class="controls">
 					<select name="{{ sprintf($childName, 'enabled') }}" id="{{ $childId }}_enabled" class="form-control">
 						<option value="1"{{ ( ! empty($child) ? $child->enabled : 1) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.enabled') }}}</option>
 						<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.disabled') }}}</option>
 					</select>
+				</div>
+			</div>
+
+			{{-- Parent --}}
+			<div class="form-group">
+				<label class="control-label" for="{{ $childId }}_enabled">Parent</label>
+
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.parent_help') }}}"></i>
+
+				<div class="controls">
+					<select data-parents class="form-control"></select>
 				</div>
 			</div>
 
@@ -70,7 +84,7 @@
 					<div class="form-group">
 						<label class="control-label" for="{{ $childId }}_type">{{{ trans('platform/menus::form.type.title') }}}</label>
 
-						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
 							<select name="{{ sprintf($childName, 'type') }}" id="{{ $childId }}_type" class="form-control">
@@ -88,7 +102,7 @@
 					<div class="form-group">
 						<label class="control-label" for="{{ $childId }}_uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
-						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
 						<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ $childId }}_uri" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
 					</div>
@@ -99,13 +113,13 @@
 
 			<div class="row">
 
-				<div class="col-md-6">
+				<div class="col-md-4">
 
 					{{-- Secure --}}
 					<div class="form-group">
 						<label class="control-label" for="{{ $childId }}_secure">{{{ trans('platform/menus::form.secure') }}}</label>
 
-						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.secure_help') }}}"></i>
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.secure_help') }}}"></i>
 
 						<div class="controls">
 							<select name="{{ sprintf($childName, 'secure') }}" id="{{ $childId }}_secure" class="form-control">
@@ -114,10 +128,6 @@
 							</select>
 						</div>
 					</div>
-
-				</div>
-
-				<div class="col-md-6">
 
 				</div>
 
@@ -151,7 +161,7 @@
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_visibility">{{{ trans('platform/menus::form.visibility') }}}</label>
 
-					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
 						<select name="{{ sprintf($childName, 'visibility') }}" id="{{ $childId }}_visibility" class="form-control">
@@ -177,30 +187,45 @@
 				{{-- ID --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_attribute_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.id_help') }}}"></i>
+
 					<input type="text" name="{{ sprintf($childName, 'attribute_id') }}" id="{{ $childId }}_attribute_id" class="form-control" value="{{ ! empty($child) ? $child->attribute_id : null }}">
 				</div>
 
 				{{-- Name --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_attribute_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.name_help') }}}"></i>
+
 					<input type="text" name="{{ sprintf($childName, 'attribute_name') }}" id="{{ $childId }}_attribute_name" class="form-control" value="{{ ! empty($child) ? $child->attribute_name : null }}">
 				</div>
 
 				{{-- Class --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_attribute_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.class_help') }}}"></i>
+
 					<input type="text" name="{{ sprintf($childName, 'attribute_class') }}" id="{{ $childId }}_attribute_class" class="form-control" value="{{ ! empty($child) ? $child->attribute_class : null }}">
 				</div>
 
 				{{-- Title --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_attribute_title">{{{ trans('platform/menus::form.attributes.title') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.title_help') }}}"></i>
+
 					<input type="text" name="{{ sprintf($childName, 'attribute_title') }}" id="{{ $childId }}_attribute_title" class="form-control" value="{{ ! empty($child) ? $child->attribute_title : null }}">
 				</div>
 
 				{{-- Target --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ $childId }}_attribute_target">{{{ trans('platform/menus::form.attributes.target.title') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.target_help') }}}"></i>
+
 					<div class="controls">
 						<select name="{{ sprintf($childName, 'attribute_target') }}" id="{{ $childId }}_attribute_target" class="form-control">
 							<option value="self"{{ ( ! empty($child) ? $child->target : null) == 'self' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.attributes.target.self') }}}</option>

@@ -151,9 +151,9 @@
 	<button type="button" class="btn btn-sm btn-info" data-toggle-options="[[ slug ]]">More options</button>
 
 	<span class="pull-right">
-		<button class="btn btn-sm btn-success" data-item-update"[[ slug ]]">{{{ trans('button.update') }}}</button>
+		<button class="btn btn-sm btn-success" data-item-update="[[ slug ]]">{{{ trans('button.update') }}}</button>
 
-		<button class="btn btn-sm btn-danger" data-item-remove"[[ slug ]]">{{{ trans('button.remove') }}}</button>
+		<button class="btn btn-sm btn-danger" data-item-remove="[[ slug ]]">{{{ trans('button.remove') }}}</button>
 	</span>
 
 	{{-- Options --}}
