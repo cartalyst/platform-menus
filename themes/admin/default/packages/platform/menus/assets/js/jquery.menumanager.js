@@ -265,6 +265,19 @@
 
 		},
 
+		renderParentsDropdowns : function() {
+
+			// Avoid scope issues
+			var self = this;
+
+			// Get the options
+			var options = self.opt;
+
+			//
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' > ol'), 0));
+
+		},
+
 		/**
 		 * Initializes all the event listeners.
 		 *
@@ -299,7 +312,7 @@
 
 
 			// Pre-render the parents dropdown
-			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' > ol'), 0));
+			self.renderParentsDropdowns();
 
 			// Clean the input values when there are changes
 			$document.on('change', 'input[type="text"]', function() {
@@ -522,6 +535,9 @@
 
 					// Hide the add new item form
 					$('[data-item-form="new-child"]').addClass('hide');
+
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
 				}
 
 			});
@@ -633,6 +649,8 @@
 					// We have unsaved changes
 					options.unsavedChanges = true;
 
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
 				}
 
 			});

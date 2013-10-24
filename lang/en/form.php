@@ -39,9 +39,25 @@ return array(
 	'enabled'      => 'Status',
 	'enabled_help' => '..',
 
+	'parent'      => 'Parent',
+	'parent_help' => '..',
 
-	'visibility' => 'Visibility',
-	'visibility_help' => '',
+	'type'      => 'Type',
+	'type_help' => '..',
+
+	'types' => array(
+		'static' => 'Static',
+		'page'   => 'Page',
+	),
+
+	'uri'      => 'Uri',
+	'uri_help' => '..',
+
+	'secure'      => 'HTTPS',
+	'secure_help' => '..',
+
+	'visibility'      => 'Visibility',
+	'visibility_help' => '..',
 
 	'visibilities' => array(
 		'always'     => 'Show Always',
@@ -50,20 +66,24 @@ return array(
 		'admin'      => 'Admin Only',
 	),
 
-
 	'attributes' => array(
 
-		'id' => 'Id',
+		'id'      => 'Id',
+		'id_help' => 'Id that will be assigned to the <li> element surrounding your menu item.',
 
-		'name' => 'Name',
+		'class'      => 'Class',
+		'class_help' => 'Class that will be assigned to the <li> element surrounding your menu item.',
 
-		'class' => 'Class',
+		'name'      => 'Name',
+		'name_help' => 'This name will be assigned to the <a> element surrounding your menu item.',
 
 		'title' => 'Title',
+		'title_help' => 'This title will be assined to the <a> element surrounding your menu item.',
 
-		'target' => array(
-			'title' => 'Target',
+		'target'      => 'Target',
+		'target_help' => '.',
 
+		'targets' => array(
 			'self'   => 'Same Window',
 			'blank'  => 'New Window',
 			'parent' => 'Parent Frame',
@@ -71,22 +91,5 @@ return array(
 		),
 
 	),
-
-
-
-
-	'type' => array(
-			'title' => 'Type',
-
-			'static' => 'Static',
-			'page'   => 'Page',
-		),
-
-		'uri' => 'Uri',
-
-		'secure' => 'HTTPS',
-
-
-
 
 );
