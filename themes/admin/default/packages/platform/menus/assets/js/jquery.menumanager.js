@@ -247,7 +247,7 @@
 
 			UL.children('li').each(function () {
 
-				var id = $(this).data('id');
+				var id = $(this).data('item-id');
 
 				var text = self.spacers(level) + $(this).find('[data-item="' + id + '"]').text();
 
@@ -267,14 +267,7 @@
 
 		renderParentsDropdowns : function() {
 
-			// Avoid scope issues
-			var self = this;
-
-			// Get the options
-			var options = self.opt;
-
-			//
-			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + self.convertToDropdown($(options.nestable.selector + ' > ol'), 0));
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
 
 		},
 
@@ -489,6 +482,9 @@
 				// Check if the form is valid
 				else if (self.validateInputs(formOpt.children) )
 				{
+					// Get the parent id
+					var parentId = $('#new-child_parent').val();
+
 					// Prepare the new item data
 					var data = {
 						'name'       : $.trim($(formOpt.children.name.input).val()),
@@ -520,6 +516,9 @@
 					self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
 					$(formOpt.children.uri.input).val('');
 					$(formOpt.children.klass.input).val('');
+
+					// Move the item to the correct destination
+					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
 
 					// We have unsaved changes
 					options.unsavedChanges = true;

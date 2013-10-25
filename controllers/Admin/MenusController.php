@@ -26,6 +26,7 @@ use Input;
 use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
 use Redirect;
+use Sentry;
 use View;
 
 class MenusController extends AdminController {
@@ -183,8 +184,9 @@ class MenusController extends AdminController {
 			}, $response['menus']);
 
 			// Get a list of all the available groups
-			$response = API::get('v1/users/groups');
-			$groups   = $response['groups'];
+			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
+
+			View::share('groups', $groups);
 
 			// Show the page
 			return View::make('platform/menus::manage', compact('menu', 'children', 'groups', 'persistedSlugs', 'pageSegment'));

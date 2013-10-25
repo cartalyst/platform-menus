@@ -66,6 +66,9 @@ return array(
 		'admin'      => 'Admin Only',
 	),
 
+	'groups'      => 'Groups',
+	'groups_help' => '..',
+
 	'attributes' => array(
 
 		'id'      => 'Id',
@@ -77,11 +80,11 @@ return array(
 		'name'      => 'Name',
 		'name_help' => 'This name will be assigned to the <a> element surrounding your menu item.',
 
-		'title' => 'Title',
-		'title_help' => 'This title will be assined to the <a> element surrounding your menu item.',
+		'title'      => 'Title',
+		'title_help' => 'This title will be assigned to the <a> element surrounding your menu item.',
 
 		'target'      => 'Target',
-		'target_help' => '.',
+		'target_help' => 'The target attribute specifies where to open the menu item.',
 
 		'targets' => array(
 			'self'   => 'Same Window',
