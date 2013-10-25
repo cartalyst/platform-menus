@@ -4,7 +4,7 @@
 	$segment = ! empty($child) ? 'edit' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 ?>
-<div class="well well-md hide" style="background: #fff" data-item-form="{{{ ! empty($child) ? $child->id : null }}}" data-item-parent="{{{ $parentId }}}">
+<div class="well well-md hide" style="background: #fff" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
 	<input type="hidden" id="{{ sprintf($childId, 'current_slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 

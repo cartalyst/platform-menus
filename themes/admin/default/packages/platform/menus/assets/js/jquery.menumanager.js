@@ -77,6 +77,15 @@
 					rules :	['required']
 				},
 
+				enabled : {
+					input : '#new-child_enabled'
+				},
+
+				parent : {
+					input : '#new-child_parent'
+				},
+
+
 				////////////////////////////////////////////////////////
 				// this needs to be changed to something more dynamic,
 				// since we can have as many types..
@@ -87,30 +96,44 @@
 				uri : {
 					input : '#new-child_uri'
 				},
+
+				secure : {
+					input : '#new-child_secure'
+				},
 				////////////////////////////////////////////////////////
+
 
 				visibility : {
 					input : '#new-child_visibility'
 				},
 
-				secure : {
-					input : '#new-child_secure'
+				groups : {
+					input : '#new-child_groups'
 				},
 
-				target : {
-					input : '#new-child_target'
-				},
+				attributes : {
+					id : {
+						input : '#new-child_attribute_id',
+					},
 
-				klass : {
-					input : '#new-child_class'
-				},
+					klass : {
+						input : '#new-child_attribute_class'
+					},
 
-				enabled : {
-					input : '#new-child_enabled'
-				},
+					name : {
+						input : '#new-child_attribute_name'
+					},
 
-			},
+					title : {
+						input : '#new-child_attribute_title'
+					},
 
+					target : {
+						input : '#new-child_attribute_target'
+					}
+				}
+
+			}
 
 		},
 
@@ -225,6 +248,12 @@
 		},
 
 
+		/**
+		 *
+		 *
+		 * @param  float  level
+		 * @return float
+		 */
 		spacers : function(level) {
 
 			var spacers = '';
@@ -238,14 +267,20 @@
 
 		},
 
-		convertToDropdown : function(UL, level) {
+		/**
+		 * Converts an OL into a HTML Dropdown menu.
+		 *
+		 * @param  object  OL
+		 * @param  float   level
+		 * @return string
+		 */
+		convertToDropdown : function(OL, level) {
 
-			// Avoid scope issues
 			var self = this;
 
 			var dropdown = '';
 
-			UL.children('li').each(function () {
+			OL.children('li').each(function () {
 
 				var id = $(this).data('item-id');
 
@@ -265,6 +300,11 @@
 
 		},
 
+		/**
+		 *
+		 *
+		 * @return void
+		 */
 		renderParentsDropdowns : function() {
 
 			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
@@ -303,8 +343,7 @@
 
 			});
 
-
-			// Pre-render the parents dropdown
+			// Pre-render the parents dropdowns
 			self.renderParentsDropdowns();
 
 			// Clean the input values when there are changes
@@ -483,25 +522,28 @@
 				else if (self.validateInputs(formOpt.children) )
 				{
 					// Get the parent id
-					var parentId = $('#new-child_parent').val();
+					var parentId = $(formOpt.children.parent.input).val();
 
 					// Prepare the new item data
 					var data = {
-						'name'       : $.trim($(formOpt.children.name.input).val()),
-						'slug'       : slug,
-						'enabled'    : $(formOpt.children.enabled.input).val(),
+						'parent_id' : parentId,
 
-						'type'       : $(formOpt.children.type.input).val(),
-						'uri'        : $.trim($(formOpt.children.uri.input).val()),
-						'secure'     : $(formOpt.children.secure.input).val(),
+						'name'    : $.trim($(formOpt.children.name.input).val()),
+						'slug'    : slug,
+						'enabled' : $(formOpt.children.enabled.input).val(),
+
+						'type'   : $(formOpt.children.type.input).val(),
+						'uri'    : $.trim($(formOpt.children.uri.input).val()),
+						'secure' : $(formOpt.children.secure.input).val(),
 
 						'visibility' : $(formOpt.children.visibility.input).val(),
+						'groups'     : $(formOpt.children.groups.input).val(),
 
-						'attribute_id'         : '',
-						'attribute_name'       : '',
-						'attribute_class'      : $.trim($(formOpt.children.klass.input).val()),
-						'attribute_title'      : '',
-						'attribute_target'     : $(formOpt.children.target.input).val()
+						'attribute_id'         : $.trim($(formOpt.children.attributes.id.input).val()),
+						'attribute_class'      : $.trim($(formOpt.children.attributes.klass.input).val()),
+						'attribute_name'       : $.trim($(formOpt.children.attributes.name.input).val()),
+						'attribute_title'      : $.trim($(formOpt.children.attributes.title.input).val()),
+						'attribute_target'     : $(formOpt.children.attributes.target.input).val()
 					};
 
 					// Append the new menu item
@@ -515,7 +557,10 @@
 					$(formOpt.children.name.input).val('');
 					self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
 					$(formOpt.children.uri.input).val('');
-					$(formOpt.children.klass.input).val('');
+					$(formOpt.children.attributes.id.input).val('');
+					$(formOpt.children.attributes.klass.input).val('');
+					$(formOpt.children.attributes.name.input).val('');
+					$(formOpt.children.attributes.title.input).val('');
 
 					// Move the item to the correct destination
 					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
@@ -556,10 +601,10 @@
 				var formId = $(this).data('item-update');
 
 				// Get the current slug
-				var currentSlug = $('#' + formId + '_current_slug').val();
+				var currentSlug = $('#current_slug_' + formId).val();
 
 				// Get the new slug
-				var slug = $('#' + formId + '_slug').val().slugify();
+				var slug = $('#slug_' + formId).val().slugify();
 
 				// Check if this an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
@@ -577,7 +622,7 @@
 					options.persistedSlugs.push(slug);
 
 					// Update the current slug input value
-					$('#' + formId + '_current_slug').val(slug);
+					$('#current_slug_' + formId).val(slug);
 
 					// Show the root form
 					self.showRootForm();

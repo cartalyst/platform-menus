@@ -1,5 +1,4 @@
-<!-- for now the data-item-parent is 0 because i need to figure out the best way to handle this when adding the item -->
-<div data-template class="well well-md hide" style="background: #fff" data-item-form="[[ slug ]]" data-item-parent="0">
+<div data-template class="well well-md hide" style="background: #fff" data-item-form="[[ slug ]]" data-item-parent="[[ parent_id ]]">
 
 	<input type="hidden" name="children[[[ slug ]]][id]" value="[[ slug ]]">
 
@@ -130,7 +129,7 @@
 
 					{{-- Secure --}}
 					<div class="form-group">
-						<label class="control-label" for="secure_[[ slug ]]">{{{ trans('platform/menus::form.child.secure') }}}</label>
+						<label class="control-label" for="secure_[[ slug ]]">{{{ trans('platform/menus::form.secure') }}}</label>
 						<div class="controls">
 							<select name="children[[[ slug ]]][secure]" id="secure_[[ slug ]]" class="form-control">
 								[? if secure == '1' ?]
