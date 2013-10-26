@@ -1,12 +1,12 @@
 <?php
-	$childId   = ! empty($child) ? "%s_{$child->id}" : 'new-child_%s';
-	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
+	$childId   = ! empty($child) ? "{$child->id}__%s" : 'new-child__%s';
+	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child__%s';
 	$segment = ! empty($child) ? 'edit' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 ?>
 <div class="well well-md hide" style="background: #fff" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
-	<input type="hidden" id="{{ sprintf($childId, 'current_slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
+	<input type="hidden" id="{{ sprintf($childId, 'current-slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 
 	<h4>
 		{{{ trans("platform/menus::form.{$segment}.legend") }}}

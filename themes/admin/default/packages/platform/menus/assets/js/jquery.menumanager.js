@@ -66,21 +66,21 @@
 				//error_class : 'error',
 
 				name : {
-					input: '#new-child_name',
+					input: '#new-child__name',
 					rules :	['required']
 				},
 
 				slug : {
-					input : '#new-child_slug',
+					input : '#new-child__slug',
 					rules :	['required']
 				},
 
 				enabled : {
-					input : '#new-child_enabled'
+					input : '#new-child__enabled'
 				},
 
 				parent : {
-					input : '#new-child_parent'
+					input : '#new-child__parent'
 				},
 
 
@@ -88,46 +88,46 @@
 				// this needs to be changed to something more dynamic,
 				// since we can have as many types..
 				type : {
-					input : '#new-child_type'
+					input : '#new-child__type'
 				},
 
 				uri : {
-					input : '#new-child_uri'
+					input : '#new-child__uri'
 				},
 
 				secure : {
-					input : '#new-child_secure'
+					input : '#new-child__secure'
 				},
 				////////////////////////////////////////////////////////
 
 
 				visibility : {
-					input : '#new-child_visibility'
+					input : '#new-child__visibility'
 				},
 
 				groups : {
-					input : '#new-child_groups'
+					input : '#new-child__groups'
 				},
 
 				attributes : {
 					id : {
-						input : '#new-child_attribute_id',
+						input : '#new-child__attribute_id',
 					},
 
 					klass : {
-						input : '#new-child_attribute_class'
+						input : '#new-child__attribute_class'
 					},
 
 					name : {
-						input : '#new-child_attribute_name'
+						input : '#new-child__attribute_name'
 					},
 
 					title : {
-						input : '#new-child_attribute_title'
+						input : '#new-child__attribute_title'
 					},
 
 					target : {
-						input : '#new-child_attribute_target'
+						input : '#new-child__attribute_target'
 					}
 				}
 
@@ -551,15 +551,20 @@
 						'type'   : $(formOpt.children.type.input).val(),
 						'uri'    : $.trim($(formOpt.children.uri.input).val()),
 						'secure' : $(formOpt.children.secure.input).val(),
+						// need to add the dynamic type: the input name needs to be something like
+						//
+						//    "`type`_uri"
+						//    (`type` will be the type value from the dropdown, this way it is more dynamic)
+						//
 
 						'visibility' : $(formOpt.children.visibility.input).val(),
 						'groups'     : $(formOpt.children.groups.input).val(),
 
-						'attribute_id'         : $.trim($(formOpt.children.attributes.id.input).val()),
-						'attribute_class'      : $.trim($(formOpt.children.attributes.klass.input).val()),
-						'attribute_name'       : $.trim($(formOpt.children.attributes.name.input).val()),
-						'attribute_title'      : $.trim($(formOpt.children.attributes.title.input).val()),
-						'attribute_target'     : $(formOpt.children.attributes.target.input).val()
+						'attribute_id'     : $.trim($(formOpt.children.attributes.id.input).val()),
+						'attribute_class'  : $.trim($(formOpt.children.attributes.klass.input).val()),
+						'attribute_name'   : $.trim($(formOpt.children.attributes.name.input).val()),
+						'attribute_title'  : $.trim($(formOpt.children.attributes.title.input).val()),
+						'attribute_target' : $(formOpt.children.attributes.target.input).val()
 					};
 
 					// Append the new menu item
@@ -620,16 +625,16 @@
 				var formBox = $('[data-item-form="' + formId + '"]');
 
 				// Get the current slug
-				var currentSlug = $('#current_slug_' + formId).val();
+				var currentSlug = $('#' + formId + '__current-slug').val();
 
 				// The current parent that this item belongs to
 				var currentParentId = formBox.data('item-parent');
 
 				// Id of the parent of this item
-				var parentId = $('#parent_' + formId).val();
+				var parentId = $('#' + formId + '__parent').val();
 
 				// Get the new slug
-				var slug = $('#slug_' + formId).val().slugify();
+				var slug = $('#' + formId + '__slug').val().slugify();
 
 				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
@@ -647,7 +652,7 @@
 					options.persistedSlugs.push(slug);
 
 					// Update the current slug input value
-					$('#current_slug_' + formId).val(slug);
+					$('#' + formId + '__current-slug').val(slug);
 
 					// Show the root form
 					self.showRootForm();

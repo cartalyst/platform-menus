@@ -1,6 +1,6 @@
 <div data-template class="well well-md hide" style="background: #fff" data-item-form="[[ slug ]]" data-item-parent="[[ parent_id ]]">
 
-	<input type="hidden" id="[[ slug ]]_current_slug" value="[[ slug ]]">
+	<input type="hidden" id="[[ slug ]]__current-slug" value="[[ slug ]]">
 
 	<h4>
 		{{{ trans('platform/menus::form.edit.legend') }}}
@@ -19,27 +19,27 @@
 
 			{{-- Name --}}
 			<div class="form-group">
-				<label class="control-label" for="name_[[ slug ]]">{{{ trans('platform/menus::form.name') }}}</label>
+				<label class="control-label" for="[[ slug ]]__name">{{{ trans('platform/menus::form.name') }}}</label>
 
 				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
 
-				<input type="text" name="children[[[ slug ]]][name]" id="name_[[ slug ]]" class="form-control" value="[[ name ]]">
+				<input type="text" name="children[[[ slug ]]][name]" id="[[ slug ]]__name" class="form-control" value="[[ name ]]">
 			</div>
 
 			{{-- Slug --}}
 			<div class="form-group">
-				<label class="control-label" for="slug_[[ slug ]]">{{{ trans('platform/menus::form.slug') }}}</label>
+				<label class="control-label" for="[[ slug ]]__slug">{{{ trans('platform/menus::form.slug') }}}</label>
 
 				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
 
-				<input type="text" name="children[[[ slug ]]][slug]" id="slug_[[ slug ]]" class="form-control" value="[[ slug ]]">
+				<input type="text" name="children[[[ slug ]]][slug]" id="[[ slug ]]__slug" class="form-control" value="[[ slug ]]">
 			</div>
 
 			{{-- Enabled --}}
 			<div class="form-group">
-				<label class="control-label" for="enabled_[[ slug ]]">{{ trans('platform/menus::form.enabled') }}</label>
+				<label class="control-label" for="[[ slug ]]__enabled">{{ trans('platform/menus::form.enabled') }}</label>
 				<div class="controls">
-					<select name="children[[[ slug ]]][enabled]" id="enabled_[[ slug ]]" class="form-control">
+					<select name="children[[[ slug ]]][enabled]" id="[[ slug ]]__enabled" class="form-control">
 						[? if enabled == '1' ?]
 						<option value="1" selected="selected">{{ trans('general.enabled') }}</option>
 						[? else ?]
@@ -57,12 +57,12 @@
 
 			{{-- Parent --}}
 			<div class="form-group">
-				<label class="control-label" for="parent_[[ slug ]]">{{{ trans('platform/menus::form.parent') }}}</label>
+				<label class="control-label" for="[[ slug ]]__parent">{{{ trans('platform/menus::form.parent') }}}</label>
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.parent_help') }}}"></i>
 
 				<div class="controls">
-					<select data-parents id="parent_[[ slug ]]" class="form-control"></select>
+					<select data-parents id="[[ slug ]]__parent" class="form-control"></select>
 				</div>
 			</div>
 
@@ -83,12 +83,12 @@
 
 					{{-- Item Type --}}
 					<div class="form-group">
-						<label class="control-label" for="type_[[ slug ]]">{{{ trans('platform/menus::form.type') }}}</label>
+						<label class="control-label" for="[[ slug ]]__type">{{{ trans('platform/menus::form.type') }}}</label>
 
 						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
-							<select name="children[[[ slug ]]][type]" id="type_[[ slug ]]" class="form-control">
+							<select name="children[[[ slug ]]][type]" id="[[ slug ]]__type" class="form-control">
 								[? if type == 'static' ?]
 								<option value="static"  selected="selected">{{{ trans('platform/menus::form.types.static') }}}</option>
 								[? else ?]
@@ -110,9 +110,9 @@
 
 					{{-- Secure --}}
 					<div class="form-group">
-						<label class="control-label" for="secure_[[ slug ]]">{{{ trans('platform/menus::form.secure') }}}</label>
+						<label class="control-label" for="[[ slug ]]__secure">{{{ trans('platform/menus::form.secure') }}}</label>
 						<div class="controls">
-							<select name="children[[[ slug ]]][secure]" id="secure_[[ slug ]]" class="form-control">
+							<select name="children[[[ slug ]]][secure]" id="[[ slug ]]__secure" class="form-control">
 								[? if secure == '1' ?]
 								<option value="1" selected="selected">{{{ trans('general.yes') }}}</option>
 								[? else ?]
@@ -134,11 +134,11 @@
 
 			{{-- Item Uri --}}
 			<div class="form-group">
-				<label class="control-label" for="uri_[[ slug ]]">{{{ trans('platform/menus::form.uri') }}}</label>
+				<label class="control-label" for="[[ slug ]]__uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
 				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-				<input type="text" name="children[[[ slug ]]][uri]" id="uri_[[ slug ]]" class="form-control" value="[[ uri ]]">
+				<input type="text" name="children[[[ slug ]]][uri]" id="[[ slug ]]__uri" class="form-control" value="[[ uri ]]">
 			</div>
 
 		</fieldset>
@@ -164,12 +164,12 @@
 
 				{{-- Visibility --}}
 				<div class="form-group">
-					<label class="control-label" for="visibility_[[ slug ]]">{{ trans('platform/menus::form.visibility') }}</label>
+					<label class="control-label" for="[[ slug ]]__visibility">{{ trans('platform/menus::form.visibility') }}</label>
 
 					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-visibility="[[ slug ]]" name="children[[[ slug ]]][visibility]" id="visibility_[[ slug ]]" class="form-control">
+						<select data-item-visibility="[[ slug ]]" name="children[[[ slug ]]][visibility]" id="[[ slug ]]__visibility" class="form-control">
 							[? if visibility == 'always' ?]
 							<option value="always" selected="selected">{{ trans('platform/menus::form.visibilities.always') }}</option>
 							[? else ?]
@@ -202,12 +202,12 @@
 					@todo - Once the item is added i need to check if i show the groups div or not..
 				-->
 				<div class="form-group hide" data-item-groups="[[ slug ]]">
-					<label class="control-label" for="groups_[[ slug ]]">{{{ trans('platform/menus::form.groups') }}}</label>
+					<label class="control-label" for="[[ slug ]]__groups">{{{ trans('platform/menus::form.groups') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
 
 					<div class="controls">
-						<select name="children[[[ slug ]]][groups]" id="groups_[[ slug ]]" class="form-control" multiple="true">
+						<select name="children[[[ slug ]]][groups]" id="[[ slug ]]__groups" class="form-control" multiple="true">
 							@foreach ($groups as $id => $name)
 							<option value="{{{ $id }}}">{{{ $name }}}</option>
 							@endforeach
@@ -228,48 +228,48 @@
 
 				{{-- ID --}}
 				<div class="form-group">
-					<label class="control-label" for="attribute_id_[[ slug ]]">{{{ trans('platform/menus::form.attributes.id') }}}</label>
+					<label class="control-label" for="[[ slug ]]__attribute_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.id_help') }}}"></i>
 
-					<input type="text" name="children[[[ slug ]]][attribute_id]" id="attribute_id_[[ slug ]]" class="form-control" value="[[ attribute_id ]]">
+					<input type="text" name="children[[[ slug ]]][attribute_id]" id="[[ slug ]]__attribute_id" class="form-control" value="[[ attribute_id ]]">
 				</div>
 
 				{{-- Class --}}
 				<div class="form-group">
-					<label class="control-label" for="attribute_class_[[ slug ]]">{{{ trans('platform/menus::form.attributes.class') }}}</label>
+					<label class="control-label" for="[[ slug ]]__attribute_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.class_help') }}}"></i>
 
-					<input type="text" name="children[[[ slug ]]][attribute_class]" id="attribute_class_[[ slug ]]" class="form-control" value="[[ attribute_class ]]">
+					<input type="text" name="children[[[ slug ]]][attribute_class]" id="[[ slug ]]__attribute_class" class="form-control" value="[[ attribute_class ]]">
 				</div>
 
 				{{-- Name --}}
 				<div class="form-group">
-					<label class="control-label" for="attribute_name_[[ slug ]]">{{{ trans('platform/menus::form.attributes.name') }}}</label>
+					<label class="control-label" for="[[ slug ]]__attribute_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.name_help') }}}"></i>
 
-					<input type="text" name="children[[[ slug ]]][attribute_name]" id="attribute_name_[[ slug ]]" class="form-control" value="[[ attribute_name ]]">
+					<input type="text" name="children[[[ slug ]]][attribute_name]" id="[[ slug ]]__attribute_name" class="form-control" value="[[ attribute_name ]]">
 				</div>
 
 				{{-- Title --}}
 				<div class="form-group">
-					<label class="control-label" for="attribute_title_[[ slug ]]">{{{ trans('platform/menus::form.attributes.title') }}}</label>
+					<label class="control-label" for="[[ slug ]]__attribute_title">{{{ trans('platform/menus::form.attributes.title') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.title_help') }}}"></i>
 
-					<input type="text" name="children[[[ slug ]]][attribute_title]" id="attribute_title_[[ slug ]]" class="form-control" value="[[ attribute_title ]]">
+					<input type="text" name="children[[[ slug ]]][attribute_title]" id="[[ slug ]]__attribute_title" class="form-control" value="[[ attribute_title ]]">
 				</div>
 
 				{{-- Target --}}
 				<div class="form-group">
-					<label class="control-label" for="attribute_target_[[ slug ]]">{{{ trans('platform/menus::form.attributes.target') }}}</label>
+					<label class="control-label" for="[[ slug ]]__attribute_target">{{{ trans('platform/menus::form.attributes.target') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.target_help') }}}"></i>
 
 					<div class="controls">
-						<select name="children[[[ slug ]]][attribute_target]" id="attribute_target_[[ slug ]]" class="form-control">
+						<select name="children[[[ slug ]]][attribute_target]" id="[[ slug ]]__attribute_target" class="form-control">
 							[? if attribute_target == 'self' ?]
 							<option value="self" selected="selected">{{{ trans('platform/menus::form.attributes.targets.self') }}}</option>
 							[? else ?]
