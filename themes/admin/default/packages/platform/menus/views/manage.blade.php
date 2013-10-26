@@ -8,12 +8,10 @@
 
 {{-- Queue assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css') }}
-{{ Asset::queue('tab', 'js/bootstrap/tab.js', 'jquery') }}
-{{ Asset::queue('modal', 'js/bootstrap/modal.js', 'jquery') }}
 {{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
-{{ Asset::queue('slugify', 'js/platform/slugify.js', 'jquery') }}
-{{ Asset::queue('nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
-{{ Asset::queue('menumanager', 'platform/menus::js/jquery.menumanager.js', 'nestable') }}
+{{ Asset::queue('jquery.slugify', 'js/platform/slugify.js', 'jquery') }}
+{{ Asset::queue('jquery.nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
+{{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', array('jquery.slugify', 'jquery.nestable')) }}
 
 {{-- Inline assets --}}
 @section('assets')
@@ -50,7 +48,7 @@ $(function() {
 			<div class="page-header">
 
 				<div class="pull-right">
-					<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{ trans('platform/menus::button.save') }}</button>
+					<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('platform/menus::button.save') }}}</button>
 				</div>
 
 				<h1>{{{ trans("platform/menus::general.{$pageSegment}.title") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
@@ -68,7 +66,7 @@ $(function() {
 
 			<ol class="items">
 				<li class="item item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
-					<div data-item class="item-name">{{ trans('platform/menus::button.add_item') }}</div>
+					<div data-item class="item-name">{{{ trans('platform/menus::button.add_item') }}}</div>
 				</li>
 			</ol>
 
@@ -91,7 +89,7 @@ $(function() {
 
 					<p>&nbsp;</p>
 
-					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{ trans('platform/menus::button.add_item') }}</button></p>
+					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
 
 				</div>
 

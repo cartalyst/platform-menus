@@ -212,11 +212,6 @@ class MenusController extends AdminController {
 		// Get the tree
 		$tree = Input::get('menu-tree', array());
 
-		var_dump($tree);
-
-
-		die;
-
 		// JSON string on non-AJAX form
 		if (is_string($tree))
 		{
@@ -236,6 +231,8 @@ class MenusController extends AdminController {
 
 			$this->processChildRecursively($child, $children);
 		}
+
+		var_dump($children);die;
 
 		// Prepare the menu data for the API
 		$menu = array(
@@ -297,20 +294,29 @@ class MenusController extends AdminController {
 		// is advantageous to us, since a menu slug can be changed
 		// without anything being messed up. For new items, we'll
 		// use the slug that has been passed to us.
-		$index = isset($child['id']) ? $child['id'] : $child['slug'];
+		$index = $child['itemId'];
 
 		$new_child = array(
-			'id'         => isset($child['id']) ? Input::get("children.{$index}.id") : null,
+			'id'         => is_numeric($index) ? $index : null,
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
+			'enabled'    => Input::get("children.{$index}.enabled", 1),
+
 			'type'       => Input::get("children.{$index}.type", 'static'),
 			'uri'        => Input::get("children.{$index}.uri"),
-			'page_id'    => Input::get("children.{$index}.page_id"),
-			'visibility' => Input::get("children.{$index}.visibility", 'always'),
+			'page_id'    => Input::get("children.{$index}.page_id"), # maybe change this to type_id ..
 			'secure'     => Input::get("children.{$index}.secure", 0),
-			'target'     => Input::get("children.{$index}.target", 0),
-			'class'      => Input::get("children.{$index}.class"),
-			'enabled'    => Input::get("children.{$index}.enabled", 1),
+
+
+			'visibility' => Input::get("children.{$index}.visibility", 'always'),
+
+			# need to add the groups
+
+			'attribute_id'     => Input::get("children.{$index}.attribute.id"),
+			'attribute_class'  => Input::get("children.{$index}.attribute.class"),
+			'attribute_name'   => Input::get("children.{$index}.attribute.name"),
+			'attribute_title'  => Input::get("children.{$index}.attribute.title"),
+			'attribute_target' => Input::get("children.{$index}.attribute.target"),
 		);
 
 		// If we have children, call the function again

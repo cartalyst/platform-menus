@@ -79,7 +79,7 @@
 
 			<div class="row">
 
-				<div class="col-md-4">
+				<div class="col-md-6">
 
 					{{-- Item Type --}}
 					<div class="form-group">
@@ -97,24 +97,7 @@
 
 				</div>
 
-				<div class="col-md-8">
-
-					{{-- Item Uri --}}
-					<div class="form-group">
-						<label class="control-label" for="{{ sprintf($childId, 'uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
-
-						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
-
-						<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
-					</div>
-
-				</div>
-
-			</div>
-
-			<div class="row">
-
-				<div class="col-md-4">
+				<div class="col-md-6">
 
 					{{-- Secure --}}
 					<div class="form-group">
@@ -134,11 +117,20 @@
 
 			</div>
 
+ 			{{-- Item Uri --}}
+			<div class="form-group">
+				<label class="control-label" for="{{ sprintf($childId, 'uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
+
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
+
+				<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
+			</div>
+
 		</fieldset>
 
 	</div>
 
-	<button type="button" class="btn btn-sm btn-info" data-toggle-options="{{{ ! empty($child) ? $child->id : null }}}">More options</button>
+	<button type="button" class="btn btn-sm btn-info" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}">More options</button>
 
 	<span class="pull-right">
 	@if ( ! empty($child))
@@ -165,7 +157,7 @@
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
-						<select name="{{ sprintf($childName, 'visibility') }}" id="{{ sprintf($childId, 'visibility') }}" class="form-control">
+						<select data-item-visibility="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'visibility') }}" id="{{ sprintf($childId, 'visibility') }}" class="form-control">
 							<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.always') }}}</option>
 							<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_in') }}}</option>
 							<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_out') }}}</option>
@@ -175,7 +167,7 @@
 				</div>
 
 				{{-- Groups --}}
-				<div class="form-group">
+				<div class="form-group{{ ! in_array( ! empty($child) ? $child->visibility : null, array('logged_in', 'admin')) ? ' hide' : null }}" data-item-groups="{{{ ! empty($child) ? $child->id : 'new-child' }}}">
 					<label class="control-label" for="{{ sprintf($childId, 'groups') }}">{{{ trans('platform/menus::form.groups') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>

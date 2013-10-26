@@ -31,33 +31,33 @@ return array(
 	),
 
 	'name'      => 'Name',
-	'name_help' => '..',
+	'name_help' => 'Type your menu item name.',
 
 	'slug'      => 'Slug',
-	'slug_help' => '..',
+	'slug_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
 
 	'enabled'      => 'Status',
-	'enabled_help' => '..',
+	'enabled_help' => 'What is this menu item status?',
 
 	'parent'      => 'Parent',
-	'parent_help' => '..',
+	'parent_help' => 'Chose the parent that this item belongs to or leave the default option selected for it to be a "root" menu item of this menu.',
 
 	'type'      => 'Type',
-	'type_help' => '..',
+	'type_help' => 'Select the item url type.',
 
 	'types' => array(
 		'static' => 'Static',
-		'page'   => 'Page',
+		'page'   => 'Page', # this will be removed later
 	),
 
 	'uri'      => 'Uri',
-	'uri_help' => '..',
+	'uri_help' => 'Type in your menu item uri.',
 
 	'secure'      => 'HTTPS',
-	'secure_help' => '..',
+	'secure_help' => 'Should',
 
 	'visibility'      => 'Visibility',
-	'visibility_help' => '..',
+	'visibility_help' => 'When this menu item should be seen?',
 
 	'visibilities' => array(
 		'always'     => 'Show Always',
@@ -67,7 +67,7 @@ return array(
 	),
 
 	'groups'      => 'Groups',
-	'groups_help' => '..',
+	'groups_help' => 'What user groups should be able to see this menu item?',
 
 	'attributes' => array(
 

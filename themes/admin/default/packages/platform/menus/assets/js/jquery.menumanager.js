@@ -23,9 +23,7 @@
  * TODO LIST:
  * 	- Updating : Add validation to the inputs
  *  - Updating : Make sure it generates a new slug
- *  - Adding / Updating : Show users groups when visibility is "logged in" or "admin only"
  *  - Adding / Updating : Show pages list dropdown when the Item type is set to Page
- *  - Updating : Make sure the parent is selected correctly on the dropdown
  *
  */
 
@@ -461,6 +459,24 @@
 			});
 
 
+			$document.on('change', '[data-item-visibility]', function(e) {
+
+				var item = $(this).data('item-visibility');
+
+				var selectedOption = $(this).val();
+
+				if ($.inArray(selectedOption, ['logged_in', 'admin']) > -1)
+				{
+					$('[data-item-groups="' + item + '"]').removeClass('hide');
+				}
+				else
+				{
+					$('[data-item-groups="' + item + '"]').addClass('hide');
+				}
+
+			});
+
+
 			/**
 			 * Hides a menu item form box.
 			 *
@@ -512,14 +528,14 @@
 				// Generate the children slug
 				var slug = $(formOpt.children.slug.input).val().slugify();
 
-				// Check if this an unique slug
+				// Check if this is an unique slug
 				if ( ! self.isUniqueSlug(slug))
 				{
 					alert('Unique slug, fix it...');
 				}
 
 				// Check if the form is valid
-				else if (self.validateInputs(formOpt.children) )
+				else if (self.validateInputs(formOpt.children))
 				{
 					// Get the parent id
 					var parentId = $(formOpt.children.parent.input).val();
@@ -600,13 +616,22 @@
 				// Get the form id
 				var formId = $(this).data('item-update');
 
+				// Get the item form box
+				var formBox = $('[data-item-form="' + formId + '"]');
+
 				// Get the current slug
 				var currentSlug = $('#current_slug_' + formId).val();
+
+				// The current parent that this item belongs to
+				var currentParentId = formBox.data('item-parent');
+
+				// Id of the parent of this item
+				var parentId = $('#parent_' + formId).val();
 
 				// Get the new slug
 				var slug = $('#slug_' + formId).val().slugify();
 
-				// Check if this an unique slug
+				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
 				{
 					alert('Unique slug, fix it...');
@@ -630,11 +655,20 @@
 					// We have unsaved changes
 					options.unsavedChanges = true;
 
-					// Get the item id
-					var id = $(this).closest('[data-item-form]').data('item-form');
-
 					// Hide the form item box
-					$('[data-item-form=' + id + ']').addClass('hide');
+					formBox.addClass('hide');
+
+					// Have we changed the parent of the item?
+					if (currentParentId != parentId)
+					{
+						alert('Move item..');
+
+						// Update this item form box parent id
+						formBox.data('item-parent', parentId);
+					}
+
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
 				}
 
 			});

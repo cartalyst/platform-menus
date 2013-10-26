@@ -58,23 +58,32 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Type of the child
 			$table->string('type')->default('static');
 
-			// Target for clicked item,
-			// 'self', 'parent', 'blank' etc
-			$table->string('target')->default('self');
-
-			// User visibility flag
-			$table->string('visibility')->nullable();
-
-			// Class for each menu item
-			$table->string('class')->nullable();
-
-			// Enabled
-			$table->boolean('enabled')->default(0);
-
 			$table->boolean('secure')->default(0);
 
 			// Specific to "static" menu children
 			$table->string('uri')->nullable();
+
+
+
+			// User visibility flag
+			$table->string('visibility')->nullable();
+
+			// Enabled
+			$table->boolean('enabled')->default(0);
+
+
+
+
+			$table->string('attribute_id')->nullable();
+			$table->string('attribute_class')->nullable();
+			$table->string('attribute_name')->nullable();
+			$table->string('attribute_title')->nullable();
+			$table->string('attribute_target')->default('self');
+
+
+
+
+
 
 			// Specific to "cms" menu children
 			// @todo this logic needs to move
@@ -82,6 +91,9 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// a bunch of events, so that menus need
 			// not know about the cms extensions
 			$table->boolean('page_id')->nullable();
+
+
+
 
 			// Timestamps of course
 			$table->timestamps();

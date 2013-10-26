@@ -1,7 +1,5 @@
 <div data-template class="well well-md hide" style="background: #fff" data-item-form="[[ slug ]]" data-item-parent="[[ parent_id ]]">
 
-	<input type="hidden" name="children[[[ slug ]]][id]" value="[[ slug ]]">
-
 	<input type="hidden" id="[[ slug ]]_current_slug" value="[[ slug ]]">
 
 	<h4>
@@ -81,7 +79,7 @@
 
 			<div class="row">
 
-				<div class="col-md-4">
+				<div class="col-md-6">
 
 					{{-- Item Type --}}
 					<div class="form-group">
@@ -108,23 +106,6 @@
 
 				</div>
 
-				<div class="col-md-8">
-
-					{{-- Item Uri --}}
-					<div class="form-group">
-						<label class="control-label" for="uri_[[ slug ]]">{{{ trans('platform/menus::form.uri') }}}</label>
-
-						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
-
-						<input type="text" name="children[[[ slug ]]][uri]" id="uri_[[ slug ]]" class="form-control" value="[[ uri ]]">
-					</div>
-
-				</div>
-
-			</div>
-
-			<div class="row">
-
 				<div class="col-md-6">
 
 					{{-- Secure --}}
@@ -149,10 +130,15 @@
 
 				</div>
 
-				<div class="col-md-6">
+			</div>
 
-				</div>
+			{{-- Item Uri --}}
+			<div class="form-group">
+				<label class="control-label" for="uri_[[ slug ]]">{{{ trans('platform/menus::form.uri') }}}</label>
 
+				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
+
+				<input type="text" name="children[[[ slug ]]][uri]" id="uri_[[ slug ]]" class="form-control" value="[[ uri ]]">
 			</div>
 
 		</fieldset>
@@ -183,7 +169,7 @@
 					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
-						<select name="children[[[ slug ]]][visibility]" id="visibility_[[ slug ]]" class="form-control">
+						<select data-item-visibility="[[ slug ]]" name="children[[[ slug ]]][visibility]" id="visibility_[[ slug ]]" class="form-control">
 							[? if visibility == 'always' ?]
 							<option value="always" selected="selected">{{ trans('platform/menus::form.visibilities.always') }}</option>
 							[? else ?]
@@ -212,7 +198,10 @@
 				</div>
 
 				{{-- Groups --}}
-				<div class="form-group">
+				<!--
+					@todo - Once the item is added i need to check if i show the groups div or not..
+				-->
+				<div class="form-group hide" data-item-groups="[[ slug ]]">
 					<label class="control-label" for="groups_[[ slug ]]">{{{ trans('platform/menus::form.groups') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>

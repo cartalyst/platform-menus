@@ -14,8 +14,7 @@
 @section('scripts')
 @parent
 <script>
-$(function()
-{
+$(function() {
 
 	$.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
 		loader: '.loading',

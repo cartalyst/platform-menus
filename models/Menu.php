@@ -58,7 +58,7 @@ class Menu extends EloquentNode {
 	);
 
 	/**
-	 * Get mutator for the enabled attribute.
+	 * Get mutator for the "enabled" attribute.
 	 *
 	 * @param  mixed  $enabled
 	 * @return bool
@@ -69,7 +69,7 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Get mutator for the secure attribute.
+	 * Get mutator for the "secure" attribute.
 	 *
 	 * @param  mixed  $secure
 	 * @return bool
