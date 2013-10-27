@@ -22,7 +22,6 @@
  *
  * TODO LIST:
  * 	- Updating : Add validation to the inputs
- *  - Updating : Make sure it generates a new slug
  *  - Adding / Updating : Show pages list dropdown when the Item type is set to Page
  *
  */
@@ -347,16 +346,35 @@
 			// Clean the input values when there are changes
 			$document.on('change', 'input[type="text"]', function() {
 
+				// Clean the input first
 				$(this).val($.trim($(this).val()));
+
+				// Only trigger if we updated the item slug
+				if ($(this).attr('id').indexOf('_slug') > -1)
+				{
+					self.slugify($(this).val(), this);
+				}
 
 			});
 
 			// When menu children data get's updated
 			$document.on('keyup', 'input[type="text"]', function() {
 
-				var formId = $(this).data('item-form');
+				// Get the form box id
+				var itemId = $(this).data('item-form');
 
-				///// stuff will be here ...
+				// Only trigger if we updated the item name
+				if ($(this).attr('id').indexOf('_name') > -1)
+				{
+					// Get the root slug
+					var rootSlug = self.getRootSlug();
+
+					// Get the item name value
+					var name = $(this).val();
+
+					// Make sure we have a proper slug
+					self.slugify(rootSlug + ' ' + name, '#' + itemId + '_slug');
+				}
 
 			});
 
@@ -632,7 +650,7 @@
 				{
 					// Remove the item from the array, because we
 					// might have changed the slug.
-					options.persistedSlugs.splice($.inArray(slug, options.persistedSlugs), 1);
+					options.persistedSlugs.splice($.inArray(currentSlug, options.persistedSlugs), 1);
 
 					// Add the item slug to the array
 					options.persistedSlugs.push(slug);
