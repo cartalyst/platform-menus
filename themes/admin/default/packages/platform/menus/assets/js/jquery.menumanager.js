@@ -394,6 +394,20 @@
 			});
 
 
+			/**
+			 * When an item url type changes.
+			 *
+			 * @return void
+			 */
+			$document.on('change', '[data-item-url-type]', function() {
+
+				var selectedOption = $(this).val();
+
+				$('[data-item-type]').addClass('hide');
+
+				$('[data-item-type="' + selectedOption + '"').removeClass('hide');
+
+			});
 
 
 			/**

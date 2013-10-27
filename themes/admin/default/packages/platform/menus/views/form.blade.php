@@ -88,7 +88,7 @@
 						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
-							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control">
+							<select data-item-url-type="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control">
 								<option value="static"{{ ( ! empty($child) ? $child->type : null) == 'static' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.static') }}}</option>
 								<option value="page"{{ ( ! empty($child) ? $child->type : null) == 'page' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.page') }}}</option>
 							</select>
@@ -118,7 +118,7 @@
 			</div>
 
 			{{-- Static Uri --}}
-			<div class="form-group">
+			<div class="form-group" data-item-type="static">
 				<label class="control-label" for="{{ sprintf($childId, 'static_uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>

@@ -88,7 +88,7 @@
 						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
-							<select data-item-form="[[ slug ]]" name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="form-control">
+							<select data-item-url-type="[[ slug ]]" data-item-form="[[ slug ]]" name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="form-control">
 								[? if type == 'static' ?]
 								<option value="static"  selected="selected">{{{ trans('platform/menus::form.types.static') }}}</option>
 								[? else ?]
@@ -133,7 +133,7 @@
 			</div>
 
 			{{-- Static Uri --}}
-			<div class="form-group">
+			<div class="form-group" data-item-type="static">
 				<label class="control-label" for="[[ slug ]]_static_uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
 				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
