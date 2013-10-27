@@ -117,13 +117,13 @@
 
 			</div>
 
- 			{{-- Item Uri --}}
+			{{-- Static Uri --}}
 			<div class="form-group">
-				<label class="control-label" for="{{ sprintf($childId, 'uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
+				<label class="control-label" for="{{ sprintf($childId, 'static_uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
+				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'static_uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
 			</div>
 
 		</fieldset>

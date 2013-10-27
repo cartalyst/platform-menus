@@ -132,13 +132,13 @@
 
 			</div>
 
-			{{-- Item Uri --}}
+			{{-- Static Uri --}}
 			<div class="form-group">
-				<label class="control-label" for="[[ slug ]]_uri">{{{ trans('platform/menus::form.uri') }}}</label>
+				<label class="control-label" for="[[ slug ]]_static_uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
 				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-				<input data-item-form="[[ slug ]]" type="text" name="children[[[ slug ]]][uri]" id="[[ slug ]]_uri" class="form-control" value="[[ uri ]]">
+				<input data-item-form="[[ slug ]]" type="text" name="children[[[ slug ]]][static_uri]" id="[[ slug ]]_static_uri" class="form-control" value="[[ uri ]]">
 			</div>
 
 		</fieldset>

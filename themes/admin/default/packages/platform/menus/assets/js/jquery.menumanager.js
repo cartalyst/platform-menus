@@ -59,74 +59,67 @@
 
 			},
 
-			// New children elements
+			// Children elements
 			children : {
 
-				//error_class : 'error',
-
 				name : {
-					input: '#new-child_name',
+					input: '#child_name',
 					rules :	['required']
 				},
 
 				slug : {
-					input : '#new-child_slug',
+					input : '#child_slug',
 					rules :	['required']
 				},
 
 				enabled : {
-					input : '#new-child_enabled'
+					input : '#child_enabled'
 				},
 
 				parent : {
-					input : '#new-child_parent'
+					input : '#child_parent'
 				},
 
-
-				////////////////////////////////////////////////////////
-				// this needs to be changed to something more dynamic,
-				// since we can have as many types..
 				type : {
-					input : '#new-child_type'
-				},
-
-				uri : {
-					input : '#new-child_uri'
+					input : '#child_type'
 				},
 
 				secure : {
-					input : '#new-child_secure'
+					input : '#child_secure'
 				},
-				////////////////////////////////////////////////////////
 
+				static_uri : {
+					input : '#child_static_uri',
+					rules : ['required_if:type=static'] // to implement
+				},
 
 				visibility : {
-					input : '#new-child_visibility'
+					input : '#child_visibility'
 				},
 
 				groups : {
-					input : '#new-child_groups'
+					input : '#child_groups'
 				},
 
 				attributes : {
 					id : {
-						input : '#new-child_attribute_id',
+						input : '#child_attribute_id',
 					},
 
 					klass : {
-						input : '#new-child_attribute_class'
+						input : '#child_attribute_class'
 					},
 
 					name : {
-						input : '#new-child_attribute_name'
+						input : '#child_attribute_name'
 					},
 
 					title : {
-						input : '#new-child_attribute_title'
+						input : '#child_attribute_title'
 					},
 
 					target : {
-						input : '#new-child_attribute_target'
+						input : '#child_attribute_target'
 					}
 				}
 
@@ -327,7 +320,7 @@
 			var formOpt = options.form
 
 			// Generate the initial children slug
-			self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
+			self.slugify($(formOpt.root.slug).val(), self.prepareInput('new-child', formOpt.children.slug.input));
 
 			// Set a bind to check if we have unsaved changes when
 			// we are about to leave the menu manager page.
@@ -529,8 +522,24 @@
 				// Prevent the form from being submitted
 				e.preventDefault();
 
+				// Prepare the inputs
+				var parentId        = self.prepareInput('new-child', formOpt.children.parent.input).val();
+				var nameInput       = self.prepareInput('new-child', formOpt.children.name.input);
+				var slugInput       = self.prepareInput('new-child', formOpt.children.slug.input);
+				var enabledInput    = self.prepareInput('new-child', formOpt.children.enabled.input);
+				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
+				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
+				var uriInput        = self.prepareInput('new-child', formOpt.children.static_uri.input);
+				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
+				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
+				var attrIdInput     = self.prepareInput('new-child', formOpt.children.attributes.id.input);
+				var attrClassInput  = self.prepareInput('new-child', formOpt.children.attributes.klass.input);
+				var attrNameInput   = self.prepareInput('new-child', formOpt.children.attributes.name.input);
+				var attrTitleInput  = self.prepareInput('new-child', formOpt.children.attributes.title.input);
+				var attrTargetInput = self.prepareInput('new-child', formOpt.children.attributes.target.input);
+
 				// Generate the children slug
-				var slug = $(formOpt.children.slug.input).val().slugify();
+				var slug = slugInput.val().slugify();
 
 				// Check if this is an unique slug
 				if ( ! self.isUniqueSlug(slug))
@@ -539,36 +548,31 @@
 				}
 
 				// Check if the form is valid
-				else if (self.validateInputs(formOpt.children))
+				else if (self.validateInputs('new-child', formOpt.children))
 				{
-					// Get the parent id
-					var parentId = $(formOpt.children.parent.input).val();
-
 					// Prepare the new item data
 					var data = {
 						'parent_id' : parentId,
+						'name'      : nameInput.val(),
+						'slug'      : slug,
+						'enabled'   : enabledInput.val(),
 
-						'name'    : $.trim($(formOpt.children.name.input).val()),
-						'slug'    : slug,
-						'enabled' : $(formOpt.children.enabled.input).val(),
-
-						'type'   : $(formOpt.children.type.input).val(),
-						'uri'    : $.trim($(formOpt.children.uri.input).val()),
-						'secure' : $(formOpt.children.secure.input).val(),
+						'type'   : typeInput.val(),
+						'secure' : secureInput.val(),
+						'uri'    : uriInput.val(),
 						// need to add the dynamic type: the input name needs to be something like
 						//
 						//    "`type`_uri"
 						//    (`type` will be the type value from the dropdown, this way it is more dynamic)
 						//
 
-						'visibility' : $(formOpt.children.visibility.input).val(),
-						'groups'     : $(formOpt.children.groups.input).val(),
-
-						'attribute_id'     : $.trim($(formOpt.children.attributes.id.input).val()),
-						'attribute_class'  : $.trim($(formOpt.children.attributes.klass.input).val()),
-						'attribute_name'   : $.trim($(formOpt.children.attributes.name.input).val()),
-						'attribute_title'  : $.trim($(formOpt.children.attributes.title.input).val()),
-						'attribute_target' : $(formOpt.children.attributes.target.input).val()
+						'visibility'       : visibilityInput.val(),
+						'groups'           : groupsInput.val(),
+						'attribute_id'     : attrIdInput.val(),
+						'attribute_class'  : attrClassInput.val(),
+						'attribute_name'   : attrNameInput.val(),
+						'attribute_title'  : attrTitleInput.val(),
+						'attribute_target' : attrTargetInput.val()
 					};
 
 					// Append the new menu item
@@ -579,13 +583,13 @@
 					options.persistedSlugs.push(slug);
 
 					// Clean the new form item inputs
-					$(formOpt.children.name.input).val('');
-					self.slugify($(formOpt.root.slug).val(), formOpt.children.slug.input);
-					$(formOpt.children.uri.input).val('');
-					$(formOpt.children.attributes.id.input).val('');
-					$(formOpt.children.attributes.klass.input).val('');
-					$(formOpt.children.attributes.name.input).val('');
-					$(formOpt.children.attributes.title.input).val('');
+					nameInput.val('');
+					self.slugify($(formOpt.root.slug).val(), slugInput);
+					uriInput.val('');
+					attrIdInput.val('');
+					attrClassInput.val('');
+					attrNameInput.val('');
+					attrTitleInput.val('');
 
 					// Move the item to the correct destination
 					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
@@ -765,6 +769,19 @@
 		},
 
 		/**
+		 * Prepare the input object.
+		 *
+		 * @param  string  id
+		 * @param  string  name
+		 * @return object
+		 */
+		prepareInput : function(id, name) {
+
+			return $(name.replace('child', id));
+
+		},
+
+		/**
 		 * Compares if the provided slugs are the same.
 		 *
 		 * @param  string  currentSlug
@@ -785,9 +802,7 @@
 		 */
 		isUniqueSlug : function(slug) {
 
-			var self = this;
-
-			return $.inArray(slug, self.opt.persistedSlugs) > -1 ? false : true;
+			return $.inArray(slug, this.opt.persistedSlugs) > -1 ? false : true;
 
 		},
 
@@ -800,13 +815,14 @@
 
 			var self = this;
 
+			// Get the children inputs options
 			var options = self.opt.form.children;
 
 			// Generate a new slug based on the root menu slug
-			var newSlug = self.getRootSlug() + ' ' + $(options.name.input).val();
+			var newSlug = self.getRootSlug() + ' ' + self.prepareInput('new-child', options.name.input).val();
 
 			// Update the new item slug
-			self.slugify(newSlug, options.slug.input);
+			self.slugify(newSlug, self.prepareInput('new-child', options.slug.input));
 
 		},
 
@@ -817,9 +833,7 @@
 		 */
 		getRootSlug : function() {
 
-			var self = this;
-
-			return $(self.opt.form.root.slug).val();
+			return $(this.opt.form.root.slug).val();
 
 		},
 
@@ -839,10 +853,11 @@
 		/**
 		 * Validates the provided inputs with the provided rules.
 		 *
-		 * @param  array  inputs
+		 * @param  string  id
+		 * @param  array   inputs
 		 * @return bool
 		 */
-		validateInputs : function(inputs) {
+		validateInputs : function(id, inputs) {
 
 			var self = this;
 
@@ -857,15 +872,17 @@
 					// Loop through the rules
 					$.each(value.rules, function(key, rule)
 					{
-						if (rule == 'required' && $(value.input).val() == '')
-						{
-							self.showError(value.input);
+						var $input = value.input.replace('child', id);
 
-							failedInputs.push(value.input)
+						if (rule == 'required' && $($input).val() == '')
+						{
+							self.showError($input);
+
+							failedInputs.push($input)
 						}
 						else
 						{
-							self.hideError(value.input);
+							self.hideError($input);
 						}
 					});
 				}
