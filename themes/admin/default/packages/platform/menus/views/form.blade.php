@@ -1,6 +1,6 @@
 <?php
-	$childId   = ! empty($child) ? "{$child->id}__%s" : 'new-child__%s';
-	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child__%s';
+	$childId   = ! empty($child) ? "{$child->id}_%s" : 'new-child_%s';
+	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 	$segment = ! empty($child) ? 'edit' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 ?>
@@ -29,7 +29,7 @@
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
 
-				<input type="text" name="{{ sprintf($childName, 'name') }}" id="{{ sprintf($childId, 'name') }}" class="form-control" value="{{ ! empty($child) ? $child->name : null }}">
+				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'name') }}" id="{{ sprintf($childId, 'name') }}" class="form-control" value="{{ ! empty($child) ? $child->name : null }}">
 			</div>
 
 			{{-- Slug --}}
@@ -38,7 +38,7 @@
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
 
-				<input type="text" name="{{ sprintf($childName, 'slug') }}" id="{{ sprintf($childId, 'slug') }}" class="form-control" value="{{ ! empty($child) ? $child->slug : null }}">
+				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'slug') }}" id="{{ sprintf($childId, 'slug') }}" class="form-control" value="{{ ! empty($child) ? $child->slug : null }}">
 			</div>
 
 			{{-- Enabled --}}
@@ -48,7 +48,7 @@
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.enabled_help') }}}"></i>
 
 				<div class="controls">
-					<select name="{{ sprintf($childName, 'enabled') }}" id="{{ sprintf($childId, 'enabled') }}" class="form-control">
+					<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'enabled') }}" id="{{ sprintf($childId, 'enabled') }}" class="form-control">
 						<option value="1"{{ ( ! empty($child) ? $child->enabled : 1) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.enabled') }}}</option>
 						<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.disabled') }}}</option>
 					</select>
@@ -62,7 +62,7 @@
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.parent_help') }}}"></i>
 
 				<div class="controls">
-					<select data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}" class="form-control"></select>
+					<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}" class="form-control"></select>
 				</div>
 			</div>
 
@@ -88,7 +88,7 @@
 						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
-							<select name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control">
+							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control">
 								<option value="static"{{ ( ! empty($child) ? $child->type : null) == 'static' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.static') }}}</option>
 								<option value="page"{{ ( ! empty($child) ? $child->type : null) == 'page' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.page') }}}</option>
 							</select>
@@ -106,7 +106,7 @@
 						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.secure_help') }}}"></i>
 
 						<div class="controls">
-							<select name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control">
+							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control">
 								<option value="1"{{ ( ! empty($child) ? $child->secure : null) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.yes') }}}</option>
 								<option value="0"{{ ( ! empty($child) ? $child->secure : null) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.no') }}}</option>
 							</select>
@@ -123,7 +123,7 @@
 
 				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-				<input type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
+				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
 			</div>
 
 		</fieldset>
@@ -157,7 +157,7 @@
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-visibility="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'visibility') }}" id="{{ sprintf($childId, 'visibility') }}" class="form-control">
+						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-visibility="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'visibility') }}" id="{{ sprintf($childId, 'visibility') }}" class="form-control">
 							<option value="always"{{ ( ! empty($child) ? $child->visibility : null) == 'always' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.always') }}}</option>
 							<option value="logged_in"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_in' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_in') }}}</option>
 							<option value="logged_out"{{ ( ! empty($child) ? $child->visibility : null) == 'logged_out' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.visibilities.logged_out') }}}</option>
@@ -173,7 +173,7 @@
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
 
 					<div class="controls">
-						<select name="{{ sprintf($childName, 'groups') }}" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
+						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
 							@foreach ($groups as $id => $name)
 							<option value="{{{ $id }}}">{{{ $name }}}</option>
 							@endforeach
@@ -198,7 +198,7 @@
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.id_help') }}}"></i>
 
-					<input type="text" name="{{ sprintf($childName, 'attribute_id') }}" id="{{ sprintf($childId, 'attribute_id') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_id : null }}">
+					<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'attribute_id') }}" id="{{ sprintf($childId, 'attribute_id') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_id : null }}">
 				</div>
 
 				{{-- Class --}}
@@ -207,7 +207,7 @@
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.class_help') }}}"></i>
 
-					<input type="text" name="{{ sprintf($childName, 'attribute_class') }}" id="{{ sprintf($childId, 'attribute_class') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_class : null }}">
+					<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'attribute_class') }}" id="{{ sprintf($childId, 'attribute_class') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_class : null }}">
 				</div>
 
 				{{-- Name --}}
@@ -216,7 +216,7 @@
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.name_help') }}}"></i>
 
-					<input type="text" name="{{ sprintf($childName, 'attribute_name') }}" id="{{ sprintf($childId, 'attribute_name') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_name : null }}">
+					<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'attribute_name') }}" id="{{ sprintf($childId, 'attribute_name') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_name : null }}">
 				</div>
 
 				{{-- Title --}}
@@ -225,7 +225,7 @@
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.title_help') }}}"></i>
 
-					<input type="text" name="{{ sprintf($childName, 'attribute_title') }}" id="{{ sprintf($childId, 'attribute_title') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_title : null }}">
+					<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'attribute_title') }}" id="{{ sprintf($childId, 'attribute_title') }}" class="form-control" value="{{ ! empty($child) ? $child->attribute_title : null }}">
 				</div>
 
 				{{-- Target --}}
@@ -235,7 +235,7 @@
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.target_help') }}}"></i>
 
 					<div class="controls">
-						<select name="{{ sprintf($childName, 'attribute_target') }}" id="{{ sprintf($childId, 'attribute_target') }}" class="form-control">
+						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'attribute_target') }}" id="{{ sprintf($childId, 'attribute_target') }}" class="form-control">
 							<option value="self"{{ ( ! empty($child) ? $child->target : null) == 'self' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.attributes.targets.self') }}}</option>
 							<option value="new_children"{{ ( ! empty($child) ? $child->target : null) == 'new_children' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.attributes.targets.blank') }}}</option>
 							<option value="parent_frame"{{ ( ! empty($child) ? $child->target : null) == 'parent_frame' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.attributes.targets.parent') }}}</option>

@@ -66,21 +66,21 @@
 				//error_class : 'error',
 
 				name : {
-					input: '#new-child__name',
+					input: '#new-child_name',
 					rules :	['required']
 				},
 
 				slug : {
-					input : '#new-child__slug',
+					input : '#new-child_slug',
 					rules :	['required']
 				},
 
 				enabled : {
-					input : '#new-child__enabled'
+					input : '#new-child_enabled'
 				},
 
 				parent : {
-					input : '#new-child__parent'
+					input : '#new-child_parent'
 				},
 
 
@@ -88,46 +88,46 @@
 				// this needs to be changed to something more dynamic,
 				// since we can have as many types..
 				type : {
-					input : '#new-child__type'
+					input : '#new-child_type'
 				},
 
 				uri : {
-					input : '#new-child__uri'
+					input : '#new-child_uri'
 				},
 
 				secure : {
-					input : '#new-child__secure'
+					input : '#new-child_secure'
 				},
 				////////////////////////////////////////////////////////
 
 
 				visibility : {
-					input : '#new-child__visibility'
+					input : '#new-child_visibility'
 				},
 
 				groups : {
-					input : '#new-child__groups'
+					input : '#new-child_groups'
 				},
 
 				attributes : {
 					id : {
-						input : '#new-child__attribute_id',
+						input : '#new-child_attribute_id',
 					},
 
 					klass : {
-						input : '#new-child__attribute_class'
+						input : '#new-child_attribute_class'
 					},
 
 					name : {
-						input : '#new-child__attribute_name'
+						input : '#new-child_attribute_name'
 					},
 
 					title : {
-						input : '#new-child__attribute_title'
+						input : '#new-child_attribute_title'
 					},
 
 					target : {
-						input : '#new-child__attribute_target'
+						input : '#new-child_attribute_target'
 					}
 				}
 
@@ -354,23 +354,9 @@
 			// When menu children data get's updated
 			$document.on('keyup', 'input[type="text"]', function() {
 
-				// need to fix this so it doesn't detect the new children inputs, not the ones
-				// we added, but the one we are adding!!
-				/*
-				if ($(this).data('children'))
-				{
-					// Get the children identifier
-					var childrenId = $(this).data('children');
+				var formId = $(this).data('item-form');
 
-					//
-					if (typeof childrenId !== 'undefined')
-					{
-						$('[data-id="' + childrenId + '"], [data-slug="' + childrenId + '"]')
-							.find(".item-name:eq(0)")
-							.html($('#' + childrenId + '_name').val());
-					}
-				}
-				*/
+				///// stuff will be here ...
 
 			});
 
@@ -625,16 +611,16 @@
 				var formBox = $('[data-item-form="' + formId + '"]');
 
 				// Get the current slug
-				var currentSlug = $('#' + formId + '__current-slug').val();
+				var currentSlug = $('#' + formId + '_current-slug').val();
 
 				// The current parent that this item belongs to
 				var currentParentId = formBox.data('item-parent');
 
 				// Id of the parent of this item
-				var parentId = $('#' + formId + '__parent').val();
+				var parentId = $('#' + formId + '_parent').val();
 
 				// Get the new slug
-				var slug = $('#' + formId + '__slug').val().slugify();
+				var slug = $('#' + formId + '_slug').val().slugify();
 
 				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
@@ -652,7 +638,7 @@
 					options.persistedSlugs.push(slug);
 
 					// Update the current slug input value
-					$('#' + formId + '__current-slug').val(slug);
+					$('#' + formId + '_current-slug').val(slug);
 
 					// Show the root form
 					self.showRootForm();
@@ -671,6 +657,10 @@
 						// Update this item form box parent id
 						formBox.data('item-parent', parentId);
 					}
+
+					// Update the li item name with the new item name,
+					// just in case the item name gets updated.
+					$('[data-item="' + formId + '"]').html($('#' + formId + '_name').val());
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
