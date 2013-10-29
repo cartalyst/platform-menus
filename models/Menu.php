@@ -21,6 +21,7 @@
 use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Illuminate\Database\Query\Expression;
 use InvalidArgumentException;
+use Platform\Menus\TypeInterface;
 
 class Menu extends EloquentNode {
 
@@ -57,6 +58,19 @@ class Menu extends EloquentNode {
 		'right' => 'rgt',
 		'tree'  => 'menu',
 	);
+
+	/**
+	 * Array of registered type relationships, where the key is the type
+	 * (which is the relationship) and the value is a closure to resolve
+	 * the relationship.
+	 *
+	 * @var array
+	 */
+	protected static $types = array();
+
+
+	protected $typeData = array();
+
 
 	/**
 	 * Get mutator for the "enabled" attribute.
@@ -204,6 +218,82 @@ class Menu extends EloquentNode {
 		}
 
 		return parent::find($id, $columns);
+	}
+
+
+	public function _getType($type = null)
+	{
+		if ($type = $this->type)
+		{
+			if ( ! isset(static::$types[$type]))
+			{
+				throw new \RuntimeException("Menu type [$type] has not been registered.");
+			}
+
+			return static::$types[$type];
+		}
+	}
+
+	public function _setTypeData(array $typeData)
+	{
+		$this->typeData = $typeData;
+	}
+
+	public function _getTypeData()
+	{
+		return $this->typeData;
+	}
+
+
+	/**
+	 * Register a custom type with a menu.
+	 *
+	 * @param  \Platform\Menus\TypeInterface  $type
+	 * @return void
+	 */
+	public static function registerType(TypeInterface $type)
+	{
+		static::$types[$type->getIdentifier()] = $type;
+	}
+
+	/**
+	 * Return all the registered types.
+	 *
+	 * @return array
+	 */
+	public static function getTypes()
+	{
+		return static::$types;
+	}
+
+	/**
+	 * Handle dynamic method calls into the method.
+	 *
+	 * @param  string  $method
+	 * @param  array   $parameters
+	 * @return mixed
+	 */
+	public function __call($method, $parameters)
+	{
+		$typeMethods = array(
+			'getName', 'getUrl',
+			'getNewTemplate', 'getNewFormTemplate',
+			'getEditTemplate', 'getEditFormTemplate',
+		);
+
+		if (in_array($method, $typeMethods))
+		{
+			if (in_array($method, array('getName', 'getUrl')))
+			{
+				$method = 'getChild'.substr($method, 3);
+			}
+
+			array_unshift($parameters, $this);
+
+			return call_user_func_array(array($this->getType(), $method), $parameters);
+		}
+
+		return parent::__call($method, $parameters);
 	}
 
 	/**

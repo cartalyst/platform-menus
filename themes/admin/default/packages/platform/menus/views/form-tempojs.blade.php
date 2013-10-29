@@ -89,17 +89,9 @@
 
 						<div class="controls">
 							<select data-item-url-type="[[ slug ]]" data-item-form="[[ slug ]]" name="children[[[ slug ]]][type]" id="[[ slug ]]_type" class="form-control">
-								[? if type == 'static' ?]
-								<option value="static"  selected="selected">{{{ trans('platform/menus::form.types.static') }}}</option>
-								[? else ?]
-								<option value="static">{{{ trans('platform/menus::form.types.static') }}}</option>
-								[? endif ?]
-
-								[? if type == 'page' ?]
-								<option value="page" selected="selected">{{{ trans('platform/menus::form.types.page') }}}</option>
-								[? else ?]
-								<option value="page">{{{ trans('platform/menus::form.types.page') }}}</option>
-								[? endif ?]
+								@foreach ($types as $type)
+								<option value="{{ $type->getIdentifier() }}">{{ $type->getName() }}</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -132,14 +124,10 @@
 
 			</div>
 
-			{{-- Static Uri --}}
-			<div class="form-group" data-item-type="static">
-				<label class="control-label" for="[[ slug ]]_static_uri">{{{ trans('platform/menus::form.uri') }}}</label>
-
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
-
-				<input data-item-form="[[ slug ]]" type="text" name="children[[[ slug ]]][static_uri]" id="[[ slug ]]_static_uri" class="form-control" value="[[ uri ]]">
-			</div>
+			{{-- Generate the types inputs --}}
+			@foreach ($types as $type)
+				{{ $type->getFormHtml($child) }}
+			@endforeach
 
 		</fieldset>
 

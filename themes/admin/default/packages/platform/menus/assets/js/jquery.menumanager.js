@@ -160,12 +160,6 @@
 
 		},
 
-		// Modal window elements
-		modal : {
-
-
-		},
-
 		// Are we saving the whole menu?
 		isSaving : false,
 
@@ -196,44 +190,35 @@
 		 */
 		initializer : function() {
 
-			// Check dependencies
-			this.checkDependencies();
+			// Avoid scope issues
+			var self = this;
 
 			// Prepare TempoJS
 			this.TempoJsMain = Tempo.prepare(this.opt.tempo.mainSelector, this.opt.tempo);
 			this.TempoJsForms = Tempo.prepare(this.opt.tempo.formsSelector, this.opt.tempo);
 
 			// Activate Nestable
-			$(this.opt.nestable.selector).nestable(this.opt.nestable).on('change', this.nestableChangeCallback);
+			$(this.opt.nestable.selector).nestable(this.opt.nestable).on('change', function(event) {
+
+				console.log(event.target.id);
+
+				console.log(self);
+
+				self.renderParentsDropdowns();
+
+				self.testing();
+
+			});
 
 			// Initialize the event listeners
 			this.events();
 
 		},
 
-		/**
-		 * Checks if the required dependencies are available.
-		 *
-		 * @return void
-		 */
-		checkDependencies : function() {
 
-			if ( ! String.prototype.slugify)
-			{
-				// bahh Slugify is not defined
-			}
-
-		},
+		testing : function() {
 
 
-
-		nestableChangeCallback : function(e) {
-
-			// once an item moves, we need to update it's parent id and
-			// repopulate all the dropdowns again, just to make sure
-			// they are all with the correct information.
-
-			console.log(e);
 
 		},
 
@@ -284,6 +269,7 @@
 				{
 					dropdown += self.convertToDropdown(children, level + 1);
 				}
+
 			});
 
 			return dropdown;
@@ -300,6 +286,7 @@
 			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
 
 		},
+
 
 		/**
 		 * Initializes all the event listeners.
@@ -474,6 +461,11 @@
 			});
 
 
+			/**
+			 * When an item visibility changes.
+			 *
+			 * @return void
+			 */
 			$document.on('change', '[data-item-visibility]', function(e) {
 
 				var item = $(this).data('item-visibility');
@@ -570,6 +562,7 @@
 				{
 					// Prepare the new item data
 					var data = {
+
 						'parent_id' : parentId,
 						'name'      : nameInput.val(),
 						'slug'      : slug,
@@ -591,6 +584,7 @@
 						'attribute_name'   : attrNameInput.val(),
 						'attribute_title'  : attrTitleInput.val(),
 						'attribute_target' : attrTargetInput.val()
+
 					};
 
 					// Append the new menu item
@@ -882,14 +876,14 @@
 			var failedInputs = [];
 
 			// Loop through the inputs
-			$.each(inputs, function(input, value)
-			{
+			$.each(inputs, function(input, value) {
+
 				// Does this input have rules?
 				if (typeof value.rules !== 'undefined')
 				{
 					// Loop through the rules
-					$.each(value.rules, function(key, rule)
-					{
+					$.each(value.rules, function(key, rule) {
+
 						var $input = value.input.replace('child', id);
 
 						if (rule == 'required' && $($input).val() == '')
@@ -902,8 +896,10 @@
 						{
 							self.hideError($input);
 						}
+
 					});
 				}
+
 			});
 
 			return failedInputs.length >= 1 ? false : true;
@@ -947,7 +943,9 @@
 	};
 
 	$.menumanager = function(menu, options) {
+
 		return new MenuManager(menu, options);
+
 	};
 
 })(jQuery, window, document);

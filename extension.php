@@ -21,6 +21,7 @@
 use Cartalyst\Extensions\ExtensionInterface;
 use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
+use Platform\Menus\Models\Menu;
 
 return array(
 
@@ -185,6 +186,11 @@ return array(
 				app('Platform\Menus\Observer')->afterEnable($extension);
 			}
 		});
+
+		$app['Platform\Menus\StaticType'] = $app->share(function($app)
+		{
+			return new Platform\Menus\StaticType($app['url'], $app['view'], $app['translator']);
+		});
 	},
 
 	/*
@@ -225,6 +231,8 @@ return array(
 		{
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
+
+		Menu::registerType($app['Platform\Menus\StaticType']);
 	},
 
 	/*

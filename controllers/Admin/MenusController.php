@@ -160,6 +160,7 @@ class MenusController extends AdminController {
 			// Fallback data
 			$menu     = null;
 			$children = null;
+			$child = null;
 
 			// Do we have a menu identifier?
 			if ( ! is_null($slug))
@@ -187,17 +188,14 @@ class MenusController extends AdminController {
 			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
 
 
-			# for now
-			$response = API::get('v1/pages');
-			$pages    = $response['pages'];
+			$name = get_class(app('Platform\Menus\Models\Menu'));
+			$types = $name::getTypes();
 
-			View::share(array(
-				'groups' => $groups,
-				'pages' => $pages,
-			));
+
+			View::share(compact('groups', 'types'));
 
 			// Show the page
-			return View::make('platform/menus::manage', compact('menu', 'children', 'groups', 'persistedSlugs', 'pageSegment'));
+			return View::make('platform/menus::manage', compact('menu', 'child', 'children', 'groups', 'persistedSlugs', 'pageSegment'));
 		}
 		catch (ApiHttpException $e)
 		{

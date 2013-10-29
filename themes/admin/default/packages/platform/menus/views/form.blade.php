@@ -90,8 +90,9 @@
 
 						<div class="controls">
 							<select data-item-url-type="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control">
-								<option value="static"{{ ( ! empty($child) ? $child->type : null) == 'static' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.static') }}}</option>
-								<option value="page"{{ ( ! empty($child) ? $child->type : null) == 'page' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::form.types.page') }}}</option>
+								@foreach ($types as $type)
+								<option value="{{ $type->getIdentifier() }}"{{ ( ! empty($child) ? $child->type : null) == $type->getIdentifier() ? ' selected="selected"' : null }}>{{ $type->getName() }}</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -118,25 +119,10 @@
 
 			</div>
 
-			{{-- Static Uri --}}
-			<div class="form-group" data-item-type="static">
-				<label class="control-label" for="{{ sprintf($childId, 'static_uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
-
-				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
-
-				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'static_uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
-			</div>
-
-			<!-- pages -->
-			<div class="form-group hide" data-item-type="page">
-				<label class="control-label" for="{{ sprintf($childId, 'page_uri') }}">Select the page</label>
-
-				<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'page_uri') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control">
-					@foreach ($pages as $page)
-					<option value="{{{ $page->id }}}">/{{{ $page->uri }}}</option>
-					@endforeach
-				</select>
-			</div>
+			{{-- Generate the types inputs --}}
+			@foreach ($types as $type)
+				{{ $type->getFormHtml($child) }}
+			@endforeach
 
 		</fieldset>
 
