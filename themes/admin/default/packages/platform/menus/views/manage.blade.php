@@ -24,9 +24,16 @@
 <script>
 $(function() {
 
-	$.menumanager('#menu-form', {
-		persistedSlugs : {{ json_encode($persistedSlugs) }}
-	});
+	// Instantiate a new Menu Manager
+	var MenuManager = $.menumanager('#menu-form');
+
+	// Set the persisted slugs
+	MenuManager.setPersistedSlugs({{ json_encode($persistedSlugs) }});
+
+	// Register the available types
+	@foreach ($types as $type)
+		MenuManager.registerType('{{ $type->getName() }}', '{{ $type->getIdentifier() }}');
+	@endforeach
 
 });
 </script>

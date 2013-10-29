@@ -126,7 +126,7 @@
 
 			{{-- Generate the types inputs --}}
 			@foreach ($types as $type)
-				{{ $type->getFormHtml($child) }}
+				{{ $type->getTemplateHtml($child) }}
 			@endforeach
 
 		</fieldset>

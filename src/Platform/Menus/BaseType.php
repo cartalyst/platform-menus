@@ -28,24 +28,30 @@ abstract class BaseType {
 	/**
 	 * The URL Generator.
 	 *
-	 * @var Illuminate\Routing\UrlGenerator
+	 * @var \Illuminate\Routing\UrlGenerator
 	 */
 	protected $url;
 
 	/**
 	 * The View Environment.
 	 *
-	 * @var Illuminate\View\Environment
+	 * @var \Illuminate\View\Environment
 	 */
 	protected $view;
 
+	/**
+	 * The Translator.
+	 *
+	 * @var \Illuminate\Translation\Translator
+	 */
 	protected $translator;
 
 	/**
 	 * Create a new static type.
 	 *
-	 * @param  Illuminate\Routing\UrlGenerator  $url
-	 * @param  Illuminate\View\Environment  $view
+	 * @param  \Illuminate\Routing\UrlGenerator    $url
+	 * @param  \Illuminate\View\Environment        $view
+	 * @param  \Illuminate\Translation\Translator  $translator
 	 * @return void
 	 */
 	public function __construct(UrlGenerator $url, Environment $view, Translator $translator)
@@ -53,49 +59,6 @@ abstract class BaseType {
 		$this->url  = $url;
 		$this->view = $view;
 		$this->translator = $translator;
-	}
-
-	/**
-	 * Return the HTML template used when creating a menu child of this type.
-	 *
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getTemplateHtml()
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template");
-	}
-
-	/**
-	 * Return the form HTML template for a new child of this type.
-	 *
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getTemplateFormHtml()
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template/form");
-	}
-
-	/**
-	 * Return the HTML template used when editing a menu child of this type.
-	 *
-	 * @param  Platform\Menus\Models\Menu  $child
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getEditHtml(Menu $child)
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/child", compact('child'));
-	}
-
-	/**
-	 * Return the form HTML template for a edit child of this type as well
-	 * as creating new children.
-	 *
-	 * @param  Platform\Menus\Models\Menu  $child
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getFormHtml(Menu $child = null)
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/form", compact('child'));
 	}
 
 }

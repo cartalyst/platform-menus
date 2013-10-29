@@ -41,6 +41,9 @@
 		// Holds all of the existing menu slugs
 		persistedSlugs : [],
 
+		// Holds all the registered types
+		types : {},
+
 		// Slug separator
 		slugSeparator : '-',
 
@@ -206,87 +209,12 @@
 
 				self.renderParentsDropdowns();
 
-				self.testing();
-
 			});
 
 			// Initialize the event listeners
 			this.events();
 
 		},
-
-
-		testing : function() {
-
-
-
-		},
-
-
-		/**
-		 *
-		 *
-		 * @param  float  level
-		 * @return float
-		 */
-		spacers : function(level) {
-
-			var spacers = '';
-
-			for(var j=0; j < level * 3; j++)
-			{
-				spacers += '&nbsp;';
-			}
-
-			return spacers;
-
-		},
-
-		/**
-		 * Converts an OL into a HTML Dropdown menu.
-		 *
-		 * @param  object  OL
-		 * @param  float   level
-		 * @return string
-		 */
-		convertToDropdown : function(OL, level) {
-
-			var self = this;
-
-			var dropdown = '';
-
-			OL.children('li').each(function () {
-
-				var id = $(this).data('item-id');
-
-				var text = self.spacers(level) + $(this).find('[data-item="' + id + '"]').text();
-
-				dropdown += '<option value="' + id + '">' + text + '</option>';
-
-				var children = $(this).children('ol');
-
-				if (children.length > 0)
-				{
-					dropdown += self.convertToDropdown(children, level + 1);
-				}
-
-			});
-
-			return dropdown;
-
-		},
-
-		/**
-		 *
-		 *
-		 * @return void
-		 */
-		renderParentsDropdowns : function() {
-
-			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
-
-		},
-
 
 		/**
 		 * Initializes all the event listeners.
@@ -539,7 +467,7 @@
 				var enabledInput    = self.prepareInput('new-child', formOpt.children.enabled.input);
 				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
-				var uriInput        = self.prepareInput('new-child', formOpt.children.static_uri.input);
+				var staticUriInput  = self.prepareInput('new-child', formOpt.children.static_uri.input);
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
 				var attrIdInput     = self.prepareInput('new-child', formOpt.children.attributes.id.input);
@@ -570,7 +498,9 @@
 
 						'type'   : typeInput.val(),
 						'secure' : secureInput.val(),
-						'uri'    : uriInput.val(),
+
+
+						'static_uri' : staticUriInput.val(),
 						// need to add the dynamic type: the input name needs to be something like
 						//
 						//    "`type`_uri"
@@ -777,6 +707,106 @@
 				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
 
 			});
+
+		},
+
+		/**
+		 * Set the persisted slugs.
+		 *
+		 * @param  array  slugs
+		 * @return void
+		 */
+		setPersistedSlugs : function(slugs) {
+
+			this.opt.persistedSlugs = slugs;
+
+		},
+
+		/**
+		 * Register a new type.
+		 *
+		 * @param  string  name
+		 * @param  string  type
+		 * @return void
+		 */
+		registerType : function(name, type) {
+
+			this.opt.types[type] = name;
+
+		},
+
+		/**
+		 * Return a list of registered types.
+		 *
+		 * @return array
+		 */
+		getTypes : function() {
+
+			return this.opt.types;
+
+		},
+
+		/**
+		 *
+		 *
+		 * @param  float  level
+		 * @return float
+		 */
+		spacers : function(level) {
+
+			var spacers = '';
+
+			for(var j=0; j < level * 3; j++)
+			{
+				spacers += '&nbsp;';
+			}
+
+			return spacers;
+
+		},
+
+		/**
+		 * Converts an OL into a HTML Dropdown menu.
+		 *
+		 * @param  object  OL
+		 * @param  float   level
+		 * @return string
+		 */
+		convertToDropdown : function(OL, level) {
+
+			var self = this;
+
+			var dropdown = '';
+
+			OL.children('li').each(function () {
+
+				var id = $(this).data('item-id');
+
+				var text = self.spacers(level) + $(this).find('[data-item="' + id + '"]').text();
+
+				dropdown += '<option value="' + id + '">' + text + '</option>';
+
+				var children = $(this).children('ol');
+
+				if (children.length > 0)
+				{
+					dropdown += self.convertToDropdown(children, level + 1);
+				}
+
+			});
+
+			return dropdown;
+
+		},
+
+		/**
+		 *
+		 *
+		 * @return void
+		 */
+		renderParentsDropdowns : function() {
+
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
 
 		},
 

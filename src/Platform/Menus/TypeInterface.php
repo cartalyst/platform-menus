@@ -39,7 +39,7 @@ interface TypeInterface {
 	/**
 	 * Get the name for the menu child.
 	 *
-	 * @param  Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return string
 	 */
 	public function getChildName(Menu $child);
@@ -47,59 +47,44 @@ interface TypeInterface {
 	/**
 	 * Get the URL for the menu child.
 	 *
-	 * @param  Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @param  array  $options
 	 * @return string
 	 */
 	public function getChildUrl(Menu $child, array $options = array());
 
 	/**
-	 * Called after a menu child is saved. Attach any links
-	 * and relationships.
+	 * Event that is called after a menu children is saved.
+	 * Attach any links and relationships.
 	 *
-	 * @param  Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
 	 */
 	public function afterSave(Menu $child);
 
 	/**
-	 * Called before a child is deleted. Detach any links
-	 * and relationships.
+	 * Event that is called before a children is deleted.
+	 * Detach any links and relationships.
 	 *
-	 * @param  Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
 	 */
 	public function beforeDelete(Menu $child);
 
 	/**
-	 * Return the HTML template used when creating a menu child of this type.
-	 *
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getTemplateHtml();
-
-	/**
-	 * Return the form HTML template for a new child of this type.
-	 *
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getTemplateFormHtml();
-
-	/**
-	 * Return the HTML template used when editing a menu child of this type.
-	 *
-	 * @param  Platform\Menus\Models\Menu  $child
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
-	 */
-	public function getEditHtml(Menu $child);
-
-	/**
 	 * Return the form HTML template for a edit child of this type as well
 	 * as creating new children.
 	 *
-	 * @param  Platform\Menus\Models\Menu  $child
-	 * @return string|Illuminate\Support\Contracts\RenderableInterface
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return \View
 	 */
 	public function getFormHtml(Menu $child = null);
+
+	/**
+	 * Return the HTML template used when creating a menu child of this type.
+	 *
+	 * @return \View
+	 */
+	public function getTemplateHtml();
 
 }
