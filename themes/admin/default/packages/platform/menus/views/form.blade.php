@@ -3,8 +3,9 @@
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 	$segment = ! empty($child) ? 'edit' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
+	$selectedGroups = ! empty($child) ? $child->groups : array();
 ?>
-<div class="well well-md hide" style="background: #fff" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
+<div class="well well-md hide well-white-bg" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
 	<input type="hidden" id="{{ sprintf($childId, 'current-slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 
@@ -17,7 +18,7 @@
 	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
 
 	{{-- Item Details --}}
-	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+	<div class="well well-md well-borderless">
 
 		<fieldset>
 
@@ -71,7 +72,7 @@
 	</div>
 
 	{{-- Item URL --}}
-	<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+	<div class="well well-md well-borderless">
 
 		<fieldset>
 
@@ -126,6 +127,17 @@
 				<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'static_uri') }}" id="{{ sprintf($childId, 'uri') }}" class="form-control" value="{{ ! empty($child) ? $child->uri : null }}">
 			</div>
 
+			<!-- pages -->
+			<div class="form-group hide" data-item-type="page">
+				<label class="control-label" for="{{ sprintf($childId, 'page_uri') }}">Select the page</label>
+
+				<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'page_uri') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control">
+					@foreach ($pages as $page)
+					<option value="{{{ $page->id }}}">/{{{ $page->uri }}}</option>
+					@endforeach
+				</select>
+			</div>
+
 		</fieldset>
 
 	</div>
@@ -144,7 +156,7 @@
 	{{-- Options --}}
 	<div class="hide" style="padding-top: 20px;" data-options>
 
-		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+		<div class="well well-md well-borderless">
 
 			<fieldset>
 
@@ -175,7 +187,7 @@
 					<div class="controls">
 						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
 							@foreach ($groups as $id => $name)
-							<option value="{{{ $id }}}">{{{ $name }}}</option>
+							<option value="{{{ $id }}}"{{ in_array($id, $selectedGroups) ? ' selected="selected"' : null }}>{{{ $name }}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -186,7 +198,7 @@
 		</div>
 
 		{{-- Attributes --}}
-		<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;">
+		<div class="well well-md well-borderless">
 
 			<fieldset>
 

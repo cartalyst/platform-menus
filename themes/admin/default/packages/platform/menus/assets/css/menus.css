@@ -1,6 +1,10 @@
 .item-close { cursor: pointer; }
 
 
+.well-borderless { border: none; border-radius: none; box-shadow: none; }
+
+.well-white-bg { background: #ffffff; }
+
 
 .nestable {
 	display: block;

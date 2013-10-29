@@ -401,11 +401,15 @@
 			 */
 			$document.on('change', '[data-item-url-type]', function() {
 
+				var itemId = $(this).data('item-url-type');
+
 				var selectedOption = $(this).val();
 
-				$('[data-item-type]').addClass('hide');
+				var itemBox = $('[data-item-form="' + itemId + '"]');
 
-				$('[data-item-type="' + selectedOption + '"').removeClass('hide');
+				itemBox.find('[data-item-type]').addClass('hide');
+
+				itemBox.find('[data-item-type="' + selectedOption + '"]').removeClass('hide');
 
 			});
 

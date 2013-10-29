@@ -7,7 +7,7 @@
 @stop
 
 {{-- Queue assets --}}
-{{ Asset::queue('menus', 'platform/menus::css/menus.css') }}
+{{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
 {{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
 {{ Asset::queue('jquery.slugify', 'js/platform/slugify.js', 'jquery') }}
 {{ Asset::queue('jquery.nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
@@ -101,7 +101,7 @@ $(function() {
 		<div class="col-md-5">
 
 			{{-- Root form --}}
-			<div class="well well-md" style="border: none; border-radius: none; box-shadow: none;" data-root-form>
+			<div class="well well-md well-borderless" data-root-form>
 
 				<fieldset>
 

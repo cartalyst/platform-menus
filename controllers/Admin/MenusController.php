@@ -186,7 +186,15 @@ class MenusController extends AdminController {
 			// Get a list of all the available groups
 			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
 
-			View::share('groups', $groups);
+
+			# for now
+			$response = API::get('v1/pages');
+			$pages    = $response['pages'];
+
+			View::share(array(
+				'groups' => $groups,
+				'pages' => $pages,
+			));
 
 			// Show the page
 			return View::make('platform/menus::manage', compact('menu', 'children', 'groups', 'persistedSlugs', 'pageSegment'));

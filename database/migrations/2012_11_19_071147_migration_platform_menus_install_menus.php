@@ -67,6 +67,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// User visibility flag
 			$table->string('visibility')->nullable();
+			$table->text('groups')->nullable();
 
 			// Enabled
 			$table->boolean('enabled')->default(0);
