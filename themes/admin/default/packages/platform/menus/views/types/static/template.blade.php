@@ -1,7 +1,7 @@
-<div class="form-group[? if type != 'static' ?] hide[? endif ?]" data-item-type="static">
-	<label class="control-label" for="[[ slug ]]_static_uri">{{{ trans('platform/menus::form.uri') }}}</label>
+<div class="form-group<% if (type != 'static') { %> hide<% } %>" data-item-type="static">
+	<label class="control-label" for="<%= slug %>_static_uri">{{{ trans('platform/menus::form.uri') }}}</label>
 
 	<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-	<input data-item-form="[[ slug ]]" type="text" name="children[[[ slug ]]][static_uri]" id="[[ slug ]]_static_uri" class="form-control" value="[[ static_uri ]]">
+	<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][static_uri]" id="<%= slug %>_static_uri" class="form-control" value="<%= static_uri %>">
 </div>

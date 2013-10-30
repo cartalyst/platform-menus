@@ -152,17 +152,6 @@
 
 		},
 
-		// TempoJS settings
-		tempo : {
-
-			mainSelector : 'nestable',
-			formsSelector : 'forms',
-
-			var_braces : '\\[\\[\\]\\]',
-			tag_braces : '\\[\\?\\?\\]'
-
-		},
-
 		// Are we saving the whole menu?
 		isSaving : false,
 
@@ -195,10 +184,6 @@
 
 			// Avoid scope issues
 			var self = this;
-
-			// Prepare TempoJS
-			this.TempoJsMain = Tempo.prepare(this.opt.tempo.mainSelector, this.opt.tempo);
-			this.TempoJsForms = Tempo.prepare(this.opt.tempo.formsSelector, this.opt.tempo);
 
 			// Activate Nestable
 			$(this.opt.nestable.selector).nestable(this.opt.nestable).on('change', function(event) {
@@ -511,11 +496,13 @@
 					};
 
 					// Attach the uri to the data for the template
+					///// need to loop through each type and set that type value
+					data['static_uri'] = '';
 					data[typeInput.val() + '_uri'] = uriInput.val();
 
 					// Append the new menu item
-					self.TempoJsMain.append(data);
-					self.TempoJsForms.append(data);
+					$('#nestable').append(_.template($('#item-template').html(), data));
+					$('#forms').append(_.template($('#form-template').html(), data));
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);

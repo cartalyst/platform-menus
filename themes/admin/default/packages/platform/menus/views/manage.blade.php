@@ -8,10 +8,10 @@
 
 {{-- Queue assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
-{{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
 {{ Asset::queue('jquery.slugify', 'js/platform/slugify.js', 'jquery') }}
 {{ Asset::queue('jquery.nestable', 'platform/menus::js/jquery.nestable.js', 'jquery')}}
 {{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', array('jquery.slugify', 'jquery.nestable')) }}
+{{ Asset::queue('underscore', 'js/underscore/underscore.js', 'jquery.menu-manager') }}
 
 {{-- Inline assets --}}
 @section('assets')
@@ -84,7 +84,7 @@ $(function() {
 					@endif
 
 					{{-- TempoJs Template --}}
-					@include('platform/menus::children')
+					@include('platform/menus::children-template')
 				</ol>
 			</div>
 
