@@ -467,7 +467,7 @@
 				var enabledInput    = self.prepareInput('new-child', formOpt.children.enabled.input);
 				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
-				var staticUriInput  = self.prepareInput('new-child', formOpt.children.static_uri.input);
+				var uriInput        = self.prepareInput('new-child', '#child_' + typeInput.val() + '_uri');
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
 				var attrIdInput     = self.prepareInput('new-child', formOpt.children.attributes.id.input);
@@ -499,16 +499,9 @@
 						'type'   : typeInput.val(),
 						'secure' : secureInput.val(),
 
+						'visibility' : visibilityInput.val(),
+						'groups'     : groupsInput.val(),
 
-						'static_uri' : staticUriInput.val(),
-						// need to add the dynamic type: the input name needs to be something like
-						//
-						//    "`type`_uri"
-						//    (`type` will be the type value from the dropdown, this way it is more dynamic)
-						//
-
-						'visibility'       : visibilityInput.val(),
-						'groups'           : groupsInput.val(),
 						'attribute_id'     : attrIdInput.val(),
 						'attribute_class'  : attrClassInput.val(),
 						'attribute_name'   : attrNameInput.val(),
@@ -516,6 +509,9 @@
 						'attribute_target' : attrTargetInput.val()
 
 					};
+
+					// Attach the uri to the data for the template
+					data[typeInput.val() + '_uri'] = uriInput.val();
 
 					// Append the new menu item
 					self.TempoJsMain.append(data);
