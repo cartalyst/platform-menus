@@ -138,7 +138,7 @@ $(function() {
 
 			{{-- TempoJs form --}}
 			<div id="forms">
-				@include('platform/menus::form-tempojs')
+				@include('platform/menus::form-template')
 			</div>
 
 		</div>
