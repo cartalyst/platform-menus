@@ -133,4 +133,5 @@ class StaticType extends BaseType implements TypeInterface {
 	{
 		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
 	}
+
 }
