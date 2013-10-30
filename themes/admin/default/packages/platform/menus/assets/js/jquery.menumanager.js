@@ -446,13 +446,12 @@
 				e.preventDefault();
 
 				// Prepare the inputs
-				var parentId        = self.prepareInput('new-child', formOpt.children.parent.input).val();
 				var nameInput       = self.prepareInput('new-child', formOpt.children.name.input);
 				var slugInput       = self.prepareInput('new-child', formOpt.children.slug.input);
 				var enabledInput    = self.prepareInput('new-child', formOpt.children.enabled.input);
+				var parentInput     = self.prepareInput('new-child', formOpt.children.parent.input);
 				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
-				var uriInput        = self.prepareInput('new-child', '#child_' + typeInput.val() + '_uri');
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
 				var attrIdInput     = self.prepareInput('new-child', formOpt.children.attributes.id.input);
@@ -460,6 +459,9 @@
 				var attrNameInput   = self.prepareInput('new-child', formOpt.children.attributes.name.input);
 				var attrTitleInput  = self.prepareInput('new-child', formOpt.children.attributes.title.input);
 				var attrTargetInput = self.prepareInput('new-child', formOpt.children.attributes.target.input);
+
+				// Get the parent id
+				var parentId = parentInput.val();
 
 				// Generate the children slug
 				var slug = slugInput.val().slugify();
@@ -496,12 +498,14 @@
 					};
 
 					// Attach the uri to the data for the template
-					///// need to loop through each type and set that type value
-					data['static_uri'] = '';
-					data[typeInput.val() + '_uri'] = uriInput.val();
+					$.each(options.types, function(id, name) {
+
+						data[id + '_uri'] = self.prepareInput('new-child', '#child_' + id + '_uri').val();
+
+					});
 
 					// Append the new menu item
-					$('#nestable').append(_.template($('#item-template').html(), data));
+					$(options.nestable.selector + ' > ol').append(_.template($('#item-template').html(), data));
 					$('#forms').append(_.template($('#form-template').html(), data));
 
 					// Add the item to the array
@@ -510,11 +514,29 @@
 					// Clean the new form item inputs
 					nameInput.val('');
 					self.slugify($(formOpt.root.slug).val(), slugInput);
-					uriInput.val('');
+					enabledInput.val('1');
+					parentInput.val('0');
+					typeInput.val('static');
+					secureInput.val('1');
+					//uriInput.val('');
 					attrIdInput.val('');
 					attrClassInput.val('');
 					attrNameInput.val('');
 					attrTitleInput.val('');
+
+					// Get the new item form box
+					var newItemForm = $('[data-item-form="new-child"]');
+
+					// Reset the types
+					$.each(options.types, function(id, name) {
+
+						newItemForm.find('[data-item-type="' + id + '"]').addClass('hide');
+
+					});
+
+					// Make sure the static is the default
+					self.prepareInput('new-child', formOpt.children.static_uri.input).val('');
+					newItemForm.find('[data-item-type="static"]').removeClass('hide');
 
 					// Move the item to the correct destination
 					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
@@ -531,8 +553,8 @@
 					// Hide the no items container
 					$('[data-no-items]').addClass('hide');
 
-					// Hide the add new item form
-					$('[data-item-form="new-child"]').addClass('hide');
+					// Hide the add new item form box
+					newItemForm.addClass('hide');
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
