@@ -1,7 +1,7 @@
-<li data-item-id="{{ ! empty($child) ? $child->id : '[[ slug ]]' }}" class="item"{{ empty($child) ? ' data-template style="display: none;"' : null }}>
+<li data-item-id="{{ $child->id }}" class="item">
 	<div class="item-dd-handle"></div>
 
-	<div data-item="{{ ! empty($child) ? $child->id : '[[ slug ]]' }}" class="item-name">{{ ! empty($child) ? $child->name : '[[ name ]]' }}</div>
+	<div data-item="{{ $child->id }}" class="item-name">{{ $child->name }}</div>
 
 	<ol class="items">
 		@if ( ! empty($child) and $children = $child->getChildren())

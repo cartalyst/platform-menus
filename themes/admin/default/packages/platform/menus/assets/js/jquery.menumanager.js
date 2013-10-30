@@ -22,7 +22,6 @@
  *
  * TODO LIST:
  * 	- Updating : Add validation to the inputs
- *  - Adding / Updating : Show pages list dropdown when the Item type is set to Page
  *
  */
 
@@ -517,8 +516,7 @@
 					enabledInput.val('1');
 					parentInput.val('0');
 					typeInput.val('static');
-					secureInput.val('1');
-					//uriInput.val('');
+					secureInput.val('0');
 					attrIdInput.val('');
 					attrClassInput.val('');
 					attrNameInput.val('');
