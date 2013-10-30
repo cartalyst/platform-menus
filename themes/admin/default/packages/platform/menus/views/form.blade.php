@@ -12,7 +12,7 @@
 	<h4>
 		{{{ trans("platform/menus::form.{$segment}.legend") }}}
 
-		<span class="pull-right"><small class="item-close" data-item-close="{{{ ! empty($child) ? $child->id : null }}}">&times;</small></span>
+		<span class="pull-right"><small class="item-close" data-item-close="{{{ ! empty($child) ? $child->id : 'new-child' }}}">&times;</small></span>
 	</h4>
 
 	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
