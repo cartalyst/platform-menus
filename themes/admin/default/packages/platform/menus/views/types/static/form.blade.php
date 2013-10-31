@@ -3,7 +3,7 @@
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 ?>
 
-<div class="form-group{{ ! empty($child) ? ( $child->type != 'static' ? ' hide' : null ) : null }}" data-item-type="static">
+<div class="form-group{{ ( ! empty($child) and $child->type != 'static') ? ' hide' : null }}" data-item-type="static">
 	<label class="control-label" for="{{ sprintf($childId, 'static_uri') }}">{{{ trans('platform/menus::form.uri') }}}</label>
 
 	<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
