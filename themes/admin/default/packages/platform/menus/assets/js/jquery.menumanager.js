@@ -46,6 +46,14 @@
 		// Slug separator
 		slugSeparator : '-',
 
+		// Underscore template elements
+		templates : {
+
+			item : '#item-template',
+			form : '#form-template'
+
+		},
+
 		// Form elements
 		form : {
 
@@ -151,7 +159,7 @@
 
 		},
 
-		// Are we saving the whole menu?
+		// Are we saving the menu?
 		isSaving : false,
 
 		// Do we have unsaved changes?
@@ -504,8 +512,8 @@
 					});
 
 					// Append the new menu item
-					$(options.nestable.selector + ' > ol').append(_.template($('#item-template').html(), data));
-					$('#forms').append(_.template($('#form-template').html(), data));
+					$(options.nestable.selector + ' > ol').append(_.template($(options.templates.item).html(), data));
+					$('[data-forms]').append(_.template($(options.templates.form).html(), data));
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
@@ -619,10 +627,27 @@
 					// Have we changed the parent of the item?
 					if (currentParentId != parentId)
 					{
-						alert('Move item..');
+						if (formId == parentId)
+						{
+							alert('Impossibru');
+						}
+						else
+						{
+							if (parentId == 0)
+							{
+								var moveTo = $(options.nestable.selector + ' > ol');
+							}
+							else
+							{
+								var moveTo = $('[data-item-id="' + parentId + '"] > ol');
+							}
 
-						// Update this item form box parent id
-						formBox.data('item-parent', parentId);
+							// Move the item to the correct destination
+							$('[data-item-id="' + formId + '"]').appendTo(moveTo);
+
+							// Update this item form box parent id
+							formBox.data('item-parent', parentId);
+						}
 					}
 
 					// Update the li item name with the new item name,

@@ -83,7 +83,7 @@ $(function() {
 					@each('platform/menus::children', $children, 'child')
 					@endif
 
-					{{-- TempoJs Template --}}
+					{{-- Underscore children template --}}
 					@include('platform/menus::children-template')
 				</ol>
 			</div>
@@ -136,8 +136,8 @@ $(function() {
 			{{-- New children form --}}
 			@include('platform/menus::form')
 
-			{{-- TempoJs form --}}
-			<div id="forms">
+			{{-- Underscore form template --}}
+			<div data-forms>
 				@include('platform/menus::form-template')
 			</div>
 

@@ -159,7 +159,7 @@
 					<div class="controls">
 						<select data-item-form="<%= slug %>" name="children[<%= slug %>][groups]" id="<%= slug %>_groups" class="form-control" multiple="true">
 							@foreach ($groups as $id => $name)
-							<option value="{{{ $id }}}">{{{ $name }}}</option>
+							<option value="{{{ $id }}}"<% if (_.indexOf(groups, '{{ $id }}') > -1) { %> selected="selected"<% } %>>{{{ $name }}}</option>
 							@endforeach
 						</select>
 					</div>
