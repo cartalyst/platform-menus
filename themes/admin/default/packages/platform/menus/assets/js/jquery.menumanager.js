@@ -111,16 +111,12 @@
 					input : '#child_groups'
 				},
 
-				attributes : {
+				klass : {
+					input : '#child_class'
+				},
 
-					klass : {
-						input : '#child_class'
-					},
-
-					target : {
-						input : '#child_target'
-					}
-
+				target : {
+					input : '#child_target'
 				}
 
 			}
@@ -451,8 +447,8 @@
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
-				var attrClassInput  = self.prepareInput('new-child', formOpt.children.attributes.klass.input);
-				var attrTargetInput = self.prepareInput('new-child', formOpt.children.attributes.target.input);
+				var classInput      = self.prepareInput('new-child', formOpt.children.klass.input);
+				var targetInput     = self.prepareInput('new-child', formOpt.children.target.input);
 
 				// Get the parent id
 				var parentId = parentInput.val();
@@ -483,8 +479,8 @@
 						'visibility' : visibilityInput.val(),
 						'groups'     : groupsInput.val(),
 
-						'klass'  : attrClassInput.val(),
-						'target' : attrTargetInput.val()
+						'klass'  : classInput.val(),
+						'target' : targetInput.val()
 
 					};
 
@@ -509,7 +505,8 @@
 					parentInput.val('0');
 					typeInput.val('static');
 					secureInput.val('0');
-					attrClassInput.val('');
+					classInput.val('');
+					targetInput.val('self');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');

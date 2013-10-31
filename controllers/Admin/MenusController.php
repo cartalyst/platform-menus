@@ -307,7 +307,7 @@ class MenusController extends AdminController {
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
 
 			'type'       => Input::get("children.{$index}.type", 'static'),
-			'uri'        => Input::get("children.{$index}.uri"),
+			'uri'        => Input::get("children.{$index}.static_uri"), // keep it like this for now
 			//'page_id'    => Input::get("children.{$index}.page_id"), # maybe change this to type_id ..
 			'secure'     => Input::get("children.{$index}.secure", 0),
 

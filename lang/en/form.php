@@ -69,30 +69,17 @@ return array(
 	'groups'      => 'Groups',
 	'groups_help' => 'What user groups should be able to see this menu item?',
 
-	'attributes' => array(
+	'class'      => 'Class',
+	'class_help' => 'Class that will be assigned to the <li> element surrounding your menu item.',
 
-		'id'      => 'Id',
-		'id_help' => 'Id that will be assigned to the <li> element surrounding your menu item.',
+	'target'      => 'Target',
+	'target_help' => 'The target attribute specifies where to open the menu item.',
 
-		'class'      => 'Class',
-		'class_help' => 'Class that will be assigned to the <li> element surrounding your menu item.',
-
-		'name'      => 'Name',
-		'name_help' => 'This name will be assigned to the <a> element surrounding your menu item.',
-
-		'title'      => 'Title',
-		'title_help' => 'This title will be assigned to the <a> element surrounding your menu item.',
-
-		'target'      => 'Target',
-		'target_help' => 'The target attribute specifies where to open the menu item.',
-
-		'targets' => array(
-			'self'   => 'Same Window',
-			'blank'  => 'New Window',
-			'parent' => 'Parent Frame',
-			'top'    => 'Top Frame (Main Document)',
-		),
-
+	'targets' => array(
+		'self'   => 'Same Window',
+		'blank'  => 'New Window',
+		'parent' => 'Parent Frame',
+		'top'    => 'Top Frame (Main Document)',
 	),
 
 );

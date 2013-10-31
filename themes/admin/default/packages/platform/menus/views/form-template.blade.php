@@ -42,8 +42,8 @@
 				<label class="control-label" for="<%= slug %>_enabled">{{{ trans('platform/menus::form.enabled') }}}</label>
 				<div class="controls">
 					<select data-item-form="<%= slug %>" name="children[<%= slug %>][enabled]" id="<%= slug %>_enabled" class="form-control">
-						<option value="1"<% if (enabled == '1') { %> selected="selected"<% } %>>{{{ trans('general.enabled') }}}</option>
-						<option value="0"<% if (enabled == '0') { %> selected="selected"<% } %>>{{{ trans('general.disabled') }}}</option>
+						<option value="1"<%= enabled == '1' ? ' selected="selected"' : null %>>{{{ trans('general.enabled') }}}</option>
+						<option value="0"<%= enabled == '0' ? ' selected="selected"' : null %>>{{{ trans('general.disabled') }}}</option>
 					</select>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 						<div class="controls">
 							<select data-item-url-type="<%= slug %>" data-item-form="<%= slug %>" name="children[<%= slug %>][type]" id="<%= slug %>_type" class="form-control">
 								@foreach ($types as $type)
-								<option value="{{ $type->getIdentifier() }}"<% if (type == '{{ $type->getIdentifier() }}') { %> selected="selected"<% } %>>{{ $type->getName() }}</option>
+								<option value="{{ $type->getIdentifier() }}"<%= type == '{{ $type->getIdentifier() }}' ? ' selected="selected"' : null %>>{{ $type->getName() }}</option>
 								@endforeach
 							</select>
 						</div>
@@ -98,8 +98,8 @@
 						<label class="control-label" for="<%= slug %>_secure">{{{ trans('platform/menus::form.secure') }}}</label>
 						<div class="controls">
 							<select data-item-form="<%= slug %>" name="children[<%= slug %>][secure]" id="<%= slug %>_secure" class="form-control">
-								<option value="1"<% if (secure == '1') { %> selected="selected"<% } %>>{{{ trans('general.yes') }}}</option>
-								<option value="0"<% if (secure == '0') { %> selected="selected"<% } %>>{{{ trans('general.no') }}}</option>
+								<option value="1"<%= secure == '1' ? ' selected="selected"' : null %>>{{{ trans('general.yes') }}}</option>
+								<option value="0"<%= secure == '0' ? ' selected="selected"' : null %>>{{{ trans('general.no') }}}</option>
 							</select>
 						</div>
 					</div>
@@ -142,16 +142,16 @@
 
 					<div class="controls">
 						<select data-item-form="<%= slug %>" data-item-visibility="<%= slug %>" name="children[<%= slug %>][visibility]" id="<%= slug %>_visibility" class="form-control">
-							<option value="always"<% if (visibility == 'always') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.visibilities.always') }}}</option>
-							<option value="logged_in"<% if (visibility == 'logged_in') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.visibilities.logged_in') }}}</option>
-							<option value="logged_out"<% if (visibility == 'logged_out') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.visibilities.logged_out') }}}</option>
-							<option value="admin"<% if (visibility == 'admin') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.visibilities.admin') }}}</option>
+							<option value="always"<%= visibility == 'always' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.visibilities.always') }}}</option>
+							<option value="logged_in"<%= visibility == 'logged_in' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.visibilities.logged_in') }}}</option>
+							<option value="logged_out"<%= visibility == 'logged_out' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.visibilities.logged_out') }}}</option>
+							<option value="admin"<%= visibility == 'admin' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.visibilities.admin') }}}</option>
 						</select>
 					</div>
 				</div>
 
 				{{-- Groups --}}
-				<div class="form-group[? if visibility == 'always' || visibility == 'logged_out' ?] hide[? endif ?]" data-item-groups="<%= slug %>">
+				<div class="form-group<%= _.indexOf(['always', 'logged_out'], visibility) > -1 ? ' hide' : null %>" data-item-groups="<%= slug %>">
 					<label class="control-label" for="<%= slug %>_groups">{{{ trans('platform/menus::form.groups') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
@@ -159,7 +159,7 @@
 					<div class="controls">
 						<select data-item-form="<%= slug %>" name="children[<%= slug %>][groups]" id="<%= slug %>_groups" class="form-control" multiple="true">
 							@foreach ($groups as $id => $name)
-							<option value="{{{ $id }}}"<% if (_.indexOf(groups, '{{ $id }}') > -1) { %> selected="selected"<% } %>>{{{ $name }}}</option>
+							<option value="{{{ $id }}}"<%= _.indexOf(groups, '{{ $id }}') > -1 ? ' selected="selected"' : null %>>{{{ $name }}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -178,25 +178,25 @@
 
 				{{-- Class --}}
 				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
+					<label class="control-label" for="<%= slug %>_class">{{{ trans('platform/menus::form.class') }}}</label>
 
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.class_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.class_help') }}}"></i>
 
 					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][class]" id="<%= slug %>_class" class="form-control" value="<%= klass %>">
 				</div>
 
 				{{-- Target --}}
 				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_target">{{{ trans('platform/menus::form.attributes.target') }}}</label>
+					<label class="control-label" for="<%= slug %>_target">{{{ trans('platform/menus::form.target') }}}</label>
 
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.target_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.target_help') }}}"></i>
 
 					<div class="controls">
 						<select data-item-form="<%= slug %>" name="children[<%= slug %>][target]" id="<%= slug %>_target" class="form-control">
-							<option value="self"<% if (target == 'self') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.self') }}}</option>
-							<option value="new_children"<% if (target == 'new_children') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.blank') }}}</option>
-							<option value="parent_frame"<% if (target == 'parent_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.parent') }}}</option>
-							<option value="top_frame"<% if (target == 'top_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.top') }}}</option>
+							<option value="self"<%= target == 'self' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.targets.self') }}}</option>
+							<option value="new_children"<%= target == 'new_children' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.targets.blank') }}}</option>
+							<option value="parent_frame"<%= target == 'parent_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.targets.parent') }}}</option>
+							<option value="top_frame"<%= target == 'top_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::form.targets.top') }}}</option>
 						</select>
 					</div>
 				</div>
