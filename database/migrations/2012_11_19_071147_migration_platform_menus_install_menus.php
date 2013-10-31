@@ -75,11 +75,11 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 
 
-			$table->string('attribute_id')->nullable();
+			//$table->string('attribute_id')->nullable();
 			$table->string('class')->nullable();
-			$table->string('attribute_name')->nullable();
-			$table->string('attribute_title')->nullable();
-			$table->string('attribute_target')->default('self');
+			//$table->string('attribute_name')->nullable();
+			//$table->string('attribute_title')->nullable();
+			$table->string('target')->default('self');
 
 
 
