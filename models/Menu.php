@@ -101,7 +101,7 @@ class Menu extends EloquentNode {
 	 * @return array
 	 * @throws InvalidArgumentException
 	 */
-	public function getGroupsAttribute($groups)
+	public function _getGroupsAttribute($groups)
 	{
 		if ( ! $groups)
 		{
