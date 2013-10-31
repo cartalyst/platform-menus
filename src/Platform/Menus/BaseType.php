@@ -47,7 +47,7 @@ abstract class BaseType {
 	protected $translator;
 
 	/**
-	 * Create a new static type.
+	 * Create a new type.
 	 *
 	 * @param  \Illuminate\Routing\UrlGenerator    $url
 	 * @param  \Illuminate\View\Environment        $view

@@ -176,54 +176,27 @@
 
 				<legend>Attributes</legend>
 
-				{{-- ID --}}
-				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_attribute_id">{{{ trans('platform/menus::form.attributes.id') }}}</label>
-
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.id_help') }}}"></i>
-
-					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][attribute_id]" id="<%= slug %>_attribute_id" class="form-control" value="<%= attribute_id %>">
-				</div>
-
 				{{-- Class --}}
 				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_attribute_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
+					<label class="control-label" for="<%= slug %>_class">{{{ trans('platform/menus::form.attributes.class') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.class_help') }}}"></i>
 
-					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][attribute_class]" id="<%= slug %>_attribute_class" class="form-control" value="<%= attribute_class %>">
-				</div>
-
-				{{-- Name --}}
-				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_attribute_name">{{{ trans('platform/menus::form.attributes.name') }}}</label>
-
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.name_help') }}}"></i>
-
-					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][attribute_name]" id="<%= slug %>_attribute_name" class="form-control" value="<%= attribute_name %>">
-				</div>
-
-				{{-- Title --}}
-				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_attribute_title">{{{ trans('platform/menus::form.attributes.title') }}}</label>
-
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.title_help') }}}"></i>
-
-					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][attribute_title]" id="<%= slug %>_attribute_title" class="form-control" value="<%= attribute_title %>">
+					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][class]" id="<%= slug %>_class" class="form-control" value="<%= klass %>">
 				</div>
 
 				{{-- Target --}}
 				<div class="form-group">
-					<label class="control-label" for="<%= slug %>_attribute_target">{{{ trans('platform/menus::form.attributes.target') }}}</label>
+					<label class="control-label" for="<%= slug %>_target">{{{ trans('platform/menus::form.attributes.target') }}}</label>
 
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.attributes.target_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-form="<%= slug %>" name="children[<%= slug %>][attribute_target]" id="<%= slug %>_attribute_target" class="form-control">
-							<option value="self"<% if (attribute_target == 'self') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.self') }}}</option>
-							<option value="new_children"<% if (attribute_target == 'new_children') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.blank') }}}</option>
-							<option value="parent_frame"<% if (attribute_target == 'parent_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.parent') }}}</option>
-							<option value="top_frame"<% if (attribute_target == 'top_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.top') }}}</option>
+						<select data-item-form="<%= slug %>" name="children[<%= slug %>][target]" id="<%= slug %>_target" class="form-control">
+							<option value="self"<% if (target == 'self') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.self') }}}</option>
+							<option value="new_children"<% if (target == 'new_children') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.blank') }}}</option>
+							<option value="parent_frame"<% if (target == 'parent_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.parent') }}}</option>
+							<option value="top_frame"<% if (target == 'top_frame') { %> selected="selected"<% } %>>{{{ trans('platform/menus::form.attributes.targets.top') }}}</option>
 						</select>
 					</div>
 				</div>

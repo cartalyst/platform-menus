@@ -63,7 +63,11 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Specific to "static" menu children
 			$table->string('uri')->nullable();
 
+			// Class for each menu item
+			$table->string('class')->nullable();
 
+			// Target for clicked item
+			$table->string('target')->default('self');
 
 			// User visibility flag
 			$table->string('visibility')->nullable();
@@ -71,19 +75,6 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// Enabled
 			$table->boolean('enabled')->default(0);
-
-
-
-
-			//$table->string('attribute_id')->nullable();
-			$table->string('class')->nullable();
-			//$table->string('attribute_name')->nullable();
-			//$table->string('attribute_title')->nullable();
-			$table->string('target')->default('self');
-
-
-
-
 
 
 			// Specific to "cms" menu children

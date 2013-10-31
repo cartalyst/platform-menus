@@ -238,8 +238,6 @@ class MenusController extends AdminController {
 			$this->processChildRecursively($child, $children);
 		}
 
-		var_dump($children);die;
-
 		// Prepare the menu data for the API
 		$menu = array(
 			'slug'     => Input::get('menu-slug'),
@@ -310,19 +308,14 @@ class MenusController extends AdminController {
 
 			'type'       => Input::get("children.{$index}.type", 'static'),
 			'uri'        => Input::get("children.{$index}.uri"),
-			'page_id'    => Input::get("children.{$index}.page_id"), # maybe change this to type_id ..
+			//'page_id'    => Input::get("children.{$index}.page_id"), # maybe change this to type_id ..
 			'secure'     => Input::get("children.{$index}.secure", 0),
 
-
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
+			//'groups' => Input::get("children.{$index}.groups", array()),
 
-			# need to add the groups
-
-			'attribute_id'     => Input::get("children.{$index}.attribute.id"),
-			'attribute_class'  => Input::get("children.{$index}.attribute.class"),
-			'attribute_name'   => Input::get("children.{$index}.attribute.name"),
-			'attribute_title'  => Input::get("children.{$index}.attribute.title"),
-			'attribute_target' => Input::get("children.{$index}.attribute.target"),
+			'class'  => Input::get("children.{$index}.class"),
+			'target' => Input::get("children.{$index}.target"),
 		);
 
 		// If we have children, call the function again

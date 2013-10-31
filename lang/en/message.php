@@ -26,13 +26,13 @@ return array(
 
 	'success' => array(
 		'create' => 'Menu was successfully created.',
-		'update' => 'Menu was successfully updated.',
+		'edit'   => 'Menu was successfully updated.',
 		'delete' => 'Menu was successfully deleted.',
 	),
 
 	'error' => array(
 		'create' => 'There was an issue creating the menu. Please try again.',
-		'update' => 'There was an issue updating the menu. Please try again.',
+		'edit'   => 'There was an issue updating the menu. Please try again.',
 		'delete' => 'There was an issue deleting the menu. Please try again.',
 	),
 

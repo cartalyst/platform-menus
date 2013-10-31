@@ -112,25 +112,15 @@
 				},
 
 				attributes : {
-					id : {
-						input : '#child_attribute_id',
-					},
 
 					klass : {
-						input : '#child_attribute_class'
-					},
-
-					name : {
-						input : '#child_attribute_name'
-					},
-
-					title : {
-						input : '#child_attribute_title'
+						input : '#child_class'
 					},
 
 					target : {
-						input : '#child_attribute_target'
+						input : '#child_target'
 					}
+
 				}
 
 			}
@@ -461,10 +451,7 @@
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
-				var attrIdInput     = self.prepareInput('new-child', formOpt.children.attributes.id.input);
 				var attrClassInput  = self.prepareInput('new-child', formOpt.children.attributes.klass.input);
-				var attrNameInput   = self.prepareInput('new-child', formOpt.children.attributes.name.input);
-				var attrTitleInput  = self.prepareInput('new-child', formOpt.children.attributes.title.input);
 				var attrTargetInput = self.prepareInput('new-child', formOpt.children.attributes.target.input);
 
 				// Get the parent id
@@ -496,11 +483,8 @@
 						'visibility' : visibilityInput.val(),
 						'groups'     : groupsInput.val(),
 
-						'attribute_id'     : attrIdInput.val(),
-						'attribute_class'  : attrClassInput.val(),
-						'attribute_name'   : attrNameInput.val(),
-						'attribute_title'  : attrTitleInput.val(),
-						'attribute_target' : attrTargetInput.val()
+						'klass'  : attrClassInput.val(),
+						'target' : attrTargetInput.val()
 
 					};
 
@@ -525,10 +509,7 @@
 					parentInput.val('0');
 					typeInput.val('static');
 					secureInput.val('0');
-					attrIdInput.val('');
 					attrClassInput.val('');
-					attrNameInput.val('');
-					attrTitleInput.val('');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');
@@ -627,12 +608,10 @@
 					// Have we changed the parent of the item?
 					if (currentParentId != parentId)
 					{
-						if (formId == parentId)
+						// Make sure we are moving to a valid parent
+						if (formId != parentId)
 						{
-							alert('Impossibru');
-						}
-						else
-						{
+							// Are we moving to the root level?
 							if (parentId == 0)
 							{
 								var moveTo = $(options.nestable.selector + ' > ol');
