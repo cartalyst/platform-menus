@@ -298,7 +298,7 @@ class MenusController extends AdminController {
 		// is advantageous to us, since a menu slug can be changed
 		// without anything being messed up. For new items, we'll
 		// use the slug that has been passed to us.
-		$index = $child['itemId'];
+		$index = $child['id'];
 
 		$new_child = array(
 			'id'         => is_numeric($index) ? $index : null,
