@@ -123,25 +123,12 @@
 
 		},
 
-		// Nestable settings
-		nestable : {
+		// Sortable settings
+		sortable : {
 
-			selector        : '#nestable',
-			listNodeName    : 'ol',
-			itemNodeName    : 'li',
-			rootClass       : 'nestable',
-			listClass       : 'items',
-			itemClass       : 'item',
-			dragClass       : 'item-dd-drag',
-			handleClass     : 'item-dd-handle',
-			collapsedClass  : 'item-dd-collapsed',
-			placeClass      : 'item-dd-placeholder',
-			noDragClass     : 'item-dd-nodrag',
-			emptyClass      : 'item-dd-empty',
-			expandBtnHTML   : false,
-			collapseBtnHTML : false,
-			group           : 0,
-			maxDepth        : 100
+			selector          : '#sortable > ol',
+			containerSelector : 'ol',
+			itemSelector      : 'li'
 
 		},
 
@@ -178,14 +165,41 @@
 			// Avoid scope issues
 			var self = this;
 
-			// Activate Nestable
-			$(this.opt.nestable.selector).nestable(this.opt.nestable).on('change', function(event) {
+			// Activate sortable
+			$(this.opt.sortable.selector).sortable({
 
-				console.log(event.target.id);
+				placeholder: '<li class="placeholder"></li>',
+				//group: 'no-drop',
+				//handle: 'div.item-dd-handle',
+				onDrop: function (item, container, _super) {
 
-				console.log(self);
+					var parentId = item.parent('ol').parent('li').data('item-id');
 
-				self.renderParentsDropdowns();
+					var itemId = item.data('item-id');
+
+					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
+
+					_super(item, container);
+
+					self.renderParentsDropdowns();
+
+				},
+				serialize: function (parent, children, isContainer) {
+
+					var result = $.extend({}, {id : parent.data('item-id')});
+
+					if(isContainer)
+					{
+						return children
+					}
+					else if (children[0])
+					{
+						result.children = children
+					}
+
+					return result
+
+				}
 
 			});
 
@@ -492,7 +506,7 @@
 					});
 
 					// Append the new menu item
-					$(options.nestable.selector + ' > ol').append(_.template($(options.templates.item).html(), data));
+					$(options.sortable.selector).append(_.template($(options.templates.item).html(), data));
 					$('[data-forms]').append(_.template($(options.templates.form).html(), data));
 
 					// Add the item to the array
@@ -611,7 +625,7 @@
 							// Are we moving to the root level?
 							if (parentId == 0)
 							{
-								var moveTo = $(options.nestable.selector + ' > ol');
+								var moveTo = $(options.sortable.selector);
 							}
 							else
 							{
@@ -658,13 +672,13 @@
 
 					// Find the item
 					var item = $('[data-item="' + itemId + '"]').closest('li');
-					var list = item.children(options.nestable.listNodeName);
+					var list = item.children(options.sortable.containerSelector);
 
 					// Check if we have children
 					if (list.length > 0)
 					{
 						// Grab the list's children items and put them after this item
-						var childItems = list.children(options.nestable.itemNodeName);
+						var childItems = list.children(options.sortable.itemSelector);
 						childItems.insertAfter(item);
 					}
 
@@ -675,7 +689,7 @@
 					item.remove();
 
 					// Check if we have children
-					if ($(options.nestable.selector + ' > ol > li').length == 0)
+					if ($(options.sortable.selector + ' > li').length == 0)
 					{
 						$('[data-item-add]').addClass('hide');
 						$('[data-no-items]').removeClass('hide').find('[data-item-add]').removeClass('hide');
@@ -708,7 +722,7 @@
 				options.isSaving = true;
 
 				// Append input to the form. It's values are JSON encoded..
-				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(options.nestable.selector).nestable('serialize')) + '\'>');
+				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(self.opt.sortable.selector).sortable("serialize").get()) + '\'>');
 
 			});
 
@@ -810,7 +824,7 @@
 		 */
 		renderParentsDropdowns : function() {
 
-			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.nestable.selector + ' > ol'), 0));
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.sortable.selector), 0));
 
 		},
 

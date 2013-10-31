@@ -1,19 +1,19 @@
 <script type="text/template" id="form-template">
 
-<div class="well well-md well-white-bg hide" data-item-form="<%= slug %>" data-item-parent="<%= parent_id %>">
+<div class="well well-md item-box-white-bg hide" data-item-form="<%= slug %>" data-item-parent="<%= parent_id %>">
 
 	<input type="hidden" id="<%= slug %>_current-slug" value="<%= slug %>">
 
 	<h4>
 		{{{ trans('platform/menus::form.edit.legend') }}}
 
-		<span class="pull-right"><small class="item-close" data-item-close="<%= slug %>">&times;</small></span>
+		<span class="pull-right"><small class="item-box-close" data-item-close="<%= slug %>">&times;</small></span>
 	</h4>
 
 	<p>{{{ trans('platform/menus::form.edit.description') }}}</p>
 
 	{{-- Item details --}}
-	<div class="well well-md well-borderless">
+	<div class="well well-md item-box-borderless">
 
 		<fieldset>
 
@@ -64,7 +64,7 @@
 	</div>
 
 	{{-- Item URL --}}
-	<div class="well well-md well-borderless">
+	<div class="well well-md item-box-borderless">
 
 		<fieldset>
 
@@ -128,7 +128,7 @@
 	{{-- Options --}}
 	<div class="hide" style="padding-top: 20px;" data-options>
 
-		<div class="well well-md well-borderless">
+		<div class="well well-md item-box-borderless">
 
 			<fieldset>
 
@@ -170,7 +170,7 @@
 		</div>
 
 		{{-- Attributes --}}
-		<div class="well well-md well-borderless">
+		<div class="well well-md item-box-borderless">
 
 			<fieldset>
 

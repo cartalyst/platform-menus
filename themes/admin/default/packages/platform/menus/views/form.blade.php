@@ -5,20 +5,20 @@
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 	$selectedGroups = ! empty($child) ? $child->groups ?: array() : array();
 ?>
-<div class="well well-md hide well-white-bg" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
+<div class="well well-md hide item-box-white-bg" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
 	<input type="hidden" id="{{ sprintf($childId, 'current-slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 
 	<h4>
 		{{{ trans("platform/menus::form.{$segment}.legend") }}}
 
-		<span class="pull-right"><small class="item-close" data-item-close="{{{ ! empty($child) ? $child->id : 'new-child' }}}">&times;</small></span>
+		<span class="pull-right"><small class="item-box-close" data-item-close="{{{ ! empty($child) ? $child->id : 'new-child' }}}">&times;</small></span>
 	</h4>
 
 	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
 
 	{{-- Item Details --}}
-	<div class="well well-md well-borderless">
+	<div class="well well-md item-box-borderless">
 
 		<fieldset>
 
@@ -72,7 +72,7 @@
 	</div>
 
 	{{-- Item URL --}}
-	<div class="well well-md well-borderless">
+	<div class="well well-md item-box-borderless">
 
 		<fieldset>
 
@@ -142,7 +142,7 @@
 	{{-- Options --}}
 	<div class="hide" style="padding-top: 20px;" data-options>
 
-		<div class="well well-md well-borderless">
+		<div class="well well-md item-box-borderless">
 
 			<fieldset>
 
@@ -184,7 +184,7 @@
 		</div>
 
 		{{-- Attributes --}}
-		<div class="well well-md well-borderless">
+		<div class="well well-md item-box-borderless">
 
 			<fieldset>
 
