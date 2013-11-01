@@ -1,9 +1,9 @@
 <script type="text/template" id="item-template">
 
-<li data-item-id="<%= slug %>">
-	<div class="item-dd-handle"></div>
+<li data-item="<%= slug %>">
+	<div class="item-handle"><i class="fa fa-reorder"></i></div>
 
-	<div data-item="<%= slug %>" class="item-name"><%= name %></div>
+	<div class="item-name" data-item-name="<%= slug %>"><%= name %></div>
 
 	<ol>
 

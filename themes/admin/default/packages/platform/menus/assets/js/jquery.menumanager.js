@@ -169,42 +169,50 @@
 			$(this.opt.sortable.selector).sortable({
 
 				placeholder: '<li class="placeholder"></li>',
-				//group: 'no-drop',
-				//handle: 'div.item-dd-handle',
+				handle: 'div.item-handle',
 				onDrop: function (item, container, _super) {
 
+					// Get the parent id
 					var parentId = item.parent('ol').parent('li').data('item-id');
 
+					// Get the item id
 					var itemId = item.data('item-id');
 
+					// Make sure we have a proper parent id
 					if (parentId == null)
 					{
 						var parentId = 0;
 					}
 
+					// Update the parent id on the item form box
 					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
 
-					self.renderParentsDropdowns();
-
+					// Make sure that the parent dropdown has the correct value selected
 					$('#' + itemId + '_parent').val(parentId);
+
+					// We have unsaved changes
+					self.opt.unsavedChanges = true;
+
+					// Refresh the parent dropdowns
+					self.renderParentsDropdowns();
 
 					_super(item, container);
 
 				},
 				serialize: function (parent, children, isContainer) {
 
-					var result = $.extend({}, { id : parent.data('item-id') });
+					var result = $.extend({}, { id : parent.data('item') });
 
 					if (isContainer)
 					{
-						return children
+						return children;
 					}
 					else if (children[0])
 					{
-						result.children = children
+						result.children = children;
 					}
 
-					return result
+					return result;
 
 				}
 
@@ -649,7 +657,7 @@
 
 					// Update the li item name with the new item name,
 					// just in case the item name gets updated.
-					$('[data-item="' + formId + '"]').html($('#' + formId + '_name').val());
+					$('[data-item-name="' + formId + '"]').html($('#' + formId + '_name').val());
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
@@ -805,9 +813,9 @@
 
 			OL.children('li').each(function () {
 
-				var id = $(this).data('item-id');
+				var id = $(this).data('item');
 
-				var text = self.spacers(level) + $(this).find('[data-item="' + id + '"]').text();
+				var text = self.spacers(level) + $(this).find('[data-item-name="' + id + '"]').text();
 
 				dropdown += '<option value="' + id + '">' + text + '</option>';
 
