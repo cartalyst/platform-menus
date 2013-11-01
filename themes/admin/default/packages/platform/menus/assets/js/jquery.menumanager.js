@@ -187,14 +187,14 @@
 					// Update the parent id on the item form box
 					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
 
+					// Refresh the parent dropdowns
+					self.renderParentsDropdowns();
+
 					// Make sure that the parent dropdown has the correct value selected
 					$('#' + itemId + '_parent').val(parentId);
 
 					// We have unsaved changes
 					self.opt.unsavedChanges = true;
-
-					// Refresh the parent dropdowns
-					self.renderParentsDropdowns();
 
 					_super(item, container);
 
