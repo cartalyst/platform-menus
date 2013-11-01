@@ -17,15 +17,6 @@
  * @link       http://cartalyst.com
  */
 
-
-/**
- *
- * TODO LIST:
- * 	- Updating : Add validation to the inputs
- *
- */
-
-
 ;(function($, window, document, undefined) {
 
 	'use strict';
@@ -113,7 +104,7 @@
 
 				static_uri : {
 					input : '#child_static_uri',
-					rules : ['required_if:type=static']
+					rules : ['required_if:type:static']
 				},
 
 				visibility : {
@@ -614,7 +605,8 @@
 					alert('The slug [' + slug + '] is already taken!');
 				}
 
-				else
+				// Check if the form is valid
+				else if (self.validateInputs(formId, formOpt.children))
 				{
 					// Remove the item from the array, because we
 					// might have changed the slug.
@@ -774,7 +766,7 @@
 			// Set the validation rules for this type
 			this.opt.form.children[type + '_uri'] = {
 				input : '#child_' + type + '_uri',
-				rules : ['required_if:type=' + type]
+				rules : ['required_if:type:' + type]
 			};
 
 		},
@@ -962,9 +954,16 @@
 
 						if (rule.indexOf('required_if') != -1)
 						{
-							var type = rule.replace('required_if:type=', '');
+							var rule = rule.split(':');
 
-							// apply some more logic here
+							var requiredInputValue = self.prepareInput(id, self.opt.form.children[rule[1]]['input']).val();
+
+							if (requiredInputValue == rule[2] & $($input).val() == '')
+							{
+								self.showError($input);
+
+								failedInputs.push($input);
+							}
 						}
 
 						else if (rule == 'required' && $($input).val() == '')
