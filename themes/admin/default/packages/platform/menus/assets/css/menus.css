@@ -19,6 +19,7 @@ body.dragging, body.dragging * {
 /* Menu items */
 ol {
 	margin: 0 0 9px 0;
+	padding-left: 0;
 }
 
 	ol li {
