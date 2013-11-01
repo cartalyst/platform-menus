@@ -74,15 +74,15 @@ $(function() {
 
 					<p>&nbsp;</p>
 
-					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
+					<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
 
 				</div>
 
 			</div>
 
-			<ol class="items">
-				<li class="item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
-					<div class="item-name">{{{ trans('platform/menus::button.add_item') }}}</div>
+			<ol class="items{{ empty($children) ? ' hide' : null }}" data-item-add>
+				<li class="item-add">
+					<div class="item-name" data-item="new-child">{{{ trans('platform/menus::button.add_item') }}}</div>
 				</li>
 			</ol>
 

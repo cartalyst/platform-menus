@@ -336,7 +336,10 @@
 			 *
 			 * @return void
 			 */
-			$document.on('click', '[data-item]', function() {
+			$document.on('click', '[data-item]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
 
 				// Hide the root form
 				self.hideRootForm();
@@ -429,25 +432,6 @@
 
 				// Close the item form box
 				$('[data-item-form="' + itemId + '"]').addClass('hide');
-
-			});
-
-
-			/**
-			 * Shows the add new item form box.
-			 *
-			 * @return void
-			 */
-			$document.on('click', '[data-item-add]', function(e) {
-
-				// Prevent the form from being submitted
-				e.preventDefault();
-
-				// Hide the root form
-				self.hideRootForm();
-
-				// Show the add item form
-				$('[data-item-form="new-child"]').removeClass('hide');
 
 			});
 
