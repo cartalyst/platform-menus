@@ -54,6 +54,15 @@
 
 		},
 
+		// Sortable settings
+		sortable : {
+
+			selector          : '#sortable > ol',
+			containerSelector : 'ol',
+			itemSelector      : 'li'
+
+		},
+
 		// Form elements
 		form : {
 
@@ -123,15 +132,6 @@
 
 		},
 
-		// Sortable settings
-		sortable : {
-
-			selector          : '#sortable > ol',
-			containerSelector : 'ol',
-			itemSelector      : 'li'
-
-		},
-
 		// Are we saving the menu?
 		isSaving : false,
 
@@ -165,7 +165,7 @@
 			// Avoid scope issues
 			var self = this;
 
-			// Activate sortable
+			// Activate Sortable
 			$(this.opt.sortable.selector).sortable({
 
 				placeholder: '<li class="placeholder"></li>',
@@ -177,18 +177,25 @@
 
 					var itemId = item.data('item-id');
 
+					if (parentId == null)
+					{
+						var parentId = 0;
+					}
+
 					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
 
-					_super(item, container);
-
 					self.renderParentsDropdowns();
+
+					$('#' + itemId + '_parent').val(parentId);
+
+					_super(item, container);
 
 				},
 				serialize: function (parent, children, isContainer) {
 
-					var result = $.extend({}, {id : parent.data('item-id')});
+					var result = $.extend({}, { id : parent.data('item-id') });
 
-					if(isContainer)
+					if (isContainer)
 					{
 						return children
 					}
