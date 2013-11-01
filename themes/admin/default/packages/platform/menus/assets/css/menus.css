@@ -46,12 +46,12 @@ body.dragging, body.dragging * {
 			}
 
 		ol li .item-name {
-			border: 1px solid #ccc;
 			background: #fafafa;
 			background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
 			background:    -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
 			background: 		linear-gradient(top, #fafafa 0%, #eee 100%);
-			color: #333;
+			border: 1px solid #cccccc;
+			color: #333333;
 			display: block;
 			font-weight: bold;
 			height: 30px;
@@ -79,7 +79,6 @@ body.dragging, body.dragging * {
 			color: #ffffff;
 			cursor: move;
 			display: block;
-			font-weight: bold;
 			height: 30px;
 			margin: 0;
 			float: left;
@@ -96,4 +95,7 @@ body.dragging, body.dragging * {
 				background: #dddddd;
 			}
 
-		ol li.item-add .item-name { text-align: center; padding-left: 0; }
+		ol li.item-add .item-name {
+			padding-left: 0;
+			text-align: center;
+		}

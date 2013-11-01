@@ -70,6 +70,10 @@
 			// children items, this contains the children hierarchy.
 			tree : 'menu-tree',
 
+			group : '.form-group',
+
+			errorClass : 'has-error',
+
 			// Root elements
 			root : {
 
@@ -109,7 +113,7 @@
 
 				static_uri : {
 					input : '#child_static_uri',
-					rules : ['required_if:type=static'] // to implement
+					rules : ['required_if:type=static']
 				},
 
 				visibility : {
@@ -488,7 +492,7 @@
 				// Check if this is an unique slug
 				if ( ! self.isUniqueSlug(slug))
 				{
-					alert('Unique slug, fix it...');
+					alert('The slug [' + slug + '] is already taken!');
 				}
 
 				// Check if the form is valid
@@ -607,7 +611,7 @@
 				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
 				{
-					alert('Unique slug, fix it...');
+					alert('The slug [' + slug + '] is already taken!');
 				}
 
 				else
@@ -764,7 +768,14 @@
 		 */
 		registerType : function(name, type) {
 
+			// Register the type
 			this.opt.types[type] = name;
+
+			// Set the validation rules for this type
+			this.opt.form.children[type + '_uri'] = {
+				input : '#child_' + type + '_uri',
+				rules : ['required_if:type=' + type]
+			};
 
 		},
 
@@ -949,12 +960,20 @@
 
 						var $input = value.input.replace('child', id);
 
-						if (rule == 'required' && $($input).val() == '')
+						if (rule.indexOf('required_if') != -1)
+						{
+							var type = rule.replace('required_if:type=', '');
+
+							// apply some more logic here
+						}
+
+						else if (rule == 'required' && $($input).val() == '')
 						{
 							self.showError($input);
 
 							failedInputs.push($input)
 						}
+
 						else
 						{
 							self.hideError($input);
@@ -991,15 +1010,27 @@
 
 		},
 
+		/**
+		 * Shows the error on the input
+		 *
+		 * @param  object  input
+		 * @return void
+		 */
 		showError : function(input) {
 
-			$(input).parent().addClass('error');
+			$(input).closest(this.opt.form.group).addClass(this.opt.form.errorClass);
 
 		},
 
+		/**
+		 * Hides the error on the input.
+		 *
+		 * @param  object  input
+		 * @return void
+		 */
 		hideError : function(input) {
 
-			$(input).parent().removeClass('error');
+			$(input).closest(this.opt.form.group).removeClass(this.opt.form.errorClass);
 
 		}
 
