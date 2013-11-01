@@ -7,7 +7,7 @@
 @stop
 
 {{-- Queue assets --}}
-{{ Asset::queue('tempo', 'js/tempo/tempo.js', 'jquery') }}
+{{ Asset::queue('underscore', 'js/underscore/underscore.js', 'jquery') }}
 {{ Asset::queue('data-grid', 'js/cartalyst/data-grid.js', 'tempo') }}
 
 {{-- Inline scripts --}}
@@ -82,22 +82,7 @@ $(function() {
 			{{-- Data Grid : Applied Filters --}}
 			<div class="col-lg-10">
 
-				<div class="data-grid_applied" data-grid="main">
-
-					<span data-template style="display: none;">
-
-						<button type="button" class="btn btn-info tip" title="Remove filter">
-							[? if column == undefined ?]
-								[[ valueLabel ]]
-							[? else ?]
-								[[ valueLabel ]] {{{ trans('general.in') }}} <em>[[ columnLabel ]]</em>
-							[? endif ?]
-							<i class="fa fa-times"></i>
-						</button>
-
-					</span>
-
-				</div>
+				<div class="data-grid_applied" data-grid="main"></div>
 
 			</div>
 
@@ -140,34 +125,15 @@ $(function() {
 		</table>
 
 		{{-- Data Grid : Pagination --}}
-		<div class="data-grid_pagination" data-grid="main">
-			<div data-template style="display: none;">
-
-				<div class="pull-right">
-
-					<ul class="pagination pagination-sm">
-						[? if prevPage !== null ?]
-						<li><a data-page="[[ prevPage ]]"><i class="fa fa-chevron-left"></i></a></li>
-						[? else ?]
-						<li class="disabled"><a><i class="fa fa-chevron-left"></i></a></li>
-						[? endif ?]
-
-						[? if nextPage !== null ?]
-						<li><a  data-page="[[ nextPage ]]"><i class="fa fa-chevron-right"></i></a></li>
-						[? else ?]
-						<li class="disabled"><a><i class="fa fa-chevron-right"></i></a></li>
-						[? endif ?]
-					</ul>
-
-				</div>
-
-				{{{ trans('general.showing') }}} [[ pageStart ]] {{{ trans('general.to') }}} [[ pageLimit ]] {{{ trans('general.of') }}} <span class="total"></span>
-
-			</div>
-		</div>
+		<div class="data-grid_pagination" data-grid="main"></div>
 
 	</div>
 
 </div>
+
+@include('platform/menus::data-grid-tmpl')
+@include('platform/menus::data-grid_pagination-tmpl')
+@include('platform/menus::data-grid_applied-tmpl')
+@include('platform/menus::data-grid_no-results-tmpl')
 
 @stop
