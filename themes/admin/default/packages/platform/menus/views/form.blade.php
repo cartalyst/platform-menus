@@ -128,7 +128,7 @@
 
 	</div>
 
-	<button type="button" class="btn btn-sm btn-info" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}">More options</button>
+	<button type="button" class="btn btn-sm btn-info" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}">{{{ trans('platform/menus::button.more_options') }}}</button>
 
 	<span class="pull-right">
 	@if ( ! empty($child))

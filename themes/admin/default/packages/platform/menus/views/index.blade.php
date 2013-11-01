@@ -87,7 +87,7 @@ $(function() {
 			</div>
 
 			<div class="col-lg-2 text-right">
-				<a class="btn btn-warning" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
+				<a class="btn btn-warning" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('platform/menus::button.create') }}}</a>
 			</div>
 
 		</div>

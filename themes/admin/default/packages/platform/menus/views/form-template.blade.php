@@ -117,7 +117,7 @@
 
 	</div>
 
-	<button type="button" class="btn btn-sm btn-info" data-toggle-options="<%= slug %>">More options</button>
+	<button type="button" class="btn btn-sm btn-info" data-toggle-options="<%= slug %>">{{{ trans('platform/menus::button.more_options') }}}</button>
 
 	<span class="pull-right">
 		<button class="btn btn-sm btn-success" data-item-update="<%= slug %>">{{{ trans('button.update') }}}</button>
