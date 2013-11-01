@@ -66,7 +66,7 @@ $(function() {
 		{{-- Menu Items --}}
 		<div class="col-md-7">
 
-			<ol>
+			<ol class="items">
 				<li class="item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
 					<div class="item-name">{{{ trans('platform/menus::button.add_item') }}}</div>
 				</li>

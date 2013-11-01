@@ -17,10 +17,12 @@ body.dragging, body.dragging * {
 
 
 /* Menu items */
-ol {
+.items{
 	margin: 0 0 9px 0;
 	padding-left: 0;
 }
+
+.items ol{ padding-left:30px; }
 
 	ol li {
 		display: block;
