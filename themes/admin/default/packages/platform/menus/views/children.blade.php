@@ -1,7 +1,7 @@
-<li data-item="{{ $child->id }}">
+<li data-item-id="{{ $child->id }}">
 	<div class="item-handle"><i class="fa fa-reorder"></i></div>
 
-	<div class="item-name" data-item-name="{{ $child->id }}">{{ $child->name }}</div>
+	<div class="item-name" data-item="{{ $child->id }}" data-item-name="{{ $child->id }}">{{ $child->name }}</div>
 
 	<ol>
 		@if ( ! empty($child) and $children = $child->getChildren())

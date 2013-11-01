@@ -201,7 +201,7 @@
 				},
 				serialize: function (parent, children, isContainer) {
 
-					var result = $.extend({}, { id : parent.data('item') });
+					var result = $.extend({}, { id : parent.data('item-id') });
 
 					if (isContainer)
 					{
@@ -813,7 +813,7 @@
 
 			OL.children('li').each(function () {
 
-				var id = $(this).data('item');
+				var id = $(this).data('item-id');
 
 				var text = self.spacers(level) + $(this).find('[data-item-name="' + id + '"]').text();
 
