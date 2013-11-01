@@ -66,6 +66,20 @@ $(function() {
 		{{-- Menu Items --}}
 		<div class="col-md-7">
 
+			<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
+
+				<div class="container" id="no-children">
+
+					<h1>{{ trans('platform/menus::message.no_children') }}</h1>
+
+					<p>&nbsp;</p>
+
+					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
+
+				</div>
+
+			</div>
+
 			<ol class="items">
 				<li class="item-add{{ empty($children) ? ' hide' : null }}" data-item-add>
 					<div class="item-name">{{{ trans('platform/menus::button.add_item') }}}</div>
@@ -81,20 +95,6 @@ $(function() {
 					{{-- Underscore children template --}}
 					@include('platform/menus::children-template')
 				</ol>
-			</div>
-
-			<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
-
-				<div class="container" id="no-children">
-
-					<h1>{{ trans('platform/menus::message.no_children') }}</h1>
-
-					<p>&nbsp;</p>
-
-					<p><button class="btn btn-primary btn-md" data-item-add><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
-
-				</div>
-
 			</div>
 
 		</div>
