@@ -89,11 +89,11 @@ $(function() {
 			<div id="sortable">
 				<ol class="items">
 					@if ( ! empty($children))
-					@each('platform/menus::children', $children, 'child')
+					@each('platform/menus::manage/children', $children, 'child')
 					@endif
 
 					{{-- Underscore children template --}}
-					@include('platform/menus::children-template')
+					@include('platform/menus::manage/children-template')
 				</ol>
 			</div>
 
@@ -125,15 +125,15 @@ $(function() {
 
 			{{-- Items form --}}
 			@if ( ! empty($children))
-			@each('platform/menus::form', $children, 'child')
+			@each('platform/menus::manage/form', $children, 'child')
 			@endif
 
 			{{-- New children form --}}
-			@include('platform/menus::form')
+			@include('platform/menus::manage/form')
 
 			{{-- Underscore form template --}}
 			<div data-forms>
-				@include('platform/menus::form-template')
+				@include('platform/menus::manage/form-template')
 			</div>
 
 		</div>
