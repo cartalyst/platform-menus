@@ -372,7 +372,7 @@ return array(
 				'slug'  => 'admin-menus',
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
-				'uri'   => '/menus',
+				'uri'   => 'menus',
 			),
 
 		),
@@ -390,7 +390,7 @@ return array(
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
 				'class' => 'fa fa-cog',
-				'uri'   => '/admin/settings',
+				'uri'   => 'admin/settings',
 			),
 
 
@@ -398,7 +398,7 @@ return array(
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
 				'class' => 'fa fa-sign-out',
-				'uri'   => '/logout',
+				'uri'   => 'logout',
 			),
 
 		),
@@ -417,7 +417,7 @@ return array(
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
 				'class'      => 'fa fa-sign-in',
-				'uri'        => '/login',
+				'uri'        => 'login',
 				'visibility' => 'logged_out',
 			),
 
@@ -425,7 +425,7 @@ return array(
 				'slug'       => 'main-logout',
 				'name'       => 'Logout',
 				'class'      => 'fa fa-home',
-				'uri'        => '/logout',
+				'uri'        => 'logout',
 				'visibility' => 'logged_in',
 			),
 
@@ -433,7 +433,7 @@ return array(
 				'slug'       => 'main-register',
 				'name'       => 'Register',
 				'class'      => 'fa fa-pencil',
-				'uri'        => '/register',
+				'uri'        => 'register',
 				'visibility' => 'logged_out',
 			),
 
@@ -441,7 +441,7 @@ return array(
 				'slug'       => 'main-dashboard',
 				'name'       => 'Admin',
 				'class'      => 'fa fa-dashboard',
-				'uri'        => '/admin',
+				'uri'        => 'admin',
 				'visibility' => 'admin',
 			),
 
