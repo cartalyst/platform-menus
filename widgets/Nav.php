@@ -164,51 +164,16 @@ class Nav {
 		// We'll modify the URI only if necessary
 		if (isset($beforeUri))
 		{
-			$child->uri = "{$beforeUri}/{$child->uri}";
+			$child->uri = "/{$beforeUri}/{$child->uri}";
+		}
+
+		if ($child->uri === $path)
+		{
+			$child->isActive = true;
 		}
 
 		switch ($child->type)
 		{
-			// If the child is static, we are able to prepare it right away
-			case 'static':
-
-				if ($activePath and is_array($activePath[0]))
-				{
-					foreach ($activePath as $currentPath)
-					{
-						if (in_array($child->id, $currentPath))
-						{
-							$child->isActive = in_array($child->id, $currentPath);
-						}
-					}
-				}
-				elseif ($child->uri === '/' and $path === '/')
-				{
-					$child->isActive = true;
-				}
-				else
-				{
-					if ($child->uri != '/' and $child->uri === $path)
-					{
-						$child->isActive = true;
-					}
-					else
-					{
-						$child->isActive = in_array($child->id, $activePath);
-					}
-				}
-
-				break;
-
-			case 'page':
-
-				if ($child->uri != '/' and $child->uri === $path)
-				{
-					$child->isActive = true;
-				}
-
-				break;
-
 			// We'll fire an event for the logic to be handled by the correct type
 			default:
 
