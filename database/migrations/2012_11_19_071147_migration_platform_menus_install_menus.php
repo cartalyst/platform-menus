@@ -73,6 +73,10 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			$table->string('visibility')->nullable();
 			$table->text('groups')->nullable();
 
+			// Regular expression field so that we can have a more
+			// flexible way to set the "selected" class on a item.
+			$table->string('regex')->nullable();
+
 			// Enabled
 			$table->boolean('enabled')->default(0);
 

@@ -116,7 +116,18 @@ class Nav {
 			$child->uri = "/{$beforeUri}/{$child->uri}";
 		}
 
-		if ($child->uri === $path)
+		// Do we have a regular expression for this item?
+		if ($regex = $child->regex)
+		{
+			// Make sure that the regular expression is valid
+			if (@preg_match($regex, $path))
+			{
+				$child->isActive = true;
+			}
+		}
+
+		// Check if the uri of the item matches the current request path
+		elseif ($child->uri === $path)
 		{
 			$child->isActive = true;
 		}
