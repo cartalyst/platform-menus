@@ -205,6 +205,26 @@
 
 		</div>
 
+		{{-- Regular Expression --}}
+		<div class="well well-md item-box-borderless">
+
+			<fieldset>
+
+				<legend>Regular Expression</legend>
+
+				{{-- Regular Expression --}}
+				<div class="form-group">
+					<label class="control-label" for="<%= slug %>_regex">{{{ trans('platform/menus::form.regex') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.regex_help') }}}"></i>
+
+					<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][regex]" id="<%= slug %>_regex" class="form-control" value="<%= regex %>">
+				</div>
+
+			</fieldset>
+
+		</div>
+
 	</div>
 
 </div>

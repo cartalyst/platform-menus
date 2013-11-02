@@ -82,4 +82,7 @@ return array(
 		'top'    => 'Top Frame (Main Document)',
 	),
 
+	'regex'      => 'Regular Expression',
+	'regex_help' => 'Regex pattern for advanced "selected" states.'
+
 );

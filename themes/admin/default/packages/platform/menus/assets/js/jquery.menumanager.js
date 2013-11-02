@@ -121,6 +121,10 @@
 
 				target : {
 					input : '#child_target'
+				},
+
+				regex : {
+					input : '#child_regex'
 				}
 
 			}
@@ -457,6 +461,7 @@
 				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
 				var classInput      = self.prepareInput('new-child', formOpt.children.klass.input);
 				var targetInput     = self.prepareInput('new-child', formOpt.children.target.input);
+				var regexInput      = self.prepareInput('new-child', formOpt.children.regex.input);
 
 				// Get the parent id
 				var parentId = parentInput.val();
@@ -488,7 +493,9 @@
 						'groups'     : groupsInput.val(),
 
 						'klass'  : classInput.val(),
-						'target' : targetInput.val()
+						'target' : targetInput.val(),
+
+						'regex' : regexInput.val()
 
 					};
 
@@ -515,6 +522,7 @@
 					secureInput.val('0');
 					classInput.val('');
 					targetInput.val('self');
+					regexInput.val('');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');

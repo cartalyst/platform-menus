@@ -219,6 +219,26 @@
 
 		</div>
 
+		{{-- Regular Expression --}}
+		<div class="well well-md item-box-borderless">
+
+			<fieldset>
+
+				<legend>Regular Expression</legend>
+
+				{{-- Regular Expression --}}
+				<div class="form-group">
+					<label class="control-label" for="{{ sprintf($childId, 'regex') }}">{{{ trans('platform/menus::form.regex') }}}</label>
+
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.regex_help') }}}"></i>
+
+					<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'regex') }}" id="{{ sprintf($childId, 'regex') }}" class="form-control" value="{{ ! empty($child) ? $child->regex : null }}">
+				</div>
+
+			</fieldset>
+
+		</div>
+
 	</div>
 
 </div>

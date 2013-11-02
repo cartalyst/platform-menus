@@ -298,6 +298,7 @@ class MenusController extends AdminController {
 
 			'class'  => Input::get("children.{$index}.class"),
 			'target' => Input::get("children.{$index}.target"),
+			'regex'  => Input::get("children.{$index}.regex"),
 		);
 
 		// If we have children, call the function again
