@@ -188,9 +188,7 @@ class Nav {
 				}
 				else
 				{
-					$childUri = str_replace('/', '\/', $child->uri);
-
-					if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
+					if ($child->uri != '/' and $child->uri === $path)
 					{
 						$child->isActive = true;
 					}
@@ -204,9 +202,7 @@ class Nav {
 
 			case 'page':
 
-				$childUri = str_replace('/', '\/', $child->uri);
-
-				if ($child->uri != '/' and preg_match("/{$childUri}/i", $path))
+				if ($child->uri != '/' and $child->uri === $path)
 				{
 					$child->isActive = true;
 				}
