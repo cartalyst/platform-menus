@@ -5,7 +5,7 @@
 		<tr>
 			<td><%= r.name %></td>
 			<td><%= r.slug %></td>
-			<td><%= r.children_count%></td>
+			<td><%= r.items_count%></td>
 			<td><%= r.created_at %></td>
 			<td>
 				<a class="btn btn-primary tip" href="{{ URL::toAdmin('menus/edit/<%= r.slug %>') }}" title="{{{ trans('platform/menus::button.edit') }}}"><i class="fa fa-edit"></i></a>

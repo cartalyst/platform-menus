@@ -50,16 +50,15 @@ class MenusController extends AdminController {
 	public function getGrid()
 	{
 		// Get all the root menus
-		$response = API::get('v1/menus', array('root' => true));
-		$menus    = array();
+		$response = API::get('v1/menus?root=true');
+		$menus    = $response['menus'];
 
-		foreach ($response['menus'] as $menu)
+		// Prepare the menus data
+		foreach ($menus as &$menu)
 		{
 			$count = $menu->getChildrenCount();
 
-			$menus[] = array_merge($menu->toArray(), array(
-				'children_count' => Lang::choice('platform/menus::table.children', $count, compact('count'))
-			));
+			$menu->items_count = Lang::choice('platform/menus::table.items', $count, compact('count'));
 		}
 
 		// Return the Data Grid object
@@ -67,7 +66,7 @@ class MenusController extends AdminController {
 			'id',
 			'name',
 			'slug',
-			'children_count',
+			'items_count',
 			'created_at',
 		));
 	}
@@ -231,17 +230,14 @@ class MenusController extends AdminController {
 
 		try
 		{
-			// Do we have a menu identifier?
+			// Are we creating a new menu?
 			if (is_null($slug))
 			{
 				// Create the menu
 				$response = API::post('v1/menus', compact('menu'));
 
-				// Get the new menu slug
-				$slug = $response['menu']->slug;
-
-				// Set the success message
-				$bag = with(new Bag)->add('success', Lang::get('platform/menus::message.success.create'));
+				// Prepare the success message
+				$message = Lang::get('platform/menus::message.success.create');
 			}
 
 			// No, we are updating the menu
@@ -250,12 +246,15 @@ class MenusController extends AdminController {
 				// Update the menu
 				$response = API::put("v1/menus/{$slug}", compact('menu'));
 
-				// Get the updated menu slug
-				$slug = $response['menu']->slug;
-
-				// Set the success message
-				$bag = with(new Bag)->add('success', Lang::get('platform/menus::message.success.edit'));
+				// Prepare the success message
+				$message = Lang::get('platform/menus::message.success.edit');
 			}
+
+			// Get the menu slug
+			$slug = $response['menu']->slug;
+
+			// Set the success message
+			$bag = with(new Bag)->add('success', $message);
 
 			// Redirect to the menu edit page
 			return Redirect::toAdmin("menus/edit/{$slug}")->withNotifications($bag);

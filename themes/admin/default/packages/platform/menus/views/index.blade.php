@@ -99,7 +99,7 @@ $(function() {
 				<tr>
 					<th data-sort="name" data-grid="main" class="col-md-3 sortable">{{{ trans('platform/menus::table.name') }}}</th>
 					<th data-sort="slug" data-grid="main" class="col-md-2 sortable">{{{ trans('platform/menus::table.slug') }}}</th>
-					<th data-sort="children_count" data-grid="main" class="col-md-2 sortable">{{{ trans('platform/menus::table.children_count') }}}</th>
+					<th data-sort="items_count" data-grid="main" class="col-md-2 sortable">{{{ trans('platform/menus::table.items_count') }}}</th>
 					<th data-sort="created_at" data-grid="main" class="col-md-3 sortable">{{{ trans('platform/menus::table.created_at') }}}</th>
 					<th class="col-md-2"></th>
 				</tr>
@@ -108,7 +108,7 @@ $(function() {
 				<tr data-template style="display: none;">
 					<td>[[ name ]]</td>
 					<td>[[ slug ]]</td>
-					<td>[[ children_count ]]</td>
+					<td>[[ items_count ]]</td>
 					<td>[[ created_at ]]</td>
 					<td>
 						<a class="btn btn-primary tip" href="{{ URL::toAdmin('menus/edit/[[ slug ]]') }}" title="{{{ trans('button.edit') }}}"><i class="fa fa-edit"></i></a>
