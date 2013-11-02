@@ -118,7 +118,7 @@ class MenusController extends ApiController {
 		// Assign the children to this menu
 		if ($children = Input::get('menu.children'))
 		{
-			$menu->mapTree($children);
+			API::put("v1/menus/{$menu->getKey()}/children", compact('children'));
 		}
 
 		return Response::api(compact('menu'));
@@ -177,7 +177,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				$menu->mapTree($value);
+				API::put("v1/menus/{$id}/children", array('children' => $value));
 			}
 			else
 			{

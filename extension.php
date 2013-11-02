@@ -254,8 +254,8 @@ return array(
 	{
 		Route::group(array('prefix' => '{api}/v1/menus/{slug}'), function()
 		{
-			#Route::get('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
-			#Route::put('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
+			Route::get('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
+			Route::put('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
 			Route::get('path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
 		});
 	},
