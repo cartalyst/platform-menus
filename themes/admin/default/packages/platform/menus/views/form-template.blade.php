@@ -110,7 +110,7 @@
 
 			{{-- Generate the types inputs --}}
 			@foreach ($types as $type)
-				{{ $type->getTemplateHtml($child) }}
+				{{ $type->getTemplateHtml() }}
 			@endforeach
 
 		</fieldset>

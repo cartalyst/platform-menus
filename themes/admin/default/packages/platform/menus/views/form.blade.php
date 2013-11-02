@@ -121,7 +121,7 @@
 
 			{{-- Generate the types inputs --}}
 			@foreach ($types as $type)
-				{{ $type->getFormHtml($child) }}
+				{{ $type->getFormHtml( ! empty($child) ? $child : null) }}
 			@endforeach
 
 		</fieldset>

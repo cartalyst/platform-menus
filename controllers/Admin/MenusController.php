@@ -38,9 +38,6 @@ class MenusController extends AdminController {
 	 */
 	public function getIndex()
 	{
-		// Set the current active menu
-		set_active_menu('admin-menus');
-
 		// Show the page
 		return View::make('platform/menus::index');
 	}
@@ -160,7 +157,6 @@ class MenusController extends AdminController {
 			// Fallback data
 			$menu     = null;
 			$children = null;
-			$child = null;
 
 			// Do we have a menu identifier?
 			if ( ! is_null($slug))
@@ -187,15 +183,15 @@ class MenusController extends AdminController {
 			// Get a list of all the available groups
 			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
 
-
+			// Get all the registered menu types
 			$name = get_class(app('Platform\Menus\Models\Menu'));
 			$types = $name::getTypes();
 
-
+			// Share some variables, because of views inheritance
 			View::share(compact('groups', 'types'));
 
 			// Show the page
-			return View::make('platform/menus::manage', compact('menu', 'child', 'children', 'groups', 'persistedSlugs', 'pageSegment'));
+			return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs', 'pageSegment'));
 		}
 		catch (ApiHttpException $e)
 		{
@@ -216,13 +212,7 @@ class MenusController extends AdminController {
 	protected function processForm($slug = null)
 	{
 		// Get the tree
-		$tree = Input::get('menu-tree', array());
-
-		// JSON string on non-AJAX form
-		if (is_string($tree))
-		{
-			$tree = json_decode($tree, true);
-		}
+		$tree = json_decode(Input::get('menu-tree', array()), true);
 
 		// Prepare our children
 		$children = array();
@@ -278,7 +268,6 @@ class MenusController extends AdminController {
 		}
 		catch (ApiHttpException $e)
 		{
-			// Redirect to the appropriate page
 			return Redirect::back()->withInput()->withErrors($e->getErrors());
 		}
 	}
