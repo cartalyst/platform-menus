@@ -1,11 +1,12 @@
 <?php
 $children = $child->getChildren();
+$isSubmenu = ($children and $child->depth > 1);
 ?>
-<li class="{{ $child->isActive ? 'active' : null }}{{ $children ? ' dropdown' : null }}">
+<li class="{{ $child->isActive ? 'active' : null }} dropdown{{ $isSubmenu ? '-submenu' : null }}">
 	<a target="{{ $child->target }}" href="{{ $child->uri }}"@if ($children) id="drop-{{ $child->slug }}" role="button" class="dropdown-toggle" data-toggle="dropdown"@endif>
 		<i class="{{ $child->class }}"></i>
 		<span>{{ $child->name }}</span>
-		@if ($children)
+		@if ($children and ! $isSubmenu)
 		<b class="caret"></b>
 		@endif
 	</a>
