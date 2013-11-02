@@ -210,8 +210,6 @@ return array(
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		require_once __DIR__.'/functions.php';
-
 		Extension::installed(function($extension) use ($app)
 		{
 			app('Platform\Menus\Observer')->afterInstall($extension);

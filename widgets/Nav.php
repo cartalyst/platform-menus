@@ -33,73 +33,23 @@ class Nav {
 	/**
 	 * Returns navigation HTML based off the current active menu.
 	 *
-	 * If the identifier is an integer, it's the depth from the top
-	 * level item based on the current active menu item.
-	 *
-	 * If it's a string, it's the slug of the item to start
-	 * rendering from, irrespective of the active menu item.
-	 *
-	 * @param  string|int  $identifier,
-	 * @param  string      $depth
-	 * @param  string      $cssClass
-	 * @param  string      $beforeUri
-	 * @return View
-	 * @throws RuntimeException
+	 * @param  string  $slug,
+	 * @param  string  $depth
+	 * @param  string  $cssClass
+	 * @param  string  $beforeUri
+	 * @return \View
 	 */
-	public function show($identifier = 0, $depth = 0, $cssClass = null, $beforeUri = null)
+	public function show($slug = 0, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
 		try
 		{
-			// Fallback active path
-			$activePath = array();
-
-			if ( ! is_numeric($identifier))
-			{
-				// If we have an active menu, we'll fill out the path now
-				if (is_array($activeMenu = get_active_menu()))
-				{
-					foreach ($activeMenu as $activeChild)
-					{
-						$response     = API::get("v1/menus/{$activeChild}/path");
-						$activePath[] = $response['path'];
-					}
-				}
-				else
-				{
-					if($activeMenu)
-					{
-						$response   = API::get("v1/menus/{$activeMenu}/path");
-						$activePath = $response['path'];
-					}
-				}
-
-				// If the "start" property is a string, it's
-				// the slug of the menu which to render.
-				$children = $this->getChildrenForSlug($identifier, $depth);
-			}
-			else
-			{
-				// Active menu is required for path based output
-				if ( ! $activeMenu = get_active_menu())
-				{
-					throw new RuntimeException("No active menu child has been set, cannot show navigation based on active menu child's path at depth [$identifier].");
-				}
-
-				$response   = API::get("v1/menus/{$activeMenu}/path");
-				$activePath = $response['path'];
-
-				if ( ! isset($activePath[$identifier]))
-				{
-					return '';
-				}
-
-				$children = $this->getChildrenForSlug($activePath[$identifier], $depth);
-			}
+			// Get the menu children
+			$children = $this->getChildrenForSlug($slug, $depth);
 
 			// Loop through and prepare the child for display
 			foreach ($children as $child)
 			{
-				$this->prepareChildRecursively($child, $beforeUri, $activePath);
+				$this->prepareChildRecursively($child, $beforeUri);
 			}
 
 			return View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
@@ -151,15 +101,14 @@ class Nav {
 	 *
 	 * @param  Platform\Menus\Menu  $child
 	 * @param  string  $beforeUri
-	 * @param  array   $activePath
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child, $beforeUri = null, array $activePath = array())
+	protected function prepareChildRecursively($child, $beforeUri = null)
 	{
 		$path = Request::getPathInfo();
 
 		// Prepare the target
-		$child->target = '_' . $child->target;
+		$child->target = "_{$child->target}";
 
 		// We'll modify the URI only if necessary
 		if (isset($beforeUri))
@@ -188,7 +137,7 @@ class Nav {
 		// Recursive!
 		foreach ($child->getChildren() as $grandChild)
 		{
-			$this->prepareChildRecursively($grandChild, $beforeUri, $activePath);
+			$this->prepareChildRecursively($grandChild, $beforeUri);
 		}
 	}
 
