@@ -56,20 +56,20 @@ class MenusController extends ApiController {
 	}
 
 	/**
+	 * Display a listing of the menus.
 	 *
-	 *
-	 * @return Cartalyst\Api\Http\Response
+	 * @return \Cartalyst\Api\Http\Response
 	 */
 	public function index()
 	{
 		// Get all the root menus
 		if (Input::get('root'))
 		{
-			return Response::api(array('menus' => $this->model->allRoot()));
+			$menus = $this->model->allRoot();
 		}
 
 		// Get all the menus on a flat array
-		if (Input::get('flat'))
+		elseif (Input::get('flat'))
 		{
 			$menus = $this->model->findAll();
 
@@ -83,10 +83,14 @@ class MenusController extends ApiController {
 				}, $menus);
 			}
 		}
+
+		// Get all the menus that belongs to an extension
 		elseif ($extension = Input::get('extension'))
 		{
 			$menus = $this->model->newQuery()->where('extension', '=', $extension)->get();
 		}
+
+		// Get all the menus
 		else
 		{
 			$menus = $this->model->all();
@@ -96,31 +100,35 @@ class MenusController extends ApiController {
 	}
 
 	/**
-	 * Create a new menu.
+	 * Store a newly created menu in storage.
 	 *
-	 * @return Cartalyst\Api\Http\Response
+	 * @return \Cartalyst\Api\Http\Response
 	 */
 	public function create()
 	{
+		// Create the new menu
 		$menu = new $this->model(array(
 			'name' => Input::get('menu.name'),
 			'slug' => Input::get('menu.slug'),
 		));
+
+		// Make this new menu a root menu
 		$menu->makeRoot();
 
+		// Assign the children to this menu
 		if ($children = Input::get('menu.children'))
 		{
-			API::put("v1/menus/{$menu->getKey()}/children", compact('children'));
+			$menu->mapTree($children);
 		}
 
 		return Response::api(compact('menu'));
 	}
 
 	/**
-	 * Returns information about the given menu.
+	 * Display the specified menu.
 	 *
 	 * @param  string  $id
-	 * @return Cartalyst\Api\Http\Response
+	 * @return \Cartalyst\Api\Http\Response
 	 */
 	public function show($id)
 	{
@@ -130,13 +138,31 @@ class MenusController extends ApiController {
 			return Response::api(Lang::get('platform/menus::message.not_found', compact('id')), 404);
 		}
 
-		return Response::api(compact('menu'));
+		$visibilities = Input::get('visibilities');
+		$enabled      = (bool) Input::get('enabled');
+		$depth        = (int) Input::get('depth', 0);
+
+		if ($visibilities and is_array($visibilities))
+		{
+			$children = $menu->findDisplayableChildren($visibilities, $enabled, $depth);
+		}
+		elseif ($enabled)
+		{
+			$children = $menu->findEnabledChildren($depth);
+		}
+		else
+		{
+			$children = $menu->findChildren($depth);
+		}
+
+		return Response::api(compact('menu', 'children'));
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Update the specified menu in storage.
 	 *
-	 * @return Cartalyst\Api\Http\Response
+	 * @param  int  $id
+	 * @return \Cartalyst\Api\Http\Response
 	 */
 	public function update($id)
 	{
@@ -151,7 +177,7 @@ class MenusController extends ApiController {
 		{
 			if ($key === 'children')
 			{
-				API::put("v1/menus/{$id}/children", array('children' => $value));
+				$menu->mapTree($value);
 			}
 			else
 			{
@@ -165,14 +191,15 @@ class MenusController extends ApiController {
 			return Response::api(compact('menu'));
 		}
 
+		// There was a problem updating the menu
 		return Response::api(Lang::get('platform/menus::message.error.update'), 500);
 	}
 
 	/**
-	 * Deletes the provided menu.
+	 * Remove the specified menu from storage.
 	 *
 	 * @param  int  $id
-	 * @return Cartalyst\Api\Http\Response
+	 * @return \Cartalyst\Api\Http\Response
 	 */
 	public function destroy($id)
 	{
@@ -185,6 +212,7 @@ class MenusController extends ApiController {
 		// Delete the menu
 		$menu->deleteWithChildren();
 
+		// Menu successfully deleted
 		return Response::api(Lang::get('platform/menus::message.delete.success'), 204);
 	}
 

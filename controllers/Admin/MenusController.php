@@ -151,9 +151,6 @@ class MenusController extends AdminController {
 	{
 		try
 		{
-			// Set the current active menu
-			set_active_menu('admin-menus');
-
 			// Fallback data
 			$menu     = null;
 			$children = null;
@@ -164,14 +161,11 @@ class MenusController extends AdminController {
 				// Get the menu information
 				$response = API::get("v1/menus/{$slug}");
 				$menu     = $response['menu'];
-
-				// Get this menu children
-				$response = API::get("v1/menus/{$slug}/children");
 				$children = $response['children'];
 			}
 
 			// Get all the menu slugs
-			$response = API::get('v1/menus', array('flat' => true, 'attributes' => 'slug'));
+			$response = API::get('v1/menus?flat=true&attributes=slug');
 
 			// Prepare the persisted slugs, so that we
 			// don't end up with repeated slugs.

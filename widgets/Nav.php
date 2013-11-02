@@ -135,7 +135,7 @@ class Nav {
 
 		$enabled = true;
 
-		$response = API::get("v1/menus/{$slug}/children", compact('depth', 'visibilities', 'enabled'));
+		$response = API::get("v1/menus/{$slug}", compact('depth', 'visibilities', 'enabled'));
 		$children = $response['children'];
 
 		return $children;
