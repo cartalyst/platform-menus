@@ -149,8 +149,14 @@ class Nav {
 		// Generate the full url
 		$child->uri = $child->secure ? URL::secure($child->uri) : URL::to($child->uri);
 
+		// Check if this item has sub items
+		$child->hasSubItems = ($child->getChildren() and $child->depth > 1);
+
+		// Get this item children
+		$child->children = $child->getChildren();
+
 		// Recursive!
-		foreach ($child->getChildren() as $grandChild)
+		foreach ($child->children as $grandChild)
 		{
 			$this->prepareChildRecursively($grandChild, $beforeUri);
 		}

@@ -1,19 +1,15 @@
-<?php
-$children = $child->getChildren();
-$isSubmenu = ($children and $child->depth > 1);
-?>
-<li class="{{ $child->isActive ? 'active' : null }} dropdown{{ $isSubmenu ? '-submenu' : null }}">
-	<a target="{{ $child->target }}" href="{{ $child->uri }}"@if ($children) id="drop-{{ $child->slug }}" role="button" class="dropdown-toggle" data-toggle="dropdown"@endif>
+<li class="{{ $child->isActive ? 'active' : null }} dropdown{{ $child->hasSubItems ? '-submenu' : null }}">
+	<a target="{{ $child->target }}" href="{{ $child->uri }}"@if ($child->children) id="drop-{{ $child->slug }}" role="button" class="dropdown-toggle" data-toggle="dropdown"@endif>
 		<i class="{{ $child->class }}"></i>
 		<span>{{ $child->name }}</span>
-		@if ($children and ! $isSubmenu)
+		@if ($child->children and ! $child->hasSubItems)
 		<b class="caret"></b>
 		@endif
 	</a>
 
-	@if ($children)
+	@if ($child->children)
 		<ul class="dropdown-menu" role="menu" aria-labelledby="drop-{{ $child->slug }}">
-		@each('platform/menus::widgets/nav/child', $children, 'child')
+		@each('platform/menus::widgets/nav/child', $child->children, 'child')
 		</ul>
 	@endif
 </li>
