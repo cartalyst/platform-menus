@@ -371,6 +371,7 @@ return array(
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
+				'regex' => '/menus/i',
 			),
 
 		),
@@ -389,6 +390,7 @@ return array(
 				'name'  => 'Settings',
 				'class' => 'fa fa-cog',
 				'uri'   => 'admin/settings',
+				'regex' => '/admin\/settings/i',
 			),
 
 
