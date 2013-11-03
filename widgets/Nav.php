@@ -107,6 +107,9 @@ class Nav {
 	{
 		$path = Request::getPathInfo();
 
+		// Get this item children
+		$child->children = $child->getChildren();
+
 		// Prepare the target
 		$child->target = "_{$child->target}";
 
@@ -150,10 +153,7 @@ class Nav {
 		$child->uri = $child->secure ? URL::secure($child->uri) : URL::to($child->uri);
 
 		// Check if this item has sub items
-		$child->hasSubItems = ($child->getChildren() and $child->depth > 1);
-
-		// Get this item children
-		$child->children = $child->getChildren();
+		$child->hasSubItems = ($child->children and $child->depth > 1);
 
 		// Recursive!
 		foreach ($child->children as $grandChild)
