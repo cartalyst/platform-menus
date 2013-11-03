@@ -24,16 +24,32 @@ use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Event;
 use InvalidArgumentException;
 use Request;
-use RuntimeException;
 use URL;
 use View;
 
 class Nav {
 
 	/**
+	 * Holds the current request path information.
+	 *
+	 * @var string
+	 */
+	protected $path;
+
+	/**
+	 * Constructor.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->path = Request::getPathInfo();
+	}
+
+	/**
 	 * Returns navigation HTML based off the current active menu.
 	 *
-	 * @param  string  $slug,
+	 * @param  string  $slug
 	 * @param  string  $depth
 	 * @param  string  $cssClass
 	 * @param  string  $beforeUri
@@ -66,14 +82,14 @@ class Nav {
 	 * @param  string  $slug
 	 * @param  int     $depth
 	 * @return array
-	 * @throws InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
 		// Validate the start component
 		if ( ! strlen($slug))
 		{
-			throw new \InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
+			throw new InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
 		}
 
 		$visibilities = array(
@@ -92,21 +108,17 @@ class Nav {
 	}
 
 	/**
-	 * Recursively prepares a child for presentation within
-	 * the nav widget.
+	 * Recursively prepares a child for presentation within the nav widget.
 	 *
-	 * If the type is anything but 'static', we'll fire
-	 * an event for the correct extension to handle the logic
-	 * of preparing the item for display.
+	 * If the type is anything but 'static', we'll fire an event for the
+	 * correct extension to handle the logic of preparing the item.
 	 *
-	 * @param  Platform\Menus\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @param  string  $beforeUri
 	 * @return void
 	 */
 	protected function prepareChildRecursively($child, $beforeUri = null)
 	{
-		$path = Request::getPathInfo();
-
 		// Get this item children
 		$child->children = $child->getChildren();
 
@@ -127,14 +139,14 @@ class Nav {
 		if ($regex = $child->regex)
 		{
 			// Make sure that the regular expression is valid
-			if (@preg_match($regex, $path))
+			if (@preg_match($regex, $this->path))
 			{
 				$child->isActive = true;
 			}
 		}
 
 		// Check if the uri of the item matches the current request path
-		elseif ($child->uri === $path)
+		elseif ($child->uri === $this->path)
 		{
 			$child->isActive = true;
 		}
