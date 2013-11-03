@@ -371,7 +371,7 @@ return array(
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
-				'regex' => '/menus/i',
+				'regex' => '/admin\/menus/i',
 			),
 
 		),
