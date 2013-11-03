@@ -115,6 +115,10 @@ class Nav {
 		{
 			$child->uri = "/{$beforeUri}/{$child->uri}";
 		}
+		elseif ($child->uri != '/')
+		{
+			$child->uri = "/{$child->uri}";
+		}
 
 		// Do we have a regular expression for this item?
 		if ($regex = $child->regex)
