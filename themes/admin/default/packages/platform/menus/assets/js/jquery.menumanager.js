@@ -553,6 +553,9 @@
 					// Hide the no items container
 					$('[data-no-items]').addClass('hide');
 
+					// Remove the error class
+					$('.' + formOpt.errorClass).removeClass(formOpt.errorClass);
+
 					// Hide the add new item form box
 					newItemForm.addClass('hide');
 
