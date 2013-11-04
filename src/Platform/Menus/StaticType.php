@@ -39,7 +39,7 @@ class StaticType extends BaseType implements TypeInterface {
 	 */
 	public function getName()
 	{
-		return $this->translator->trans('platform/menus::form.types.static');
+		return $this->translator->trans('platform/menus::form.type_static');
 	}
 
 	/**

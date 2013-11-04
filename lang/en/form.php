@@ -45,10 +45,7 @@ return array(
 	'type'      => 'Type',
 	'type_help' => 'Select the item url type.',
 
-	'types' => array(
-		'static' => 'Static',
-		'page'   => 'Page', # this will be removed later
-	),
+	'type_static' => 'Static',
 
 	'uri'      => 'Uri',
 	'uri_help' => 'Type in your menu item uri.',
@@ -57,7 +54,7 @@ return array(
 	'secure_help' => 'Should',
 
 	'visibility'      => 'Visibility',
-	'visibility_help' => 'When this menu item should be seen?',
+	'visibility_help' => 'When should this menu item be seen?',
 
 	'visibilities' => array(
 		'always'     => 'Show Always',
