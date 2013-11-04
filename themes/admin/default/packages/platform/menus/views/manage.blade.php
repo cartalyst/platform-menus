@@ -37,7 +37,7 @@ $(function() {
 {{-- Call custom inline styles --}}
 @section('styles')
 @parent
-@show
+@stop
 
 {{-- Page content --}}
 @section('content')
