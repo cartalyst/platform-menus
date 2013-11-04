@@ -36,6 +36,7 @@ $(function() {
 
 {{-- Call custom inline styles --}}
 @section('styles')
+@parent
 @show
 
 {{-- Page content --}}
