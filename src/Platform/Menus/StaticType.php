@@ -43,37 +43,6 @@ class StaticType extends BaseType implements TypeInterface {
 	}
 
 	/**
-	 * Get the name for the menu child.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @return string
-	 */
-	public function getChildName(Menu $child)
-	{
-		return $child->name;
-	}
-
-	/**
-	 * Get the URL for the menu child.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @param  array  $options
-	 * @return string
-	 */
-	public function getChildUrl(Menu $child, array $options = array())
-	{
-		if ($uri = $child->uri)
-		{
-			if (isset($options['before_uri']))
-			{
-				$uri = $options['before_uri'].'/'.$uri;
-			}
-
-			return $this->url->to($uri);
-		}
-	}
-
-	/**
 	 * Event that is called after a menu children is saved.
 	 * Attach any links and relationships.
 	 *

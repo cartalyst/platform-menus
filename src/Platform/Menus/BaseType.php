@@ -56,9 +56,43 @@ abstract class BaseType {
 	 */
 	public function __construct(UrlGenerator $url, Environment $view, Translator $translator)
 	{
-		$this->url  = $url;
+		$this->url = $url;
 		$this->view = $view;
 		$this->translator = $translator;
+	}
+
+	/**
+	 * Get the name for the menu child.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return string
+	 */
+	public function getChildName(Menu $child)
+	{
+		return $child->name;
+	}
+
+	/**
+	 * Get the URL for the menu child.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  array  $options
+	 * @return string
+	 */
+	public function getChildUrl(Menu $child, array $options = array())
+	{
+		$uri = $child->uri;
+
+		if ($beforeUri = array_get($options, 'before_uri'))
+		{
+			$uri = "/{$beforeUri}/{$uri}";
+		}
+		elseif ($uri != '/')
+		{
+			$uri = "/{$uri}";
+		}
+
+		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri);
 	}
 
 }

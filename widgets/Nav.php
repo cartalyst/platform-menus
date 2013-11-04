@@ -23,7 +23,6 @@ use Cartalyst\Api\Http\ApiHttpException;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Event;
 use InvalidArgumentException;
-use Request;
 use URL;
 use View;
 
@@ -43,7 +42,7 @@ class Nav {
 	 */
 	public function __construct()
 	{
-		$this->path = Request::getPathInfo();
+		$this->path = URL::current();
 	}
 
 	/**
@@ -116,21 +115,22 @@ class Nav {
 	 */
 	protected function prepareChildRecursively($child, $beforeUri = null)
 	{
+		// Prepare the options array
+		$options = array(
+			'before_uri' => $beforeUri,
+		);
+
+		//
+		$type = $child->getType($child->type);
+
 		// Get this item children
 		$child->children = $child->getChildren();
 
 		// Prepare the target
 		$child->target = "_{$child->target}";
 
-		// We'll modify the URI only if necessary
-		if (isset($beforeUri))
-		{
-			$child->uri = "/{$beforeUri}/{$child->uri}";
-		}
-		elseif ($child->uri != '/')
-		{
-			$child->uri = "/{$child->uri}";
-		}
+		//
+		$child->uri = $type->getChildUrl($child, $options);
 
 		// Do we have a regular expression for this item?
 		if ($regex = $child->regex)
@@ -147,14 +147,12 @@ class Nav {
 		{
 			$child->isActive = true;
 		}
-		// Generate the full url
-		$child->uri = $child->secure ? URL::secure($child->uri) : URL::to($child->uri);
 
 		// Check if this item has sub items
 		$child->hasSubItems = ($child->children and $child->depth > 1);
 
 		// We'll fire an event for the logic to be handled by the correct type
-		Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
+		//Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
 		# we need to inject the data after we receive the response back from the event..
 
 		// Recursive!

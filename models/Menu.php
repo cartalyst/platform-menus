@@ -221,7 +221,7 @@ class Menu extends EloquentNode {
 	}
 
 
-	public function _getType($type = null)
+	public function getType($type = null)
 	{
 		if ($type = $this->type)
 		{
