@@ -35,6 +35,10 @@ $(function() {
 </script>
 @stop
 
+{{-- Call custom inline styles --}}
+@section('styles')
+@show
+
 {{-- Page content --}}
 @section('content')
 
