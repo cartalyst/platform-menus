@@ -110,10 +110,7 @@ class Nav {
 	/**
 	 * Recursively prepares a child for presentation within the nav widget.
 	 *
-	 * If the type is anything but 'static', we'll fire an event for the
-	 * correct extension to handle the logic of preparing the item.
-	 *
-	 * @param  \Platform\Menus\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @param  string  $beforeUri
 	 * @return void
 	 */
@@ -150,22 +147,15 @@ class Nav {
 		{
 			$child->isActive = true;
 		}
-
-		switch ($child->type)
-		{
-			// We'll fire an event for the logic to be handled by the correct type
-			default:
-
-				Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
-
-				break;
-		}
-
 		// Generate the full url
 		$child->uri = $child->secure ? URL::secure($child->uri) : URL::to($child->uri);
 
 		// Check if this item has sub items
 		$child->hasSubItems = ($child->children and $child->depth > 1);
+
+		// We'll fire an event for the logic to be handled by the correct type
+		Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
+		# we need to inject the data after we receive the response back from the event..
 
 		// Recursive!
 		foreach ($child->children as $grandChild)
