@@ -42,109 +42,105 @@ $(function() {
 {{-- Page content --}}
 @section('content')
 
-<form id="menu-form" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
+<div class="col-md-12">
 
-	{{-- CSRF Token --}}
-	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+	<form id="menu-form" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
 
-	<div class="row">
+		{{-- CSRF Token --}}
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-		<div class="col-md-12">
+		{{-- Page header --}}
+		<div class="page-header">
 
-			{{-- Page header --}}
-			<div class="page-header">
-
-				<div class="pull-right">
-					<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('platform/menus::button.save') }}}</button>
-				</div>
-
-				<h1>{{{ trans("platform/menus::general.{$pageSegment}.title") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
-
+			<div class="pull-right">
+				<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('platform/menus::button.save') }}}</button>
 			</div>
+
+			<h1>{{{ trans("platform/menus::general.{$pageSegment}.title") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
 
 		</div>
 
-	</div>
+		<div class="row">
 
-	<div class="row">
+			{{-- Menu Items --}}
+			<div class="col-md-7">
 
-		{{-- Menu Items --}}
-		<div class="col-md-7">
+				<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
 
-			<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
+					<div class="container" id="no-children">
 
-				<div class="container" id="no-children">
+						<h1>{{ trans('platform/menus::message.no_children') }}</h1>
 
-					<h1>{{ trans('platform/menus::message.no_children') }}</h1>
+						<p>&nbsp;</p>
 
-					<p>&nbsp;</p>
+						<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
 
-					<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
+					</div>
 
 				</div>
 
-			</div>
-
-			<ol class="items{{ empty($children) ? ' hide' : null }}" data-item-add>
-				<li class="item-add">
-					<div class="item-name" data-item="new-child">{{{ trans('platform/menus::button.add_item') }}}</div>
-				</li>
-			</ol>
-
-			<div id="sortable">
-				<ol class="items">
-					@if ( ! empty($children))
-					@each('platform/menus::manage/children', $children, 'child')
-					@endif
-
-					{{-- Underscore children template --}}
-					@include('platform/menus::manage/children-template')
+				<ol class="items{{ empty($children) ? ' hide' : null }}" data-item-add>
+					<li class="item-add">
+						<div class="item-name" data-item="new-child">{{{ trans('platform/menus::button.add_item') }}}</div>
+					</li>
 				</ol>
+
+				<div id="sortable">
+					<ol class="items">
+						@if ( ! empty($children))
+						@each('platform/menus::manage/children', $children, 'child')
+						@endif
+
+						{{-- Underscore children template --}}
+						@include('platform/menus::manage/children-template')
+					</ol>
+				</div>
+
+			</div>
+
+			{{-- Sidebar --}}
+			<div class="col-md-5">
+
+				{{-- Root form --}}
+				<div class="well well-md item-box-borderless" data-root-form>
+
+					<fieldset>
+
+						<legend>Menu Details</legend>
+
+						<div class="form-group">
+							<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
+							<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
+							<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
+						</div>
+
+					</fieldset>
+
+				</div>
+
+				{{-- Items form --}}
+				@if ( ! empty($children))
+				@each('platform/menus::manage/form', $children, 'child')
+				@endif
+
+				{{-- New children form --}}
+				@include('platform/menus::manage/form')
+
+				{{-- Underscore form template --}}
+				<div data-forms>
+					@include('platform/menus::manage/form-template')
+				</div>
+
 			</div>
 
 		</div>
 
-		{{-- Sidebar --}}
-		<div class="col-md-5">
+	</form>
 
-			{{-- Root form --}}
-			<div class="well well-md item-box-borderless" data-root-form>
-
-				<fieldset>
-
-					<legend>Menu Details</legend>
-
-					<div class="form-group">
-						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
-						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
-					</div>
-
-					<div class="form-group">
-						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
-						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
-					</div>
-
-				</fieldset>
-
-			</div>
-
-			{{-- Items form --}}
-			@if ( ! empty($children))
-			@each('platform/menus::manage/form', $children, 'child')
-			@endif
-
-			{{-- New children form --}}
-			@include('platform/menus::manage/form')
-
-			{{-- Underscore form template --}}
-			<div data-forms>
-				@include('platform/menus::manage/form-template')
-			</div>
-
-		</div>
-
-	</div>
-
-</form>
+</div>
 
 @stop
