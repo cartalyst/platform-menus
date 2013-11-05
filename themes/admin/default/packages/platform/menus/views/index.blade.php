@@ -72,6 +72,7 @@ $(function() {
 				</div>
 
 				<button class="btn btn-default"><i class="fa fa-search"></i></button>
+
 			</form>
 
 		</span>
