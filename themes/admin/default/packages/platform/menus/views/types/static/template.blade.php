@@ -3,5 +3,5 @@
 
 	<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.uri_help') }}}"></i>
 
-	<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][static_uri]" id="<%= slug %>_static_uri" class="form-control" value="<%= static_uri %>">
+	<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][static][uri]" id="<%= slug %>_static_uri" class="form-control" value="<%= static_uri %>">
 </div>
