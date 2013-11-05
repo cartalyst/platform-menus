@@ -42,7 +42,7 @@ interface TypeInterface {
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return string
 	 */
-	public function getChildName(Menu $child);
+	public function getNameAttribute(Menu $child);
 
 	/**
 	 * Get the URL for the menu child.
@@ -51,7 +51,7 @@ interface TypeInterface {
 	 * @param  array  $options
 	 * @return string
 	 */
-	public function getChildUrl(Menu $child, array $options = array());
+	public function getUrlAttribute(Menu $child, array $options = array());
 
 	/**
 	 * Event that is called after a menu children is saved.

@@ -120,17 +120,14 @@ class Nav {
 			'before_uri' => $beforeUri,
 		);
 
-		//
-		$type = $child->getType($child->type);
-
 		// Get this item children
 		$child->children = $child->getChildren();
 
 		// Prepare the target
 		$child->target = "_{$child->target}";
 
-		//
-		$child->uri = $type->getChildUrl($child, $options);
+		// Prepare the uri
+		$child->uri = $child->getUrl($options);
 
 		// Do we have a regular expression for this item?
 		if ($regex = $child->regex)
@@ -150,10 +147,6 @@ class Nav {
 
 		// Check if this item has sub items
 		$child->hasSubItems = ($child->children and $child->depth > 1);
-
-		// We'll fire an event for the logic to be handled by the correct type
-		//Event::fire("platform.menus.nav.prepare_child.{$child->type}", compact('child', 'beforeUri'));
-		# we need to inject the data after we receive the response back from the event..
 
 		// Recursive!
 		foreach ($child->children as $grandChild)

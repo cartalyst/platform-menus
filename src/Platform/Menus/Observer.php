@@ -25,6 +25,18 @@ use Platform\Menus\Models\Menu;
 class Observer {
 
 	/**
+	 *
+	 *
+	 *
+	 */
+	public function saving($model)
+	{
+		$type = $model->getType();
+
+		$type->afterSave($model);
+	}
+
+	/**
 	 * Observer after an extension is installed.
 	 *
 	 * @param  Cartalyst\Extensions\Extension  $extension

@@ -68,6 +68,18 @@ class Menu extends EloquentNode {
 	 */
 	protected static $types = array();
 
+	public function save(array $options = array())
+	{
+		if (isset($this->attributes['type_data']))
+		{
+			$this->setTypeData($this->attributes['type_data']);
+
+			unset($this->attributes['type_data']);
+		}
+
+		parent::save($options);
+	}
+
 
 	protected $typeData = array();
 
@@ -234,12 +246,12 @@ class Menu extends EloquentNode {
 		}
 	}
 
-	public function _setTypeData(array $typeData)
+	public function setTypeData(array $typeData)
 	{
 		$this->typeData = $typeData;
 	}
 
-	public function _getTypeData()
+	public function getTypeData()
 	{
 		return $this->typeData;
 	}
@@ -275,22 +287,28 @@ class Menu extends EloquentNode {
 	 */
 	public function __call($method, $parameters)
 	{
-		$typeMethods = array(
-			'getName', 'getUrl',
-			'getNewTemplate', 'getNewFormTemplate',
-			'getEditTemplate', 'getEditFormTemplate',
-		);
+		$type = $this->getType();
 
-		if (in_array($method, $typeMethods))
+		$methodFound = false;
+
+		$_method = 'get'.substr($method, 3).'Attribute';
+
+		if (method_exists($type, $method))
 		{
-			if (in_array($method, array('getName', 'getUrl')))
-			{
-				$method = 'getChild'.substr($method, 3);
-			}
+			$methodFound = true;
+		}
+		elseif (method_exists($type, $_method))
+		{
+			$method = $_method;
 
+			$methodFound = true;
+		}
+
+		if ($methodFound)
+		{
 			array_unshift($parameters, $this);
 
-			return call_user_func_array(array($this->getType(), $method), $parameters);
+			return call_user_func_array(array($type, $method), $parameters);
 		}
 
 		return parent::__call($method, $parameters);

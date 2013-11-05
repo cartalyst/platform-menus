@@ -231,6 +231,8 @@ return array(
 		});
 
 		Menu::registerType($app['Platform\Menus\StaticType']);
+
+		Menu::observe(app('Platform\Menus\Observer'));
 	},
 
 	/*

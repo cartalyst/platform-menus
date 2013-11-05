@@ -288,9 +288,7 @@ class MenusController extends AdminController {
 			'slug'       => Input::get("children.{$index}.slug"),
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
 
-			'type'       => Input::get("children.{$index}.type", 'static'),
-			'uri'        => Input::get("children.{$index}.static_uri"), // keep it like this for now
-			//'page_id'    => Input::get("children.{$index}.page_id"), # maybe change this to type_id ..
+			'type'       => $type = Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
 
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
@@ -300,6 +298,9 @@ class MenusController extends AdminController {
 			'target' => Input::get("children.{$index}.target"),
 			'regex'  => Input::get("children.{$index}.regex"),
 		);
+
+		// Attach the type data
+		$new_child['type_data'] = Input::get("children.{$index}.{$type}", array());
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)

@@ -67,7 +67,7 @@ abstract class BaseType {
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return string
 	 */
-	public function getChildName(Menu $child)
+	public function getNameAttribute(Menu $child)
 	{
 		return $child->name;
 	}
@@ -79,7 +79,7 @@ abstract class BaseType {
 	 * @param  array  $options
 	 * @return string
 	 */
-	public function getChildUrl(Menu $child, array $options = array())
+	public function getUrlAttribute(Menu $child, array $options = array())
 	{
 		$uri = $child->uri;
 

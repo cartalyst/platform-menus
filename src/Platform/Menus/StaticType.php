@@ -43,45 +43,6 @@ class StaticType extends BaseType implements TypeInterface {
 	}
 
 	/**
-	 * Event that is called after a menu children is saved.
-	 * Attach any links and relationships.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @return void
-	 */
-	public function afterSave(Menu $child)
-	{
-		$data = $child->getTypeData();
-
-		$save = false;
-
-		if (isset($data['uri']))
-		{
-			$child->uri = $data->uri;
-
-			$save = true;
-		}
-
-		if (isset($data['name']))
-		{
-			$child->Name = $data->name;
-
-			$save = true;
-		}
-
-		if ($save) $child->save();
-	}
-
-	/**
-	 * Event that is called before a children is deleted.
-	 * Detach any links and relationships.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @return void
-	 */
-	public function beforeDelete(Menu $child) {}
-
-	/**
 	 * Return the form HTML template for a edit child of this type as well
 	 * as creating new children.
 	 *
@@ -102,5 +63,31 @@ class StaticType extends BaseType implements TypeInterface {
 	{
 		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
 	}
+
+	/**
+	 * Event that is called after a menu children is saved.
+	 * Attach any links and relationships.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return void
+	 */
+	public function afterSave(Menu $child)
+	{
+		$data = $child->getTypeData();
+
+		if (isset($data['uri']))
+		{
+			$child->uri = $data['uri'];
+		}
+	}
+
+	/**
+	 * Event that is called before a children is deleted.
+	 * Detach any links and relationships.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return void
+	 */
+	public function beforeDelete(Menu $child) {}
 
 }
