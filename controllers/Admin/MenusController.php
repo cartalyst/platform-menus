@@ -297,7 +297,8 @@ class MenusController extends AdminController {
 		);
 
 		// Attach the type data
-		$new_child['type_data'] = Input::get("children.{$index}.{$type}", array());
+		#$new_child['type_data'] = Input::get("children.{$index}.{$type}", array());
+		$new_child['uri'] = Input::get("children.{$index}.static.uri");
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
