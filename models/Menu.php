@@ -84,9 +84,9 @@ class Menu extends EloquentNode {
 	 */
 	public function save(array $options = array())
 	{
-		if (isset($this->attributes['type_data']))
+		if ($typeData = array_get($this->attributes, 'type_data'))
 		{
-			$this->setTypeData($this->attributes['type_data']);
+			$this->setTypeData($typeData);
 
 			unset($this->attributes['type_data']);
 		}
