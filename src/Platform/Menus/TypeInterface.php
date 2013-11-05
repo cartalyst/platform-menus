@@ -54,6 +54,22 @@ interface TypeInterface {
 	public function getUrlAttribute(Menu $child, array $options = array());
 
 	/**
+	 * Return the form HTML template for a edit child of this type as well
+	 * as creating new children.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return \View
+	 */
+	public function getFormHtml(Menu $child = null);
+
+	/**
+	 * Return the HTML template used when creating a menu child of this type.
+	 *
+	 * @return \View
+	 */
+	public function getTemplateHtml();
+
+	/**
 	 * Event that is called after a menu children is saved.
 	 * Attach any links and relationships.
 	 *
@@ -70,21 +86,5 @@ interface TypeInterface {
 	 * @return void
 	 */
 	public function beforeDelete(Menu $child);
-
-	/**
-	 * Return the form HTML template for a edit child of this type as well
-	 * as creating new children.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @return \View
-	 */
-	public function getFormHtml(Menu $child = null);
-
-	/**
-	 * Return the HTML template used when creating a menu child of this type.
-	 *
-	 * @return \View
-	 */
-	public function getTemplateHtml();
 
 }

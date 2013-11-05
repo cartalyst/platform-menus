@@ -95,4 +95,22 @@ abstract class BaseType {
 		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri);
 	}
 
+	/**
+	 * Event that is called after a menu children is saved.
+	 * Attach any links and relationships.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return void
+	 */
+	public function afterSave(Menu $child){}
+
+	/**
+	 * Called before a child is deleted. Detach any links
+	 * and relationships.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return void
+	 */
+	public function beforeDelete(Menu $child) {}
+
 }
