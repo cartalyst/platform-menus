@@ -244,5 +244,5 @@
 </div>
 
 @if ( ! empty($child) and $children = $child->getChildren())
-@each('platform/menus::form', $children, 'child')
+@each('platform/menus::manage/form', $children, 'child')
 @endif

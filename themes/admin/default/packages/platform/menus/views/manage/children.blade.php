@@ -5,7 +5,7 @@
 
 	<ol>
 		@if ( ! empty($child) and $children = $child->getChildren())
-			@each('platform/menus::children', $children, 'child')
+			@each('platform/menus::manage/children', $children, 'child')
 		@endif
 	</ol>
 </li>
