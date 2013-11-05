@@ -77,21 +77,14 @@ class Menu extends EloquentNode {
 	protected $typeData = array();
 
 	/**
-	 * Save the model to the database.
+	 * Unset an attribute.
 	 *
-	 * @param  array  $options
-	 * @return bool
+	 * @param  string  $key
+	 * @return void
 	 */
-	public function save(array $options = array())
+	public function unsetAttribute($key)
 	{
-		if ($typeData = array_get($this->attributes, 'type_data'))
-		{
-			$this->setTypeData($typeData);
-
-			unset($this->attributes['type_data']);
-		}
-
-		return parent::save($options);
+		unset($this->attributes[$key]);
 	}
 
 	/**

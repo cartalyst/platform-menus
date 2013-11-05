@@ -25,13 +25,33 @@ use Platform\Menus\Models\Menu;
 class Observer {
 
 	/**
+	 * Register a creating model event with the dispatcher.
 	 *
-	 *
-	 *
+	 * @param  \Closure|string  $callback
+	 * @return void
 	 */
-	public function saving($model)
+	public function creating($model)
+	{
+		echo 'Being created';
+		die;
+	}
+
+	/**
+	 * Register an updating model event with the dispatcher.
+	 *
+	 * @param  \Closure|string  $callback
+	 * @return void
+	 */
+	public function updating($model)
 	{
 		$type = $model->getType();
+
+		if ($typeData = array_get($model->getAttributes(), 'type_data'))
+		{
+			$model->setTypeData($typeData);
+
+			$model->unsetAttribute('type_data');
+		}
 
 		$type->afterSave($model);
 	}
