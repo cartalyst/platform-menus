@@ -51,7 +51,7 @@ return array(
 	'uri_help' => 'Type in your menu item uri.',
 
 	'secure'      => 'HTTPS',
-	'secure_help' => 'Should',
+	'secure_help' => 'Should this url be served over HTTPS?',
 
 	'visibility'      => 'Visibility',
 	'visibility_help' => 'When should this menu item be seen?',
