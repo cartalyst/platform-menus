@@ -91,7 +91,7 @@ class Menu extends EloquentNode {
 			unset($this->attributes['type_data']);
 		}
 
-		parent::save($options);
+		return parent::save($options);
 	}
 
 	/**
