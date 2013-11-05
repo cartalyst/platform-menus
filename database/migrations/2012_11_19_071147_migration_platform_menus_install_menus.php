@@ -80,17 +80,6 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Enabled
 			$table->boolean('enabled')->default(0);
 
-
-			// Specific to "cms" menu children
-			// @todo this logic needs to move
-			// and we need to handle this through
-			// a bunch of events, so that menus need
-			// not know about the cms extensions
-			$table->boolean('page_id')->nullable();
-
-
-
-
 			// Timestamps of course
 			$table->timestamps();
 

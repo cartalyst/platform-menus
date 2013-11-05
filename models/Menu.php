@@ -22,6 +22,7 @@ use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Illuminate\Database\Query\Expression;
 use InvalidArgumentException;
 use Platform\Menus\TypeInterface;
+use RuntimeException;
 
 class Menu extends EloquentNode {
 
@@ -68,6 +69,19 @@ class Menu extends EloquentNode {
 	 */
 	protected static $types = array();
 
+	/**
+	 * Hold the type data when saving the menu.
+	 *
+	 * @var array
+	 */
+	protected $typeData = array();
+
+	/**
+	 * Save the model to the database.
+	 *
+	 * @param  array  $options
+	 * @return bool
+	 */
 	public function save(array $options = array())
 	{
 		if (isset($this->attributes['type_data']))
@@ -79,10 +93,6 @@ class Menu extends EloquentNode {
 
 		parent::save($options);
 	}
-
-
-	protected $typeData = array();
-
 
 	/**
 	 * Get mutator for the "enabled" attribute.
@@ -232,30 +242,44 @@ class Menu extends EloquentNode {
 		return parent::find($id, $columns);
 	}
 
-
+	/**
+	 * Return information about the selected type.
+	 *
+	 * @param  string  $type
+	 * @return array
+	 * @throws RuntimeException
+	 */
 	public function getType($type = null)
 	{
-		if ($type = $this->type)
+		$type = $type ?: $this->type;
+
+		if ( ! isset(static::$types[$type]))
 		{
-			if ( ! isset(static::$types[$type]))
-			{
-				throw new \RuntimeException("Menu type [$type] has not been registered.");
-			}
-
-			return static::$types[$type];
+			throw new RuntimeException("Menu type [$type] has not been registered.");
 		}
+
+		return static::$types[$type];
 	}
 
-	public function setTypeData(array $typeData)
-	{
-		$this->typeData = $typeData;
-	}
-
+	/**
+	 * Return the type data.
+	 *
+	 * @return array
+	 */
 	public function getTypeData()
 	{
 		return $this->typeData;
 	}
 
+	/**
+	 * Set the type data.
+	 *
+	 * @return void
+	 */
+	public function setTypeData(array $typeData)
+	{
+		$this->typeData = $typeData;
+	}
 
 	/**
 	 * Register a custom type with a menu.

@@ -287,13 +287,10 @@ class MenusController extends AdminController {
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
-
 			'type'       => $type = Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
-
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
-			//'groups' => Input::get("children.{$index}.groups", array()),
-
+			//'groups'     => Input::get("children.{$index}.groups", array()),
 			'class'  => Input::get("children.{$index}.class"),
 			'target' => Input::get("children.{$index}.target"),
 			'regex'  => Input::get("children.{$index}.regex"),

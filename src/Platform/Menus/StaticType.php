@@ -75,7 +75,7 @@ class StaticType extends BaseType implements TypeInterface {
 	{
 		$data = $child->getTypeData();
 
-		if (isset($data['uri']))
+		if ($uri = array_get($data, 'uri'))
 		{
 			$child->uri = $data['uri'];
 		}
