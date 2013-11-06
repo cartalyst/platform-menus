@@ -62,6 +62,10 @@ class MenusController extends ApiController {
 	 */
 	public function index()
 	{
+
+		### improve this!!!
+
+
 		// Get all the root menus
 		if (Input::get('root'))
 		{
@@ -93,7 +97,19 @@ class MenusController extends ApiController {
 		// Get all the menus
 		else
 		{
-			$menus = $this->model->all();
+			$query = $this->model->newQuery();
+
+			foreach (Input::get('criteria', array()) as $column => $criteria)
+			{
+				$query = $query->where($column, $criteria);
+			}
+
+			if (Input::get('return') == 'first')
+			{
+				return Response::api(array('menu' => $query->first()));
+			}
+
+			$menus = $query->get();
 		}
 
 		return Response::api(compact('menus'));

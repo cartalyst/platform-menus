@@ -30,10 +30,11 @@ class Dropdown {
 	 *
 	 * @param  string  $slug
 	 * @param  int     $depth
+	 * @param  int     $current
 	 * @param  array   $attributes
 	 * @return \View
 	 */
-	public function show($slug, $depth, $attributes = array())
+	public function show($slug, $depth, $current = null, $attributes = array())
 	{
 		try
 		{
@@ -43,7 +44,7 @@ class Dropdown {
 			// Loop through and prepare the child for display
 			foreach ($children as $child)
 			{
-				$this->prepareChildRecursively($child);
+				$this->prepareChildRecursively($child, $current);
 			}
 
 			// Prepare the attributes
@@ -77,15 +78,18 @@ class Dropdown {
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child)
+	protected function prepareChildRecursively($child, $current = null)
 	{
 		// Get this item children
 		$child->children = $child->getChildren();
 
+		// Is this the current child?
+		$child->isCurrent = $current == $child->id;
+
 		// Recursive!
 		foreach ($child->children as $grandChild)
 		{
-			$this->prepareChildRecursively($grandChild);
+			$this->prepareChildRecursively($grandChild, $current);
 		}
 	}
 
