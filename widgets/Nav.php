@@ -21,7 +21,6 @@
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
-use Event;
 use InvalidArgumentException;
 use URL;
 use View;
@@ -54,7 +53,7 @@ class Nav {
 	 * @param  string  $beforeUri
 	 * @return \View
 	 */
-	public function show($slug = 0, $depth = 0, $cssClass = null, $beforeUri = null)
+	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null)
 	{
 		try
 		{
@@ -101,9 +100,8 @@ class Nav {
 		$enabled = true;
 
 		$response = API::get("v1/menus/{$slug}", compact('depth', 'visibilities', 'enabled'));
-		$children = $response['children'];
 
-		return $children;
+		return $response['children'];
 	}
 
 	/**
