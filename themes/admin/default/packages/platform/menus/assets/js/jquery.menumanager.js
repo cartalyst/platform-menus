@@ -523,6 +523,9 @@
 					classInput.val('');
 					targetInput.val('self');
 					regexInput.val('');
+					visibilityInput.val('always');
+					$('[data-item-groups="new-child"]').addClass('hide');
+					groupsInput.val('');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');
@@ -537,6 +540,9 @@
 					// Make sure the static is the default
 					self.prepareInput('new-child', formOpt.children.static_uri.input).val('');
 					newItemForm.find('[data-item-type="static"]').removeClass('hide');
+
+					// Hide the more options area
+					newItemForm.find('[data-options]').addClass('hide');
 
 					// Move the item to the correct destination
 					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
