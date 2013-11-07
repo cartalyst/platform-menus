@@ -32,9 +32,10 @@ class Dropdown {
 	 * @param  int     $depth
 	 * @param  int     $current
 	 * @param  array   $attributes
+	 * @param  array   $customOptions
 	 * @return \View
 	 */
-	public function show($slug, $depth, $current = null, $attributes = array())
+	public function show($slug, $depth, $current = null, $attributes = array(), $customOptions = array())
 	{
 		try
 		{
@@ -50,7 +51,7 @@ class Dropdown {
 			// Prepare the attributes
 			$attributes = HTML::attributes($attributes);
 
-			return View::make('platform/menus::widgets/dropdown', compact('children', 'attributes'));
+			return View::make('platform/menus::widgets/dropdown', compact('children', 'attributes', 'customOptions'));
 		}
 		catch (ApiHttpException $e)
 		{
