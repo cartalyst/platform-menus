@@ -78,7 +78,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			$table->string('regex')->nullable();
 
 			// Enabled
-			$table->boolean('enabled')->default(0);
+			$table->boolean('enabled')->default(1);
 
 			// Timestamps of course
 			$table->timestamps();
