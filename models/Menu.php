@@ -246,6 +246,8 @@ class Menu extends EloquentNode {
 	{
 		$type = $type ?: $this->type;
 
+		if (is_null($type)) return false;
+
 		if ( ! isset(static::$types[$type]))
 		{
 			throw new RuntimeException("Menu type [$type] has not been registered.");

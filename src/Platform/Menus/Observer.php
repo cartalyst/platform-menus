@@ -44,16 +44,17 @@ class Observer {
 	 */
 	public function updating($model)
 	{
-		$type = $model->getType();
-
-		if ($typeData = array_get($model->getAttributes(), 'type_data'))
+		if ($type = $model->getType())
 		{
-			$model->setTypeData($typeData);
+			if ($typeData = array_get($model->getAttributes(), 'type_data'))
+			{
+				$model->setTypeData($typeData);
 
-			$model->unsetAttribute('type_data');
+				$model->unsetAttribute('type_data');
+			}
+
+			$type->afterSave($model);
 		}
-
-		$type->afterSave($model);
 	}
 
 	/**
