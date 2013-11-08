@@ -150,10 +150,6 @@ class MenusController extends AdminController {
 	{
 		try
 		{
-			// Fallback data
-			$menu     = null;
-			$children = null;
-
 			// Do we have a menu identifier?
 			if ( ! is_null($slug))
 			{
