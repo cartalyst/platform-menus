@@ -21,7 +21,6 @@
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
-use InvalidArgumentException;
 use URL;
 use View;
 
@@ -83,16 +82,9 @@ class Nav {
 	 * @param  string  $slug
 	 * @param  int     $depth
 	 * @return array
-	 * @throws \InvalidArgumentException
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
-		// Validate the start component
-		if ( ! strlen($slug))
-		{
-			throw new InvalidArgumentException("Empty string was provided for the menu item which to base navigation on.");
-		}
-
 		$visibilities = array(
 			'always',
 			Sentry::check() ? 'logged_in' : 'logged_out',
