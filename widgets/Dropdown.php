@@ -26,7 +26,41 @@ use View;
 class Dropdown {
 
 	/**
-	 * Returns HTML dropdown based off the provided menu slug.
+	 * Returns an HTML dropdown with all the root menus.
+	 *
+	 * @param  array   $attributes
+	 * @param  array   $customOptions
+	 * @return \View
+	 */
+	public function root($attributes = array(), $customOptions = array())
+	{
+		try
+		{
+			$response = API::get('v1/menus?root=true');
+
+			$items = $response['menus'];
+
+			foreach ($items as &$item)
+			{
+				$item->depth = $item->depth ?: 1;
+
+				$item->children = array();
+			}
+
+			// Prepare the attributes
+			$attributes = HTML::attributes($attributes);
+
+			return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
+		}
+		catch (ApiHttpException $e)
+		{
+			return;
+		}
+	}
+
+	/**
+	 * Returns an HTML dropdown with all the childrens of
+	 * the provided menu slug.
 	 *
 	 * @param  string  $slug
 	 * @param  int     $depth
@@ -40,22 +74,22 @@ class Dropdown {
 		try
 		{
 			// Get the menu children
-			$children = $this->getChildrenForSlug($slug, $depth);
+			$items = $this->getChildrenForSlug($slug, $depth);
 
-			// Loop through and prepare the child for display
-			foreach ($children as $child)
+			// Loop through and prepare the item for display
+			foreach ($items as $item)
 			{
-				$this->prepareChildRecursively($child, $current);
+				$this->prepareChildRecursively($item, $current);
 			}
 
 			// Prepare the attributes
 			$attributes = HTML::attributes($attributes);
 
-			return View::make('platform/menus::widgets/dropdown', compact('children', 'attributes', 'customOptions'));
+			return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
 		}
 		catch (ApiHttpException $e)
 		{
-			return '';
+			return;
 		}
 	}
 
@@ -76,19 +110,20 @@ class Dropdown {
 	/**
 	 * Recursively prepares a child for presentation within the nav widget.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $item
+	 * @param  string  $current
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child, $current = null)
+	protected function prepareChildRecursively($item, $current = null)
 	{
 		// Get this item children
-		$child->children = $child->getChildren();
+		$item->children = $item->getChildren();
 
 		// Is this the current child?
-		$child->isCurrent = $current == $child->id;
+		$item->isCurrent = $current == $item->id;
 
 		// Recursive!
-		foreach ($child->children as $grandChild)
+		foreach ($item->children as $grandChild)
 		{
 			$this->prepareChildRecursively($grandChild, $current);
 		}
