@@ -171,18 +171,14 @@ return array(
 
 	'register' => function(ExtensionInterface $extension, Application $app)
 	{
-		// After the platform installer has finished, we'll loop through
-		// each extension that exists and apply our install and enable
-		// filters on them.
+		// After platform finishes the installation process, we'll
+		// loop through each extension that exists and apply our
+		// after install and after enable filters on them.
 		Installer::after(function()
 		{
 			foreach (Extensions::allEnabled() as $extension)
 			{
 				app('Platform\Menus\Observer')->afterInstall($extension);
-			}
-
-			foreach (Extensions::allEnabled() as $extension)
-			{
 				app('Platform\Menus\Observer')->afterEnable($extension);
 			}
 		});

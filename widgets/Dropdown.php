@@ -28,9 +28,9 @@ class Dropdown {
 	/**
 	 * Returns an HTML dropdown with all the root menus.
 	 *
-	 * @param  int     $current
-	 * @param  array   $attributes
-	 * @param  array   $customOptions
+	 * @param  int    $current
+	 * @param  array  $attributes
+	 * @param  array  $customOptions
 	 * @return \View
 	 */
 	public function root($current = null, $attributes = array(), $customOptions = array())

@@ -130,7 +130,7 @@ class Menu extends EloquentNode {
 
 		if ( ! $_groups = json_decode($groups, true))
 		{
-			throw new InvalidArgumentException("Cannot JSON decode groups [$groups].");
+			throw new InvalidArgumentException("Cannot JSON decode groups [{$groups}].");
 		}
 
 		return $_groups;
@@ -144,14 +144,7 @@ class Menu extends EloquentNode {
 	 */
 	public function _setGroupsAttribute($groups)
 	{
-		$groups = array_merge($this->getGroups(), $groups);
-
 		$this->attributes['groups'] = ! empty($groups) ? json_encode($groups) : '';
-	}
-
-	public function getGroups()
-	{
-		return $this->groups;
 	}
 
 	/**
@@ -236,7 +229,7 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Return information about the selected type.
+	 * Return information about the provided type.
 	 *
 	 * @param  string  $type
 	 * @return array
@@ -250,30 +243,10 @@ class Menu extends EloquentNode {
 
 		if ( ! isset(static::$types[$type]))
 		{
-			throw new RuntimeException("Menu type [$type] has not been registered.");
+			throw new RuntimeException("Menu type [{$type}] has not been registered.");
 		}
 
 		return static::$types[$type];
-	}
-
-	/**
-	 * Return the type data.
-	 *
-	 * @return array
-	 */
-	public function getTypeData()
-	{
-		return $this->typeData;
-	}
-
-	/**
-	 * Set the type data.
-	 *
-	 * @return void
-	 */
-	public function setTypeData(array $typeData)
-	{
-		$this->typeData = $typeData;
 	}
 
 	/**
@@ -295,6 +268,26 @@ class Menu extends EloquentNode {
 	public static function getTypes()
 	{
 		return static::$types;
+	}
+
+	/**
+	 * Return the type data.
+	 *
+	 * @return array
+	 */
+	public function getTypeData()
+	{
+		return $this->typeData;
+	}
+
+	/**
+	 * Set the type data.
+	 *
+	 * @return void
+	 */
+	public function setTypeData(array $typeData)
+	{
+		$this->typeData = $typeData;
 	}
 
 	/**
