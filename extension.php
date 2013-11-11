@@ -230,9 +230,9 @@ return array(
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
 
-		Menu::registerType($app['Platform\Menus\StaticType']);
+		app('Platform\Menus\Models\Menu')->registerType($app['Platform\Menus\StaticType']);
 
-		Menu::observe(app('Platform\Menus\Observer'));
+		app('Platform\Menus\Models\Menu')->observe(app('Platform\Menus\Observer'));
 	},
 
 	/*
