@@ -28,11 +28,12 @@ class Dropdown {
 	/**
 	 * Returns an HTML dropdown with all the root menus.
 	 *
+	 * @param  int     $current
 	 * @param  array   $attributes
 	 * @param  array   $customOptions
 	 * @return \View
 	 */
-	public function root($attributes = array(), $customOptions = array())
+	public function root($current = false, $attributes = array(), $customOptions = array())
 	{
 		try
 		{
@@ -43,6 +44,8 @@ class Dropdown {
 			foreach ($items as &$item)
 			{
 				$item->depth = $item->depth ?: 1;
+
+				$item->isCurrent = $current == $item->id;
 
 				$item->children = array();
 			}
