@@ -98,7 +98,7 @@ class Dropdown {
 	 * Recursively prepares the items for presentation.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $item
-	 * @param  string   $current
+	 * @param  string  $current
 	 * @return void
 	 */
 	protected function prepareItemsRecursively($item, $current = null)
