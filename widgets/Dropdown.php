@@ -33,21 +33,18 @@ class Dropdown {
 	 * @param  array   $customOptions
 	 * @return \View
 	 */
-	public function root($current = false, $attributes = array(), $customOptions = array())
+	public function root($current = null, $attributes = array(), $customOptions = array())
 	{
 		try
 		{
+			// Get all the root items
 			$response = API::get('v1/menus?root=true');
-
 			$items = $response['menus'];
 
-			foreach ($items as &$item)
+			// Loop through and prepare the items for display
+			foreach ($items as $item)
 			{
-				$item->depth = $item->depth ?: 1;
-
-				$item->isCurrent = $current == $item->id;
-
-				$item->children = array();
+				$this->prepareItemsRecursively($item, $current);
 			}
 
 			// Prepare the attributes
@@ -62,7 +59,7 @@ class Dropdown {
 	}
 
 	/**
-	 * Returns an HTML dropdown with all the childrens of
+	 * Returns an HTML dropdown with all the children of
 	 * the provided menu slug.
 	 *
 	 * @param  string  $slug
@@ -77,12 +74,13 @@ class Dropdown {
 		try
 		{
 			// Get the menu children
-			$items = $this->getChildrenForSlug($slug, $depth);
+			$response = API::get("v1/menus/{$slug}", compact('depth'));
+			$items = $response['children'];
 
-			// Loop through and prepare the item for display
+			// Loop through and prepare the items for display
 			foreach ($items as $item)
 			{
-				$this->prepareChildRecursively($item, $current);
+				$this->prepareItemsRecursively($item, $current);
 			}
 
 			// Prepare the attributes
@@ -97,27 +95,13 @@ class Dropdown {
 	}
 
 	/**
-	 * Returns the children for a menu with the given slug.
-	 *
-	 * @param  string  $slug
-	 * @param  int     $depth
-	 * @return array
-	 */
-	protected function getChildrenForSlug($slug, $depth = 0)
-	{
-		$response = API::get("v1/menus/{$slug}", compact('depth'));
-
-		return $response['children'];
-	}
-
-	/**
-	 * Recursively prepares a child for presentation within the nav widget.
+	 * Recursively prepares the items for presentation.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $item
-	 * @param  string  $current
+	 * @param  string   $current
 	 * @return void
 	 */
-	protected function prepareChildRecursively($item, $current = null)
+	protected function prepareItemsRecursively($item, $current = null)
 	{
 		// Get this item children
 		$item->children = $item->getChildren();
@@ -125,10 +109,13 @@ class Dropdown {
 		// Is this the current child?
 		$item->isCurrent = $current == $item->id;
 
+		// Make sure we have a proper item depth
+		$item->depth = $item->depth ?: 1;
+
 		// Recursive!
-		foreach ($item->children as $grandChild)
+		foreach ($item->children as $children)
 		{
-			$this->prepareChildRecursively($grandChild, $current);
+			$this->prepareItemsRecursively($children, $current);
 		}
 	}
 
