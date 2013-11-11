@@ -51,9 +51,10 @@ class Nav {
 	 * @param  string  $depth
 	 * @param  string  $cssClass
 	 * @param  string  $beforeUri
+	 * @param  string  $view
 	 * @return \View
 	 */
-	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null)
+	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
 	{
 		try
 		{
@@ -66,7 +67,9 @@ class Nav {
 				$this->prepareChildRecursively($child, $beforeUri);
 			}
 
-			return View::make('platform/menus::widgets/nav', compact('children', 'cssClass'));
+			$view = $view ?: 'platform/menus::widgets/nav';
+
+			return View::make($view, compact('children', 'cssClass'));
 		}
 		catch (ApiHttpException $e)
 		{
