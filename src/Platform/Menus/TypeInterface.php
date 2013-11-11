@@ -71,7 +71,6 @@ interface TypeInterface {
 
 	/**
 	 * Event that is called after a menu children is saved.
-	 * Attach any links and relationships.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
@@ -80,7 +79,6 @@ interface TypeInterface {
 
 	/**
 	 * Event that is called before a children is deleted.
-	 * Detach any links and relationships.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void

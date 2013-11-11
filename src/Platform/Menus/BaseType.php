@@ -95,7 +95,6 @@ abstract class BaseType {
 
 	/**
 	 * Event that is called after a menu children is saved.
-	 * Attach any links and relationships.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
@@ -103,8 +102,7 @@ abstract class BaseType {
 	public function afterSave(Menu $child){}
 
 	/**
-	 * Called before a child is deleted. Detach any links
-	 * and relationships.
+	 * Event that is called before a children is deleted.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void

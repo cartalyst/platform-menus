@@ -60,7 +60,7 @@ class Observer {
 	/**
 	 * Observer after an extension is installed.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return void
 	 * @todo   See if we can move the fetching to the API, if not
 	 *         we'll remove it from all methods.
@@ -124,7 +124,7 @@ class Observer {
 	/**
 	 * Observer after an extension is uninstalled.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return void
 	 */
 	public function afterUninstall(Extension $extension)
@@ -165,7 +165,7 @@ class Observer {
 	/**
 	 * Observer after an extension is enabled.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return void
 	 */
 	public function afterEnable(Extension $extension)
@@ -185,7 +185,7 @@ class Observer {
 	/**
 	 * Observer after an extension is disabled.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return void
 	 */
 	public function afterDisable(Extension $extension)
@@ -207,7 +207,7 @@ class Observer {
 	 * returnin an array where the key is a menu slug and
 	 * the value is an array of children.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return array
 	 */
 	protected function extractMenus(Extension $extension)
@@ -240,7 +240,7 @@ class Observer {
 	 * Prepares children for the fancy mapping process that will occur,
 	 * including validating attributes.
 	 *
-	 * @param  Cartalyst\Extensions\Extension  $extension
+	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @param  array  $children
 	 * @return void
 	 */
