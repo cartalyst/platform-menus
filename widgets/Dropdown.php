@@ -37,20 +37,9 @@ class Dropdown {
 	{
 		try
 		{
-			// Get all the root items
 			$response = API::get('v1/menus?root=true');
-			$items = $response['menus'];
 
-			// Loop through and prepare the items for display
-			foreach ($items as $item)
-			{
-				$this->prepareItemsRecursively($item, $current);
-			}
-
-			// Prepare the attributes
-			$attributes = HTML::attributes($attributes);
-
-			return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
+			return $this->renderDropdown($response['menus'], $current, $attributes, $customOptions);
 		}
 		catch (ApiHttpException $e)
 		{
@@ -73,25 +62,37 @@ class Dropdown {
 	{
 		try
 		{
-			// Get the menu children
 			$response = API::get("v1/menus/{$slug}", compact('depth'));
-			$items = $response['children'];
 
-			// Loop through and prepare the items for display
-			foreach ($items as $item)
-			{
-				$this->prepareItemsRecursively($item, $current);
-			}
-
-			// Prepare the attributes
-			$attributes = HTML::attributes($attributes);
-
-			return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
+			return $this->renderDropdown($response['children'], $current, $attributes, $customOptions);
 		}
 		catch (ApiHttpException $e)
 		{
 			return;
 		}
+	}
+
+	/**
+	 * Render the view with the dropdown items.
+	 *
+	 * @param  array   $items
+	 * @param  int     $current
+	 * @param  array   $attributes
+	 * @param  array   $customOptions
+	 * @return \View
+	 */
+	protected function renderDropdown($items, $current, $attributes, $customOptions)
+	{
+		// Loop through and prepare the items for display
+		foreach ($items as $item)
+		{
+			$this->prepareItemsRecursively($item, $current);
+		}
+
+		// Prepare the attributes
+		$attributes = HTML::attributes($attributes);
+
+		return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
 	}
 
 	/**
