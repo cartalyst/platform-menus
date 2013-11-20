@@ -62,6 +62,16 @@ abstract class BaseType {
 	}
 
 	/**
+	 * Get a human friendly name for the type.
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->translator->trans("platform/menus::form.type_{$this->getIdentifier()}");
+	}
+
+	/**
 	 * Get the name for the menu child.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
@@ -91,6 +101,28 @@ abstract class BaseType {
 		$uri = ltrim($uri, '/');
 
 		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri);
+	}
+
+	/**
+	 * Return the form HTML template for a edit child of this type as well
+	 * as creating new children.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @return \View
+	 */
+	public function getFormHtml(Menu $child = null)
+	{
+		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/form", compact('child'));
+	}
+
+	/**
+	 * Return the HTML template used when creating a menu child of this type.
+	 *
+	 * @return \View
+	 */
+	public function getTemplateHtml()
+	{
+		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
 	}
 
 	/**

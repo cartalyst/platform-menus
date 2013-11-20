@@ -33,38 +33,6 @@ class StaticType extends BaseType implements TypeInterface {
 	}
 
 	/**
-	 * Get a human friendly name for the type.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->translator->trans('platform/menus::form.type_static');
-	}
-
-	/**
-	 * Return the form HTML template for a edit child of this type as well
-	 * as creating new children.
-	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
-	 * @return \View
-	 */
-	public function getFormHtml(Menu $child = null)
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/form", compact('child'));
-	}
-
-	/**
-	 * Return the HTML template used when creating a menu child of this type.
-	 *
-	 * @return \View
-	 */
-	public function getTemplateHtml()
-	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
-	}
-
-	/**
 	 * Event that is called after a menu children is saved.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $child
