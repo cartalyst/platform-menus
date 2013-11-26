@@ -127,7 +127,6 @@ return array(
 	|	object \Composer\Autoload\ClassLoader      $loader
 	|	object \Illuminate\Foundation\Application  $app
 	|
-	|
 	| Supported: "composer", "platform", "Closure"
 	|
 	*/
