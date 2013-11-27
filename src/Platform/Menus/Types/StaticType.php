@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus;
+<?php namespace Platform\Menus\Types;
 /**
  * Part of the Platform application.
  *
@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Models\Menu;
+use Platform\Menus\Menu;
 
 class StaticType extends BaseType implements TypeInterface {
 
@@ -35,7 +35,7 @@ class StaticType extends BaseType implements TypeInterface {
 	/**
 	 * Event that is called after a menu children is saved.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
 	public function afterSave(Menu $child)
@@ -51,7 +51,7 @@ class StaticType extends BaseType implements TypeInterface {
 	/**
 	 * Event that is called before a children is deleted.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
 	public function beforeDelete(Menu $child) {}

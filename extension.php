@@ -21,7 +21,6 @@
 use Cartalyst\Extensions\ExtensionInterface;
 use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
-use Platform\Menus\Models\Menu;
 
 return array(
 
@@ -183,9 +182,14 @@ return array(
 			}
 		});
 
-		$app['Platform\Menus\StaticType'] = $app->share(function($app)
+		$app['Platform\Menus\Types\StaticType'] = $app->share(function($app)
 		{
-			return new Platform\Menus\StaticType($app['url'], $app['view'], $app['translator']);
+			return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
+		});
+
+		App::bind('Platform\Menus\Repositories\MenuRepositoryInterface', function($app)
+		{
+			return new Platform\Menus\Repositories\DbMenuRepository(get_class($app['Platform\Menus\Menu']));
 		});
 	},
 
@@ -226,9 +230,9 @@ return array(
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
 
-		app('Platform\Menus\Models\Menu')->registerType($app['Platform\Menus\StaticType']);
+		app('Platform\Menus\Menu')->registerType($app['Platform\Menus\Types\StaticType']);
 
-		app('Platform\Menus\Models\Menu')->observe(app('Platform\Menus\Observer'));
+		app('Platform\Menus\Menu')->observe(app('Platform\Menus\Observer'));
 	},
 
 	/*

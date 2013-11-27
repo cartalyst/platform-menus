@@ -25,6 +25,7 @@ use Illuminate\Support\MessageBag as Bag;
 use Input;
 use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
+use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Redirect;
 use Sentry;
 use View;
@@ -32,13 +33,32 @@ use View;
 class MenusController extends AdminController {
 
 	/**
+	 * Menus repository.
+	 *
+	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
+	 */
+	protected $menus;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @return void
+	 */
+	public function __construct(MenuRepositoryInterface $menus)
+	{
+		parent::__construct();
+
+		$this->menus = $menus;
+	}
+
+	/**
 	 * Display a listing of menus.
 	 *
-	 * @return \View
+	 * @return \Illuminate\View\View
 	 */
 	public function getIndex()
 	{
-		// Show the page
 		return View::make('platform/menus::index');
 	}
 
@@ -49,11 +69,8 @@ class MenusController extends AdminController {
 	 */
 	public function getGrid()
 	{
-		// Get all the root menus
-		$response = API::get('v1/menus?root=true');
-		$menus    = $response['menus'];
+		$menus = $this->menus->grid();
 
-		// Prepare the menus data
 		foreach ($menus as &$menu)
 		{
 			$count = $menu->getChildrenCount();
@@ -61,7 +78,6 @@ class MenusController extends AdminController {
 			$menu->items_count = Lang::choice('platform/menus::table.items', $count, compact('count'));
 		}
 
-		// Return the Data Grid object
 		return DataGrid::make($menus, array(
 			'id',
 			'name',
@@ -74,21 +90,21 @@ class MenusController extends AdminController {
 	/**
 	 * Show the form for creating a new menu.
 	 *
-	 * @return \View
+	 * @return \Illuminate\View\View
 	 */
 	public function getCreate()
 	{
-		return $this->showForm(null, 'create');
+		return $this->showForm('create');
 	}
 
 	/**
 	 * Handle posting of the form for creating a new menu.
 	 *
-	 * @return \Redirect
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postCreate()
 	{
-		return $this->processForm();
+		return $this->processForm('create');
 	}
 
 	/**
@@ -99,54 +115,57 @@ class MenusController extends AdminController {
 	 */
 	public function getEdit($slug = null)
 	{
-		return $this->showForm($slug, 'edit');
+		if ( ! $slug)
+		{
+			return Redirect::toAdmin('menus');
+		}
+
+		return $this->showForm('update', $slug);
 	}
 
 	/**
 	 * Handle posting of the form for updating a menu.
 	 *
 	 * @param  mixed  $slug
-	 * @return \Redirect
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postEdit($slug = null)
 	{
-		return $this->processForm($slug);
+		return $this->processForm('update', $slug);
 	}
 
 	/**
 	 * Remove the specified menu.
 	 *
 	 * @param  mixed  $slug
-	 * @return \Redirect
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function getDelete($slug)
 	{
-		try
+		// Do we have a menu identifier?
+		if ($slug)
 		{
 			// Delete the menu
-			API::delete("v1/menus/{$slug}");
+			$this->menus->delete($slug);
 
-			// Set the success message
-			$bag = with(new Bag)->add('success', Lang::get('platform/menus::message.success.delete'));
-		}
-		catch (ApiHttpException $e)
-		{
-			// Set the error message
-			$bag = with(new Bag)->add('error', Lang::get('platform/menus::message.error.delete'));
+			// Prepare the success message
+			$message = Lang::get('platform/menus::message.success.delete');
+
+			// Redirect to the menus management page
+			return Redirect::toAdmin('menus')->withSuccess($message);
 		}
 
-		// Redirect to the menus management page
-		return Redirect::toAdmin('menus')->withNotifications($bag);
+		return Redirect::toAdmin('menus');
 	}
 
 	/**
 	 * Shows the form.
 	 *
+	 * @param  string  $mode
 	 * @param  mixed   $slug
-	 * @param  string  $pageSegment
 	 * @return mixed
 	 */
-	protected function showForm($slug = null, $pageSegment = null)
+	protected function showForm($mode = null, $slug = null)
 	{
 		try
 		{
@@ -173,14 +192,14 @@ class MenusController extends AdminController {
 			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
 
 			// Get all the registered menu types
-			$name = get_class(app('Platform\Menus\Models\Menu'));
+			$name = get_class(app('Platform\Menus\Menu'));
 			$types = $name::getTypes();
 
 			// Share some variables, because of views inheritance
 			View::share(compact('groups', 'types'));
 
 			// Show the page
-			return View::make('platform/menus::manage', compact('menu', 'children', 'persistedSlugs', 'pageSegment'));
+			return View::make('platform/menus::manage', compact('mode', 'menu', 'children', 'persistedSlugs'));
 		}
 		catch (ApiHttpException $e)
 		{
@@ -195,10 +214,11 @@ class MenusController extends AdminController {
 	/**
 	 * Processes the form.
 	 *
+	 * @param  string  $mode
 	 * @param  mixed  $slug
-	 * @return \Redirect
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	protected function processForm($slug = null)
+	protected function processForm($mode, $slug = null)
 	{
 		// Get the tree
 		$tree = json_decode(Input::get('menu-tree', array()), true);

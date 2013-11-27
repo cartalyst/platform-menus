@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Models;
+<?php namespace Platform\Menus;
 /**
  * Part of the Platform application.
  *
@@ -21,7 +21,7 @@
 use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Illuminate\Database\Query\Expression;
 use InvalidArgumentException;
-use Platform\Menus\TypeInterface;
+use Platform\Menus\Types\TypeInterface;
 use RuntimeException;
 
 class Menu extends EloquentNode {
@@ -114,7 +114,7 @@ class Menu extends EloquentNode {
 	 *
 	 * @param  mixed  $groups
 	 * @return array
-	 * @throws InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 */
 	public function _getGroupsAttribute($groups)
 	{
@@ -233,7 +233,7 @@ class Menu extends EloquentNode {
 	 *
 	 * @param  string  $type
 	 * @return array
-	 * @throws RuntimeException
+	 * @throws \RuntimeException
 	 */
 	public function getType($type = null)
 	{
@@ -252,7 +252,7 @@ class Menu extends EloquentNode {
 	/**
 	 * Register a custom type with a menu.
 	 *
-	 * @param  \Platform\Menus\TypeInterface  $type
+	 * @param  \Platform\Menus\Types\TypeInterface  $type
 	 * @return void
 	 */
 	public static function registerType(TypeInterface $type)

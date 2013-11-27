@@ -27,7 +27,7 @@ class PathController extends ApiController {
 	/**
 	 * Holds the menu model.
 	 *
-	 * @var Platform\Menus\Models\Menu
+	 * @var Platform\Menus\Menu
 	 */
 	protected $model;
 
@@ -40,7 +40,7 @@ class PathController extends ApiController {
 	{
 		parent::__construct();
 
-		$this->model = app('Platform\Menus\Models\Menu');
+		$this->model = app('Platform\Menus\Menu');
 	}
 
 	/**

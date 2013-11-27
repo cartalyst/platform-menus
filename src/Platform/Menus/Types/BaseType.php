@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus;
+<?php namespace Platform\Menus\Types;
 /**
  * Part of the Platform application.
  *
@@ -21,7 +21,7 @@
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Translation\Translator;
 use Illuminate\View\Environment;
-use Platform\Menus\Models\Menu;
+use Platform\Menus\Menu;
 
 abstract class BaseType {
 
@@ -74,7 +74,7 @@ abstract class BaseType {
 	/**
 	 * Get the name for the menu child.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return string
 	 */
 	public function getNameAttribute(Menu $child)
@@ -85,7 +85,7 @@ abstract class BaseType {
 	/**
 	 * Get the URL for the menu child.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @param  array  $options
 	 * @return string
 	 */
@@ -107,7 +107,7 @@ abstract class BaseType {
 	 * Return the form HTML template for a edit child of this type as well
 	 * as creating new children.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return \View
 	 */
 	public function getFormHtml(Menu $child = null)
@@ -128,7 +128,7 @@ abstract class BaseType {
 	/**
 	 * Event that is called after a menu children is saved.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
 	public function afterSave(Menu $child){}
@@ -136,7 +136,7 @@ abstract class BaseType {
 	/**
 	 * Event that is called before a children is deleted.
 	 *
-	 * @param  \Platform\Menus\Models\Menu  $child
+	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
 	public function beforeDelete(Menu $child) {}
