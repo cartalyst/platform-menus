@@ -35,6 +35,13 @@ interface MenuRepositoryInterface {
 	public function findAll();
 
 	/**
+	 * Return all the root menus.
+	 *
+	 * @return \Platform\Menus\Menu
+	 */
+	public function findRoot();
+
+	/**
 	 * Get an menu by it's primary key.
 	 *
 	 * @param  int  $id

@@ -55,7 +55,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function grid()
 	{
-		return $this->createModel()->allRoot();
+		return $this->findRoot();
 	}
 
 	/**
@@ -64,6 +64,14 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	public function findAll()
 	{
 		return $this->createModel()->findAll();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findRoot()
+	{
+		return $this->createModel()->allRoot();
 	}
 
 	/**
