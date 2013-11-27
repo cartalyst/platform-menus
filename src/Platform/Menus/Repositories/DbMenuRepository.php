@@ -83,6 +83,14 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function findWhere($column, $value)
+	{
+		return $this->createModel()->where($column, $value)->first();
+	}
+
+	/**
 	 * Return all the menu slugs.
 	 *
 	 * @return array

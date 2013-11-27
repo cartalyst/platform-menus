@@ -50,6 +50,15 @@ interface MenuRepositoryInterface {
 	public function find($id);
 
 	/**
+	 * Perform a basic search.
+	 *
+	 * @param  string  $column
+	 * @param  mixed   $value
+	 * @return \Platform\Menus\Menu
+	 */
+	public function findWhere($column, $value);
+
+	/**
 	 * Determine if the given menu is valid for creation.
 	 *
 	 * @param  array  $data
