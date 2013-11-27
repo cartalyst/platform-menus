@@ -63,7 +63,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this->createModel()->newQuery()->get();
+		return $this->createModel()->findAll();
 	}
 
 	/**
@@ -74,13 +74,17 @@ class DbMenuRepository implements MenuRepositoryInterface {
 		return $this->createModel()->orWhere('slug', $id)->orWhere('id', $id)->first();
 	}
 
-	// return all the menu slugs
+	/**
+	 * Return all the menu slugs.
+	 *
+	 * @return array
+	 */
 	public function slugs()
 	{
 		return array_map(function($child)
 		{
 			return $child['slug'];
-		}, $this->createModel()->findAll());
+		}, $this->findAll());
 	}
 
 	/**
