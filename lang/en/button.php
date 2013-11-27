@@ -21,7 +21,7 @@
 return array(
 
 	'create' => 'Create menu',
-	'edit'   => 'Edit menu',
+	'update' => 'Edit menu',
 	'delete' => 'Delete menu',
 
 	'save' => 'Save Menu',

@@ -1,7 +1,7 @@
 <?php
 	$childId   = ! empty($child) ? "{$child->id}_%s" : 'new-child_%s';
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
-	$segment = ! empty($child) ? 'edit' : 'create';
+	$mode = ! empty($child) ? 'update' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 	$selectedGroups = ! empty($child) ? $child->groups ?: array() : array();
 ?>
@@ -10,12 +10,12 @@
 	<input type="hidden" id="{{ sprintf($childId, 'current-slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 
 	<h4>
-		{{{ trans("platform/menus::form.{$segment}.legend") }}}
+		{{{ trans("platform/menus::form.{$mode}.legend") }}}
 
 		<span class="pull-right"><small class="item-box-close" data-item-close="{{{ ! empty($child) ? $child->id : 'new-child' }}}">&times;</small></span>
 	</h4>
 
-	<p>{{{ trans("platform/menus::form.{$segment}.description") }}}</p>
+	<p>{{{ trans("platform/menus::form.{$mode}.description") }}}</p>
 
 	{{-- Item Details --}}
 	<div class="well well-md item-box-borderless">

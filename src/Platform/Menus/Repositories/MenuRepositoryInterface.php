@@ -30,7 +30,7 @@ interface MenuRepositoryInterface {
 	/**
 	 * Return all the menu entries.
 	 *
-	 * @return \Platform\Content\Content
+	 * @return \Platform\Menus\Menu
 	 */
 	public function findAll();
 
@@ -38,7 +38,7 @@ interface MenuRepositoryInterface {
 	 * Get an menu by it's primary key.
 	 *
 	 * @param  int  $id
-	 * @return \Platform\Content\Content
+	 * @return \Platform\Menus\Menu
 	 */
 	public function find($id);
 
@@ -63,7 +63,7 @@ interface MenuRepositoryInterface {
 	 * Creates a menu with the given data.
 	 *
 	 * @param  array  $data
-	 * @return \Cartalyst\Content\Content
+	 * @return \Cartalyst\Menus\Menu
 	 */
 	public function create(array $data);
 
@@ -72,7 +72,7 @@ interface MenuRepositoryInterface {
 	 *
 	 * @param  int    $id
 	 * @param  array  $data
-	 * @return \Cartalyst\Content\Content
+	 * @return \Cartalyst\Menus\Menu
 	 */
 	public function update($id, array $data);
 

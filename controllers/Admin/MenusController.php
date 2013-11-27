@@ -167,55 +167,37 @@ class MenusController extends AdminController {
 	 */
 	protected function showForm($mode = null, $slug = null)
 	{
-		try
+		// Do we have a menu identifier?
+		if ( ! is_null($slug))
 		{
-			// Do we have a menu identifier?
-			if ( ! is_null($slug))
-			{
-				// Get the menu information
-				$response = API::get("v1/menus/{$slug}");
-				$menu     = $response['menu'];
-				$children = $response['children'];
-			}
+			// Get the menu information
+			$menu = $this->menus->find($slug);
 
-			// Get all the menu slugs
-			$response = API::get('v1/menus?flat=true&attributes=slug');
-
-			// Prepare the persisted slugs, so that we
-			// don't end up with repeated slugs.
-			$persistedSlugs = array_map(function($child)
-			{
-				return $child['slug'];
-			}, $response['menus']);
-
-			// Get a list of all the available groups
-			$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
-
-			// Get all the registered menu types
-			$name = get_class(app('Platform\Menus\Menu'));
-			$types = $name::getTypes();
-
-			// Share some variables, because of views inheritance
-			View::share(compact('groups', 'types'));
-
-			// Show the page
-			return View::make('platform/menus::manage', compact('mode', 'menu', 'children', 'persistedSlugs'));
+			// Get this menu children
+			$children = $menu->findChildren(0);
 		}
-		catch (ApiHttpException $e)
-		{
-			// Set the error message
-			$bag = with(new Bag)->add('error', $e->getMessage());
 
-			// Return to the menus management page
-			return Redirect::toAdmin('menus')->withNotifications($bag);
-		}
+		// Get the persisted slugs
+		$persistedSlugs = $this->menus->slugs();
+
+		// Get a list of all the available groups
+		$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
+
+		// Get all the registered menu types
+		$types = app('Platform\Menus\Menu')->getTypes();
+
+		// Share some variables, because of views inheritance
+		View::share(compact('groups', 'types'));
+
+		// Show the page
+		return View::make('platform/menus::manage', compact('mode', 'menu', 'children', 'persistedSlugs'));
 	}
 
 	/**
 	 * Processes the form.
 	 *
 	 * @param  string  $mode
-	 * @param  mixed  $slug
+	 * @param  mixed   $slug
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	protected function processForm($mode, $slug = null)
@@ -238,47 +220,48 @@ class MenusController extends AdminController {
 		}
 
 		// Prepare the menu data for the API
-		$menu = array(
+		$input = array(
 			'slug'     => Input::get('menu-slug'),
 			'name'     => Input::get('menu-name'),
 			'children' => $children,
 		);
 
-		try
+		// Do we have a menu identifier?
+		if ($slug)
 		{
-			// Are we creating a new menu?
-			if (is_null($slug))
-			{
-				// Create the menu
-				$response = API::post('v1/menus', compact('menu'));
+			// Check if the input is valid
+			$messages = $this->menus->validForUpdate($slug, $input);
 
-				// Prepare the success message
-				$message = Lang::get('platform/menus::message.success.create');
-			}
-
-			// No, we are updating the menu
-			else
+			// Do we have any errors?
+			if ($messages->isEmpty())
 			{
 				// Update the menu
-				$response = API::put("v1/menus/{$slug}", compact('menu'));
-
-				// Prepare the success message
-				$message = Lang::get('platform/menus::message.success.edit');
+				$menu = $this->menus->update($slug, $input);
 			}
-
-			// Get the menu slug
-			$slug = $response['menu']->slug;
-
-			// Set the success message
-			$bag = with(new Bag)->add('success', $message);
-
-			// Redirect to the menu edit page
-			return Redirect::toAdmin("menus/edit/{$slug}")->withNotifications($bag);
 		}
-		catch (ApiHttpException $e)
+		else
 		{
-			return Redirect::back()->withInput()->withErrors($e->getErrors());
+			// Check if the input is valid
+			$messages = $this->menus->validForCreation($input);
+
+			// Do we have any errors?
+			if ($messages->isEmpty())
+			{
+				// Create the menu
+				$menu = $this->menus->create($input);
+			}
 		}
+
+		// Do we have any errors?
+		if ($messages->isEmpty())
+		{
+			// Prepare the success message
+			$message = Lang::get("platform/menus::message.success.{$mode}");
+
+			return Redirect::toAdmin("menus/edit/{$menu->slug}")->withSuccess($message);
+		}
+
+		return Redirect::back()->withInput()->witherrors($messages);
 	}
 
 	/**

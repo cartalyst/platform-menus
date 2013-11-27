@@ -18,7 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-use Symfony\Component\Finder\Finder;
 use Validator;
 
 class DbMenuRepository implements MenuRepositoryInterface {
@@ -36,12 +35,8 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 * @var array
 	 */
 	protected $rules = array(
-		'name'    => 'required|max:255',
-		'slug'    => 'required|max:255|unique:content',
-		'enabled' => 'required',
-		'type'    => 'required|in:database,filesystem',
-		'value'   => 'required_if:type,database',
-		'file'    => 'required_if:type,filesystem',
+		'name' => 'required',
+		'slug' => 'required|unique:menus,slug',
 	);
 
 	/**
@@ -79,6 +74,15 @@ class DbMenuRepository implements MenuRepositoryInterface {
 		return $this->createModel()->orWhere('slug', $id)->orWhere('id', $id)->first();
 	}
 
+	// return all the menu slugs
+	public function slugs()
+	{
+		return array_map(function($child)
+		{
+			return $child['slug'];
+		}, $this->createModel()->findAll());
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,7 +98,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->find($id);
 
-		$this->rules['slug'] = "required|max:255|unique:content,slug,{$model->slug},slug";
+		$this->rules['slug'] = "required|unique:menus,slug,{$model->slug},slug";
 
 		return $this->validateMenu($data);
 	}
@@ -104,7 +108,17 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function create(array $data)
 	{
-		with($model = $this->createModel())->fill($data)->save();
+		$model = new $this->model(array(
+			'name' => $data['name'],
+			'slug' => $data['slug'],
+		));
+
+		$model->makeRoot();
+
+		if ($children = $data['children'])
+		{
+			$model->mapTree($children);
+		}
 
 		return $model;
 	}
@@ -116,7 +130,19 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->find($id);
 
-		$model->fill($data)->save();
+		foreach ($data as $key => $value)
+		{
+			if ($key === 'children')
+			{
+				$model->mapTree($value);
+			}
+			else
+			{
+				$model->{$key} = $value;
+			}
+		}
+
+		$model->save();
 
 		return $model;
 	}
@@ -128,7 +154,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->find($id);
 
-		return $model->delete();
+		return $model->deleteWithChildren();
 	}
 
 	/**
@@ -156,29 +182,6 @@ class DbMenuRepository implements MenuRepositoryInterface {
 		$class = '\\'.ltrim($this->model, '\\');
 
 		return new $class;
-	}
-
-	/**
-	 * Returns a list of the available content files.
-	 *
-	 * @return array
-	 */
-	public function files()
-	{
-		$contentModel = $this->model;
-
-		$finder = with(new Finder)->in($contentModel::getPaths())->depth('< 3');
-
-		$files = array();
-
-		foreach ($finder->files() as $file)
-		{
-			$file = str_replace(DIRECTORY_SEPARATOR, '/', $file->getRelativePathname());
-
-			$files[$file] = $file;
-		}
-
-		return $files;
 	}
 
 }

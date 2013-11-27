@@ -25,7 +25,7 @@ return array(
 		'description' => 'Add a new navigation item.',
 	),
 
-	'edit' => array(
+	'update' => array(
 		'legend'      => 'Edit Item',
 		'description' => 'Update an existing navigation item.',
 	),
