@@ -18,12 +18,29 @@
  * @link       http://cartalyst.com
  */
 
-use API;
-use Cartalyst\Api\Http\ApiHttpException;
 use HTML;
+use Platform\Menus\Repositories\MenuRepositoryInterface;
 use View;
 
 class Dropdown {
+
+	/**
+	 * Menus repository.
+	 *
+	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
+	 */
+	protected $menus;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @return void
+	 */
+	public function __construct(MenuRepositoryInterface $menus)
+	{
+		$this->menus = $menus;
+	}
 
 	/**
 	 * Returns an HTML dropdown with all the root menus.
@@ -35,16 +52,7 @@ class Dropdown {
 	 */
 	public function root($current = null, $attributes = array(), $customOptions = array())
 	{
-		try
-		{
-			$response = API::get('v1/menus?root=true');
-
-			return $this->renderDropdown($response['menus'], $current, $attributes, $customOptions);
-		}
-		catch (ApiHttpException $e)
-		{
-			return;
-		}
+		return $this->renderDropdown($this->menus->allRoot(), $current, $attributes, $customOptions);
 	}
 
 	/**
@@ -60,16 +68,9 @@ class Dropdown {
 	 */
 	public function show($slug, $depth, $current = null, $attributes = array(), $customOptions = array())
 	{
-		try
-		{
-			$response = API::get("v1/menus/{$slug}", compact('depth'));
+		$menu = $this->menus->find($slug);
 
-			return $this->renderDropdown($response['children'], $current, $attributes, $customOptions);
-		}
-		catch (ApiHttpException $e)
-		{
-			return;
-		}
+		return $this->renderDropdown($menu->findChildren($depth), $current, $attributes, $customOptions);
 	}
 
 	/**
