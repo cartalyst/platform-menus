@@ -18,8 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-use API;
-use Cartalyst\Api\Http\ApiHttpException;
 use DataGrid;
 use Illuminate\Support\MessageBag as Bag;
 use Input;
@@ -57,7 +55,7 @@ class MenusController extends AdminController {
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function getIndex()
+	public function index()
 	{
 		return View::make('platform/menus::index');
 	}
@@ -67,7 +65,7 @@ class MenusController extends AdminController {
 	 *
 	 * @return \Cartalyst\DataGrid\DataGrid
 	 */
-	public function getGrid()
+	public function grid()
 	{
 		$menus = $this->menus->grid();
 
@@ -92,7 +90,7 @@ class MenusController extends AdminController {
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function getCreate()
+	public function create()
 	{
 		return $this->showForm('create');
 	}
@@ -102,7 +100,7 @@ class MenusController extends AdminController {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function postCreate()
+	public function store()
 	{
 		return $this->processForm('create');
 	}
@@ -113,7 +111,7 @@ class MenusController extends AdminController {
 	 * @param  mixed  $slug
 	 * @return mixed
 	 */
-	public function getEdit($slug = null)
+	public function edit($slug = null)
 	{
 		if ( ! $slug)
 		{
@@ -129,7 +127,7 @@ class MenusController extends AdminController {
 	 * @param  mixed  $slug
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function postEdit($slug = null)
+	public function update($slug = null)
 	{
 		return $this->processForm('update', $slug);
 	}
@@ -140,7 +138,7 @@ class MenusController extends AdminController {
 	 * @param  mixed  $slug
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function getDelete($slug)
+	public function delete($slug)
 	{
 		// Do we have a menu identifier?
 		if ($slug)
@@ -181,7 +179,8 @@ class MenusController extends AdminController {
 		$persistedSlugs = $this->menus->slugs();
 
 		// Get a list of all the available groups
-		$groups = Sentry::getGroupProvider()->createModel()->lists('name', 'id');
+		#$groups = Sentry::getGroupRepository()->createModel()->lists('name', 'id');
+		$groups = array(); # ^^ not working
 
 		// Get all the registered menu types
 		$types = app('Platform\Menus\Menu')->getTypes();
@@ -258,7 +257,7 @@ class MenusController extends AdminController {
 			// Prepare the success message
 			$message = Lang::get("platform/menus::message.success.{$mode}");
 
-			return Redirect::toAdmin("menus/edit/{$menu->slug}")->withSuccess($message);
+			return Redirect::toAdmin("menus/{$menu->slug}/edit")->withSuccess($message);
 		}
 
 		return Redirect::back()->withInput()->witherrors($messages);

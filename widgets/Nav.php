@@ -18,13 +18,19 @@
  * @link       http://cartalyst.com
  */
 
-use API;
-use Cartalyst\Api\Http\ApiHttpException;
+use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Sentry;
 use URL;
 use View;
 
 class Nav {
+
+	/**
+	 * Menus repository.
+	 *
+	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
+	 */
+	protected $menus;
 
 	/**
 	 * Holds the current request path information.
@@ -36,10 +42,13 @@ class Nav {
 	/**
 	 * Constructor.
 	 *
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(MenuRepositoryInterface $menus)
 	{
+		$this->menus = $menus;
+
 		$this->path = URL::current();
 	}
 
@@ -55,6 +64,7 @@ class Nav {
 	 */
 	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
 	{
+		return; # for now
 		try
 		{
 			// Get the menu children
