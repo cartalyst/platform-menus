@@ -96,7 +96,7 @@ interface MenuRepositoryInterface {
 	 * Deletes the given menu.
 	 *
 	 * @param  int  $id
-	 * @return bool|null
+	 * @return bool
 	 */
 	public function delete($id);
 

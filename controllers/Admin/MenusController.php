@@ -140,20 +140,13 @@ class MenusController extends AdminController {
 	 */
 	public function delete($slug)
 	{
-		// Do we have a menu identifier?
-		if ($slug)
+		// Delete the menu
+		if ($this->menus->delete($slug))
 		{
-			// Delete the menu
-			$this->menus->delete($slug);
-
-			// Prepare the success message
-			$message = Lang::get('platform/menus::message.success.delete');
-
-			// Redirect to the menus management page
-			return Redirect::toAdmin('menus')->withSuccess($message);
+			return Redirect::toAdmin('menus')->withSuccess(Lang::get('platform/menus::message.success.delete'));
 		}
 
-		return Redirect::toAdmin('menus');
+		return Redirect::toAdmin('menus')->withErrors(Lang::get('platform/menus::message.error.delete'));
 	}
 
 	/**

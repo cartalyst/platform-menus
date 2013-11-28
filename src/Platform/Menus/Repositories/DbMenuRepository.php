@@ -36,7 +36,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	protected $rules = array(
 		'name' => 'required',
-		'slug' => 'required|unique:menus,slug',
+		'slug' => 'required|unique:menus',
 	);
 
 	/**
@@ -116,11 +116,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function validForUpdate($id, array $data)
 	{
-		$model = $this->find($id);
-
-		$this->rules['slug'] = "required|unique:menus,slug,{$model->slug},slug";
-
-		return $this->validateMenu($data);
+		return $this->validateMenu($data, $id);
 	}
 
 	/**
@@ -172,19 +168,32 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function delete($id)
 	{
-		$model = $this->find($id);
+		if ($model = $this->find($id))
+		{
+			$model->deleteWithChildren();
 
-		return $model->deleteWithChildren();
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
 	 * Validates a content.
 	 *
 	 * @param  array  $data
+	 * @param  mixed  $id
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	protected function validateMenu($data)
+	protected function validateMenu($data, $id = null)
 	{
+		if($id)
+		{
+			$model = $this->find($id);
+
+			$this->rules['slug'] .= ",slug,{$model->slug},slug";
+		}
+
 		$validator = Validator::make($data, $this->rules);
 
 		$validator->passes();
