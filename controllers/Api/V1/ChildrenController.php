@@ -19,7 +19,7 @@
  */
 
 use Input;
-use Platform\Routing\Controllers\ApiController;
+use Platform\Foundation\Controllers\ApiController;
 use Response;
 
 class ChildrenController extends ApiController {

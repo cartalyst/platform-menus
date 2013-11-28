@@ -21,7 +21,7 @@
 use API;
 use Input;
 use Lang;
-use Platform\Routing\Controllers\ApiController;
+use Platform\Foundation\Controllers\ApiController;
 use Response;
 
 class MenusController extends ApiController {

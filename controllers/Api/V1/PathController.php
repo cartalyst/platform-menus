@@ -19,7 +19,7 @@
  */
 
 use Lang;
-use Platform\Routing\Controllers\ApiController;
+use Platform\Foundation\Controllers\ApiController;
 use Response;
 
 class PathController extends ApiController {
