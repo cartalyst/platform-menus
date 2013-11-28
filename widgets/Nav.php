@@ -64,7 +64,6 @@ class Nav {
 	 */
 	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
 	{
-		return; # for now
 		try
 		{
 			// Get the menu children
@@ -102,11 +101,9 @@ class Nav {
 
 		if (Sentry::check() and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
 
-		$enabled = true;
+		$menu = $this->menus->find($slug);
 
-		$response = API::get("v1/menus/{$slug}", compact('depth', 'visibilities', 'enabled'));
-
-		return $response['children'];
+		return $menu->findDisplayableChildren($visibilities, true, $depth);
 	}
 
 	/**
