@@ -20,7 +20,7 @@
 
 use API;
 use Cartalyst\Api\Http\ApiHttpException;
-use Cartalyst\Sentry\Facades\Laravel\Sentry;
+use Sentry;
 use URL;
 use View;
 
