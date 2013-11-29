@@ -172,8 +172,7 @@ class MenusController extends AdminController {
 		$persistedSlugs = $this->menus->slugs();
 
 		// Get a list of all the available groups
-		#$groups = Sentry::getGroupRepository()->createModel()->lists('name', 'id');
-		$groups = array(); # ^^ not working
+		$groups = Sentry::getGroupRepository()->createModel()->all();
 
 		// Get all the registered menu types
 		$types = app('Platform\Menus\Menu')->getTypes();

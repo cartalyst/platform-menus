@@ -172,8 +172,8 @@
 
 					<div class="controls">
 						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
-							@foreach ($groups as $id => $name)
-							<option value="{{{ $id }}}"{{ in_array($id, $selectedGroups) ? ' selected="selected"' : null }}>{{{ $name }}}</option>
+							@foreach ($groups as $group)
+							<option value="{{{ $group->id }}}"{{ in_array($group->id, $selectedGroups) ? ' selected="selected"' : null }}>{{{ $group->name }}}</option>
 							@endforeach
 						</select>
 					</div>
