@@ -87,6 +87,8 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findWhere($column, $value)
 	{
+		if ( ! $value) return false;
+
 		return $this->createModel()->where($column, $value)->first();
 	}
 
