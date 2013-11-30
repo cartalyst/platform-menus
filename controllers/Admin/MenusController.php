@@ -40,7 +40,7 @@ class MenusController extends AdminController {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
 	public function __construct(MenuRepositoryInterface $menus)
@@ -111,13 +111,8 @@ class MenusController extends AdminController {
 	 * @param  mixed  $slug
 	 * @return mixed
 	 */
-	public function edit($slug = null)
+	public function edit($slug)
 	{
-		if ( ! $slug)
-		{
-			return Redirect::toAdmin('menus');
-		}
-
 		return $this->showForm('update', $slug);
 	}
 
@@ -127,7 +122,7 @@ class MenusController extends AdminController {
 	 * @param  mixed  $slug
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function update($slug = null)
+	public function update($slug)
 	{
 		return $this->processForm('update', $slug);
 	}
@@ -156,7 +151,7 @@ class MenusController extends AdminController {
 	 * @param  mixed   $slug
 	 * @return mixed
 	 */
-	protected function showForm($mode = null, $slug = null)
+	protected function showForm($mode, $slug = null)
 	{
 		// Do we have a menu identifier?
 		if ( ! is_null($slug))
@@ -252,7 +247,7 @@ class MenusController extends AdminController {
 			return Redirect::toAdmin("menus/{$menu->slug}/edit")->withSuccess($message);
 		}
 
-		return Redirect::back()->withInput()->witherrors($messages);
+		return Redirect::back()->withInput()->withErrors($messages);
 	}
 
 	/**
