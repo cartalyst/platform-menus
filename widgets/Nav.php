@@ -101,9 +101,12 @@ class Nav {
 
 		if (Sentry::check() and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
 
-		$menu = $this->menus->find($slug);
+		if ($menu = $this->menus->find($slug))
+		{
+			return $menu->findDisplayableChildren($visibilities, true, $depth);
+		}
 
-		return $menu->findDisplayableChildren($visibilities, true, $depth);
+		return array();
 	}
 
 	/**
