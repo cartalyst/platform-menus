@@ -148,7 +148,10 @@ class MenusController extends AdminController {
 		if ( ! is_null($slug))
 		{
 			// Get the menu information
-			$menu = $this->menus->find($slug);
+			if ( ! $menu = $this->menus->find($slug))
+			{
+				return Redirect::toAdmin('menus')->withErrors(Lang::get('platform/menus::message.not_found', array('id' => $slug)));
+			}
 
 			// Get this menu children
 			$children = $menu->findChildren(0);
