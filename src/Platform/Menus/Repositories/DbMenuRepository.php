@@ -164,8 +164,6 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function update($id, array $data)
 	{
-		ksort($data);
-
 		$model = $this->find($id);
 
 		foreach ($data as $key => $value)

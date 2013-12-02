@@ -201,9 +201,9 @@ class MenusController extends AdminController {
 
 		// Prepare the menu data for the API
 		$input = array(
+			'children' => $children,
 			'slug'     => Input::get('menu-slug'),
 			'name'     => Input::get('menu-name'),
-			'children' => $children,
 		);
 
 		// Do we have a menu identifier?
