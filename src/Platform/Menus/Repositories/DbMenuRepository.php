@@ -18,12 +18,13 @@
  * @link       http://cartalyst.com
  */
 
+use Lang;
 use Validator;
 
 class DbMenuRepository implements MenuRepositoryInterface {
 
 	/**
-	 * The Eloquent content model.
+	 * The Eloquent menu model.
 	 *
 	 * @var string
 	 */
@@ -55,7 +56,16 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function grid()
 	{
-		return $this->findRoot();
+		$menus = $this->findRoot();
+
+		foreach ($menus as &$menu)
+		{
+			$count = $menu->getChildrenCount();
+
+			$menu->items_count = Lang::choice('platform/menus::table.items', $count, compact('count'));
+		}
+
+		return $menus;
 	}
 
 	/**
@@ -93,9 +103,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	}
 
 	/**
-	 * Return all the menu slugs.
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function slugs()
 	{
@@ -103,6 +111,16 @@ class DbMenuRepository implements MenuRepositoryInterface {
 		{
 			return $child['slug'];
 		}, $this->findAll());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getTypes()
+	{
+		$model = $this->model;
+
+		return $model::getTypes();
 	}
 
 	/**
@@ -181,7 +199,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	}
 
 	/**
-	 * Validates a content.
+	 * Validates a menu.
 	 *
 	 * @param  array  $data
 	 * @param  mixed  $id

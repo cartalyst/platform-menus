@@ -67,16 +67,7 @@ class MenusController extends AdminController {
 	 */
 	public function grid()
 	{
-		$menus = $this->menus->grid();
-
-		foreach ($menus as &$menu)
-		{
-			$count = $menu->getChildrenCount();
-
-			$menu->items_count = Lang::choice('platform/menus::table.items', $count, compact('count'));
-		}
-
-		return DataGrid::make($menus, array(
+		return DataGrid::make($this->menus->grid(), array(
 			'id',
 			'name',
 			'slug',
@@ -170,7 +161,7 @@ class MenusController extends AdminController {
 		$groups = Sentry::getGroupRepository()->createModel()->all();
 
 		// Get all the registered menu types
-		$types = app('Platform\Menus\Menu')->getTypes();
+		$types = $this->menus->getTypes();
 
 		// Share some variables, because of views inheritance
 		View::share(compact('groups', 'types'));

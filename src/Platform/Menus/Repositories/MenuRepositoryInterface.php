@@ -59,6 +59,20 @@ interface MenuRepositoryInterface {
 	public function findWhere($column, $value);
 
 	/**
+	 * Return all the menu slugs.
+	 *
+	 * @return array
+	 */
+	public function slugs();
+
+	/**
+	 * Return all the available menu types.
+	 *
+	 * @return array
+	 */
+	public function getTypes();
+
+	/**
 	 * Determine if the given menu is valid for creation.
 	 *
 	 * @param  array  $data
