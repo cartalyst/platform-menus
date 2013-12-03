@@ -196,7 +196,7 @@ class Menu extends EloquentNode {
 
 					$query
 						->orWhere('node.groups', '')
-						->orWhere('node.groups', new Expression('NULL'));
+						->orWhereNull('node.groups');
 				});
 			}
 
