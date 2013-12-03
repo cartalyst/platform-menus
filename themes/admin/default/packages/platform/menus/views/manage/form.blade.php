@@ -171,7 +171,7 @@
 					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
+						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}[]" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
 							@foreach ($groups as $group)
 							<option value="{{{ $group->id }}}"{{ in_array($group->id, $selectedGroups) ? ' selected="selected"' : null }}>{{{ $group->name }}}</option>
 							@endforeach

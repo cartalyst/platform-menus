@@ -116,7 +116,7 @@ class Menu extends EloquentNode {
 	 * @return array
 	 * @throws \InvalidArgumentException
 	 */
-	public function _getGroupsAttribute($groups)
+	public function getGroupsAttribute($groups)
 	{
 		if ( ! $groups)
 		{
@@ -142,9 +142,23 @@ class Menu extends EloquentNode {
 	 * @param  array  $groups
 	 * @return void
 	 */
-	public function _setGroupsAttribute($groups)
+	public function setGroupsAttribute($groups)
 	{
-		$this->attributes['groups'] = ! empty($groups) ? json_encode($groups) : '';
+		// If we get a string, let's just ensure it's a proper JSON string
+		if ( ! is_array($groups))
+		{
+			$groups = $this->getGroupsAttribute($groups);
+		}
+
+		if ( ! empty($groups))
+		{
+			$groups = array_values(array_map('intval', $groups));
+			$this->attributes['groups'] = json_encode($groups);
+		}
+		else
+		{
+			$this->attributes['groups'] = '';
+		}
 	}
 
 	/**
@@ -152,20 +166,39 @@ class Menu extends EloquentNode {
 	 * which satisfy any of the provided visibilities.
 	 *
 	 * @param  array  $visibilities
+	 * @param  array  $groups
 	 * @param  bool   $enabled
 	 * @param  int    $depth
 	 * @return array
 	 */
-	public function findDisplayableChildren(array $visibilities, $enabled = null, $depth = 0)
+	public function findDisplayableChildren(array $visibilities, array $groups = null, $enabled = null, $depth = 0)
 	{
 		$worker = $this->createWorker();
 
-		return $this->filterChildren(function($query) use ($visibilities, $enabled, $worker)
+		$children = $this->filterChildren(function($query) use ($visibilities, $groups, $enabled, $worker)
 		{
 			$query->whereIn(
 				new Expression($worker->wrapColumn('node.visibility')),
 				$visibilities
 			);
+
+			// If we have groups set, we'll filter down to records who are likely
+			// to contain our group. This will speed up the filtering process
+			// later on.
+			if (isset($groups))
+			{
+				$query->whereNested(function($query) use ($groups)
+				{
+					foreach ($groups as $group)
+					{
+						$query->orWhere('node.groups', 'like', '%'.$group.'%');
+					}
+
+					$query
+						->orWhere('node.groups', '')
+						->orWhere('node.groups', new Expression('NULL'));
+				});
+			}
 
 			if ( ! is_null($enabled))
 			{
@@ -176,6 +209,36 @@ class Menu extends EloquentNode {
 				);
 			}
 		}, $depth);
+
+		$this->filterChildrenGroups($children, $groups);
+
+		return $children;
+	}
+
+	protected function filterChildrenGroups(array &$children, array $groups = null)
+	{
+		if ( ! isset($groups))
+		{
+			return $children;
+		}
+
+		foreach ($children as $index => $child)
+		{
+			if (count($child->groups) > 0)
+			{
+				$matching = array_intersect($child->groups, $groups);
+
+				if (count($matching) === 0)
+				{
+					unset($children[$index]);
+					continue;
+				}
+			}
+
+			$grandChildren = $child->getChildren();
+			$this->filterChildrenGroups($grandChildren, $groups);
+			$child->setChildren($grandChildren);
+		}
 	}
 
 	/**

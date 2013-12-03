@@ -94,16 +94,32 @@ class Nav {
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
+		$loggedIn = Sentry::check();
+
 		$visibilities = array(
 			'always',
-			Sentry::check() ? 'logged_in' : 'logged_out',
+			$loggedIn ? 'logged_in' : 'logged_out',
 		);
+
+		if ($loggedIn)
+		{
+			$groups = array();
+
+			foreach (Sentry::getGroups() as $group)
+			{
+				$groups[] = $group->getGroupId();
+			}
+		}
+		else
+		{
+			$groups = null;
+		}
 
 		if (Sentry::check() and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
 
 		if ($menu = $this->menus->find($slug))
 		{
-			return $menu->findDisplayableChildren($visibilities, true, $depth);
+			return $menu->findDisplayableChildren($visibilities, $groups, true, $depth);
 		}
 
 		return array();
