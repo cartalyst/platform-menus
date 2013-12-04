@@ -84,9 +84,9 @@ class Observer {
 			});
 
 			$query = with(new Menu)
-			    ->newQuery()
-			    ->where('extension', '=', $extension->getSlug())
-			    ->where('slug', 'like', "{$slug}-");
+				->newQuery()
+				->where('extension', '=', $extension->getSlug())
+				->where('slug', 'like', "%{$slug}-%");
 
 			if (count($slugs))
 			{
@@ -117,6 +117,17 @@ class Observer {
 			// a speed improvement.
 			$menu->mapTreeAndKeep($tree);
 		}
+
+		$children = with(new Menu)
+		    ->newQuery()
+		    ->where('extension', '=', $extension->getSlug())
+		    ->get();
+
+		foreach ($children as $child)
+		{
+			$child->enabled = false;
+			$child->save();
+		}
 	}
 
 	/**
@@ -142,8 +153,8 @@ class Observer {
 			}
 
 			$query = with(new Menu)
-			    ->newQuery()
-			    ->where('extension', '=', $extension->getSlug());
+				->newQuery()
+				->where('extension', '=', $extension->getSlug());
 
 			if (count($slugs) > 0)
 			{
@@ -169,9 +180,9 @@ class Observer {
 	public function afterEnable(Extension $extension)
 	{
 		$children = with(new Menu)
-		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug())
-		    ->get();
+			->newQuery()
+			->where('extension', '=', $extension->getSlug())
+			->get();
 
 		foreach ($children as $child)
 		{
@@ -189,9 +200,9 @@ class Observer {
 	public function afterDisable(Extension $extension)
 	{
 		$children = with(new Menu)
-		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug())
-		    ->get();
+			->newQuery()
+			->where('extension', '=', $extension->getSlug())
+			->get();
 
 		foreach ($children as $child)
 		{
