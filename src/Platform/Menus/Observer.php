@@ -18,9 +18,9 @@
  * @link       http://cartalyst.com
  */
 
-use API;
 use Cartalyst\Extensions\Extension;
 use Platform\Menus\Menu;
+use Sentry;
 
 class Observer {
 
@@ -62,8 +62,6 @@ class Observer {
 	 *
 	 * @param  \Cartalyst\Extensions\Extension  $extension
 	 * @return void
-	 * @todo   See if we can move the fetching to the API, if not
-	 *         we'll remove it from all methods.
 	 */
 	public function afterInstall(Extension $extension)
 	{
@@ -110,7 +108,7 @@ class Observer {
 			$this->recursivelyPurgeExisting($children, $existing);
 
 			$tree = array_merge($existing, $children);
-			$this->recursivelyStripAttributes($tree);
+			$this->recursivelyPrepareAttributes($tree);
 
 			// Because we have just taken our existing hierarchy
 			// and added to it, we can save on the overhead of
@@ -327,7 +325,7 @@ class Observer {
 	 * @param  array  $children
 	 * @return void
 	 */
-	protected function recursivelyStripAttributes(array &$children)
+	protected function recursivelyPrepareAttributes(array &$children)
 	{
 		$guarded = with(new Menu)->getGuarded();
 
@@ -335,7 +333,17 @@ class Observer {
 		{
 			$child = array_except($child, $guarded);
 
-			$this->recursivelyStripAttributes($child['children']);
+			if (isset($child['groups']) and is_array($child['groups']))
+			{
+				$groups = Sentry::getGroupRepository()
+					->createModel()
+					->newQuery()
+					->lists('id', 'slug');
+
+				$child['groups'] = array_values(array_intersect_key($groups, array_flip($child['groups'])));
+			}
+
+			$this->recursivelyPrepareAttributes($child['children']);
 		}
 	}
 
