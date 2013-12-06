@@ -21,7 +21,6 @@
 return array(
 
 	'index'  => 'List Menus',
-	'grid'   => 'List Menus [Grid]',
 	'create' => 'Create new Menus',
 	'edit'   => 'View / Edit Menus',
 	'delete' => 'Delete Menus',

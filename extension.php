@@ -250,24 +250,29 @@ return array(
 	|
 	| List of permissions this extension has. These are shown in the user
 	| management area to build a graphical interface where permissions
-	| may be selected.
+	| can be selected to allow or deny user access.
 	|
-	| The admin controllers state that permissions should follow the following
-	| structure:
-	|
-	|     vendor/extension::area.controller@method
-	|
-	| For example:
-	|
-	|    platform/users::admin.usersController@index
-	|    Platform\Users\Controllers\Admin\UsersController@getIndex
-	|
-	| These are automatically generated for controller routes however you are
-	| free to add your own permissions and check against them at any time.
+	| You can protect single or multiple controller methods at once.
 	|
 	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
-	| will be the label for the permission which is displayed when editing
-	| permissions.
+	| will be the label for the permission which is going to be displayed
+	| when editing the permissions.
+	|
+	| The permissions should follow the following structure:
+	|
+	|     vendor/extension::area.controller@method
+	|     vendor/extension::area.controller@method1,method2, ...
+	|
+	| Examples:
+	|
+	|    Platform\Users\Controllers\Admin\UsersController@index
+	|
+	|      =>  platform/users::admin.usersController@index
+	|
+	|    Platform\Users\Controllers\Admin\UsersController@index
+	|    Platform\Users\Controllers\Admin\UsersController@grid
+	|
+	|      =>  platform/users::admin.usersController@index,grid
 	|
 	*/
 
@@ -275,11 +280,10 @@ return array(
 	{
 		return array(
 
-			'platform/menus::admin.menusController@index'  => Lang::get('platform/menus::permissions.index'),
-			'platform/menus::admin.menusController@grid'   => Lang::get('platform/menus::permissions.grid'),
-			'platform/menus::admin.menusController@create' => Lang::get('platform/menus::permissions.create'),
-			'platform/menus::admin.menusController@edit'   => Lang::get('platform/menus::permissions.edit'),
-			'platform/menus::admin.menusController@delete' => Lang::get('platform/menus::permissions.delete'),
+			'platform/menus::admin.menusController@index,grid' => Lang::get('platform/menus::permissions.index'),
+			'platform/menus::admin.menusController@create'     => Lang::get('platform/menus::permissions.create'),
+			'platform/menus::admin.menusController@edit'       => Lang::get('platform/menus::permissions.edit'),
+			'platform/menus::admin.menusController@delete'     => Lang::get('platform/menus::permissions.delete'),
 
 		);
 	},
