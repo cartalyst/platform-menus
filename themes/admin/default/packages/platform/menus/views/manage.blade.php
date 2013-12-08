@@ -2,7 +2,7 @@
 
 {{-- Page title --}}
 @section('title')
-{{{ trans("platform/menus::general.{$mode}.title") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}} ::
+{{{ trans("platform/menus::general.{$mode}") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}} ::
 @parent
 @stop
 
@@ -56,7 +56,7 @@ $(function() {
 				<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('platform/menus::button.save') }}}</button>
 			</div>
 
-			<h1>{{{ trans("platform/menus::general.{$mode}.title") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
+			<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
 
 		</div>
 

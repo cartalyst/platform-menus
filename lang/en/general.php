@@ -20,17 +20,8 @@
 
 return array(
 
-	'title'       => 'Menus',
-	'description' => 'Manage all the menus throughout your website.',
-
-	'create' => array(
-		'title'       => 'Create Menu',
-		'description' => 'Please supply the following information.',
-	),
-
-	'update' => array(
-		'title'       => 'Update Menu',
-		'description' => 'Please supply the following information.',
-	),
+	'title'  => 'Menus',
+	'create' => 'Create Menu',
+	'update' => 'Update Menu',
 
 );

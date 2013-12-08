@@ -5,12 +5,12 @@
 	<input type="hidden" id="<%= slug %>_current-slug" value="<%= slug %>">
 
 	<h4>
-		{{{ trans('platform/menus::form.edit.legend') }}}
+		{{{ trans('platform/menus::form.update.legend') }}}
 
 		<span class="pull-right"><small class="item-box-close" data-item-close="<%= slug %>">&times;</small></span>
 	</h4>
 
-	<p>{{{ trans('platform/menus::form.edit.description') }}}</p>
+	<p>{{{ trans('platform/menus::form.update.description') }}}</p>
 
 	{{-- Item details --}}
 	<div class="well well-md item-box-borderless">
