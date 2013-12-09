@@ -256,23 +256,12 @@ return array(
 	|
 	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
 	| will be the label for the permission which is going to be displayed
-	| when editing the permissions.
+	| when editing the permissions and when access is denied.
 	|
 	| The permissions should follow the following structure:
 	|
-	|     vendor/extension::area.controller@method
-	|     vendor/extension::area.controller@method1,method2, ...
-	|
-	| Examples:
-	|
-	|    Platform\Users\Controllers\Admin\UsersController@index
-	|
-	|      =>  platform/users::admin.usersController@index
-	|
-	|    Platform\Users\Controllers\Admin\UsersController@index
-	|    Platform\Users\Controllers\Admin\UsersController@grid
-	|
-	|      =>  platform/users::admin.usersController@index,grid
+	|     Vendor\Namespace\Controller@method
+	|     Vendor\Namespace\Controller@method1,method2, ...
 	|
 	*/
 
@@ -280,10 +269,10 @@ return array(
 	{
 		return array(
 
-			'platform/menus::admin.menusController@index,grid' => Lang::get('platform/menus::permissions.index'),
-			'platform/menus::admin.menusController@create'     => Lang::get('platform/menus::permissions.create'),
-			'platform/menus::admin.menusController@edit'       => Lang::get('platform/menus::permissions.edit'),
-			'platform/menus::admin.menusController@delete'     => Lang::get('platform/menus::permissions.delete'),
+			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
+			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
+			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
+			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
 
 		);
 	},
