@@ -83,9 +83,14 @@ class Observer {
 				if ($key == 'slug') $slugs[] = $value;
 			});
 
+			// Load up the associated menu
+			$method = camel_case($slug).'Menu';
+			with($menu = Menu::$method())->findChildren();
+
 			$query = with(new Menu)
 				->newQuery()
 				->where('extension', '=', $extension->getSlug())
+				->where('menu', '=', $menu->getKey())
 				->where('slug', 'like', "%{$slug}-%");
 
 			if (count($slugs))
@@ -101,8 +106,6 @@ class Observer {
 
 			// Firstly, we'll purge the existing children (and any descendents)
 			// from the children array and put them in the existing array.
-			$method = camel_case($slug).'Menu';
-			with($menu = Menu::$method())->findChildren();
 			$tree     = $menu->toArray();
 			$existing = $tree['children'];
 			$this->recursivelyPurgeExisting($children, $existing);
