@@ -377,6 +377,14 @@ return array(
 			),
 
 			array(
+				'slug'       => 'main-dashboard',
+				'name'       => 'Admin',
+				'class'      => 'fa fa-dashboard',
+				'uri'        => 'admin',
+				'visibility' => 'admin',
+			),
+
+			array(
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
 				'class'      => 'fa fa-sign-in',
@@ -398,14 +406,6 @@ return array(
 				'class'      => 'fa fa-pencil',
 				'uri'        => 'register',
 				'visibility' => 'logged_out',
-			),
-
-			array(
-				'slug'       => 'main-dashboard',
-				'name'       => 'Admin',
-				'class'      => 'fa fa-dashboard',
-				'uri'        => 'admin',
-				'visibility' => 'admin',
 			),
 
 		),
