@@ -20,12 +20,6 @@
 
 return array(
 
-	'create' => 'Create menu',
-	'update' => 'Edit menu',
-	'delete' => 'Delete menu',
-
-	'save' => 'Save Menu',
-
 	'add_item'     => 'Add a new Item',
 	'more_options' => 'More options',
 

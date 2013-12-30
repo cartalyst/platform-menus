@@ -53,7 +53,7 @@ $(function() {
 		<div class="page-header">
 
 			<div class="pull-right">
-				<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('platform/menus::button.save') }}}</button>
+				<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('button.update') }}}</button>
 			</div>
 
 			<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
