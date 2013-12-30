@@ -342,10 +342,11 @@ return array(
 		'system' => array(
 
 			array(
-				'slug'  => 'system-preview',
-				'name'  => 'Preview',
-				'class' => 'fa fa-home',
-				'uri'   => '/',
+				'slug'   => 'system-preview',
+				'name'   => 'Preview',
+				'class'  => 'fa fa-home',
+				'uri'    => '/',
+				'target' => '_blank',
 			),
 
 			array(
