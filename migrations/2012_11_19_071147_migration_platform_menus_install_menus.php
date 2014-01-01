@@ -81,7 +81,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			$table->boolean('enabled')->default(1);
 
 			// Timestamps of course
-			$table->timestamps();
+			$table->nullableTimestamps();
 
 			// Alright, all fields created. We'll add a
 			// primary key, based on the slug field
