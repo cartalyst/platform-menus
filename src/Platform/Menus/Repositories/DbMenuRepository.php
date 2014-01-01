@@ -89,7 +89,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		return $this->createModel()->orWhere('slug', $id)->orWhere('id', $id)->first();
+		return $this->createModel()->orWhere('slug', $id)->orWhere('id', (int) $id)->first();
 	}
 
 	/**
