@@ -6,6 +6,8 @@ Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.txt). Code well, ro
 
 ## Package Story
 
+History and future capabilities.
+
 #### Complete
 
 - *xx-01-14* - v1.0.0
