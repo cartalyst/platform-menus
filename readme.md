@@ -2,7 +2,7 @@
 
 Manage all the menus throughout your website.
 
-Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.md). Code well, rock on.
+Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.txt). Code well, rock on.
 
 ##Package Story
 
