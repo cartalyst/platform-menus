@@ -1,7 +1,0 @@
-{
-	"name" : "Menus Extension",
-	"branch" : "master",
-	"github" : "cartalyst/platform-menus",
-	"travis" : false,
-	"demo" : false
-}
