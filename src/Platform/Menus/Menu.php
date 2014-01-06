@@ -187,16 +187,24 @@ class Menu extends EloquentNode {
 			// later on.
 			if (isset($groups))
 			{
-				$query->whereNested(function($query) use ($groups)
+				$query->whereNested(function($query) use ($groups, $worker)
 				{
 					foreach ($groups as $group)
 					{
-						$query->orWhere('node.groups', 'like', '%'.$group.'%');
+						$query->orWhere(
+							new Expression($worker->wrapColumn("node.groups")),
+							'LIKE',
+							$group
+						);
 					}
 
-					$query
-						->orWhere('node.groups', '')
-						->orWhereNull('node.groups');
+					$query->orWhere(
+						new Expression($worker->wrapColumn("node.groups")),
+						''
+					)
+					->orWhereNull(
+						new Expression($worker->wrapColumn("node.groups"))
+					);
 				});
 			}
 
