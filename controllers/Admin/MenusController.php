@@ -276,10 +276,7 @@ class MenusController extends AdminController {
 		);
 
 		// Attach the type data
-		foreach (Input::get("children.{$index}.{$type}", array()) as $key => $value)
-		{
-			$new_child[$key] = $value;
-		}
+		$new_child = array_merge($new_child, Input::get("children.{$index}.{$type}", array()));
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
