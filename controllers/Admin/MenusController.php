@@ -266,7 +266,7 @@ class MenusController extends AdminController {
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
-			'type'       => Input::get("children.{$index}.type", 'static'),
+			'type'       => $type = Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
 			'groups'     => (array) Input::get("children.{$index}.groups", array()),
@@ -276,7 +276,10 @@ class MenusController extends AdminController {
 		);
 
 		// Attach the type data
-		$new_child['uri'] = Input::get("children.{$index}.static.uri");
+		foreach (Input::get("children.{$index}.{$type}", array()) as $key => $value)
+		{
+			$new_child[$key] = $value;
+		}
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)

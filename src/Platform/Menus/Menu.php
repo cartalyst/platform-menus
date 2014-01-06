@@ -77,17 +77,6 @@ class Menu extends EloquentNode {
 	protected $typeData = array();
 
 	/**
-	 * Unset an attribute.
-	 *
-	 * @param  string  $key
-	 * @return void
-	 */
-	public function unsetAttribute($key)
-	{
-		unset($this->attributes[$key]);
-	}
-
-	/**
 	 * Get mutator for the "enabled" attribute.
 	 *
 	 * @param  mixed  $enabled

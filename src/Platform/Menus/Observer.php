@@ -25,18 +25,6 @@ use Sentry;
 class Observer {
 
 	/**
-	 * Register a creating model event with the dispatcher.
-	 *
-	 * @param  \Closure|string  $callback
-	 * @return void
-	 */
-	public function creating($model)
-	{
-		echo 'Being created';
-		die;
-	}
-
-	/**
 	 * Register an updating model event with the dispatcher.
 	 *
 	 * @param  \Closure|string  $callback
@@ -46,12 +34,7 @@ class Observer {
 	{
 		if ($type = $model->getType())
 		{
-			if ($typeData = array_get($model->getAttributes(), 'type_data'))
-			{
-				$model->setTypeData($typeData);
-
-				$model->unsetAttribute('type_data');
-			}
+			$model->setTypeData($model->getAttributes());
 
 			$type->afterSave($model);
 		}
