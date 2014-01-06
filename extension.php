@@ -159,7 +159,7 @@ return array(
 				app('Platform\Menus\Observer')->afterInstall($extension);
 				app('Platform\Menus\Observer')->afterEnable($extension);
 			}
-		});
+		}, 10);
 
 		$app['Platform\Menus\Types\StaticType'] = $app->share(function($app)
 		{
