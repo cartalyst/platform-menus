@@ -8,28 +8,29 @@ Part of the Cartalyst Arsenal & licensed [OSI BSD 3](license.txt). Code well, ro
 
 History and future capabilities.
 
-#### Complete
+### Complete
 
-- *xx-01-14* - v1.0.0
-	- User can create new menus.
-	- User can set menu name.
-	- User can set menu slug.
-	- User can create menu items.
-		- User can set the menu item name.
-		- User can set the menu item slug.
-		- User can set the menu item status.
-		- User can make the menu item children of a another menu item.
-		- User can set the menu item type.
-		- User can set the menu item url.
-		- User can set the menu item visibility.
-		- User can set the menu item link target.
-		- User can set the menu css class.
-		- USer can set a regular expression on the menu item for advanced "active" states.
-	- User can update menu items.
-	- User can delete menu items.
-	- User can sort the menu items.
-	- User can update menus.
-	- User can delete menus.
+#### xx-Jan-14 - v1.0.0
+
+- User can create new menus.
+- User can set menu name.
+- User can set menu slug.
+- User can create menu items.
+	- User can set the menu item name.
+	- User can set the menu item slug.
+	- User can set the menu item status.
+	- User can make the menu item children of a another menu item.
+	- User can set the menu item type.
+	- User can set the menu item url.
+	- User can set the menu item visibility.
+	- User can set the menu item link target.
+	- User can set the menu css class.
+	- USer can set a regular expression on the menu item for advanced "active" states.
+- User can update menu items.
+- User can delete menu items.
+- User can sort the menu items.
+- User can update menus.
+- User can delete menus.
 
 ## Versioning
 
