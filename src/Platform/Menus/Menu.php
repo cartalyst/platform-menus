@@ -183,7 +183,7 @@ class Menu extends EloquentNode {
 						$query->orWhere(
 							new Expression($worker->wrapColumn("node.groups")),
 							'LIKE',
-							$group
+							"%{$group}%"
 						);
 					}
 
