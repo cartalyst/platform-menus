@@ -166,19 +166,17 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->find($id);
 
-		foreach ($data as $key => $value)
+		foreach (array_except($data, array('children')) as $key => $value)
 		{
-			if ($key === 'children')
-			{
-				$model->mapTree($value);
-			}
-			else
-			{
-				$model->{$key} = $value;
-			}
+			$model->{$key} = $value;
 		}
 
 		$model->save();
+
+		if ($children = array_get($data, 'children'))
+		{
+			$model->mapTree($children);
+		}
 
 		return $model;
 	}
