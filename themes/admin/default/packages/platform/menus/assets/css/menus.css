@@ -70,6 +70,10 @@ body.dragging, body.dragging * {
 				cursor: pointer;
 			}
 
+			ol li .item-name.disabled {
+
+			}
+
 		ol li .item-handle {
 			background: #dddddd;
 			background: -webkit-linear-gradient(top, #dddddd 0%, #bbbbbb 100%);
