@@ -119,7 +119,7 @@ class Nav {
 
 		if ($menu = $this->menus->find($slug))
 		{
-			return $menu->findDisplayableChildren($visibilities, $groups, true, $depth);
+			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
 		}
 
 		return array();

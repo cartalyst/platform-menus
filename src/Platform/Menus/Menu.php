@@ -156,15 +156,14 @@ class Menu extends EloquentNode {
 	 *
 	 * @param  array  $visibilities
 	 * @param  array  $groups
-	 * @param  bool   $enabled
 	 * @param  int    $depth
 	 * @return array
 	 */
-	public function findDisplayableChildren(array $visibilities, array $groups = null, $enabled = null, $depth = 0)
+	public function findDisplayableChildren(array $visibilities, array $groups = null, $depth = 0)
 	{
 		$worker = $this->createWorker();
 
-		$children = $this->filterChildren(function($query) use ($visibilities, $groups, $enabled, $worker)
+		$children = $this->filterChildren(function($query) use ($visibilities, $groups, $worker)
 		{
 			$query->whereIn(
 				new Expression($worker->wrapColumn('node.visibility')),
@@ -197,26 +196,53 @@ class Menu extends EloquentNode {
 				});
 			}
 
-			if ( ! is_null($enabled))
-			{
-				$query->where(
-					new Expression($worker->wrapColumn('node.enabled')),
-					'=',
-					$enabled
-				);
-			}
 		}, $depth);
+
+		$this->filterChildrenStatus($children);
 
 		$this->filterChildrenGroups($children, $groups);
 
 		return $children;
 	}
 
+	/**
+	 * Filters enabled children.
+	 *
+	 * @param  array  $children
+	 * @return void
+	 */
+	protected function filterChildrenStatus(array &$children)
+	{
+		foreach ($children as $index => $child)
+		{
+			if ( ! $child->enabled)
+			{
+				unset($children[$index]);
+
+				continue;
+			}
+
+			if ($grandChildren = $child->children)
+			{
+				$this->filterChildrenStatus($grandChildren);
+
+				$child->setChildren($grandChildren);
+			}
+		}
+	}
+
+	/**
+	 * Filters children based on their groups.
+	 *
+	 * @param  array  $children
+	 * @param  array  $groups
+	 * @return void
+	 */
 	protected function filterChildrenGroups(array &$children, array $groups = null)
 	{
 		if ( ! isset($groups))
 		{
-			return $children;
+			return;
 		}
 
 		foreach ($children as $index => $child)
@@ -236,27 +262,6 @@ class Menu extends EloquentNode {
 			$this->filterChildrenGroups($grandChildren, $groups);
 			$child->setChildren($grandChildren);
 		}
-	}
-
-	/**
-	 * Filters children and returns an array of enabled
-	 * children only.
-	 *
-	 * @param  int  $depth
-	 * @return array
-	 */
-	public function findEnabledChildren($depth = 0)
-	{
-		$worker = $this->createWorker();
-
-		return $this->filterChildren(function($query) use ($worker)
-		{
-			$query->where(
-				new Expression($worker->wrapColumn('node.enabled')),
-				'=',
-				1
-			);
-		}, $depth);
 	}
 
 	/**
