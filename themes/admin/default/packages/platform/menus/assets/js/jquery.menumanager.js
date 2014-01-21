@@ -591,6 +591,9 @@
 				// Get the current slug
 				var currentSlug = $('#' + formId + '_current-slug').val();
 
+				// Get the item status
+				var enabled = $('#' + formId + '_enabled').val();
+
 				// The current parent that this item belongs to
 				var currentParentId = formBox.data('item-parent');
 
@@ -655,6 +658,16 @@
 					// Update the li item name with the new item name,
 					// just in case the item name gets updated.
 					$('[data-item-name="' + formId + '"]').html($('#' + formId + '_name').val());
+
+					// Show/hide the status handle
+					if (enabled == 0)
+					{
+						$('[data-item-status="' + formId + '"]').removeClass('hide');
+					}
+					else
+					{
+						$('[data-item-status="' + formId + '"]').addClass('hide');
+					}
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();

@@ -1,11 +1,10 @@
 <li data-item-id="{{ $child->id }}">
 	<div class="item-handle"><i class="fa fa-reorder"></i></div>
 
-	<div class="item-name" data-item="{{ $child->id }}" data-item-name="{{ $child->id }}">
-		{{ $child->name }}
+	<div class="item-name" data-item="{{ $child->id }}" >
+		<span data-item-name="{{ $child->id }}">{{ $child->name }}</span>
 
-		{{ $child->enabled ? '' : '<span class="item-status"><i class="fa fa-eye-slash"></i></span>' }}
-
+		<span class="item-status{{ $child->enabled == 0 ? null : ' hide' }}" data-item-status="{{ $child->id }}"><i class="fa fa-eye-slash"></i></span>
 	</div>
 
 	<ol>
