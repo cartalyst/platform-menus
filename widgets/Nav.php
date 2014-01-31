@@ -18,6 +18,7 @@
  * @link       http://cartalyst.com
  */
 
+use Exception;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Sentry;
 use URL;
@@ -79,9 +80,9 @@ class Nav {
 
 			return View::make($view, compact('children', 'cssClass'));
 		}
-		catch (ApiHttpException $e)
+		catch (Exception $e)
 		{
-			return '';
+			return;
 		}
 	}
 
@@ -94,31 +95,19 @@ class Nav {
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
-		$loggedIn = Sentry::check();
-
-		$visibilities = array(
-			'always',
-			$loggedIn ? 'logged_in' : 'logged_out',
-		);
-
-		if ($loggedIn)
-		{
-			$groups = array();
-
-			foreach (Sentry::getGroups() as $group)
-			{
-				$groups[] = $group->getGroupId();
-			}
-		}
-		else
-		{
-			$groups = null;
-		}
-
-		if (Sentry::check() and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
-
 		if ($menu = $this->menus->find($slug))
 		{
+			$loggedIn = Sentry::check();
+
+			$visibilities = array(
+				'always',
+				$loggedIn ? 'logged_in' : 'logged_out',
+			);
+
+			$groups = $loggedIn ? Sentry::getGroups()->lists('id') : null;
+
+			if ($loggedIn and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
+
 			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
 		}
 
