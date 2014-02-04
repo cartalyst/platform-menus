@@ -2,16 +2,16 @@
 
 {{-- Page title --}}
 @section('title')
-{{{ trans("platform/menus::general.{$mode}") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}} ::
-@parent
+	@parent
+	: {{{ trans("platform/menus::general.{$mode}") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}}
 @stop
 
 {{-- Queue assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
-{{ Asset::queue('jquery.slugify', 'js/platform/slugify.js', 'jquery') }}
+{{ Asset::queue('jquery.slugify', 'platform/js/slugify.js', 'jquery') }}
 {{ Asset::queue('jquery.sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
 {{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', array('jquery.slugify', 'jquery.sortable')) }}
-{{ Asset::queue('underscore', 'js/underscore/underscore.js', 'jquery.menu-manager') }}
+{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery.menu-manager') }}
 
 {{-- Inline scripts --}}
 @section('scripts')

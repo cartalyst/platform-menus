@@ -2,13 +2,13 @@
 
 {{-- Page title --}}
 @section('title')
-{{{ trans('platform/menus::general.title') }}} ::
-@parent
+	@parent
+	: {{{ trans('platform/menus::general.title') }}} ::
 @stop
 
 {{-- Queue assets --}}
-{{ Asset::queue('underscore', 'js/underscore/underscore.js', 'jquery') }}
-{{ Asset::queue('data-grid', 'js/cartalyst/data-grid.js', 'underscore') }}
+{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
+{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'underscore') }}
 
 {{-- Inline scripts --}}
 @section('scripts')
