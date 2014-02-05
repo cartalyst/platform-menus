@@ -3,7 +3,7 @@
 {{-- Page title --}}
 @section('title')
 	@parent
-	: {{{ trans('platform/menus::general.title') }}} ::
+	: {{{ trans('platform/menus::general.title') }}}
 @stop
 
 {{-- Queue assets --}}
