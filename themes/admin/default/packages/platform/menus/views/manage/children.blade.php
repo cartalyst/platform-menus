@@ -1,5 +1,5 @@
 <li data-item-id="{{ $child->id }}">
-	<div class="item-handle"><i class="fa fa-reorder"></i></div>
+	<div class="item-handle"><i class="fa fa-bars"></i></div>
 
 	<div class="item-name" data-item="{{ $child->id }}" >
 		<span data-item-name="{{ $child->id }}">{{ $child->name }}</span>
