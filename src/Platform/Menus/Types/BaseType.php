@@ -100,7 +100,7 @@ abstract class BaseType {
 
 		$uri = ltrim($uri, '/');
 
-		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri);
+		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri, array(), false);
 	}
 
 	/**
