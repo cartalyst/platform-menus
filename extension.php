@@ -154,10 +154,13 @@ return [
 		// after install and after enable filters on them.
 		Installer::after(function()
 		{
+			$observer = app('Platform\Menus\Observer');
+
 			foreach (Extensions::allEnabled() as $extension)
 			{
-				app('Platform\Menus\Observer')->afterInstall($extension);
-				app('Platform\Menus\Observer')->afterEnable($extension);
+				$observer->afterInstall($extension);
+
+				$observer->afterEnable($extension);
 			}
 		}, 10);
 
@@ -189,22 +192,22 @@ return [
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		Extension::installed(function($extension) use ($app)
+		Extension::installed(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterInstall($extension);
 		});
 
-		Extension::uninstalled(function($extension) use ($app)
+		Extension::uninstalled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterUninstall($extension);
 		});
 
-		Extension::enabled(function($extension) use ($app)
+		Extension::enabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterEnable($extension);
 		});
 
-		Extension::disabled(function($extension) use ($app)
+		Extension::disabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
