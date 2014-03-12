@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Menu;
+use Platform\Menus\Models\Menu;
 
 class StaticType extends BaseType implements TypeInterface {
 

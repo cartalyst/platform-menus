@@ -21,7 +21,7 @@
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Translation\Translator;
 use Illuminate\View\Environment;
-use Platform\Menus\Menu;
+use Platform\Menus\Models\Menu;
 
 abstract class BaseType {
 
