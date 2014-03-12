@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus;
+<?php namespace Platform\Menus\Models;
 /**
  * Part of the Platform application.
  *
