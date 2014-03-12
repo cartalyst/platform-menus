@@ -35,10 +35,10 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 *
 	 * @var array
 	 */
-	protected $rules = array(
+	protected $rules = [
 		'name' => 'required',
 		'slug' => 'required|unique:menus',
-	);
+	];
 
 	/**
 	 * Start it up.
@@ -56,7 +56,7 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function grid()
 	{
-		$menus = $this->findRoot();
+		$menus = $this->findAllRoot();
 
 		foreach ($menus as &$menu)
 		{
@@ -73,15 +73,19 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this->createModel()->findAll();
+		return $this
+			->createModel()
+			->findAll();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function findRoot()
+	public function findAllRoot()
 	{
-		return $this->createModel()->allRoot();
+		return $this
+			->createModel()
+			->allRoot();
 	}
 
 	/**
@@ -89,7 +93,23 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		return $this->createModel()->orWhere('slug', $id)->orWhere('id', (int) $id)->first();
+		return $this
+			->createModel()
+			->orWhere('slug', $id)
+			->orWhere('id', (int) $id)
+			->first();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findRoot($id)
+	{
+		return $this->createModel()
+			->orWhere('slug', $id)
+			->orWhere('id', (int) $id)
+			->where($this->createModel()->getReservedAttributeName('left'), 1)
+			->first();
 	}
 
 	/**
@@ -97,9 +117,10 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findWhere($column, $value)
 	{
-		if ( ! $value) return false;
-
-		return $this->createModel()->where($column, $value)->first();
+		return $this
+			->createModel()
+			->where($column, $value)
+			->first();
 	}
 
 	/**
@@ -144,10 +165,10 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function create(array $data)
 	{
-		$model = new $this->model(array(
+		$model = new $this->model([
 			'name' => $data['name'],
 			'slug' => $data['slug'],
-		));
+		]);
 
 		$model->makeRoot();
 
@@ -166,17 +187,14 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->find($id);
 
-		foreach (array_except($data, array('children')) as $key => $value)
+		foreach (array_except($data, ['children']) as $key => $value)
 		{
 			$model->{$key} = $value;
 		}
 
 		$model->save();
 
-		if ($children = array_get($data, 'children'))
-		{
-			$model->mapTree($children);
-		}
+		$model->mapTree(array_get($data, 'children', []));
 
 		return $model;
 	}

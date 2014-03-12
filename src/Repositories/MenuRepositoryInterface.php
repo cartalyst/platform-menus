@@ -21,40 +21,48 @@
 interface MenuRepositoryInterface {
 
 	/**
-	 * Return a dataset compatible with the data grid.
+	 * Returns a dataset compatible with data grid.
 	 *
-	 * @return mixed
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function grid();
 
 	/**
-	 * Return all the menu entries.
+	 * Returns all the menu entries.
 	 *
-	 * @return \Platform\Menus\Menu
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function findAll();
 
 	/**
-	 * Return all the root menus.
+	 * Returns all the root menus.
 	 *
-	 * @return \Platform\Menus\Menu
+	 * @return \Platform\Menus\Models\Menu
 	 */
-	public function findRoot();
+	public function findAllRoot();
 
 	/**
-	 * Get an menu by it's primary key.
+	 * Returns a menu by its primary key or slug.
 	 *
 	 * @param  int  $id
-	 * @return \Platform\Menus\Menu
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function find($id);
+
+	/**
+	 * Returns a root menu by its primary key or slug.
+	 *
+	 * @param  int  $id
+	 * @return \Platform\Menus\Models\Menu
+	 */
+	public function findRoot($id);
 
 	/**
 	 * Perform a basic search.
 	 *
 	 * @param  string  $column
-	 * @param  mixed   $value
-	 * @return \Platform\Menus\Menu
+	 * @param  mixed  $value
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function findWhere($column, $value);
 
@@ -83,7 +91,7 @@ interface MenuRepositoryInterface {
 	/**
 	 * Determine if the given menu is valid for updating.
 	 *
-	 * @param  int    $id
+	 * @param  int  $id
 	 * @param  array  $data
 	 * @return \Illuminate\Support\MessageBag
 	 */
@@ -93,16 +101,16 @@ interface MenuRepositoryInterface {
 	 * Creates a menu with the given data.
 	 *
 	 * @param  array  $data
-	 * @return \Cartalyst\Menus\Menu
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function create(array $data);
 
 	/**
 	 * Updates a menu with the given data.
 	 *
-	 * @param  int    $id
+	 * @param  int  $id
 	 * @param  array  $data
-	 * @return \Cartalyst\Menus\Menu
+	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function update($id, array $data);
 
