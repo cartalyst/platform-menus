@@ -1,0 +1,62 @@
+{
+	"name": "platform/menus",
+	"type": "platform-extension",
+	"description": "Manage all the menus throughout your website.",
+	"keywords": ["cartalyst", "platform", "laravel", "extension", "menus"],
+	"license": "BSD License (3-clause)",
+	"authors": [
+		{
+			"name": "Cartalyst LLC",
+			"email": "help@cartalyst.com"
+		},
+		{
+			"name": "Ben Corlett",
+			"email": "ben.corlett@cartalyst.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Bruno Gaspar",
+			"email": "bruno.gaspar@cartalyst.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Dan Syme",
+			"email": "dan.syme@cartalyst.com",
+			"role": "Creator & Designer"
+		}
+	],
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "http://packages.cartalyst.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0",
+
+		"cartalyst/composer-installers": "1.0.*",
+		"cartalyst/nested-sets": "dev-master",
+
+		"platform/admin": "dev-develop"
+	},
+	"require-dev": {
+		"mockery/mockery": "0.7.*"
+	},
+	"autoload": {
+		"classmap": [
+			"controllers",
+			"migrations",
+			"widgets"
+		],
+		"psr-0": {
+			"Platform\\Menus" : "src/"
+		}
+	},
+	"extra": {
+		"component": "extension",
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	},
+	"minimum-stability": "dev"
+}

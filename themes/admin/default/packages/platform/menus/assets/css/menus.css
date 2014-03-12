@@ -1,0 +1,106 @@
+.item-box-borderless { border: none; border-radius: none; box-shadow: none; }
+.item-box-white-bg { background: #ffffff; }
+.item-box-close { cursor: pointer; }
+
+
+/* General */
+body.dragging, body.dragging * {
+	cursor: move !important;
+}
+
+.dragged {
+	opacity: 0.5;
+	position: absolute;
+	top: 0;
+	z-index: 2000;
+}
+
+
+/* Menu items */
+.items {
+	margin: 0 0 9px 0;
+	padding-left: 0;
+}
+
+.items ol {
+	padding-left: 30px;
+}
+
+ol li {
+	display: block;
+}
+
+ol li.placeholder {
+	background: #f2fbff;
+	border: 1px dashed #b6bcbf;
+	margin: 5px 0;
+	min-height: 30px;
+	padding: 0;
+	position: relative;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+ol li .item-name {
+	background: #fafafa;
+	background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
+	background:    -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
+	background: 		linear-gradient(top, #fafafa 0%, #eee 100%);
+	border: 1px solid #cccccc;
+	color: #333333;
+	display: block;
+	font-weight: bold;
+	height: 30px;
+	margin: 5px 0;
+	padding: 5px 10px 5px 40px;
+	text-decoration: none;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+ol li .item-name:hover {
+	background: #fff;
+	cursor: pointer;
+}
+
+ol li .item-handle {
+	background: #dddddd;
+	background: -webkit-linear-gradient(top, #dddddd 0%, #bbbbbb 100%);
+	background:    -moz-linear-gradient(top, #dddddd 0%, #bbbbbb 100%);
+	background: 		linear-gradient(top, #dddddd 0%, #bbbbbb 100%);
+	border: 1px solid #aaaaaa;
+	color: #222222;
+	cursor: move;
+	display: block;
+	height: 30px;
+	margin: 0;
+	float: left;
+	padding: 4px 8px;
+	width: 30px;
+	-webkit-border-radius: 3px 0 0 3px;
+	-moz-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+ol li .item-handle:hover {
+	background: #dddddd;
+}
+
+ol li.item-add .item-name {
+	padding-left: 0;
+	text-align: center;
+}
+
+ol li .item-status {
+	color: #666666;
+	float:right;
+}
