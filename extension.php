@@ -22,7 +22,7 @@ use Cartalyst\Extensions\ExtensionInterface;
 use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
 
-return array(
+return [
 
 	/*
 	|--------------------------------------------------------------------------
@@ -100,11 +100,11 @@ return array(
 	|
 	*/
 
-	'require' => array(
+	'require' => [
 
 		'platform/admin',
 
-	),
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -154,10 +154,13 @@ return array(
 		// after install and after enable filters on them.
 		Installer::after(function()
 		{
+			$observer = app('Platform\Menus\Observer');
+
 			foreach (Extensions::allEnabled() as $extension)
 			{
-				app('Platform\Menus\Observer')->afterInstall($extension);
-				app('Platform\Menus\Observer')->afterEnable($extension);
+				$observer->afterInstall($extension);
+
+				$observer->afterEnable($extension);
 			}
 		}, 10);
 
@@ -168,7 +171,7 @@ return array(
 
 		$app->bind('Platform\Menus\Repositories\MenuRepositoryInterface', function($app)
 		{
-			return new Platform\Menus\Repositories\DbMenuRepository(get_class($app['Platform\Menus\Menu']));
+			return new Platform\Menus\Repositories\DbMenuRepository(get_class($app['Platform\Menus\Models\Menu']));
 		});
 	},
 
@@ -189,29 +192,29 @@ return array(
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		Extension::installed(function($extension) use ($app)
+		Extension::installed(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterInstall($extension);
 		});
 
-		Extension::uninstalled(function($extension) use ($app)
+		Extension::uninstalled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterUninstall($extension);
 		});
 
-		Extension::enabled(function($extension) use ($app)
+		Extension::enabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterEnable($extension);
 		});
 
-		Extension::disabled(function($extension) use ($app)
+		Extension::disabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
 
-		app('Platform\Menus\Menu')->registerType($app['Platform\Menus\Types\StaticType']);
+		app('Platform\Menus\Models\Menu')->registerType($app['Platform\Menus\Types\StaticType']);
 
-		app('Platform\Menus\Menu')->observe(app('Platform\Menus\Observer'));
+		app('Platform\Menus\Models\Menu')->observe(app('Platform\Menus\Observer'));
 	},
 
 	/*
@@ -231,7 +234,7 @@ return array(
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(array('prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'), function()
+		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
 		{
 			Route::get('/', 'MenusController@index');
 			Route::get('grid', 'MenusController@grid');
@@ -267,14 +270,14 @@ return array(
 
 	'permissions' => function()
 	{
-		return array(
+		return [
 
 			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
 			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
 			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
 			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
 
-		);
+		];
 	},
 
 	/*
@@ -282,15 +285,17 @@ return array(
 	| Widgets
 	|--------------------------------------------------------------------------
 	|
-	| List of custom widgets associated with the extension. Like routes, the
-	| value for the widget key may either be a closure or a class & method
-	| name (joined with an @ symbol). Of course, Platform will guess the
+	| Closure that is called when the extension is started. You can register
+	| all your custom widgets here. Of course, Platform will guess the
 	| widget class for you, this is just for custom widgets or if you
 	| do not wish to make a new class for a very small widget.
 	|
 	*/
 
-	'widgets' => array(),
+	'widgets' => function()
+	{
+
+	},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -325,92 +330,92 @@ return array(
 	|
 	*/
 
-	'menus' => array(
+	'menus' => [
 
-		'admin' => array(
+		'admin' => [
 
-			array(
+			[
 				'slug'  => 'admin-menus',
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
 				'regex' => '/admin\/menus/i',
-			),
+			],
 
-		),
+		],
 
-		'system' => array(
+		'system' => [
 
-			array(
+			[
 				'slug'   => 'system-preview',
 				'name'   => 'Preview',
 				'class'  => 'fa fa-home',
 				'uri'    => '/',
 				'target' => '_blank',
-			),
+			],
 
-			array(
+			[
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
 				'class' => 'fa fa-cog',
 				'uri'   => 'admin/settings',
 				'regex' => '/admin\/settings/i',
-			),
+			],
 
 
-			array(
+			[
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
 				'class' => 'fa fa-sign-out',
 				'uri'   => 'logout',
-			),
+			],
 
-		),
+		],
 
-		'main' => array(
+		'main' => [
 
-			array(
+			[
 				'slug'       => 'main-home',
 				'name'       => 'Home',
 				'class'      => 'fa fa-home',
 				'uri'        => '/',
 				'visibility' => 'always',
-			),
+			],
 
-			array(
+			[
 				'slug'       => 'main-dashboard',
 				'name'       => 'Admin',
 				'class'      => 'fa fa-dashboard',
 				'uri'        => 'admin',
 				'visibility' => 'admin',
-			),
+			],
 
-			array(
+			[
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
 				'class'      => 'fa fa-sign-in',
 				'uri'        => 'login',
 				'visibility' => 'logged_out',
-			),
+			],
 
-			array(
+			[
 				'slug'       => 'main-logout',
 				'name'       => 'Logout',
 				'class'      => 'fa fa-home',
 				'uri'        => 'logout',
 				'visibility' => 'logged_in',
-			),
+			],
 
-			array(
+			[
 				'slug'       => 'main-register',
 				'name'       => 'Register',
 				'class'      => 'fa fa-pencil',
 				'uri'        => 'register',
 				'visibility' => 'logged_out',
-			),
+			],
 
-		),
+		],
 
-	),
+	],
 
-);
+];

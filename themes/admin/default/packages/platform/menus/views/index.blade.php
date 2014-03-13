@@ -9,33 +9,75 @@
 {{-- Queue assets --}}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
 {{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'underscore') }}
+{{ Asset::queue('moment', 'moment/js/moment.js') }}
 
 {{-- Inline scripts --}}
 @section('scripts')
 @parent
 <script>
-$(function() {
-
-	$.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
+$(function()
+{
+	var dg = $.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
 		loader: '.loading',
-		paginationType: 'single',
-		defaultSort: {
-			column: 'created_at',
-			direction: 'desc'
-		},
-		callback: function() {
+		scroll: '.data-grid',
+		callback: function()
+		{
+			$('#checkAll').prop('checked', false);
 
-			$('.tip').tooltip();
-
+			$('#actions').prop('disabled', true);
 		}
 	});
 
-	$('.data-grid_pagination').on('click', 'a', function() {
+	$('#checkAll').click(function()
+	{
+		$('input:checkbox').not(this).prop('checked', this.checked);
 
-		$(document.body).animate({ scrollTop: $('.data-grid').offset().top }, 200);
-
+		if ($('input[name="entries[]"]:checked').length > 0)
+		{
+			$('#actions').prop('disabled', false);
+		}
+		else
+		{
+			$('#actions').prop('disabled', true);
+		}
 	});
 
+	$(document).on('click', 'input[name="entries[]"]', function()
+	{
+		if ($('input[name="entries[]"]:checked').length > 0)
+		{
+			$('#actions').prop('disabled', false);
+		}
+		else
+		{
+			$('#actions').prop('disabled', true);
+		}
+	});
+
+	$(document).on('click', '[data-action]', function(e)
+	{
+		e.preventDefault();
+
+		var action = $(this).data('action');
+
+		var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
+		{
+			return +e.value;
+		});
+
+		$.ajax({
+			type: 'POST',
+			url: '{{ URL::toAdmin('menus') }}',
+			data: {
+				action  : action,
+				entries : entries
+			},
+			success: function(response)
+			{
+				dg.refresh();
+			}
+		});
+	});
 });
 </script>
 @stop
@@ -51,21 +93,15 @@ $(function() {
 {{-- Page header --}}
 <div class="page-header">
 
-	<span class="pull-right">
-
-		<a class="btn btn-warning" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
-
-	</span>
-
 	<h1>{{{ trans('platform/menus::general.title') }}}</h1>
 
 </div>
 
 <div class="row">
 
-	{{-- Data Grid : Applied Filters --}}
 	<div class="col-lg-7">
 
+		{{-- Data Grid : Applied Filters --}}
 		<div class="data-grid_applied" data-grid="main"></div>
 
 	</div>
@@ -80,20 +116,15 @@ $(function() {
 
 			</div>
 
-			<div class="form-group">
-				<select class="form-control" name="column">
-					<option value="all">{{{ trans('general.all') }}}</option>
-					<option value="name">{{{ trans('platform/menus::table.name') }}}</option>
-					<option value="slug">{{{ trans('platform/menus::table.slug') }}}</option>
-					<option value="created_at">{{{ trans('platform/menus::table.created_at') }}}</option>
-				</select>
-			</div>
+			<div class="form-group has-feedback">
 
-			<div class="form-group">
 				<input name="filter" type="text" placeholder="{{{ trans('general.search') }}}" class="form-control">
+
+				<span class="glyphicon fa fa-search form-control-feedback"></span>
+
 			</div>
 
-			<button class="btn btn-default"><i class="fa fa-search"></i></button>
+			<a class="btn btn-primary" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
 
 		</form>
 
@@ -106,11 +137,11 @@ $(function() {
 <table data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="data-grid table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th data-sort="name" data-grid="main" class="col-md-3 sortable">{{{ trans('platform/menus::table.name') }}}</th>
-			<th data-sort="slug" data-grid="main" class="col-md-2 sortable">{{{ trans('platform/menus::table.slug') }}}</th>
-			<th data-sort="items_count" data-grid="main" class="col-md-2 sortable">{{{ trans('platform/menus::table.items_count') }}}</th>
-			<th data-sort="created_at" data-grid="main" class="col-md-3 sortable">{{{ trans('platform/menus::table.created_at') }}}</th>
-			<th class="col-md-2"></th>
+			<th><input type="checkbox" name="checkAll" id="checkAll"></th>
+			<th data-sort="name" class="col-md-5 sortable">{{{ trans('platform/menus::table.name') }}}</th>
+			<th data-sort="slug" class="col-md-2 sortable">{{{ trans('platform/menus::table.slug') }}}</th>
+			<th data-sort="items_count" class="col-md-2 sortable">{{{ trans('platform/menus::table.items_count') }}}</th>
+			<th data-sort="created_at" class="col-md-3 sortable">{{{ trans('platform/menus::table.created_at') }}}</th>
 		</tr>
 	</thead>
 	<tbody></tbody>
@@ -119,9 +150,9 @@ $(function() {
 {{-- Data Grid : Pagination --}}
 <div class="data-grid_pagination" data-grid="main"></div>
 
-@include('platform/menus::data-grid-tmpl')
-@include('platform/menus::data-grid_pagination-tmpl')
-@include('platform/menus::data-grid_applied-tmpl')
-@include('platform/menus::data-grid_no-results-tmpl')
+@include('platform/menus::grid/results')
+@include('platform/menus::grid/pagination')
+@include('platform/menus::grid/filters')
+@include('platform/menus::grid/no-results')
 
 @stop
