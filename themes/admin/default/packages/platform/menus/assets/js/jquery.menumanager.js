@@ -13,643 +13,1046 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-(function($){
-
-	$.MenuManager = function(el, options) {
-		// To avoid scope issues, we use 'base' instead of 'this' to
-		// reference this class from internal events and functions.
-		var base = this;
-
-		// Access to jQuery and DOM versions of element
-		base.$el = $(el);
-		base.el  = el;
-
-		// Add a reverse reference to the DOM object
-		base.$el.data('MenuManager', base);
-
-		/**
-		 * Initializer
-		 *
-		 * @return void
-		 */
-		base.Initializer = function() {
-
-			$(document).on('keyup', 'input[type="text"]', function()
-			{
-
-				childrenId = $(this).data('children');
-
-				if (typeof childrenId !== 'undefined')
-				{
-					$("[data-id='" + childrenId + "'], [data-slug='" + childrenId + "']")
-						.find(".item-name:eq(0)")
-						.html($('#' + childrenId + '_name').val());
-				}
-
-			});
-
-			// Extend the default options with the provided options
-			base.options = $.extend({}, $.MenuManager.defaultOptions, options);
-
-			// Initialize Tempo js
-			base.options.Tempo = Tempo.prepare('nestable', base.options.tempoSettings);
-
-			// Activate Nestable
-			$(base.options.nestable.selector).nestable(base.options.nestable);
-
-			// Generate the initial children slug
-			$(base.options.form.children.slug).val(base.generateChildrenSlug());
-
-			// When the root menu name value changes
-			$(document).on('keyup', base.options.form.root.name, function() {
-
-				// Clean the root menu slug value
-				base.generateRootSlug($(this).val());
-
-				// Update the new menu item slug value
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// When the root menu slug value changes
-			$(document).on('change', base.options.form.root.slug, function() {
-
-				// Clean the root menu slug value
-				base.generateRootSlug($(this).val());
-
-				// Update the new menu item slug value
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// Adds a new menu item
-			$(document).on('click', base.options.form.children.submit, base.addItem);
-
-			// Removes a menu item
-			$(document).on('click', base.options.form.itemRemove, base.removeItem);
-
-			// Clean the root item name
-			$(document).on('change', base.options.form.root.name, function() {
-
-				$(base.options.form.root.name).val($.trim($(this).val()));
-
-			});
-
-			// Clean the root item slug
-			$(document).on('change', base.options.form.root.slug, function() {
-
-				$(base.options.form.root.slug).val($.trim($(this).val()));
-
-			});
-
-			// Update the new menu item slug
-			$(document).on('keyup', base.options.form.children.name, function() {
-
-				base.updateChildrenSlug();
-
-				base.updateChildrenUri();
-
-			});
-
-			// Clean the new item name
-			$(document).on('change', base.options.form.children.name, function() {
-
-				$(this).val($.trim($(this).val()));
-
-			});
-
-			// Clean the new item slug
-			$(document).on('change', base.options.form.children.slug, function() {
-
-				$(this).val(base.slugify($(this).val()));
-
-				base.validateChildSlug();
-
-			});
-
-			// When the main form is submited
-			base.$el.submit(function(e){
-
-				// Append input to the form. It's values are JSON encoded..
-				return base.$el.append('<input type="hidden" name="' + base.options.hierarchyInputName + '" value=\'' + window.JSON.stringify($(base.options.nestable.selector).nestable('serialize')) + '\'>');
-
-			});
-
-		};
-
-		/**
-		 * Adds a new menu item.
-		 *
-		 * @return void
-		 * @todo   Add TempoJs, so when we add a new item we
-		 *         use the template, instead of this messy code!
-		 */
-		base.addItem = function(e) {
-
-			// Prevent the form from being submited
-			e.preventDefault();
-
-			// Run the before callback
-			base.options.beforeAdd();
-
-			// Validate the new children name and the new children slug
-			if (base.validateChildName() & base.validateChildSlug())
-			{
-				// Get the new item data
-				name       = $.trim($(base.options.form.children.name).val());
-				slug       = base.slugify($(base.options.form.children.slug).val());
-				type       = $(base.options.form.children.type).val();
-				uri        = $.trim($(base.options.form.children.uri).val());
-				visibility = $(base.options.form.children.visibility).val();
-				secure     = $(base.options.form.children.secure).val();
-				target     = $(base.options.form.children.target).val();
-				klass      = $.trim($(base.options.form.children.klass).val());
-				enabled    = $(base.options.form.children.enabled).val();
-
-				// Hide the no children div
-				$(base.options.noChildrenSelector).addClass('hide');
-
-				//
-				var data = {
-					'name'       : name,
-					'slug'       : slug,
-					'type'       : type,
-					'uri'        : uri,
-					'visibility' : visibility,
-					'secure'     : secure,
-					'target'     : target,
-					'class'      : klass,
-					'enabled'    : enabled
-				};
-
-				//
-				base.options.Tempo.append(data);
-
-				// Add the item to the array
-				base.options.persistedSlugs.push(slug);
-
-				// Clean the new item inputs
-				$(base.options.form.children.name).val('');
-				$(base.options.form.children.slug).val(base.generateChildrenSlug());
-				$(base.options.form.children.uri).val('');
-				$(base.options.form.children.klass).val('');
-
-				// Run the after callback
-				base.options.afterAdd();
-
-				$('#create-child').modal('hide');
-
-				return true;
-			}
-
-			return false;
-
-		};
-
-		/**
-		 * Removes a menu item.
-		 *
-		 * @return void
-		 */
-		base.removeItem = function() {
-
-			//Close Bootstrap Modal
-			$('.modal-backdrop').remove();
-
-			// Run the before callback
-			base.options.beforeRemove();
-
-			// Get the item selector
-			itemSelector = '.' + base.options.nestable.itemClass;
-
-			// Get this item id
-			itemId = $(this).closest(itemSelector).data('id');
-
-			// Get this item slug
-			itemSlug = $(this).closest(itemSelector).data('slug');
-
-			// Remove the item from the array
-			base.options.persistedSlugs.splice($.inArray(itemSlug, base.options.persistedSlugs), 1);
-
-			// Get both data and item identifier
-			dataIdentifier = (typeof itemSlug == 'undefined' ? 'id' : 'slug');
-			itemIdentifier = (typeof itemSlug == 'undefined' ? itemId : itemSlug);
-
-			// Find closest item
-			var $item = $(itemSelector + '[data-' + dataIdentifier + '="' + itemIdentifier + '"]');
-			var $list = $item.children(base.options.nestable.listNodeName);
-
-			// Check if we have children
-			if ($list.length > 0)
-			{
-				// Grab the list's children items and put them after this item
-				$childItems = $list.children(base.options.nestable.itemNodeName);
-				$childItems.insertAfter($item);
-			}
-
-			// Remove the item from the menu
-			$item.remove();
-
-			if ($(base.options.nestable.selector + ' > ol > li').length == 0)
-			{
-				$(base.options.noChildrenSelector).removeClass('hide');
-			}
-
-			// Run the after callback
-			base.options.afterRemove();
-
-		};
-
-		/**
-		 * Updates a menu item.
-		 *
-		 * @return void
-		 */
-		base.updateItem = function() {
-
-			// Run the before callback
-			base.options.beforeUpdate();
-
-			// ...
-
-			// Run the after callback
-			base.options.afterUpdate();
-
-		};
-
-		/**
-		 * Returns the current `Root item` slug.
-		 *
-		 * @return string
-		 */
-		base.getRootSlug = function() {
-
-			rootSlug = $.trim($(base.options.form.root.slug).val());
-
-			if (rootSlug.length >= 1)
-			{
-				rootSlug += base.options.slugSeparator;
-			}
-
-			return rootSlug;
-
-		};
-
-		/**
-		 * Generates the root menu slug, after
-		 * the root menu name has been updated.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.generateRootSlug = function(string) {
-
-			// Update the current menu slug
-			$(base.options.form.root.slug).val(base.generateSlug(string));
-
-		};
-
-		/**
-		 * Generates a slug.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.generateSlug = function(string) {
-
-			// Trim the string
-			string = $.trim(string);
-
-			// Return the slugified string
-			return base.slugify(typeof string !== 'undefined' ? string : '');
-
-		};
-
-		/**
-		 * Generates a new item slug based
-		 * on the root item slug.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.generateChildrenSlug = function(string) {
-
-			// Make sure we have a string
-			string = typeof string !== 'undefined' ? string : '';
-
-			// Generate the slug and return it
-			return base.getRootSlug() + base.generateSlug(string);
-
-		};
-
-		/**
-		 * Updates the new item slug.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.updateChildrenSlug = function(string) {
-
-			//
-			if (typeof string == 'undefined')
-			{
-				// Get the new item name value
-				string = $(base.options.form.children.name).val();
-			}
-
-			// Generate the slug
-			slug = base.generateChildrenSlug(string);
-
-			// Update the new item slug
-			$(base.options.form.children.slug).val(slug);
-
-			// Check if the slug alread exists
-			if (($.inArray(slug, base.options.persistedSlugs) > -1))
-			{
-				// Shdow the errors
-				//base.showError(base.options.form.children.name);
-				base.showError(base.options.form.children.slug);
-			}
-			else
-			{
-				// Remove the errors
-				//base.hideError(base.options.form.children.name);
-				base.hideError(base.options.form.children.slug);
-			}
-
-		};
-
-		base.updateChildrenUri = function(string) {
-
-			//
-			if (typeof string == 'undefined')
-			{
-				// Get the new item name value
-				string = $(base.options.form.children.name).val();
-			}
-
-			// Generate the slug
-			slug = base.generateSlug(string);
-
-			// Update the new item uri
-			$(base.options.form.children.uri).val(slug);
-
-		};
-
-		/**
-		 * Slugify a string.
-		 *
-		 * @param  string
-		 * @return string
-		 */
-		base.slugify = function(string) {
-
-			// Make sure we have a slug separator
-			separator = (typeof base.options.slugSeparator !== 'undefined' ? base.options.slugSeparator : '-');
-
-			// Converts a string to lowercase and
-			// removes spaces.
-			string = string.toLowerCase().replace(/^\s+|\s+$/g, '');
-
-			// Remove accents
-			var from = 'ĺěščřžýťňďàáäâèéëêìíïîòóöôùůúüûñç·/_,:;';
-			var to   = 'lescrzytndaaaaeeeeiiiioooouuuuunc------';
-			for (var i = 0, l = from.length; i < l; i++)
-			{
-				string = string.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-			}
-
-			// Return the slugified string
-			return string.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-					.replace(/\s+/g, separator) // collapse whitespace and replace by _
-					.replace(/-+/g, separator) // collapse dashes
-					.replace(new RegExp(separator + '+$'), '') // Trim separator from start
-					.replace(new RegExp('^' + separator + '+'), ''); // Trim separator from end
-
-		};
-
-		/**
-		 * Validates the children name.
-		 *
-		 * @return bool
-		 */
-		base.validateChildName = function(){
-
-			name = $.trim($(base.options.form.children.name).val());
-
-			if (name.length < 3)
-			{
-				// Show the error
-				base.showError(base.options.form.children.name);
-
-				return false;
-			}
-
-			// Hide the error
-			base.hideError(base.options.form.children.name);
-
-			return true;
-
-		};
-
-		/**
-		 * Validates the children slug.
-		 *
-		 * @return bool
-		 */
-		base.validateChildSlug = function(){
-
-			slug = base.slugify($(base.options.form.children.slug).val());
-
-			if (slug.length < 3)
-			{
-				// Show the error
-				base.showError(base.options.form.children.slug);
-
-				return false;
-			}
-
-			// Check if this slug already exists
-			if (($.inArray(slug, base.options.persistedSlugs) > -1))
-			{
-				// Show the error
-				base.showError(base.options.form.children.slug);
-
-				return false;
-			}
-
-			// Hide the error
-			base.hideError(base.options.form.children.slug);
-
-			return true;
-
-		};
-
-		/**
-		 * Show the error on an input.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.showError = function(input) {
-
-			$(input).addClass('error').closest(base.options.controlGroupSelector).addClass('error');
-
-		};
-
-		/**
-		 * Hides the error on an input.
-		 *
-		 * @param  string
-		 * @return void
-		 */
-		base.hideError = function(input) {
-
-			$(input).removeClass('error').closest(base.options.controlGroupSelector).removeClass('error');
-
-		};
-
-		// Run initializer
-		base.Initializer();
-
-	};
-
-
-
-	$.MenuManager.defaultOptions = {
-
-		// Selector for control groups that wrap inputs
-		controlGroupSelector : '.control-group',
-		//// leaving it here, for now...
-
-		noChildrenSelector: '#no-children',
+;(function($, window, document, undefined) {
+
+	'use strict';
+
+	/**
+	 * Default settings
+	 *
+	 * @var array
+	 */
+	var defaults = {
 
 		// Holds all of the existing menu slugs
 		persistedSlugs : [],
 
+		// Holds all the registered types
+		types : {},
+
 		// Slug separator
 		slugSeparator : '-',
+
+		// Underscore template elements
+		templates : {
+
+			item : '#item-template',
+			form : '#form-template'
+
+		},
+
+		// Sortable settings
+		sortable : {
+
+			selector          : '#sortable > ol',
+			containerSelector : 'ol',
+			itemSelector      : 'li'
+
+		},
 
 		// Form elements
 		form : {
 
+			// This is the name of the input that is submitted with the
+			// children items, this contains the children hierarchy.
+			tree : 'menu-tree',
+
+			group : '.form-group',
+
+			errorClass : 'has-error',
+
 			// Root elements
 			root : {
+
 				name : '#menu-name',
-				slug : '#menu-slug'
+				slug : '#menu-slug',
+
 			},
 
-			// New Children elements
+			// Children elements
 			children : {
-				name       : '#new-child_name',
-				slug       : '#new-child_slug',
-				type       : '#new-child_type',
-				uri        : '#new-child_uri',
-				visibility : '#new-child_visibility',
-				secure     : '#new-child_secure',
-				target     : '#new-child_target',
-				klass      : '#new-child_class',
-				enabled    : '#new-child_enabled',
 
-				submit : '#new-child_add'
-			},
+				name : {
+					input: '#child_name',
+					rules :	['required']
+				},
 
-			// Selector for removing menu items
-			itemRemove : '.remove'
+				slug : {
+					input : '#child_slug',
+					rules :	['required']
+				},
+
+				enabled : {
+					input : '#child_enabled'
+				},
+
+				parent : {
+					input : '#child_parent'
+				},
+
+				type : {
+					input : '#child_type'
+				},
+
+				secure : {
+					input : '#child_secure'
+				},
+
+				static_uri : {
+					input : '#child_static_uri',
+					rules : ['required_if:type:static']
+				},
+
+				visibility : {
+					input : '#child_visibility'
+				},
+
+				groups : {
+					input : '#child_groups'
+				},
+
+				klass : {
+					input : '#child_class'
+				},
+
+				target : {
+					input : '#child_target'
+				},
+
+				regex : {
+					input : '#child_regex'
+				}
+
+			}
 
 		},
 
-		// Tempo object
-		Tempo : null,
+		// Are we saving the menu?
+		isSaving : false,
 
-		// Tempo settings
-		tempoSettings : {
-			'var_braces': '\\[\\[\\]\\]',
-			'tag_braces': '\\[\\?\\?\\]'
-		},
-
-		// Nestable settings
-		nestable : {
-			selector        : '#nestable',
-			listNodeName    : 'ol',
-			itemNodeName    : 'li',
-			rootClass       : 'nestable',
-			listClass       : 'items',
-			itemClass       : 'item',
-			dragClass       : 'item-dd-drag',
-			handleClass     : 'item-dd-handle',
-			collapsedClass  : 'item-dd-collapsed',
-			placeClass      : 'item-dd-placeholder',
-			noDragClass     : 'item-dd-nodrag',
-			emptyClass      : 'item-dd-empty',
-			expandBtnHTML   : false,
-			collapseBtnHTML : false,
-			group           : 0,
-			maxDepth        : 100
-		},
-
-		hierarchyInputName: 'tree',
-
-		/**
-		 * Event called before we add a new menu item.
-		 *
-		 * @return void
-		 */
-		beforeAdd : function() {},
-
-		/**
-		 * Event called after we add a new menu item.
-		 *
-		 * @return void
-		 */
-		afterAdd : function() {},
-
-		/**
-		 * Event called before we remove a menu item.
-		 *
-		 * @return void
-		 */
-		beforeRemove : function() {},
-
-		/**
-		 * Event called after we remove a menu item.
-		 *
-		 * @return void
-		 */
-		afterRemove : function() {},
-
-		/**
-		 * Event called before we update a menu item.
-		 *
-		 * @return void
-		 */
-		beforeUpdate : function() {},
-
-		/**
-		 * Event called after we update a menu item.
-		 *
-		 * @return void
-		 */
-		afterUpdate : function() {}
+		// Do we have unsaved changes?
+		unsavedChanges : false
 
 	};
 
+	function MenuManager(menu, options) {
+
+		// Extend the default options with the provided options
+		this.opt = $.extend({}, defaults, options);
+
+		// Cache the form selector
+		this.$form = menu;
+
+		// Initialize the Menu Manager
+		this.initializer();
+
+	}
+
+	MenuManager.prototype = {
+
+		/**
+		 * Initializes the Menu Manager.
+		 *
+		 * @return void
+		 */
+		initializer : function() {
+
+			// Avoid scope issues
+			var self = this;
+
+			// Activate Sortable
+			$(this.opt.sortable.selector).sortable({
+
+				placeholder: '<li class="placeholder"></li>',
+				handle: 'div.item-handle',
+				onDrop: function (item, container, _super) {
+
+					// Get the parent id
+					var parentId = item.parent('ol').parent('li').data('item-id');
+
+					// Get the item id
+					var itemId = item.data('item-id');
+
+					// Make sure we have a proper parent id
+					if (parentId == null)
+					{
+						var parentId = 0;
+					}
+
+					// Update the parent id on the item form box
+					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
+
+					// Refresh the parent dropdowns
+					self.renderParentsDropdowns();
+
+					// Make sure that the parent dropdown has the correct value selected
+					$('#' + itemId + '_parent').val(parentId);
+
+					// We have unsaved changes
+					self.opt.unsavedChanges = true;
+
+					_super(item, container);
+
+				},
+				serialize: function (parent, children, isContainer) {
+
+					var result = $.extend({}, { id : parent.data('item-id') });
+
+					if (isContainer)
+					{
+						return children;
+					}
+					else if (children[0])
+					{
+						result.children = children;
+					}
+
+					return result;
+
+				}
+
+			});
+
+			// Initialize the event listeners
+			this.events();
+
+		},
+
+		/**
+		 * Initializes all the event listeners.
+		 *
+		 * @return void
+		 */
+		events : function() {
+
+			// Avoid scope issues
+			var self = this;
+
+			var $document = $(document);
+
+			// Get the options
+			var options = self.opt;
+
+			// Get the form options
+			var formOpt = options.form
+
+			// Generate the initial children slug
+			self.slugify($(formOpt.root.slug).val(), self.prepareInput('new-child', formOpt.children.slug.input));
+
+			// Set a bind to check if we have unsaved changes when
+			// we are about to leave the menu manager page.
+			$(window).bind('beforeunload', function() {
+
+				if (options.unsavedChanges & ! options.isSaving)
+				{
+					return 'You have unsaved changes.';
+				}
+
+			});
+
+			// Pre-render the parents dropdowns
+			self.renderParentsDropdowns();
+
+			// Clean the input values when there are changes
+			$document.on('change', 'input[type="text"]', function() {
+
+				// Clean the input first
+				$(this).val($.trim($(this).val()));
+
+				// Only trigger if we updated the item slug
+				if ($(this).attr('id').indexOf('_slug') > -1)
+				{
+					self.slugify($(this).val(), this);
+				}
+
+			});
+
+			// When menu children data get's updated
+			$document.on('keyup', 'input[type="text"]', function() {
+
+				// Get the form box id
+				var itemId = $(this).data('item-form');
+
+				// Only trigger if we updated the item name
+				if ($(this).attr('id').indexOf('_name') > -1)
+				{
+					// Get the root slug
+					var rootSlug = self.getRootSlug();
+
+					// Get the item name value
+					var name = $(this).val();
+
+					// Make sure we have a proper slug
+					self.slugify(rootSlug + ' ' + name, '#' + itemId + '_slug');
+				}
+
+			});
+
+			// When the value of the root name input changes
+			$document.on('keyup', formOpt.root.name, function() {
+
+				// Update the root slug value
+				self.slugify($(this).val(), formOpt.root.slug);
+
+				// Update the new menu item inputs
+				self.updateNewFormInputs();
+
+			})
+
+			// When the value of the root slug input changes
+			$document.on('change', formOpt.root.slug, function() {
+
+				// Clean the root slug value
+				self.slugify($(this).val(), formOpt.root.slug);
+
+				// Update the new menu item inputs
+				self.updateNewFormInputs();
+
+			});
 
 
-	$.fn.MenuManager = function(options) {
+			/**
+			 * When an item url type changes.
+			 *
+			 * @return void
+			 */
+			$document.on('change', '[data-item-url-type]', function() {
 
-		return this.each(function(){
-			(new $.MenuManager(this, options));
-		});
+				var itemId = $(this).data('item-url-type');
+
+				var selectedOption = $(this).val();
+
+				var itemBox = $('[data-item-form="' + itemId + '"]');
+
+				itemBox.find('[data-item-type]').addClass('hide');
+
+				itemBox.find('[data-item-type="' + selectedOption + '"]').removeClass('hide');
+
+			});
+
+
+			/**
+			 * Shows a menu item form box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Hide the root form
+				self.hideRootForm();
+
+				// Close all the other item forms  boxes
+				$('[data-item-form]').addClass('hide');
+
+				// Get the item id
+				var itemId = $(this).data('item');
+
+				// Get the item form box
+				var itemBox = $('[data-item-form=' + itemId + ']');
+
+				// Get the parent id
+				var parentId = itemBox.data('item-parent');
+
+				// Show the form item box
+				itemBox.removeClass('hide');
+
+				// Change the selected item on the dropdown
+				itemBox.find('[data-parents]').val(parentId);
+
+			});
+
+
+			/**
+			 * Toggle the options on an item box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-toggle-options]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Get the item id
+				var itemId = $(this).data('toggle-options');
+
+				// Get the element options
+				var element = $('[data-item-form="' + itemId + '"]').find('[data-options]');
+
+				// Should we hide or show the options element?
+				if (element.hasClass('hide'))
+				{
+					element.removeClass('hide');
+				}
+				else
+				{
+					element.addClass('hide');
+				}
+
+			});
+
+
+			/**
+			 * When an item visibility changes.
+			 *
+			 * @return void
+			 */
+			$document.on('change', '[data-item-visibility]', function(e) {
+
+				var item = $(this).data('item-visibility');
+
+				var selectedOption = $(this).val();
+
+				if ($.inArray(selectedOption, ['logged_in', 'admin']) > -1)
+				{
+					$('[data-item-groups="' + item + '"]').removeClass('hide');
+				}
+				else
+				{
+					$('[data-item-groups="' + item + '"]').addClass('hide');
+				}
+
+			});
+
+
+			/**
+			 * Hides a menu item form box.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-close]', function() {
+
+				// Show the root form
+				self.showRootForm();
+
+				// Get the item id
+				var itemId = $(this).data('item-close');
+
+				// Close the item form box
+				$('[data-item-form="' + itemId + '"]').addClass('hide');
+
+			});
+
+
+			/**
+			 * Adds a new menu item.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-create]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Prepare the inputs
+				var nameInput       = self.prepareInput('new-child', formOpt.children.name.input);
+				var slugInput       = self.prepareInput('new-child', formOpt.children.slug.input);
+				var enabledInput    = self.prepareInput('new-child', formOpt.children.enabled.input);
+				var parentInput     = self.prepareInput('new-child', formOpt.children.parent.input);
+				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
+				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
+				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
+				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
+				var classInput      = self.prepareInput('new-child', formOpt.children.klass.input);
+				var targetInput     = self.prepareInput('new-child', formOpt.children.target.input);
+				var regexInput      = self.prepareInput('new-child', formOpt.children.regex.input);
+
+				// Get the parent id
+				var parentId = parentInput.val();
+
+				// Generate the children slug
+				var slug = slugInput.val().slugify();
+
+				// Check if this is an unique slug
+				if ( ! self.isUniqueSlug(slug))
+				{
+					alert('The slug [' + slug + '] is already taken!');
+				}
+
+				// Check if the form is valid
+				else if (self.validateInputs('new-child', formOpt.children))
+				{
+					// Prepare the new item data
+					var data = {
+
+						'parent_id' : parentId,
+						'name'      : nameInput.val(),
+						'slug'      : slug,
+						'enabled'   : enabledInput.val(),
+
+						'type'   : typeInput.val(),
+						'secure' : secureInput.val(),
+
+						'visibility' : visibilityInput.val(),
+						'groups'     : groupsInput.val(),
+
+						'klass'  : classInput.val(),
+						'target' : targetInput.val(),
+
+						'regex' : regexInput.val()
+
+					};
+
+					// Attach the uri to the data for the template
+					$.each(options.types, function(id, name) {
+
+						data[id + '_uri'] = self.prepareInput('new-child', '#child_' + id + '_uri').val();
+
+					});
+
+					// Append the new menu item
+					$(options.sortable.selector).append(_.template($(options.templates.item).html(), data));
+					$('[data-forms]').append(_.template($(options.templates.form).html(), data));
+
+					// Add the item to the array
+					options.persistedSlugs.push(slug);
+
+					// Clean the new form item inputs
+					nameInput.val('');
+					self.slugify($(formOpt.root.slug).val(), slugInput);
+					enabledInput.val('1');
+					parentInput.val('0');
+					typeInput.val('static');
+					secureInput.val('0');
+					classInput.val('');
+					targetInput.val('self');
+					regexInput.val('');
+					visibilityInput.val('always');
+					$('[data-item-groups="new-child"]').addClass('hide');
+					groupsInput.val('');
+
+					// Get the new item form box
+					var newItemForm = $('[data-item-form="new-child"]');
+
+					// Reset the types
+					$.each(options.types, function(id, name) {
+
+						newItemForm.find('[data-item-type="' + id + '"]').addClass('hide');
+
+					});
+
+					// Make sure the static is the default
+					self.prepareInput('new-child', formOpt.children.static_uri.input).val('');
+					newItemForm.find('[data-item-type="static"]').removeClass('hide');
+
+					// Hide the more options area
+					newItemForm.find('[data-options]').addClass('hide');
+
+					// Move the item to the correct destination
+					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
+
+					// We have unsaved changes
+					options.unsavedChanges = true;
+
+					// Show the root form
+					self.showRootForm();
+
+					// Show the add button
+					$('[data-item-add]').removeClass('hide');
+
+					// Hide the no items container
+					$('[data-no-items]').addClass('hide');
+
+					// Remove the error class
+					$('.' + formOpt.errorClass).removeClass(formOpt.errorClass);
+
+					// Hide the add new item form box
+					newItemForm.addClass('hide');
+
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
+				}
+
+			});
+
+
+			/**
+			 * Updates a menu item.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-update]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Get the form id
+				var formId = $(this).data('item-update');
+
+				// Get the item form box
+				var formBox = $('[data-item-form="' + formId + '"]');
+
+				// Get the current slug
+				var currentSlug = $('#' + formId + '_current-slug').val();
+
+				// Get the item status
+				var enabled = $('#' + formId + '_enabled').val();
+
+				// The current parent that this item belongs to
+				var currentParentId = formBox.data('item-parent');
+
+				// Id of the parent of this item
+				var parentId = $('#' + formId + '_parent').val();
+
+				// Get the new slug
+				var slug = $('#' + formId + '_slug').val().slugify();
+
+				// Check if this is an unique slug
+				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
+				{
+					alert('The slug [' + slug + '] is already taken!');
+				}
+
+				// Check if the form is valid
+				else if (self.validateInputs(formId, formOpt.children))
+				{
+					// Remove the item from the array, because we
+					// might have changed the slug.
+					options.persistedSlugs.splice($.inArray(currentSlug, options.persistedSlugs), 1);
+
+					// Add the item slug to the array
+					options.persistedSlugs.push(slug);
+
+					// Update the current slug input value
+					$('#' + formId + '_current-slug').val(slug);
+
+					// Show the root form
+					self.showRootForm();
+
+					// We have unsaved changes
+					options.unsavedChanges = true;
+
+					// Hide the form item box
+					formBox.addClass('hide');
+
+					// Have we changed the parent of the item?
+					if (currentParentId != parentId)
+					{
+						// Make sure we are moving to a valid parent
+						if (formId != parentId)
+						{
+							// Are we moving to the root level?
+							if (parentId == 0)
+							{
+								var moveTo = $(options.sortable.selector);
+							}
+							else
+							{
+								var moveTo = $('[data-item-id="' + parentId + '"] > ol');
+							}
+
+							// Move the item to the correct destination
+							$('[data-item-id="' + formId + '"]').appendTo(moveTo);
+
+							// Update this item form box parent id
+							formBox.data('item-parent', parentId);
+						}
+					}
+
+					// Update the li item name with the new item name,
+					// just in case the item name gets updated.
+					$('[data-item-name="' + formId + '"]').html($('#' + formId + '_name').val());
+
+					// Show/hide the status handle
+					if (enabled == 0)
+					{
+						$('[data-item-status="' + formId + '"]').removeClass('hide');
+					}
+					else
+					{
+						$('[data-item-status="' + formId + '"]').addClass('hide');
+					}
+
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
+				}
+
+			});
+
+
+			/**
+			 * Removes a menu item.
+			 *
+			 * @return void
+			 */
+			$document.on('click', '[data-item-remove]', function(e) {
+
+				// Prevent the form from being submitted
+				e.preventDefault();
+
+				// Confirmation message
+				var message = 'Are you sure you want to delete this menu item?';
+
+				// Confirm if the user wants to remove the item
+				if (confirm(message) == true)
+				{
+					// Get this item id
+					var itemId = $(this).data('item-remove');
+
+					// Find the item
+					var item = $('[data-item="' + itemId + '"]').closest('li');
+					var list = item.children(options.sortable.containerSelector);
+
+					// Check if we have children
+					if (list.length > 0)
+					{
+						// Grab the list's children items and put them after this item
+						var childItems = list.children(options.sortable.itemSelector);
+						childItems.insertAfter(item);
+					}
+
+					// Remove the item from the array
+					options.persistedSlugs.splice($.inArray(itemId, options.persistedSlugs), 1);
+
+					// Remove the item from the menu
+					item.remove();
+
+					// Check if we have children
+					if ($(options.sortable.selector + ' > li').length == 0)
+					{
+						$('[data-item-add]').addClass('hide');
+						$('[data-no-items]').removeClass('hide').find('[data-item-add]').removeClass('hide');
+					}
+
+					// Remove the item form
+					$('[data-item-form="' + itemId + '"]').remove();
+
+					// Show the root form
+					self.showRootForm();
+
+					// We have unsaved changes
+					options.unsavedChanges = true;
+
+					// Refresh the parents dropdowns
+					self.renderParentsDropdowns();
+				}
+
+			});
+
+
+			/**
+			 * Process the whole form.
+			 *
+			 * @return object
+			 */
+			$document.on('submit', self.$form, function() {
+
+				// We are submitting the form
+				options.isSaving = true;
+
+				// Append input to the form. It's values are JSON encoded..
+				return $(self.$form).append('<input type="hidden" name="' + options.form.tree + '" value=\'' + window.JSON.stringify($(self.opt.sortable.selector).sortable("serialize").get()) + '\'>');
+
+			});
+
+		},
+
+		/**
+		 * Set the persisted slugs.
+		 *
+		 * @param  array  slugs
+		 * @return void
+		 */
+		setPersistedSlugs : function(slugs) {
+
+			this.opt.persistedSlugs = slugs;
+
+		},
+
+		/**
+		 * Register a new type.
+		 *
+		 * @param  string  name
+		 * @param  string  type
+		 * @return void
+		 */
+		registerType : function(name, type) {
+
+			// Register the type
+			this.opt.types[type] = name;
+
+			// Set the validation rules for this type
+			this.opt.form.children[type + '_uri'] = {
+				input : '#child_' + type + '_uri',
+				rules : ['required_if:type:' + type]
+			};
+
+		},
+
+		/**
+		 * Return a list of registered types.
+		 *
+		 * @return array
+		 */
+		getTypes : function() {
+
+			return this.opt.types;
+
+		},
+
+		/**
+		 *
+		 *
+		 * @param  float  level
+		 * @return float
+		 */
+		spacers : function(level) {
+
+			var spacers = '';
+
+			for(var j=0; j < level * 3; j++)
+			{
+				spacers += '&nbsp;';
+			}
+
+			return spacers;
+
+		},
+
+		/**
+		 * Converts an OL into a HTML Dropdown menu.
+		 *
+		 * @param  object  OL
+		 * @param  float   level
+		 * @return string
+		 */
+		convertToDropdown : function(OL, level) {
+
+			var self = this;
+
+			var dropdown = '';
+
+			OL.children('li').each(function () {
+
+				var id = $(this).data('item-id');
+
+				var text = self.spacers(level) + $(this).find('[data-item-name="' + id + '"]').text();
+
+				dropdown += '<option value="' + id + '">' + text + '</option>';
+
+				var children = $(this).children('ol');
+
+				if (children.length > 0)
+				{
+					dropdown += self.convertToDropdown(children, level + 1);
+				}
+
+			});
+
+			return dropdown;
+
+		},
+
+		/**
+		 *
+		 *
+		 * @return void
+		 */
+		renderParentsDropdowns : function() {
+
+			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.sortable.selector), 0));
+
+		},
+
+		/**
+		 * Prepare the input object.
+		 *
+		 * @param  string  id
+		 * @param  string  name
+		 * @return object
+		 */
+		prepareInput : function(id, name) {
+
+			return $(name.replace('child', id));
+
+		},
+
+		/**
+		 * Compares if the provided slugs are the same.
+		 *
+		 * @param  string  currentSlug
+		 * @param  string  newSlug
+		 * @return bool
+		 */
+		isSameSlug : function(currentSlug, newSlug) {
+
+			return currentSlug === newSlug ? true : false;
+
+		},
+
+		/**
+		 * Checks if the provided slug is unique on the system.
+		 *
+		 * @param  string  slug
+		 * @return bool
+		 */
+		isUniqueSlug : function(slug) {
+
+			return $.inArray(slug, this.opt.persistedSlugs) > -1 ? false : true;
+
+		},
+
+		/**
+		 *
+		 *
+		 * @return void
+		 */
+		updateNewFormInputs : function() {
+
+			var self = this;
+
+			// Get the children inputs options
+			var options = self.opt.form.children;
+
+			// Generate a new slug based on the root menu slug
+			var newSlug = self.getRootSlug() + ' ' + self.prepareInput('new-child', options.name.input).val();
+
+			// Update the new item slug
+			self.slugify(newSlug, self.prepareInput('new-child', options.slug.input));
+
+		},
+
+		/**
+		 * Returns the root slug.
+		 *
+		 * @return string
+		 */
+		getRootSlug : function() {
+
+			return $(this.opt.form.root.slug).val();
+
+		},
+
+		/**
+		 * Slugifies the provided value and stores it on the provided input.
+		 *
+		 * @param  string  value
+		 * @param  string  input
+		 * @return void
+		 */
+		slugify : function(value, input) {
+
+			$(input).val(value.slugify());
+
+		},
+
+		/**
+		 * Validates the provided inputs with the provided rules.
+		 *
+		 * @param  string  id
+		 * @param  array   inputs
+		 * @return bool
+		 */
+		validateInputs : function(id, inputs) {
+
+			var self = this;
+
+			var failedInputs = [];
+
+			// Loop through the inputs
+			$.each(inputs, function(input, value) {
+
+				// Does this input have rules?
+				if (typeof value.rules !== 'undefined')
+				{
+					// Loop through the rules
+					$.each(value.rules, function(key, rule) {
+
+						var $input = value.input.replace('child', id);
+
+						if (rule.indexOf('required_if') != -1)
+						{
+							var rule = rule.split(':');
+
+							var requiredInputValue = self.prepareInput(id, self.opt.form.children[rule[1]]['input']).val();
+
+							if (requiredInputValue == rule[2] & $($input).val() == '')
+							{
+								self.showError($input);
+
+								failedInputs.push($input);
+							}
+						}
+
+						else if (rule == 'required' && $($input).val() == '')
+						{
+							self.showError($input);
+
+							failedInputs.push($input)
+						}
+
+						else
+						{
+							self.hideError($input);
+						}
+
+					});
+				}
+
+			});
+
+			return failedInputs.length >= 1 ? false : true;
+
+		},
+
+		/**
+		 * Shows the root form box.
+		 *
+		 * @return void
+		 */
+		showRootForm : function() {
+
+			$('[data-root-form]').removeClass('hide');
+
+		},
+
+		/**
+		 * Hides the root form box.
+		 *
+		 * @return void
+		 */
+		hideRootForm : function() {
+
+			$('[data-root-form]').addClass('hide');
+
+		},
+
+		/**
+		 * Shows the error on the input
+		 *
+		 * @param  object  input
+		 * @return void
+		 */
+		showError : function(input) {
+
+			$(input).closest(this.opt.form.group).addClass(this.opt.form.errorClass);
+
+		},
+
+		/**
+		 * Hides the error on the input.
+		 *
+		 * @param  object  input
+		 * @return void
+		 */
+		hideError : function(input) {
+
+			$(input).closest(this.opt.form.group).removeClass(this.opt.form.errorClass);
+
+		}
 
 	};
 
-})(jQuery);
+	$.menumanager = function(menu, options) {
+
+		return new MenuManager(menu, options);
+
+	};
+
+})(jQuery, window, document);

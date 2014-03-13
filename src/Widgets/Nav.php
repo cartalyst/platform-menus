@@ -99,10 +99,10 @@ class Nav {
 		{
 			$loggedIn = Sentry::check();
 
-			$visibilities = array(
+			$visibilities = [
 				'always',
 				$loggedIn ? 'logged_in' : 'logged_out',
-			);
+			];
 
 			$groups = $loggedIn ? Sentry::getGroups()->lists('id') : null;
 
@@ -111,7 +111,7 @@ class Nav {
 			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
 		}
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -124,9 +124,9 @@ class Nav {
 	protected function prepareChildRecursively($child, $beforeUri = null)
 	{
 		// Prepare the options array
-		$options = array(
+		$options = [
 			'before_uri' => $beforeUri,
-		);
+		];
 
 		// Get this item children
 		$child->children = $child->getChildren();

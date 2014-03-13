@@ -2,7 +2,13 @@
 	"name": "platform/menus",
 	"type": "platform-extension",
 	"description": "Manage all the menus throughout your website.",
-	"keywords": ["cartalyst", "platform", "laravel", "extension", "menus"],
+	"keywords": [
+		"cartalyst",
+		"platform",
+		"laravel",
+		"extension",
+		"menus"
+	],
 	"license": "BSD License (3-clause)",
 	"authors": [
 		{
@@ -32,32 +38,23 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
-
+		"php": ">=5.4.0",
 		"cartalyst/composer-installers": "1.0.*",
 		"cartalyst/nested-sets": "dev-master",
-
-		"platform/admin": "1.0.*"
-	},
-	"require-dev": {
-		"mockery/mockery": "0.7.*"
+		"platform/admin": "dev-develop"
 	},
 	"autoload": {
 		"classmap": [
-			"controllers",
-			"migrations",
-			"models",
-			"tests",
-			"widgets"
+			"migrations"
 		],
-		"psr-0": {
-			"Platform\\Menus" : "src/"
+		"psr-4": {
+			"Platform\\Menus\\" : "src/"
 		}
 	},
 	"extra": {
 		"component": "extension",
 		"branch-alias": {
-			"dev-master": "1.0-dev"
+			"dev-master": "2.0.x-dev"
 		}
 	},
 	"minimum-stability": "dev"

@@ -14,7 +14,7 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -22,7 +22,7 @@ return array(
 
 	'already_exists' => 'Menu already exists!',
 	'not_found'      => 'Menu [:id] either not a root menu item or does not exist.',
-	'no_children'    => 'No children.',
+	'no_children'    => 'No items!',
 
 	'success' => array(
 		'create' => 'Menu was successfully created.',

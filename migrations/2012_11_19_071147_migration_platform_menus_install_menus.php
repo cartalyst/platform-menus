@@ -14,7 +14,7 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -58,33 +58,30 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Type of the child
 			$table->string('type')->default('static');
 
-			// Target for clicked item,
-			// 'self', 'parent', 'blank' etc
-			$table->string('target')->nullable();
-
-			// User visibility flag
-			$table->string('visibility')->nullable();
-
-			// Class for each menu item
-			$table->string('class')->nullable();
-
-			// Enabled
-			$table->boolean('enabled')->default(0);
-
 			$table->boolean('secure')->default(0);
 
 			// Specific to "static" menu children
 			$table->string('uri')->nullable();
 
-			// Specific to "cms" menu children
-			// @todo this logic needs to move
-			// and we need to handle this through
-			// a bunch of events, so that menus need
-			// not know about the cms extensions
-			$table->boolean('page_id')->nullable();
+			// Class for each menu item
+			$table->string('class')->nullable();
+
+			// Target for clicked item
+			$table->string('target')->default('self');
+
+			// User visibility flag
+			$table->string('visibility')->default('always');
+			$table->text('groups')->nullable();
+
+			// Regular expression field so that we can have a more
+			// flexible way to set the "selected" class on a item.
+			$table->string('regex')->nullable();
+
+			// Enabled
+			$table->boolean('enabled')->default(1);
 
 			// Timestamps of course
-			$table->timestamps();
+			$table->nullableTimestamps();
 
 			// Alright, all fields created. We'll add a
 			// primary key, based on the slug field

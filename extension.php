@@ -14,7 +14,7 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -22,15 +22,15 @@ use Cartalyst\Extensions\ExtensionInterface;
 use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
 
-return array(
+return [
 
 	/*
 	|--------------------------------------------------------------------------
 	| Name
 	|--------------------------------------------------------------------------
 	|
-	| This is your extension name and it is only used for presentational
-	| purposes only.
+	| This is your extension name and it is only required for
+	| presentational purposes.
 	|
 	*/
 
@@ -42,9 +42,10 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	| This is your extension unique identifier and should not be changed as
-	| it will be recognized as a new extension. Ideally, this should match
-	| the folder structure within the extensions folder, but this is
-	| completely optional.
+	| it will be recognized as a new extension.
+	|
+	| Ideally, this should match the folder structure within the extensions
+	| folder, but this is completely optional.
 	|
 	*/
 
@@ -90,20 +91,20 @@ return array(
 	| Requirements
 	|--------------------------------------------------------------------------
 	|
-	| You should list here all the extensions this extension requires to work
-	| properly. This is used in conjunction with composer, so you should put
-	| the same extension dependencies on your composer.json require key so
-	| that they get resolved using composer, however you can use without
-	| composer, at which point you'll have to ensure that the required
-	| extensions are available.
+	| List here all the extensions that this extension requires to work.
+	| This is used in conjunction with composer, so you should put the
+	| same extension dependencies on your main composer.json require
+	| key, so that they get resolved using composer, however you
+	| can use without composer, at which point you'll have to
+	| ensure that the required extensions are available.
 	|
 	*/
 
-	'require' => array(
+	'require' => [
 
 		'platform/admin',
 
-	),
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -122,36 +123,14 @@ return array(
 	| If a Closure is defined, it should take two parameters as defined
 	| bellow:
 	|
-	|	object Composer\Autoload\ClassLoader      $loader
-	|	object Illuminate\Foundation\Application  $app
-	|
+	|	object \Composer\Autoload\ClassLoader      $loader
+	|	object \Illuminate\Foundation\Application  $app
 	|
 	| Supported: "composer", "platform", "Closure"
 	|
 	*/
 
 	'autoload' => 'composer',
-
-	/*
-	|--------------------------------------------------------------------------
-	| URI
-	|--------------------------------------------------------------------------
-	|
-	| You can specify the URI that this extension will respond to.
-	|
-	| You can choose to specify a single string, where the URI will be matched
-	| on the 'admin' and 'public' sections of Platform.
-	|
-	| You can provide an array with the 'admin' and 'public' keys to specify
-	| a different URI for admin and public sections, you can have as many
-	| keys as you need in case your applications needs them.
-	|
-	| You can provide an 'override' which is an array of extensions this
-	| extension overrides it's URI from.
-	|
-	*/
-
-	'uri' => 'menus',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -163,27 +142,36 @@ return array(
 	|
 	| The closure parameters are:
 	|
-	|	object Cartalyst\Extensions\ExtensionInterface
-	|	object Illuminate\Foundation\Application
+	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
+	|	object \Illuminate\Foundation\Application        $app
 	|
 	*/
 
 	'register' => function(ExtensionInterface $extension, Application $app)
 	{
-		// After the installer has finished, we'll loop through
-		// each extension that exists and apply our instal and enable
-		// filters to it.
+		// After platform finishes the installation process, we'll
+		// loop through each extension that exists and apply our
+		// after install and after enable filters on them.
 		Installer::after(function()
 		{
-			foreach (Extensions::allEnabled() as $extension)
-			{
-				app('Platform\Menus\Observer')->afterInstall($extension);
-			}
+			$observer = app('Platform\Menus\Observer');
 
 			foreach (Extensions::allEnabled() as $extension)
 			{
-				app('Platform\Menus\Observer')->afterEnable($extension);
+				$observer->afterInstall($extension);
+
+				$observer->afterEnable($extension);
 			}
+		}, 10);
+
+		$app['Platform\Menus\Types\StaticType'] = $app->share(function($app)
+		{
+			return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
+		});
+
+		$app->bind('Platform\Menus\Repositories\MenuRepositoryInterface', function($app)
+		{
+			return new Platform\Menus\Repositories\DbMenuRepository(get_class($app['Platform\Menus\Models\Menu']));
 		});
 	},
 
@@ -197,34 +185,36 @@ return array(
 	|
 	| The closure parameters are:
 	|
-	|	object Cartalyst\Extensions\ExtensionInterface
-	|	object Illuminate\Foundation\Application
+	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
+	|	object \Illuminate\Foundation\Application        $app
 	|
 	*/
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		require_once __DIR__.'/functions.php';
-
-		Extension::installed(function($extension) use ($app)
+		Extension::installed(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterInstall($extension);
 		});
 
-		Extension::uninstalled(function($extension) use ($app)
+		Extension::uninstalled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterUninstall($extension);
 		});
 
-		Extension::enabled(function($extension) use ($app)
+		Extension::enabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterEnable($extension);
 		});
 
-		Extension::disabled(function($extension) use ($app)
+		Extension::disabled(function($extension)
 		{
 			app('Platform\Menus\Observer')->afterDisable($extension);
 		});
+
+		app('Platform\Menus\Models\Menu')->registerType($app['Platform\Menus\Types\StaticType']);
+
+		app('Platform\Menus\Models\Menu')->observe(app('Platform\Menus\Observer'));
 	},
 
 	/*
@@ -237,18 +227,22 @@ return array(
 	|
 	| The closure parameters are:
 	|
-	|	object Cartalyst\Extensions\ExtensionInterface
-	|	object Illuminate\Foundation\Application
+	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
+	|	object \Illuminate\Foundation\Application        $app
 	|
 	*/
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(array('prefix' => '{api}/v1/menus/{slug}'), function()
+		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
 		{
-			Route::get('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@show');
-			Route::put('children', 'Platform\Menus\Controllers\Api\V1\ChildrenController@update');
-			Route::get('path', 'Platform\Menus\Controllers\Api\V1\PathController@show');
+			Route::get('/', 'MenusController@index');
+			Route::get('grid', 'MenusController@grid');
+			Route::get('create', 'MenusController@create');
+			Route::post('create', 'MenusController@store');
+			Route::get('{id}/edit', 'MenusController@edit');
+			Route::post('{id}/edit', 'MenusController@update');
+			Route::get('{id}/delete', 'MenusController@delete');
 		});
 	},
 
@@ -259,38 +253,31 @@ return array(
 	|
 	| List of permissions this extension has. These are shown in the user
 	| management area to build a graphical interface where permissions
-	| may be selected.
+	| can be selected to allow or deny user access.
 	|
-	| The admin controllers state that permissions should follow the following
-	| structure:
-	|
-	|     vendor/extension::area.controller@method
-	|
-	| For example:
-	|
-	|    platform/users::admin.usersController@index
-	|    Platform\Users\Controllers\Admin\UsersController@getIndex
-	|
-	| These are automatically generated for controller routes however you are
-	| free to add your own permissions and check against them at any time.
+	| You can protect single or multiple controller methods at once.
 	|
 	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
-	| will be the label for the permission which is displayed when editing
-	| permissions.
+	| will be the label for the permission which is going to be displayed
+	| when editing the permissions and when access is denied.
+	|
+	| The permissions should follow the following structure:
+	|
+	|     Vendor\Namespace\Controller@method
+	|     Vendor\Namespace\Controller@method1,method2, ...
 	|
 	*/
 
 	'permissions' => function()
 	{
-		return array(
+		return [
 
-			'platform/menus::admin.menusController@index'  => Lang::get('platform/menus::permissions.index'),
-			'platform/menus::admin.menusController@grid'   => Lang::get('platform/menus::permissions.grid'),
-			'platform/menus::admin.menusController@create' => Lang::get('platform/menus::permissions.create'),
-			'platform/menus::admin.menusController@edit'   => Lang::get('platform/menus::permissions.edit'),
-			'platform/menus::admin.menusController@delete' => Lang::get('platform/menus::permissions.delete'),
+			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
+			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
+			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
+			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
 
-		);
+		];
 	},
 
 	/*
@@ -298,30 +285,17 @@ return array(
 	| Widgets
 	|--------------------------------------------------------------------------
 	|
-	| List of custom widgets associated with the extension. Like routes, the
-	| value for the widget key may either be a closure or a class & method
-	| name (joined with an @ symbol). Of course, Platform will guess the
+	| Closure that is called when the extension is started. You can register
+	| all your custom widgets here. Of course, Platform will guess the
 	| widget class for you, this is just for custom widgets or if you
 	| do not wish to make a new class for a very small widget.
 	|
 	*/
 
-	'widgets' => array(),
+	'widgets' => function()
+	{
 
-	/*
-	|--------------------------------------------------------------------------
-	| Plugins
-	|--------------------------------------------------------------------------
-	|
-	| List of custom plugins associated with the extension. Like routes, the
-	| value for the plugin key may either be a closure or a class & method
-	| name (joined with an @ symbol). Of course, Platform will guess the
-	| plugin class for you, this is just for custom plugins or if you
-	| do not wish to make a new class for a very small plugin.
-	|
-	*/
-
-	'plugins' => array(),
+	},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -356,89 +330,92 @@ return array(
 	|
 	*/
 
-	'menus' => array(
+	'menus' => [
 
-		'admin' => array(
+		'admin' => [
 
-			array(
+			[
 				'slug'  => 'admin-menus',
 				'name'  => 'Menus',
-				'class' => 'icon-th-list',
+				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
-			),
+				'regex' => '/admin\/menus/i',
+			],
 
-		),
+		],
 
-		'system' => array(
+		'system' => [
 
-			array(
-				'slug'  => 'system-preview',
-				'name'  => 'Preview',
-				'class' => 'icon-home',
-				'uri'   => '/',
-			),
+			[
+				'slug'   => 'system-preview',
+				'name'   => 'Preview',
+				'class'  => 'fa fa-home',
+				'uri'    => '/',
+				'target' => '_blank',
+			],
 
-			array(
+			[
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
-				'class' => 'icon-cog',
+				'class' => 'fa fa-cog',
 				'uri'   => 'admin/settings',
-			),
+				'regex' => '/admin\/settings/i',
+			],
 
 
-			array(
+			[
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
-				'class' => 'icon-signout',
-				'uri'   => '/logout',
-			),
+				'class' => 'fa fa-sign-out',
+				'uri'   => 'logout',
+			],
 
-		),
+		],
 
-		'main' => array(
+		'main' => [
 
-			array(
+			[
 				'slug'       => 'main-home',
 				'name'       => 'Home',
-				'class'      => 'icon-home',
+				'class'      => 'fa fa-home',
 				'uri'        => '/',
 				'visibility' => 'always',
-			),
+			],
 
-			array(
-				'slug'       => 'main-login',
-				'name'       => 'Sign In',
-				'class'      => 'icon-signin',
-				'uri'        => 'login',
-				'visibility' => 'logged_out',
-			),
-
-			array(
-				'slug'       => 'main-logout',
-				'name'       => 'Logout',
-				'class'      => 'icon-home',
-				'uri'        => 'logout',
-				'visibility' => 'logged_in',
-			),
-
-			array(
-				'slug'       => 'main-register',
-				'name'       => 'Register',
-				'class'      => 'icon-pencil',
-				'uri'        => 'register',
-				'visibility' => 'logged_out',
-			),
-
-			array(
+			[
 				'slug'       => 'main-dashboard',
 				'name'       => 'Admin',
-				'class'      => 'icon-dashboard',
+				'class'      => 'fa fa-dashboard',
 				'uri'        => 'admin',
 				'visibility' => 'admin',
-			),
+			],
 
-		),
+			[
+				'slug'       => 'main-login',
+				'name'       => 'Sign In',
+				'class'      => 'fa fa-sign-in',
+				'uri'        => 'login',
+				'visibility' => 'logged_out',
+			],
 
-	),
+			[
+				'slug'       => 'main-logout',
+				'name'       => 'Logout',
+				'class'      => 'fa fa-home',
+				'uri'        => 'logout',
+				'visibility' => 'logged_in',
+			],
 
-);
+			[
+				'slug'       => 'main-register',
+				'name'       => 'Register',
+				'class'      => 'fa fa-pencil',
+				'uri'        => 'register',
+				'visibility' => 'logged_out',
+			],
+
+		],
+
+	],
+
+];

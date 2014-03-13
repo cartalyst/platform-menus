@@ -14,72 +14,72 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 return array(
 
-	'legend' => 'Menu Properties',
-
 	'create' => array(
-		'legend' => 'Create Menu',
+		'legend'      => 'New Item',
+		'description' => 'Add a new navigation item.',
 	),
 
 	'update' => array(
-		'legend' => 'Update :menu',
+		'legend'      => 'Edit Item',
+		'description' => 'Update an existing navigation item.',
 	),
 
-	'root' => array(
-		'name' => 'Name',
-		'slug' => 'Slug',
+	'name'      => 'Name',
+	'name_help' => 'Type your menu item name.',
+
+	'slug'      => 'Slug',
+	'slug_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
+
+	'enabled'      => 'Status',
+	'enabled_help' => 'What is this menu item status?',
+
+	'parent'      => 'Parent',
+	'parent_help' => 'Chose the parent that this item belongs to or leave the default option selected for it to be a "root" menu item of this menu.',
+
+	'type'      => 'Type',
+	'type_help' => 'Select the item url type.',
+
+	'type_static' => 'Static',
+
+	'uri'      => 'Uri',
+	'uri_help' => 'Type in your menu item uri.',
+
+	'secure'      => 'HTTPS',
+	'secure_help' => 'Should this url be served over HTTPS?',
+
+	'visibility'      => 'Visibility',
+	'visibility_help' => 'When should this menu item be seen?',
+
+	'visibilities' => array(
+		'always'     => 'Show Always',
+		'logged_in'  => 'Logged In',
+		'logged_out' => 'Logged Out',
+		'admin'      => 'Admin Only',
 	),
 
-	'child' => array(
-		'create' => array(
-			'legend' => 'New Child',
-		),
+	'groups'      => 'Groups',
+	'groups_help' => 'What user groups should be able to see this menu item?',
 
-		'update' => array(
-			'legend' => ':menu details',
-		),
+	'class'      => 'Class',
+	'class_help' => 'Class that will be assigned to the <li> element surrounding your menu item.',
 
-		'name' => 'Name',
-		'slug' => 'Slug',
+	'target'      => 'Target',
+	'target_help' => 'The target attribute specifies where to open the menu item.',
 
-		'type' => array(
-			'title' => 'Type',
-
-			'static' => 'Static',
-			'page'   => 'Page',
-		),
-
-		'uri' => 'Uri',
-
-		'secure' => 'Make Secure (HTTPS)',
-
-		'visibility' => array(
-			'title' => 'Visibility',
-
-			'always'     => 'Show Always',
-			'logged_in'  => 'Logged In',
-			'logged_out' => 'Logged Out',
-			'admin'      => 'Admin Only',
-		),
-
-		'target' => array(
-			'title' => 'Target',
-
-			'self'   => 'Same Window',
-			'blank'  => 'New Window',
-			'parent' => 'Parent Frame',
-			'top'    => 'Top Frame (Main Document)',
-		),
-
-		'class' => 'CSS class',
-
-		'enabled' => 'Status',
-
+	'targets' => array(
+		'self'   => 'Same Window',
+		'blank'  => 'New Window',
+		'parent' => 'Parent Frame',
+		'top'    => 'Top Frame (Main Document)',
 	),
+
+	'regex'      => 'Regular Expression',
+	'regex_help' => 'Regex pattern for advanced "selected" states.'
 
 );

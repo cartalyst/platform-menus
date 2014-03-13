@@ -1,173 +1,158 @@
-@extends('templates/default')
+@extends('layouts/default')
 
 {{-- Page title --}}
 @section('title')
-{{ trans('platform/menus::general.title') }} ::
-@parent
+	@parent
+	: {{{ trans('platform/menus::general.title') }}}
 @stop
 
-{{-- Queue Assets --}}
-{{ Asset::queue('tempo', 'js/vendor/tempo/tempo.js', 'jquery') }}
-{{ Asset::queue('data-grid', 'js/vendor/cartalyst/data-grid.js', 'tempo') }}
+{{-- Queue assets --}}
+{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
+{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'underscore') }}
+{{ Asset::queue('moment', 'moment/js/moment.js') }}
 
-{{-- Inline Styles --}}
-@section('styles')
-@parent
-@stop
-
-{{-- Inline Scripts --}}
+{{-- Inline scripts --}}
 @section('scripts')
 @parent
 <script>
-$(function() {
-
-	$.datagrid('main', '.data-grid__table', '.data-grid__pagination', '.data-grid__applied', {
+$(function()
+{
+	var dg = $.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
 		loader: '.loading',
-		type: 'single',
-		sort: {
-			column: 'created_at',
-			direction: 'desc'
-		},
-		callback: function(obj) {
+		scroll: '.data-grid',
+		callback: function()
+		{
+			$('#checkAll').prop('checked', false);
 
-			$('.total').html(Platform.Utils.shorten(obj.filterCount));
-			$('[data-title]').tooltip();
-
+			$('#actions').prop('disabled', true);
 		}
 	});
 
+	$('#checkAll').click(function()
+	{
+		$('input:checkbox').not(this).prop('checked', this.checked);
+
+		if ($('input[name="entries[]"]:checked').length > 0)
+		{
+			$('#actions').prop('disabled', false);
+		}
+		else
+		{
+			$('#actions').prop('disabled', true);
+		}
+	});
+
+	$(document).on('click', 'input[name="entries[]"]', function()
+	{
+		if ($('input[name="entries[]"]:checked').length > 0)
+		{
+			$('#actions').prop('disabled', false);
+		}
+		else
+		{
+			$('#actions').prop('disabled', true);
+		}
+	});
+
+	$(document).on('click', '[data-action]', function(e)
+	{
+		e.preventDefault();
+
+		var action = $(this).data('action');
+
+		var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
+		{
+			return +e.value;
+		});
+
+		$.ajax({
+			type: 'POST',
+			url: '{{ URL::toAdmin('menus') }}',
+			data: {
+				action  : action,
+				entries : entries
+			},
+			success: function(response)
+			{
+				dg.refresh();
+			}
+		});
+	});
 });
 </script>
 @stop
 
-{{-- Page content --}}
-@section('page')
-<header class="page__header">
-
-	<nav class="page__navigation">
-		@widget('platform/menus::nav.show', array(1, 1, 'navigation nav nav-tabs', admin_uri()))
-	</nav>
-
-	<div class="page__title">
-
-		<h1><span class="total"></span> {{ trans('platform/menus::general.title') }}</h1>
-
-	</div>
-
-</header>
-
-<section class="page__content">
-
-	<div class="data-grid">
-
-		<header class="data-grid__header">
-
-			<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="data-grid__search">
-				<div class="select">
-					<select name="column">
-						<option value="all">{{ trans('general.all') }}</option>
-						<option value="name">{{ trans('platform/menus::table.name') }}</option>
-						<option value="slug">{{ trans('platform/menus::table.slug') }}</option>
-						<option value="created_at">{{ trans('platform/menus::table.created_at') }}</option>
-					</select>
-				</div>
-
-				<div class="input-append pull-left">
-					<input name="filter" type="text" placeholder="{{ trans('general.search') }}" class="input-large">
-					<button class="btn btn-large"><i class="icon-search"></i></button>
-				</div>
-			</form>
-
-			<ul class="data-grid__applied navigation navigation--inline" data-grid="main">
-				<li data-template style="display: none;">
-					<a href="#">
-						[? if column == undefined ?]
-						[[ valueLabel ]]
-						[? else ?]
-						[[ valueLabel ]] {{ trans('general.in') }} [[ columnLabel ]]
-						[? endif ?]
-						<i class="icon-remove-sign"></i>
-					</a>
-				</li>
-			</ul>
-
-			<div class="data-grid__loader">
-				<div class="loading">
-					<span class="loading__loader"></span>
-				</div>
-			</div>
-
-		</header>
-
-		<table data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="data-grid__table">
-			<thead>
-				<tr>
-					<th data-sort="name" data-grid="main" class="sortable">{{ trans('platform/menus::table.name') }}</th>
-					<th data-sort="slug" data-grid="main" class="sortable">{{ trans('platform/menus::table.slug') }}</th>
-					<th data-sort="children_count" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.children_count') }}</th>
-					<th data-sort="created_at" data-grid="main" class="span2 sortable">{{ trans('platform/menus::table.created_at') }}</th>
-					<th></th>
-			</tr>
-			</thead>
-			<tbody>
-				<tr data-template style="display: none;">
-					<td>[[ name ]]</td>
-					<td>[[ slug ]]</td>
-					<td>[[ children_count ]]</td>
-					<td>[[ created_at ]]</td>
-					<td>
-						<nav class="actions actions--hidden actions--right">
-							<ul class="navigation navigation--inline-circle">
-								<li><a data-toggle="modal" data-target="#platform-modal-confirm" href="{{ URL::toAdmin('menus/delete/[[ slug ]]') }}"  data-title="{{ trans('button.delete') }}"><i class="icon-trash"></i></a></li>
-								<li><a href="{{ URL::toAdmin('menus/edit/[[ slug ]]') }}" data-title="{{ trans('button.edit') }}"><i class="icon-pencil"></i></a></li>
-							</ul>
-						</nav>
-					</td>
-				</tr>
-				<tr data-results-fallback style="display: none;">
-					<td colspan="5" class="no-results">
-						{{ trans('table.no_results') }}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-	</div>
-
-</section>
+{{-- Inline styles --}}
+@section('styles')
+@parent
 @stop
 
-@section('page__footer')
+{{-- Page content --}}
+@section('content')
 
-	<nav class="actions actions--right">
-		<ul class="navigation navigation--inline-circle">
-			<li><a data-placement="bottom" href="{{ URL::toAdmin('menus/create') }}" data-title="{{ trans('button.create') }}"><i class="icon-plus"></i></a></li>
-		</ul>
-	</nav>
+{{-- Page header --}}
+<div class="page-header">
 
-	<div class="data-grid__pagination clearfix" data-grid="main">
-		<div data-template style="display: none;">
-			<div class="count">[[ pageStart ]] - [[ pageLimit ]] {{ trans('general.of') }} <span class="total"></span></div>
-			<nav class="actions actions--right">
-				<ul class="navigation navigation--inline-circle">
-					[? if prevPage !== null ?]
-					<li>
-						<a href="#" data-page="[[ prevPage ]]">
-							<i class="icon-chevron-left"></i>
-						</a>
-					</li>
-					[? endif ?]
+	<h1>{{{ trans('platform/menus::general.title') }}}</h1>
 
-					[? if nextPage !== null ?]
-					<li>
-						<a href="#" data-page="[[ nextPage ]]">
-							<i class="icon-chevron-right"></i>
-						</a>
-					</li>
-					[? endif ?]
-				</ul>
-			</nav>
-		</div>
+</div>
+
+<div class="row">
+
+	<div class="col-lg-7">
+
+		{{-- Data Grid : Applied Filters --}}
+		<div class="data-grid_applied" data-grid="main"></div>
+
 	</div>
+
+	<div class="col-lg-5 text-right">
+
+		<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="form-inline" role="form">
+
+			<div class="form-group">
+
+				<div class="loading"></div>
+
+			</div>
+
+			<div class="form-group has-feedback">
+
+				<input name="filter" type="text" placeholder="{{{ trans('general.search') }}}" class="form-control">
+
+				<span class="glyphicon fa fa-search form-control-feedback"></span>
+
+			</div>
+
+			<a class="btn btn-primary" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
+
+		</form>
+
+	</div>
+
+</div>
+
+<br />
+
+<table data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="data-grid table table-striped table-bordered table-hover">
+	<thead>
+		<tr>
+			<th><input type="checkbox" name="checkAll" id="checkAll"></th>
+			<th data-sort="name" class="col-md-5 sortable">{{{ trans('platform/menus::table.name') }}}</th>
+			<th data-sort="slug" class="col-md-2 sortable">{{{ trans('platform/menus::table.slug') }}}</th>
+			<th data-sort="items_count" class="col-md-2 sortable">{{{ trans('platform/menus::table.items_count') }}}</th>
+			<th data-sort="created_at" class="col-md-3 sortable">{{{ trans('platform/menus::table.created_at') }}}</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+{{-- Data Grid : Pagination --}}
+<div class="data-grid_pagination" data-grid="main"></div>
+
+@include('platform/menus::grid/results')
+@include('platform/menus::grid/pagination')
+@include('platform/menus::grid/filters')
+@include('platform/menus::grid/no-results')
 
 @stop

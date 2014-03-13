@@ -14,17 +14,13 @@
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 return array(
 
-	'add_child'            => 'Create Child',
-	'remove_child'         => 'Remove Child',
-	'update_child'         => 'Update Children',
-
-	'toggle_child_details' => 'Toggle Details',
-	'drag_children'        => 'Drag',
+	'add_item'     => 'Add a new Item',
+	'more_options' => 'More options',
 
 );

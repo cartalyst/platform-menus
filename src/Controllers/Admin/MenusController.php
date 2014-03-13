@@ -67,13 +67,22 @@ class MenusController extends AdminController {
 	 */
 	public function grid()
 	{
-		return DataGrid::make($this->menus->grid(), array(
+		$data = $this->menus->grid();
+
+		$columns = [
 			'id',
 			'name',
 			'slug',
 			'items_count',
 			'created_at',
-		));
+		];
+
+		$settings = [
+			'sort'      => 'created_at',
+			'direction' => 'desc',
+		];
+
+		return DataGrid::make($data, $columns, $settings);
 	}
 
 	/**
@@ -126,13 +135,16 @@ class MenusController extends AdminController {
 	 */
 	public function delete($slug)
 	{
-		// Delete the menu
 		if ($this->menus->delete($slug))
 		{
-			return Redirect::toAdmin('menus')->withSuccess(Lang::get('platform/menus::message.success.delete'));
+			$message = Lang::get('platform/menus::message.success.delete');
+
+			return Redirect::toAdmin('menus')->withSuccess($message);
 		}
 
-		return Redirect::toAdmin('menus')->withErrors(Lang::get('platform/menus::message.error.delete'));
+		$message = Lang::get('platform/menus::message.error.delete');
+
+		return Redirect::toAdmin('menus')->withErrors($message);
 	}
 
 	/**
@@ -148,9 +160,11 @@ class MenusController extends AdminController {
 		if ($slug)
 		{
 			// Get the menu information
-			if ( ! $menu = $this->menus->find($slug))
+			if ( ! $menu = $this->menus->findRoot($slug))
 			{
-				return Redirect::toAdmin('menus')->withErrors(Lang::get('platform/menus::message.not_found', array('id' => $slug)));
+				$message = Lang::get('platform/menus::message.not_found', ['id' => $slug]);
+
+				return Redirect::toAdmin('menus')->withErrors($message);
 			}
 
 			// Get this menu children
@@ -170,7 +184,9 @@ class MenusController extends AdminController {
 		View::share(compact('groups', 'types'));
 
 		// Show the page
-		return View::make('platform/menus::manage', compact('mode', 'menu', 'children', 'persistedSlugs'));
+		return View::make('platform/menus::manage', compact(
+			'mode', 'menu', 'children', 'persistedSlugs'
+		));
 	}
 
 	/**
@@ -183,10 +199,10 @@ class MenusController extends AdminController {
 	protected function processForm($mode, $slug = null)
 	{
 		// Get the tree
-		$tree = json_decode(Input::get('menu-tree', array()), true);
+		$tree = json_decode(Input::get('menu-tree', []), true);
 
 		// Prepare our children
-		$children = array();
+		$children = [];
 
 		foreach ($tree as $child)
 		{
@@ -200,11 +216,11 @@ class MenusController extends AdminController {
 		}
 
 		// Prepare the menu data for the API
-		$input = array(
+		$input = [
 			'children' => $children,
 			'slug'     => Input::get('menu-slug'),
 			'name'     => Input::get('menu-name'),
-		);
+		];
 
 		// Do we have a menu identifier?
 		if ($slug)
@@ -261,7 +277,7 @@ class MenusController extends AdminController {
 		// use the slug that has been passed to us.
 		$index = $child['id'];
 
-		$new_child = array(
+		$new_child = [
 			'id'         => is_numeric($index) ? $index : null,
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
@@ -269,19 +285,19 @@ class MenusController extends AdminController {
 			'type'       => $type = Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
-			'groups'     => (array) Input::get("children.{$index}.groups", array()),
+			'groups'     => (array) Input::get("children.{$index}.groups", []),
 			'class'      => Input::get("children.{$index}.class"),
 			'target'     => Input::get("children.{$index}.target"),
 			'regex'      => Input::get("children.{$index}.regex"),
-		);
+		];
 
 		// Attach the type data
-		$new_child = array_merge($new_child, Input::get("children.{$index}.{$type}", array()));
+		$new_child = array_merge($new_child, Input::get("children.{$index}.{$type}", []));
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		{
-			$grand_children = array();
+			$grand_children = [];
 
 			foreach ($child['children'] as $child)
 			{
