@@ -19,7 +19,7 @@
  */
 
 use Cartalyst\Extensions\Extension;
-use Platform\Menus\Menu;
+use Platform\Menus\Models\Menu;
 use Sentry;
 
 class Observer {
