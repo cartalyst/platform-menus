@@ -15,70 +15,70 @@
 @section('scripts')
 @parent
 <script>
-$(function()
-{
-	var dg = $.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
-		loader: '.loading',
-		scroll: '.data-grid',
-		callback: function()
-		{
-			$('#checkAll').prop('checked', false);
-
-			$('#actions').prop('disabled', true);
-		}
-	});
-
-	$('#checkAll').click(function()
+	jQuery(document).ready(function($)
 	{
-		$('input:checkbox').not(this).prop('checked', this.checked);
-
-		if ($('input[name="entries[]"]:checked').length > 0)
-		{
-			$('#actions').prop('disabled', false);
-		}
-		else
-		{
-			$('#actions').prop('disabled', true);
-		}
-	});
-
-	$(document).on('click', 'input[name="entries[]"]', function()
-	{
-		if ($('input[name="entries[]"]:checked').length > 0)
-		{
-			$('#actions').prop('disabled', false);
-		}
-		else
-		{
-			$('#actions').prop('disabled', true);
-		}
-	});
-
-	$(document).on('click', '[data-action]', function(e)
-	{
-		e.preventDefault();
-
-		var action = $(this).data('action');
-
-		var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
-		{
-			return +e.value;
-		});
-
-		$.ajax({
-			type: 'POST',
-			url: '{{ URL::toAdmin('menus') }}',
-			data: {
-				action  : action,
-				entries : entries
-			},
-			success: function(response)
+		var dg = $.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
+			loader: '.loading',
+			scroll: '.data-grid',
+			callback: function()
 			{
-				dg.refresh();
+				$('#checkAll').prop('checked', false);
+
+				$('#actions').prop('disabled', true);
 			}
 		});
+
+		$('#checkAll').click(function()
+		{
+			$('input:checkbox').not(this).prop('checked', this.checked);
+
+			if ($('input[name="entries[]"]:checked').length > 0)
+			{
+				$('#actions').prop('disabled', false);
+			}
+			else
+			{
+				$('#actions').prop('disabled', true);
+			}
+		});
+
+		$(document).on('click', 'input[name="entries[]"]', function()
+		{
+			if ($('input[name="entries[]"]:checked').length > 0)
+			{
+				$('#actions').prop('disabled', false);
+			}
+			else
+			{
+				$('#actions').prop('disabled', true);
+			}
+		});
+
+		$(document).on('click', '[data-action]', function(e)
+		{
+			e.preventDefault();
+
+			var action = $(this).data('action');
+
+			var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
+			{
+				return +e.value;
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: '{{ URL::toAdmin('menus') }}',
+				data: {
+					action  : action,
+					entries : entries
+				},
+				success: function(response)
+				{
+					dg.refresh();
+				}
+			});
+		});
 	});
-});
 </script>
 @stop
 
