@@ -28,30 +28,20 @@
 			}
 		});
 
-		$('#checkAll').click(function()
+		$(document).on('click', '#checkAll', function()
 		{
 			$('input:checkbox').not(this).prop('checked', this.checked);
 
-			if ($('input[name="entries[]"]:checked').length > 0)
-			{
-				$('#actions').prop('disabled', false);
-			}
-			else
-			{
-				$('#actions').prop('disabled', true);
-			}
+			var status = $('input[name="entries[]"]:checked').length > 0;
+
+			$('#actions').prop('disabled', ! status);
 		});
 
 		$(document).on('click', 'input[name="entries[]"]', function()
 		{
-			if ($('input[name="entries[]"]:checked').length > 0)
-			{
-				$('#actions').prop('disabled', false);
-			}
-			else
-			{
-				$('#actions').prop('disabled', true);
-			}
+			var status = $('input[name="entries[]"]:checked').length > 0;
+
+			$('#actions').prop('disabled', ! status);
 		});
 
 		$(document).on('click', '[data-action]', function(e)
@@ -69,8 +59,8 @@
 				type: 'POST',
 				url: '{{ URL::toAdmin('menus') }}',
 				data: {
-					action  : action,
-					entries : entries
+					action : action,
+					entries: entries
 				},
 				success: function(response)
 				{
