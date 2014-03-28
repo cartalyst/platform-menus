@@ -164,14 +164,16 @@ return [
 			}
 		}, 10);
 
-		$app['Platform\Menus\Types\StaticType'] = $app->share(function($app)
+		$app->bind('Platform\Menus\Types\StaticType', function($app)
 		{
 			return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
 		});
 
 		$app->bind('Platform\Menus\Repositories\MenuRepositoryInterface', function($app)
 		{
-			return new Platform\Menus\Repositories\DbMenuRepository(get_class($app['Platform\Menus\Models\Menu']));
+			$model = get_class($app['Platform\Menus\Models\Menu']);
+
+			return new Platform\Menus\Repositories\DbMenuRepository($model);
 		});
 	},
 
