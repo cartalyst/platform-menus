@@ -50,7 +50,7 @@
 	<div class="page-header">
 
 		<div class="pull-right">
-			<button class="btn btn-success btn-lg" type="submit"><i class="icon-save"></i> {{{ trans('button.update') }}}</button>
+			<button class="btn btn-success btn-lg" type="submit"><i class="fa fa-save"></i> {{{ trans('button.update') }}}</button>
 		</div>
 
 		<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
@@ -70,7 +70,7 @@
 
 					<p>&nbsp;</p>
 
-					<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="icon-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
+					<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="fa fa-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
 
 				</div>
 
