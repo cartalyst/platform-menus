@@ -157,7 +157,7 @@ class MenusController extends AdminController {
 	protected function showForm($mode, $slug = null)
 	{
 		// Do we have a menu identifier?
-		if ($slug || $slug == 0)
+		if (isset($slug))
 		{
 			// Get the menu information
 			if ( ! $menu = $this->menus->findRoot($slug))
