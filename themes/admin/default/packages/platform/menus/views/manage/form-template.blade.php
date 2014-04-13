@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<label class="control-label" for="<%= slug %>_name">{{{ trans('platform/menus::form.name') }}}</label>
 
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
+				<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.name_help') }}}"></i>
 
 				<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][name]" id="<%= slug %>_name" class="form-control" value="<%= name %>">
 			</div>
@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<label class="control-label" for="<%= slug %>_slug">{{{ trans('platform/menus::form.slug') }}}</label>
 
-				<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
+				<i class="fa fa-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.slug_help') }}}"></i>
 
 				<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][slug]" id="<%= slug %>_slug" class="form-control" value="<%= slug %>">
 			</div>
@@ -78,7 +78,7 @@
 					<div class="form-group">
 						<label class="control-label" for="<%= slug %>_type">{{{ trans('platform/menus::form.type') }}}</label>
 
-						<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.type_help') }}}"></i>
 
 						<div class="controls">
 							<select data-item-url-type="<%= slug %>" data-item-form="<%= slug %>" name="children[<%= slug %>][type]" id="<%= slug %>_type" class="form-control">
@@ -138,7 +138,7 @@
 				<div class="form-group">
 					<label class="control-label" for="<%= slug %>_visibility">{{{ trans('platform/menus::form.visibility') }}}</label>
 
-					<i class="icon-info-sign" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.visibility_help') }}}"></i>
 
 					<div class="controls">
 						<select data-item-form="<%= slug %>" data-item-visibility="<%= slug %>" name="children[<%= slug %>][visibility]" id="<%= slug %>_visibility" class="form-control">
