@@ -151,9 +151,9 @@ return [
 		// After platform finishes the installation process, we'll
 		// loop through each extension that exists and apply our
 		// after install and after enable filters on them.
-		Installer::after(function()
+		Installer::after(function() use ($app)
 		{
-			$observer = app('Platform\Menus\Observer');
+			$observer = $app['Platform\Menus\Observer'];
 
 			foreach (Extensions::allEnabled() as $extension)
 			{
@@ -193,29 +193,31 @@ return [
 
 	'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		Extension::installed(function($extension)
+		$observer = $app['Platform\Menus\Observer'];
+
+		Extension::installed(function($extension) use ($observer)
 		{
-			app('Platform\Menus\Observer')->afterInstall($extension);
+			$observer->afterInstall($extension);
 		});
 
-		Extension::uninstalled(function($extension)
+		Extension::uninstalled(function($extension) use ($observer)
 		{
-			app('Platform\Menus\Observer')->afterUninstall($extension);
+			$observer->afterUninstall($extension);
 		});
 
-		Extension::enabled(function($extension)
+		Extension::enabled(function($extension) use ($observer)
 		{
-			app('Platform\Menus\Observer')->afterEnable($extension);
+			$observer->afterEnable($extension);
 		});
 
-		Extension::disabled(function($extension)
+		Extension::disabled(function($extension) use ($observer)
 		{
-			app('Platform\Menus\Observer')->afterDisable($extension);
+			$observer->afterDisable($extension);
 		});
 
-		app('Platform\Menus\Models\Menu')->registerType($app['Platform\Menus\Types\StaticType']);
+		$app['Platform\Menus\Models\Menu']->registerType($app['Platform\Menus\Types\StaticType']);
 
-		app('Platform\Menus\Models\Menu')->observe(app('Platform\Menus\Observer'));
+		$app['Platform\Menus\Models\Menu']->observe($observer);
 	},
 
 	/*
