@@ -49,15 +49,17 @@ abstract class BaseType {
 	/**
 	 * Create a new type.
 	 *
-	 * @param  \Illuminate\Routing\UrlGenerator    $url
-	 * @param  \Illuminate\View\Environment        $view
+	 * @param  \Illuminate\Routing\UrlGenerator  $url
+	 * @param  \Illuminate\View\Environment  $view
 	 * @param  \Illuminate\Translation\Translator  $translator
 	 * @return void
 	 */
 	public function __construct(UrlGenerator $url, Environment $view, Translator $translator)
 	{
 		$this->url = $url;
+
 		$this->view = $view;
+
 		$this->translator = $translator;
 	}
 
