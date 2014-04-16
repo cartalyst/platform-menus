@@ -172,7 +172,7 @@ return [
 		{
 			$model = get_class($app['Platform\Menus\Models\Menu']);
 
-			return new Platform\Menus\Repositories\DbMenuRepository($model);
+			return new Platform\Menus\Repositories\DbMenuRepository($model, $app['events']);
 		});
 	},
 

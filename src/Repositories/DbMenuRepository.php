@@ -18,6 +18,7 @@
  * @link       http://cartalyst.com
  */
 
+use Illuminate\Events\Dispatcher;
 use Lang;
 use Validator;
 
@@ -31,6 +32,13 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	protected $model;
 
 	/**
+	 * The event dispatcher instance.
+	 *
+	 * @var \Illuminate\Events\Dispatcher
+	 */
+	protected $dispatcher;
+
+	/**
 	 * Holds the form validation rules.
 	 *
 	 * @var array
@@ -41,14 +49,17 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	];
 
 	/**
-	 * Start it up.
+	 * Constructor.
 	 *
 	 * @param  string  $model
+	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
 	 * @return void
 	 */
-	public function __construct($model)
+	public function __construct($model, Dispatcher $dispatcher)
 	{
 		$this->model = $model;
+
+		$this->dispatcher = $dispatcher;
 	}
 
 	/**
@@ -165,19 +176,21 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function create(array $data)
 	{
-		$model = new $this->model([
+		$menu = new $this->model([
 			'name' => $data['name'],
 			'slug' => $data['slug'],
 		]);
 
-		$model->makeRoot();
+		$menu->makeRoot();
 
 		if ($children = $data['children'])
 		{
-			$model->mapTree($children);
+			$menu->mapTree($children);
 		}
 
-		return $model;
+		$this->dispatcher->fire('platform.menu.created', $menu);
+
+		return $menu;
 	}
 
 	/**
@@ -185,18 +198,20 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function update($id, array $data)
 	{
-		$model = $this->find($id);
+		$menu = $this->find($id);
 
 		foreach (array_except($data, ['children']) as $key => $value)
 		{
-			$model->{$key} = $value;
+			$menu->{$key} = $value;
 		}
 
-		$model->save();
+		$menu->save();
 
-		$model->mapTree(array_get($data, 'children', []));
+		$menu->mapTree(array_get($data, 'children', []));
 
-		return $model;
+		$this->dispatcher->fire('platform.menu.updated', $menu);
+
+		return $menu;
 	}
 
 	/**
@@ -204,9 +219,11 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function delete($id)
 	{
-		if ($model = $this->find($id))
+		if ($menu = $this->find($id))
 		{
-			$model->deleteWithChildren();
+			$this->dispatcher->fire('platform.menu.deleted', $menu);
+
+			$menu->deleteWithChildren();
 
 			return true;
 		}
