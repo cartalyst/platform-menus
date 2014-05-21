@@ -1,6 +1,6 @@
 <?php namespace Platform\Menus;
 /**
- * Part of the Platform package.
+ * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
  *
@@ -9,7 +9,7 @@
  * This source file is subject to the Cartalyst PSL License that is
  * bundled with this package in the license.txt file.
  *
- * @package    Platform
+ * @package    Platform Menus extension
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
