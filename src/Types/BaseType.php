@@ -19,7 +19,7 @@
 
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Translation\Translator;
-use Illuminate\View\Environment;
+use Illuminate\View\Factory;
 use Platform\Menus\Models\Menu;
 
 abstract class BaseType {
@@ -32,9 +32,9 @@ abstract class BaseType {
 	protected $url;
 
 	/**
-	 * The View Environment.
+	 * The View Factory.
 	 *
-	 * @var \Illuminate\View\Environment
+	 * @var \Illuminate\View\Factory
 	 */
 	protected $view;
 
@@ -49,11 +49,11 @@ abstract class BaseType {
 	 * Create a new type.
 	 *
 	 * @param  \Illuminate\Routing\UrlGenerator  $url
-	 * @param  \Illuminate\View\Environment  $view
+	 * @param  \Illuminate\View\Factory  $view
 	 * @param  \Illuminate\Translation\Translator  $translator
 	 * @return void
 	 */
-	public function __construct(UrlGenerator $url, Environment $view, Translator $translator)
+	public function __construct(UrlGenerator $url, Factory $view, Translator $translator)
 	{
 		$this->url = $url;
 
