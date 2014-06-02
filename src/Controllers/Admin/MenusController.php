@@ -24,10 +24,18 @@ use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Redirect;
+use Response;
 use Sentry;
 use View;
 
 class MenusController extends AdminController {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $csrfWhitelist = [
+		'executeAction',
+	];
 
 	/**
 	 * Menus repository.
@@ -35,6 +43,15 @@ class MenusController extends AdminController {
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
 	protected $menus;
+
+	/**
+	 * Holds all the mass actions we can execute.
+	 *
+	 * @var array
+	 */
+	protected $actions = [
+		'delete',
+	];
 
 	/**
 	 * Constructor.
@@ -144,6 +161,28 @@ class MenusController extends AdminController {
 		$message = Lang::get('platform/menus::message.error.delete');
 
 		return Redirect::toAdmin('menus')->withErrors($message);
+	}
+
+	/**
+	 * Executes the mass action.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function executeAction()
+	{
+		$action = Input::get('action');
+
+		if (in_array($action, $this->actions))
+		{
+			foreach (Input::get('entries', []) as $entry)
+			{
+				$this->menus->{$action}($entry);
+			}
+
+			return Response::json('Success');
+		}
+
+		return Response::json('Failed', 500);
 	}
 
 	/**

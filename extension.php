@@ -249,6 +249,7 @@ return [
 		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
 		{
 			Route::get('/', 'MenusController@index');
+			Route::post('/', 'MenusController@executeAction');
 			Route::get('grid', 'MenusController@grid');
 			Route::get('create', 'MenusController@create');
 			Route::post('create', 'MenusController@store');
