@@ -25,7 +25,7 @@ use Platform\Admin\Controllers\Admin\AdminController;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Redirect;
 use Response;
-use Sentry;
+use Sentinel;
 use View;
 
 class MenusController extends AdminController {
@@ -213,7 +213,7 @@ class MenusController extends AdminController {
 		$persistedSlugs = $this->menus->slugs();
 
 		// Get a list of all the available groups
-		$groups = Sentry::getGroupRepository()->createModel()->all();
+		$groups = Sentinel::getGroupRepository()->createModel()->all();
 
 		// Get all the registered menu types
 		$types = $this->menus->getTypes();
