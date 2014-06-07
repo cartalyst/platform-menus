@@ -19,7 +19,7 @@
 
 use Cartalyst\Extensions\Extension;
 use Platform\Menus\Models\Menu;
-use Sentry;
+use Sentinel;
 
 class Observer {
 
@@ -331,7 +331,7 @@ class Observer {
 
 			if (isset($child['groups']) and is_array($child['groups']))
 			{
-				$groups = Sentry::getGroupRepository()
+				$groups = Sentinel::getGroupRepository()
 					->createModel()
 					->newQuery()
 					->lists('id', 'slug');

@@ -105,14 +105,20 @@
 
 					<legend>Menu Details</legend>
 
-					<div class="form-group">
+					<div class="form-group{{ $errors->first('name', ' has-error') }}">
 						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
+
 						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
+
+						<span class="help-block">{{{ $errors->first('name', ':message') }}}</span>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group{{ $errors->first('slug', ' has-error') }}">
 						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
+
 						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
+
+						<span class="help-block">{{{ $errors->first('slug', ':message') }}}</span>
 					</div>
 
 				</fieldset>

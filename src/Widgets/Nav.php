@@ -19,7 +19,7 @@
 
 use Exception;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
-use Sentry;
+use Sentinel;
 use URL;
 use View;
 
@@ -96,16 +96,16 @@ class Nav {
 	{
 		if ($menu = $this->menus->find($slug))
 		{
-			$loggedIn = Sentry::check();
+			$loggedIn = Sentinel::check();
 
 			$visibilities = [
 				'always',
 				$loggedIn ? 'logged_in' : 'logged_out',
 			];
 
-			$groups = $loggedIn ? Sentry::getGroups()->lists('id') : null;
+			$groups = $loggedIn ? Sentinel::getGroups()->lists('id') : null;
 
-			if ($loggedIn and Sentry::hasAccess('admin')) $visibilities[] = 'admin';
+			if ($loggedIn and Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
 
 			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
 		}

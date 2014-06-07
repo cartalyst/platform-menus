@@ -162,17 +162,27 @@ return [
 			}
 		}, 10);
 
-		$app->bind('Platform\Menus\Types\StaticType', function($app)
-		{
-			return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
-		});
+		$menuType = 'Platform\Menus\Types\StaticType';
 
-		$app->bind('Platform\Menus\Repositories\MenuRepositoryInterface', function($app)
+		if ( ! $app->bound($menuType))
 		{
-			$model = get_class($app['Platform\Menus\Models\Menu']);
+			$app->bind($menuType, function($app)
+			{
+				return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
+			});
+		}
 
-			return new Platform\Menus\Repositories\DbMenuRepository($model, $app['events']);
-		});
+		$menuRepository = 'Platform\Menus\Repositories\MenuRepositoryInterface';
+
+		if ( ! $app->bound($menuRepository))
+		{
+			$app->bind($menuRepository, function($app)
+			{
+				$model = get_class($app['Platform\Menus\Models\Menu']);
+
+				return new Platform\Menus\Repositories\DbMenuRepository($model, $app['events']);
+			});
+		}
 	},
 
 	/*
@@ -239,6 +249,7 @@ return [
 		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
 		{
 			Route::get('/', 'MenusController@index');
+			Route::post('/', 'MenusController@executeAction');
 			Route::get('grid', 'MenusController@grid');
 			Route::get('create', 'MenusController@create');
 			Route::post('create', 'MenusController@store');

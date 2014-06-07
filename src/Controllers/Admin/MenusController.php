@@ -24,10 +24,18 @@ use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Redirect;
-use Sentry;
+use Response;
+use Sentinel;
 use View;
 
 class MenusController extends AdminController {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $csrfWhitelist = [
+		'executeAction',
+	];
 
 	/**
 	 * Menus repository.
@@ -35,6 +43,15 @@ class MenusController extends AdminController {
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
 	protected $menus;
+
+	/**
+	 * Holds all the mass actions we can execute.
+	 *
+	 * @var array
+	 */
+	protected $actions = [
+		'delete',
+	];
 
 	/**
 	 * Constructor.
@@ -147,6 +164,28 @@ class MenusController extends AdminController {
 	}
 
 	/**
+	 * Executes the mass action.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function executeAction()
+	{
+		$action = Input::get('action');
+
+		if (in_array($action, $this->actions))
+		{
+			foreach (Input::get('entries', []) as $entry)
+			{
+				$this->menus->{$action}($entry);
+			}
+
+			return Response::json('Success');
+		}
+
+		return Response::json('Failed', 500);
+	}
+
+	/**
 	 * Shows the form.
 	 *
 	 * @param  string  $mode
@@ -174,7 +213,7 @@ class MenusController extends AdminController {
 		$persistedSlugs = $this->menus->slugs();
 
 		// Get a list of all the available groups
-		$groups = Sentry::getGroupRepository()->createModel()->all();
+		$groups = Sentinel::getGroupRepository()->createModel()->all();
 
 		// Get all the registered menu types
 		$types = $this->menus->getTypes();
