@@ -311,12 +311,10 @@ class MenusController extends AdminController {
 	{
 		// Existing menu children will be passing an ID to us. This
 		// is advantageous to us, since a menu slug can be changed
-		// without anything being messed up. For new items, we'll
-		// use the slug that has been passed to us.
+		// without anything being messed up.
 		$index = $child['id'];
 
 		$new_child = [
-			'id'         => is_numeric($index) ? $index : null,
 			'name'       => Input::get("children.{$index}.name"),
 			'slug'       => Input::get("children.{$index}.slug"),
 			'enabled'    => Input::get("children.{$index}.enabled", 1),
@@ -328,6 +326,13 @@ class MenusController extends AdminController {
 			'target'     => Input::get("children.{$index}.target"),
 			'regex'      => Input::get("children.{$index}.regex"),
 		];
+
+		// Only append id if we are dealing with
+		// an existing menu item.
+		if (is_numeric($index))
+		{
+			$new_child['id'] = $index;
+		}
 
 		// Attach the type data
 		$new_child = array_merge($new_child, Input::get("children.{$index}.{$type}", []));
