@@ -983,7 +983,7 @@
 						{
 							self.showError($input);
 
-							failedInputs.push($input)
+							failedInputs.push($input);
 						}
 
 						else
