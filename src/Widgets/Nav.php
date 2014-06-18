@@ -68,7 +68,13 @@ class Nav {
 		{
 			// Get the menu children
 			$children = $this->getChildrenForSlug($slug, $depth);
-
+			
+			// If menu doesn't exist, return.
+			if( ! $children)
+			{
+				return;
+			}
+				
 			// Loop through and prepare the child for display
 			foreach ($children as $child)
 			{
