@@ -388,7 +388,7 @@ return [
 				'name'   => 'Preview',
 				'class'  => 'fa fa-home',
 				'uri'    => '/',
-				'target' => '_blank',
+				'target' => 'blank',
 			],
 
 			[
