@@ -96,16 +96,16 @@ class Nav {
 	{
 		if ($menu = $this->menus->find($slug))
 		{
-			$loggedIn = Sentinel::check();
+			$user = Sentinel::check();
 
 			$visibilities = [
 				'always',
-				$loggedIn ? 'logged_in' : 'logged_out',
+				$user ? 'logged_in' : 'logged_out',
 			];
 
-			$groups = $loggedIn ? Sentinel::getGroups()->lists('id') : null;
+			$groups = $user ? $user->roles->lists('id') : null;
 
-			if ($loggedIn and Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
+			if ($user && Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
 
 			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
 		}
@@ -153,7 +153,7 @@ class Nav {
 		}
 
 		// Check if this item has sub items
-		$child->hasSubItems = ($child->children and $child->depth > 1);
+		$child->hasSubItems = ($child->children && $child->depth > 1);
 
 		// Recursive!
 		foreach ($child->children as $grandChild)
