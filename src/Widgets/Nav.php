@@ -105,7 +105,7 @@ class Nav {
 
 			$roles = $user ? $user->roles->lists('id') : null;
 
-			if ($user && Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
+			if ($user && Sentinel::hasAnyAccess(['superuser', 'admin'])) $visibilities[] = 'admin';
 
 			return $menu->findDisplayableChildren($visibilities, $roles, $depth);
 		}
