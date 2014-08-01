@@ -60,7 +60,7 @@
 			// children items, this contains the children hierarchy.
 			tree : 'menu-tree',
 
-			group : '.form-group',
+			role : '.form-role',
 
 			errorClass : 'has-error',
 
@@ -110,8 +110,8 @@
 					input : '#child_visibility'
 				},
 
-				groups : {
-					input : '#child_groups'
+				roles : {
+					input : '#child_roles'
 				},
 
 				klass : {
@@ -410,11 +410,11 @@
 
 				if ($.inArray(selectedOption, ['logged_in', 'admin']) > -1)
 				{
-					$('[data-item-groups="' + item + '"]').removeClass('hide');
+					$('[data-item-roles="' + item + '"]').removeClass('hide');
 				}
 				else
 				{
-					$('[data-item-groups="' + item + '"]').addClass('hide');
+					$('[data-item-roles="' + item + '"]').addClass('hide');
 				}
 
 			});
@@ -457,7 +457,7 @@
 				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
-				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
+				var rolesInput      = self.prepareInput('new-child', formOpt.children.roles.input);
 				var classInput      = self.prepareInput('new-child', formOpt.children.klass.input);
 				var targetInput     = self.prepareInput('new-child', formOpt.children.target.input);
 				var regexInput      = self.prepareInput('new-child', formOpt.children.regex.input);
@@ -489,7 +489,7 @@
 						'secure' : secureInput.val(),
 
 						'visibility' : visibilityInput.val(),
-						'groups'     : groupsInput.val(),
+						'roles'     : rolesInput.val(),
 
 						'klass'  : classInput.val(),
 						'target' : targetInput.val(),
@@ -523,8 +523,8 @@
 					targetInput.val('self');
 					regexInput.val('');
 					visibilityInput.val('always');
-					$('[data-item-groups="new-child"]').addClass('hide');
-					groupsInput.val('');
+					$('[data-item-roles="new-child"]').addClass('hide');
+					rolesInput.val('');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');
@@ -1030,7 +1030,7 @@
 		 */
 		showError : function(input) {
 
-			$(input).closest(this.opt.form.group).addClass(this.opt.form.errorClass);
+			$(input).closest(this.opt.form.role).addClass(this.opt.form.errorClass);
 
 		},
 
@@ -1042,7 +1042,7 @@
 		 */
 		hideError : function(input) {
 
-			$(input).closest(this.opt.form.group).removeClass(this.opt.form.errorClass);
+			$(input).closest(this.opt.form.role).removeClass(this.opt.form.errorClass);
 
 		}
 

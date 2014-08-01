@@ -103,11 +103,11 @@ class Nav {
 				$user ? 'logged_in' : 'logged_out',
 			];
 
-			$groups = $user ? $user->roles->lists('id') : null;
+			$roles = $user ? $user->roles->lists('id') : null;
 
 			if ($user && Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
 
-			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
+			return $menu->findDisplayableChildren($visibilities, $roles, $depth);
 		}
 
 		return [];

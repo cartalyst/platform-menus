@@ -62,8 +62,8 @@ return array(
 		'admin'      => 'Admin Only',
 	),
 
-	'groups'      => 'Groups',
-	'groups_help' => 'What user groups should be able to see this menu item?',
+	'roles'      => 'Roles',
+	'roles_help' => 'What user roles should be able to see this menu item?',
 
 	'class'      => 'Class',
 	'class_help' => 'Class that will be assigned to the <li> element surrounding your menu item.',

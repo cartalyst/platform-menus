@@ -70,7 +70,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// User visibility flag
 			$table->string('visibility')->default('always');
-			$table->text('groups')->nullable();
+			$table->text('roles')->nullable();
 
 			// Regular expression field so that we can have a more
 			// flexible way to set the "selected" class on a item.

@@ -3,7 +3,7 @@
 	$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 	$mode = ! empty($child) ? 'update' : 'create';
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
-	$selectedGroups = ! empty($child) ? $child->groups ?: array() : array();
+	$selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 ?>
 <div class="well well-md hide item-box-white-bg" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
@@ -164,16 +164,16 @@
 					</div>
 				</div>
 
-				{{-- Groups --}}
-				<div class="form-group{{ ! in_array( ! empty($child) ? $child->visibility : null, array('logged_in', 'admin')) ? ' hide' : null }}" data-item-groups="{{{ ! empty($child) ? $child->id : 'new-child' }}}">
-					<label class="control-label" for="{{ sprintf($childId, 'groups') }}">{{{ trans('platform/menus::form.groups') }}}</label>
+				{{-- Roles --}}
+				<div class="form-group{{ ! in_array( ! empty($child) ? $child->visibility : null, array('logged_in', 'admin')) ? ' hide' : null }}" data-item-roles="{{{ ! empty($child) ? $child->id : 'new-child' }}}">
+					<label class="control-label" for="{{ sprintf($childId, 'roles') }}">{{{ trans('platform/menus::form.roles') }}}</label>
 
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.roles_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'groups') }}[]" id="{{ sprintf($childId, 'groups') }}" class="form-control" multiple="true">
-							@foreach ($groups as $group)
-							<option value="{{{ $group->id }}}"{{ in_array($group->id, $selectedGroups) ? ' selected="selected"' : null }}>{{{ $group->name }}}</option>
+						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'roles') }}[]" id="{{ sprintf($childId, 'roles') }}" class="form-control" multiple="true">
+							@foreach ($roles as $role)
+							<option value="{{{ $role->id }}}"{{ in_array($role->id, $selectedRoles) ? ' selected="selected"' : null }}>{{{ $role->name }}}</option>
 							@endforeach
 						</select>
 					</div>

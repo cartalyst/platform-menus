@@ -151,15 +151,15 @@
 				</div>
 
 				{{-- Groups --}}
-				<div class="form-group<%= _.indexOf(['always', 'logged_out'], visibility) > -1 ? ' hide' : null %>" data-item-groups="<%= slug %>">
-					<label class="control-label" for="<%= slug %>_groups">{{{ trans('platform/menus::form.groups') }}}</label>
+				<div class="form-group<%= _.indexOf(['always', 'logged_out'], visibility) > -1 ? ' hide' : null %>" data-item-roles="<%= slug %>">
+					<label class="control-label" for="<%= slug %>_roles">{{{ trans('platform/menus::form.roles') }}}</label>
 
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.groups_help') }}}"></i>
+					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::form.roles_help') }}}"></i>
 
 					<div class="controls">
-						<select data-item-form="<%= slug %>" name="children[<%= slug %>][groups][]" id="<%= slug %>_groups" class="form-control" multiple="true">
-							@foreach ($groups as $group)
-							<option value="{{{ $group->id }}}"<%= _.indexOf(groups, '{{ $group->id }}') > -1 ? ' selected="selected"' : null %>>{{{ $group->name }}}</option>
+						<select data-item-form="<%= slug %>" name="children[<%= slug %>][roles][]" id="<%= slug %>_roles" class="form-control" multiple="true">
+							@foreach ($roles as $role)
+							<option value="{{{ $role->id }}}"<%= _.indexOf(roles, '{{ $role->id }}') > -1 ? ' selected="selected"' : null %>>{{{ $role->name }}}</option>
 							@endforeach
 						</select>
 					</div>

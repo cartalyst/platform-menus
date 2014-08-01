@@ -98,54 +98,54 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Get mutator for the "groups" attribute.
+	 * Get mutator for the "roles" attribute.
 	 *
-	 * @param  mixed  $groups
+	 * @param  mixed  $roles
 	 * @return array
 	 * @throws \InvalidArgumentException
 	 */
-	public function getGroupsAttribute($groups)
+	public function getRolesAttribute($roles)
 	{
-		if ( ! $groups)
+		if ( ! $roles)
 		{
 			return array();
 		}
 
-		if (is_array($groups))
+		if (is_array($roles))
 		{
-			return $groups;
+			return $roles;
 		}
 
-		if ( ! $_groups = json_decode($groups, true))
+		if ( ! $_roles = json_decode($roles, true))
 		{
-			throw new InvalidArgumentException("Cannot JSON decode groups [{$groups}].");
+			throw new InvalidArgumentException("Cannot JSON decode roles [{$roles}].");
 		}
 
-		return $_groups;
+		return $_roles;
 	}
 
 	/**
-	 * Set mutator for the "groups" attribute.
+	 * Set mutator for the "roles" attribute.
 	 *
-	 * @param  array  $groups
+	 * @param  array  $roles
 	 * @return void
 	 */
-	public function setGroupsAttribute($groups)
+	public function setRolesAttribute($roles)
 	{
 		// If we get a string, let's just ensure it's a proper JSON string
-		if ( ! is_array($groups))
+		if ( ! is_array($roles))
 		{
-			$groups = $this->getGroupsAttribute($groups);
+			$roles = $this->getRolesAttribute($roles);
 		}
 
-		if ( ! empty($groups))
+		if ( ! empty($roles))
 		{
-			$groups = array_values(array_map('intval', $groups));
-			$this->attributes['groups'] = json_encode($groups);
+			$roles = array_values(array_map('intval', $roles));
+			$this->attributes['roles'] = json_encode($roles);
 		}
 		else
 		{
-			$this->attributes['groups'] = '';
+			$this->attributes['roles'] = '';
 		}
 	}
 
@@ -154,43 +154,43 @@ class Menu extends EloquentNode {
 	 * which satisfy any of the provided visibilities.
 	 *
 	 * @param  array  $visibilities
-	 * @param  array  $groups
+	 * @param  array  $roles
 	 * @param  int    $depth
 	 * @return array
 	 */
-	public function findDisplayableChildren(array $visibilities, array $groups = null, $depth = 0)
+	public function findDisplayableChildren(array $visibilities, array $roles = null, $depth = 0)
 	{
 		$worker = $this->createWorker();
 
-		$children = $this->filterChildren(function($query) use ($visibilities, $groups, $worker)
+		$children = $this->filterChildren(function($query) use ($visibilities, $roles, $worker)
 		{
 			$query->whereIn(
 				new Expression($worker->wrapColumn('node.visibility')),
 				$visibilities
 			);
 
-			// If we have groups set, we'll filter down to records who are likely
-			// to contain our group. This will speed up the filtering process
+			// If we have roles set, we'll filter down to records who are likely
+			// to contain our role. This will speed up the filtering process
 			// later on.
-			if (isset($groups))
+			if (isset($roles))
 			{
-				$query->whereNested(function($query) use ($groups, $worker)
+				$query->whereNested(function($query) use ($roles, $worker)
 				{
-					foreach ($groups as $group)
+					foreach ($roles as $role)
 					{
 						$query->orWhere(
-							new Expression($worker->wrapColumn("node.groups")),
+							new Expression($worker->wrapColumn("node.roles")),
 							'LIKE',
-							"%{$group}%"
+							"%{$role}%"
 						);
 					}
 
 					$query->orWhere(
-						new Expression($worker->wrapColumn("node.groups")),
+						new Expression($worker->wrapColumn("node.roles")),
 						''
 					)
 					->orWhereNull(
-						new Expression($worker->wrapColumn("node.groups"))
+						new Expression($worker->wrapColumn("node.roles"))
 					);
 				});
 			}
@@ -199,7 +199,7 @@ class Menu extends EloquentNode {
 
 		$this->filterChildrenStatus($children);
 
-		$this->filterChildrenGroups($children, $groups);
+		$this->filterChildrenRoles($children, $roles);
 
 		return $children;
 	}
@@ -231,24 +231,24 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Filters children based on their groups.
+	 * Filters children based on their roles.
 	 *
 	 * @param  array  $children
-	 * @param  array  $groups
+	 * @param  array  $roles
 	 * @return void
 	 */
-	protected function filterChildrenGroups(array &$children, array $groups = null)
+	protected function filterChildrenRoles(array &$children, array $roles = null)
 	{
-		if ( ! isset($groups))
+		if ( ! isset($roles))
 		{
 			return;
 		}
 
 		foreach ($children as $index => $child)
 		{
-			if (count($child->groups) > 0)
+			if (count($child->roles) > 0)
 			{
-				$matching = array_intersect($child->groups, $groups);
+				$matching = array_intersect($child->roles, $roles);
 
 				if (count($matching) === 0)
 				{
@@ -258,7 +258,7 @@ class Menu extends EloquentNode {
 			}
 
 			$grandChildren = $child->getChildren();
-			$this->filterChildrenGroups($grandChildren, $groups);
+			$this->filterChildrenRoles($grandChildren, $roles);
 			$child->setChildren($grandChildren);
 		}
 	}

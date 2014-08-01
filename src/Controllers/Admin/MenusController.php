@@ -212,14 +212,14 @@ class MenusController extends AdminController {
 		// Get the persisted slugs
 		$persistedSlugs = $this->menus->slugs();
 
-		// Get a list of all the available groups
-		$groups = Sentinel::getGroupRepository()->createModel()->all();
+		// Get a list of all the available roles
+		$roles = Sentinel::getRoleRepository()->createModel()->all();
 
 		// Get all the registered menu types
 		$types = $this->menus->getTypes();
 
 		// Share some variables, because of views inheritance
-		View::share(compact('groups', 'types'));
+		View::share(compact('roles', 'types'));
 
 		// Show the page
 		return View::make('platform/menus::manage', compact(
@@ -321,7 +321,7 @@ class MenusController extends AdminController {
 			'type'       => $type = Input::get("children.{$index}.type", 'static'),
 			'secure'     => Input::get("children.{$index}.secure", 0),
 			'visibility' => Input::get("children.{$index}.visibility", 'always'),
-			'groups'     => (array) Input::get("children.{$index}.groups", []),
+			'roles'      => (array) Input::get("children.{$index}.roles", []),
 			'class'      => Input::get("children.{$index}.class"),
 			'target'     => Input::get("children.{$index}.target"),
 			'regex'      => Input::get("children.{$index}.regex"),

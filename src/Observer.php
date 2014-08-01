@@ -329,14 +329,14 @@ class Observer {
 		{
 			$child = array_except($child, $guarded);
 
-			if (isset($child['groups']) and is_array($child['groups']))
+			if (isset($child['roles']) and is_array($child['roles']))
 			{
-				$groups = Sentinel::getGroupRepository()
+				$roles = Sentinel::getRoleRepository()
 					->createModel()
 					->newQuery()
 					->lists('id', 'slug');
 
-				$child['groups'] = array_values(array_intersect_key($groups, array_flip($child['groups'])));
+				$child['roles'] = array_values(array_intersect_key($roles, array_flip($child['roles'])));
 			}
 
 			$this->recursivelyPrepareAttributes($child['children']);
