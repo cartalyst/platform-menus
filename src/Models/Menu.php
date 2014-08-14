@@ -17,13 +17,17 @@
  * @link       http://cartalyst.com
  */
 
+use Cartalyst\Attributes\EntityInterface;
 use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Illuminate\Database\Query\Expression;
 use InvalidArgumentException;
+use Platform\Attributes\Traits\EntityTrait;
 use Platform\Menus\Types\TypeInterface;
 use RuntimeException;
 
-class Menu extends EloquentNode {
+class Menu extends EloquentNode implements EntityInterface {
+
+	use EntityTrait;
 
 	/**
 	 * The table associated with the model.

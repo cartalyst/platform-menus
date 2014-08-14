@@ -17,11 +17,15 @@
  * @link       http://cartalyst.com
  */
 
+use Cartalyst\Support\Traits\EventTrait;
+use Cartalyst\Support\Traits\RepositoryTrait;
+use Cartalyst\Support\Traits\ValidatorTrait;
 use Illuminate\Events\Dispatcher;
 use Lang;
-use Validator;
 
-class DbMenuRepository implements MenuRepositoryInterface {
+class IlluminateMenuRepository implements MenuRepositoryInterface {
+
+	use EventTrait, RepositoryTrait, ValidatorTrait;
 
 	/**
 	 * The Eloquent menu model.
@@ -29,23 +33,6 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 * @var string
 	 */
 	protected $model;
-
-	/**
-	 * The event dispatcher instance.
-	 *
-	 * @var \Illuminate\Events\Dispatcher
-	 */
-	protected $dispatcher;
-
-	/**
-	 * Holds the form validation rules.
-	 *
-	 * @var array
-	 */
-	protected $rules = [
-		'name' => 'required',
-		'slug' => 'required|unique:menus',
-	];
 
 	/**
 	 * Constructor.
@@ -159,7 +146,9 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function validForCreation(array $data)
 	{
-		return $this->validateMenu($data);
+		return $this->validator
+			->on('create')
+			->validate($data);
 	}
 
 	/**
@@ -167,7 +156,12 @@ class DbMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function validForUpdate($id, array $data)
 	{
-		return $this->validateMenu($data, $id);
+		$menu = $this->find($id);
+
+		return $this->validator
+			->on('update')
+			->bind(['slug' => $menu->slug])
+			->validate($data);
 	}
 
 	/**
@@ -228,29 +222,6 @@ class DbMenuRepository implements MenuRepositoryInterface {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Validates a menu.
-	 *
-	 * @param  array  $data
-	 * @param  mixed  $id
-	 * @return \Illuminate\Support\MessageBag
-	 */
-	protected function validateMenu($data, $id = null)
-	{
-		if($id)
-		{
-			$model = $this->find($id);
-
-			$this->rules['slug'] .= ",slug,{$model->slug},slug";
-		}
-
-		$validator = Validator::make($data, $this->rules);
-
-		$validator->passes();
-
-		return $validator->errors();
 	}
 
 	/**

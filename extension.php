@@ -132,102 +132,19 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Register Callback
+	| Service Providers
 	|--------------------------------------------------------------------------
 	|
-	| Closure that is called when the extension is registered. This can do
-	| all the needed custom logic upon registering.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
+	| Define your extension service providers here. They will be dynamically
+	| registered without having to include them in app/config/app.php.
 	|
 	*/
 
-	'register' => function(ExtensionInterface $extension, Application $app)
-	{
-		// After platform finishes the installation process, we'll
-		// loop through each extension that exists and apply our
-		// after install and after enable filters on them.
-		Installer::after(function() use ($app)
-		{
-			$observer = $app['Platform\Menus\Observer'];
+	'providers' => [
 
-			foreach (Extensions::allEnabled() as $extension)
-			{
-				$observer->afterInstall($extension);
+		'Platform\Menus\MenusServiceProvider',
 
-				$observer->afterEnable($extension);
-			}
-		}, 10);
-
-		$menuType = 'Platform\Menus\Types\StaticType';
-
-		if ( ! $app->bound($menuType))
-		{
-			$app->bind($menuType, function($app)
-			{
-				return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
-			});
-		}
-
-		$menuRepository = 'Platform\Menus\Repositories\MenuRepositoryInterface';
-
-		if ( ! $app->bound($menuRepository))
-		{
-			$app->bind($menuRepository, function($app)
-			{
-				$model = get_class($app['Platform\Menus\Models\Menu']);
-
-				return new Platform\Menus\Repositories\DbMenuRepository($model, $app['events']);
-			});
-		}
-	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Boot Callback
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is booted. This can do
-	| all the needed custom logic upon booting.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
-	|
-	*/
-
-	'boot' => function(ExtensionInterface $extension, Application $app)
-	{
-		$observer = $app['Platform\Menus\Observer'];
-
-		Extension::installed(function($extension) use ($observer)
-		{
-			$observer->afterInstall($extension);
-		});
-
-		Extension::uninstalled(function($extension) use ($observer)
-		{
-			$observer->afterUninstall($extension);
-		});
-
-		Extension::enabled(function($extension) use ($observer)
-		{
-			$observer->afterEnable($extension);
-		});
-
-		Extension::disabled(function($extension) use ($observer)
-		{
-			$observer->afterDisable($extension);
-		});
-
-		$app['Platform\Menus\Models\Menu']->registerType($app['Platform\Menus\Types\StaticType']);
-
-		$app['Platform\Menus\Models\Menu']->observe($observer);
-	},
+	],
 
 	/*
 	|--------------------------------------------------------------------------
