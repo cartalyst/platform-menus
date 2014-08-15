@@ -17,11 +17,12 @@
  * @link       http://cartalyst.com
  */
 
+use Extension;
+use Extensions;
 use Illuminate\Support\ServiceProvider;
-use Platform\Menus\Types\StaticType;
 use Installer;
 use Platform\Menus\Repositories\IlluminateMenuRepository;
-use Extension;
+use Platform\Menus\Types\StaticType;
 
 class MenusServiceProvider extends ServiceProvider {
 
@@ -30,10 +31,7 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('platform/menus', 'platform/menus'. __DIR__.'/..');
-
-		// Register the attributes namespace
-		$this->registerAttributesNamespaces();
+		$this->package('platform/menus', 'platform/menus', __DIR__.'/..');
 
 		$observer = $this->app['Platform\Menus\Observer'];
 
@@ -69,13 +67,13 @@ class MenusServiceProvider extends ServiceProvider {
 	{
 		$this->registerMenusValidator();
 
-		$app = $this->app;
-
 		$this->registerAfterInstallEvents();
 
 		$this->registerMenuType();
 
 		$this->registerMenuRepository();
+
+		$this->registerAttributesNamespaces();
 	}
 
 	/**
