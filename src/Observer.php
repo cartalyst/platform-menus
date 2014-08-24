@@ -92,7 +92,7 @@ class Observer {
 			$existing = $tree['children'];
 			$this->recursivelyPurgeExisting($children, $existing);
 
-			$tree = array_merge($existing, $children);
+			$tree = array_merge_recursive($existing, $children);
 			$this->recursivelyPrepareAttributes($tree);
 
 			// Because we have just taken our existing hierarchy
