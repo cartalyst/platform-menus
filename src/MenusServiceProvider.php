@@ -58,6 +58,9 @@ class MenusServiceProvider extends ServiceProvider {
 		$this->app['Platform\Menus\Models\Menu']->registerType($this->app['Platform\Menus\Types\StaticType']);
 
 		$this->app['Platform\Menus\Models\Menu']->observe($observer);
+
+		// Subscribe the registered event handlers
+		$this->app['events']->subscribe('Platform\Menus\Handlers\MenuEventHandlerInterface');
 	}
 
 	/**
@@ -74,6 +77,8 @@ class MenusServiceProvider extends ServiceProvider {
 		$this->registerMenuRepository();
 
 		$this->registerAttributesNamespaces();
+
+		$this->registerEventHandlers();
 	}
 
 	/**
@@ -134,7 +139,7 @@ class MenusServiceProvider extends ServiceProvider {
 			{
 				$model = get_class($app['Platform\Menus\Models\Menu']);
 
-				return (new IlluminateMenuRepository($model, $app['events']))
+				return (new IlluminateMenuRepository($model, $app['events'], $app['cache']))
 					->setValidator($app['Platform\Menus\Validator\MenusValidatorInterface']);
 			});
 		}
@@ -165,6 +170,19 @@ class MenusServiceProvider extends ServiceProvider {
 		$model = $this->app['Platform\Attributes\Models\Attribute'];
 
 		$model->registerNamespace($this->app['Platform\Menus\Models\Menu']);
+	}
+
+	/**
+	 * Register the event handlers.
+	 *
+	 * @return void
+	 */
+	protected function registerEventHandlers()
+	{
+		$this->app->bindIf(
+			'Platform\Menus\Handlers\MenuEventHandlerInterface',
+			'Platform\Menus\Handlers\MenuEventHandler'
+		);
 	}
 
 }

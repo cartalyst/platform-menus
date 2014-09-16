@@ -20,6 +20,7 @@
 use Cartalyst\Support\Traits\EventTrait;
 use Cartalyst\Support\Traits\RepositoryTrait;
 use Cartalyst\Support\Traits\ValidatorTrait;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Events\Dispatcher;
 use Lang;
 
@@ -35,17 +36,27 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	protected $model;
 
 	/**
+	 * The Illuminate Cache manager instance.
+	 *
+	 * @var \Illuminate\Cache\CacheManager
+	 */
+	protected $cache;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param  string  $model
 	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
+	 * @param  \Illuminate\Cache\CacheManager  $cache
 	 * @return void
 	 */
-	public function __construct($model, Dispatcher $dispatcher)
+	public function __construct($model, Dispatcher $dispatcher, CacheManager $cache)
 	{
 		$this->model = $model;
 
 		$this->dispatcher = $dispatcher;
+
+		$this->cache = $cache;
 	}
 
 	/**
@@ -70,9 +81,12 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this
-			->createModel()
-			->findAll();
+		return $this->cache->rememberForever('platform.menu.all', function()
+		{
+			return $this
+				->createModel()
+				->findAll();
+		});
 	}
 
 	/**
@@ -80,9 +94,12 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
-		return $this
-			->createModel()
-			->allRoot();
+		return $this->cache->rememberForever('platform.menu.all.root', function()
+		{
+			return $this
+				->createModel()
+				->allRoot();
+		});
 	}
 
 	/**
@@ -90,11 +107,14 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		return $this
-			->createModel()
-			->orWhere('slug', $id)
-			->orWhere('id', (int) $id)
-			->first();
+		return $this->cache->rememberForever("platform.menu.{$id}", function() use ($id)
+		{
+			return $this
+				->createModel()
+				->orWhere('slug', $id)
+				->orWhere('id', (int) $id)
+				->first();
+		});
 	}
 
 	/**
@@ -102,11 +122,14 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		return $this->createModel()
-			->orWhere('slug', $id)
-			->orWhere('id', (int) $id)
-			->where($this->createModel()->getReservedAttributeName('left'), 1)
-			->first();
+		return $this->cache->rememberForever("platform.menu.root.{$id}", function() use ($id)
+		{
+			return $this->createModel()
+				->orWhere('slug', $id)
+				->orWhere('id', (int) $id)
+				->where($this->createModel()->getReservedAttributeName('left'), 1)
+				->first();
+		});
 	}
 
 	/**
@@ -114,10 +137,13 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findWhere($column, $value)
 	{
-		return $this
-			->createModel()
-			->where($column, $value)
-			->first();
+		return $this->cache->remember("platform.menu.where.{$column}.{$value}", 24 * 60, function() use ($column, $value)
+		{
+			return $this
+				->createModel()
+				->where($column, $value)
+				->first();
+		});
 	}
 
 	/**
