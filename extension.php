@@ -143,7 +143,7 @@ return [
 
 	'providers' => [
 
-		'Platform\Menus\MenusServiceProvider',
+		'Platform\Menus\Providers\MenusServiceProvider',
 
 	],
 

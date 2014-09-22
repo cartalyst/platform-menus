@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus;
+<?php namespace Platform\Menus\Providers;
 /**
  * Part of the Platform Menus extension.
  *
