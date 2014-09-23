@@ -193,14 +193,38 @@ return [
 
 	'permissions' => function(Permissions $permissions)
 	{
-		return [
+		$permissions->group('menus', function($g)
+		{
+			$g->name = 'Menus';
 
-			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
-			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
-			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
-			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
+			$g->permission('menus.index', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.index');
 
-		];
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'index, grid');
+			});
+
+			$g->permission('menus.create', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.create');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create');
+			});
+
+			$g->permission('menus.edit', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.edit');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit');
+			});
+
+			$g->permission('menus.delete', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.delete');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'delete');
+			});
+		});
 	},
 
 	/*
