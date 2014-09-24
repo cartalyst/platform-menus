@@ -45,8 +45,8 @@
 	"require": {
 		"php": ">=5.4.0",
 		"cartalyst/composer-installers": "~1.1",
-		"cartalyst/nested-sets": "dev-master",
-		"platform/admin": "dev-feature/settings"
+		"cartalyst/nested-sets": "~2.0",
+		"platform/admin": "dev-feature/traits"
 	},
 	"autoload": {
 		"classmap": [
