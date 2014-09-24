@@ -17,51 +17,12 @@
  * @link       http://cartalyst.com
  */
 
+use Cartalyst\Support\Base\EventHandler as BaseHandler;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Container\Container;
 use Platform\Menus\Models\Menu;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
-class MenuEventHandler implements MenuEventHandlerInterface {
-
-	/**
-	 * The container instance.
-	 *
-	 * @var \Illuminate\Container\Container
-	 */
-	protected $app;
-
-	/**
-	 * The menu repository.
-	 *
-	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
-	 */
-	protected $menu;
-
- 	/**
-	 * The Cache manager instance.
-	 *
-	 * @var \Illuminate\Cache\CacheManager
-	 */
-	protected $cache;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menu
-	 * @param  \Illuminate\Container\Container  $app
-	 * @param  \Illuminate\Cache\CacheManager  $cache
-	 * @return void
-	 */
-	public function __construct(MenuRepositoryInterface $menu, Container $app, CacheManager $cache)
-	{
-		$this->menu = $menu;
-
-		$this->app = $app;
-
-		$this->cache = $cache;
-	}
+class MenuEventHandler extends BaseHandler implements MenuEventHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
@@ -82,7 +43,7 @@ class MenuEventHandler implements MenuEventHandlerInterface {
 	{
 		$this->cache->forget('platform.menu.all');
 
-		$this->menu->find($menu->id);
+		$this->app['Platform\Menus\Repositories\MenuRepositoryInterface']->find($menu->id);
 	}
 
 	/**
@@ -93,9 +54,10 @@ class MenuEventHandler implements MenuEventHandlerInterface {
 		$this->cache->forget('platform.menu.all');
 
 		$this->cache->forget("platform.menu.{$menu->id}");
+
 		$this->cache->forget("platform.menu.{$menu->slug}");
 
-		$this->menu->find($menu->id);
+		$this->app['Platform\Menus\Repositories\MenuRepositoryInterface']->find($menu->id);
 	}
 
 	/**
@@ -106,6 +68,7 @@ class MenuEventHandler implements MenuEventHandlerInterface {
 		$this->cache->forget('platform.menu.all');
 
 		$this->cache->forget("platform.menu.{$menu->id}");
+
 		$this->cache->forget("platform.menu.{$menu->slug}");
 	}
 
