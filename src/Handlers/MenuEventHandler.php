@@ -17,9 +17,9 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Support\Base\EventHandler as BaseHandler;
-use Illuminate\Events\Dispatcher;
 use Platform\Menus\Models\Menu;
+use Illuminate\Events\Dispatcher;
+use Cartalyst\Support\Base\EventHandler as BaseHandler;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
 class MenuEventHandler extends BaseHandler implements MenuEventHandlerInterface {
