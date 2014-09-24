@@ -28,7 +28,7 @@
 		{
 			"name": "Dan Syme",
 			"email": "dan.syme@cartalyst.com",
-			"role": "Creator & Designer"
+			"role": "Project Lead"
 		},
 		{
 			"name": "Suhayb Wardany",
@@ -39,13 +39,13 @@
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://packages.cartalyst.com"
+			"url": "https://packages.cartalyst.com"
 		}
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"cartalyst/composer-installers": "1.1.*",
-		"cartalyst/nested-sets": "dev-master",
+		"cartalyst/composer-installers": "~1.1",
+		"cartalyst/nested-sets": "~2.0",
 		"platform/admin": "dev-feature/traits"
 	},
 	"autoload": {

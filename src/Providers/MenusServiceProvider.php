@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus;
+<?php namespace Platform\Menus\Providers;
 /**
  * Part of the Platform Menus extension.
  *
@@ -31,7 +31,7 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('platform/menus', 'platform/menus', __DIR__.'/..');
+		$this->package('platform/menus', 'platform/menus', __DIR__.'/../..');
 
 		$observer = $this->app['Platform\Menus\Observer'];
 

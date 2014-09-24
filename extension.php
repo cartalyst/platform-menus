@@ -17,9 +17,10 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Extensions\ExtensionInterface;
-use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
+use Cartalyst\Extensions\ExtensionInterface;
+use Cartalyst\Settings\Repository as Settings;
+use Cartalyst\Permissions\Container as Permissions;
 
 return [
 
@@ -142,7 +143,7 @@ return [
 
 	'providers' => [
 
-		'Platform\Menus\MenusServiceProvider',
+		'Platform\Menus\Providers\MenusServiceProvider',
 
 	],
 
@@ -178,75 +179,52 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Database Seeds
-	|--------------------------------------------------------------------------
-	|
-	| Platform provides a very simple way to seed your database with test
-	| data using seed classes. All seed classes should be stored on the
-	| `database/seeds` directory within your extension folder.
-	|
-	| The order you register your seed classes is the order they'll run.
-	|
-	| The seeds array should follow the following structure:
-	|
-	|	Vendor\Namespace\Database\Seeds\FooSeeder
-	|	Vendor\Namespace\Database\Seeds\BarSeeder
-	|
-	*/
-
-	'seeds' => [
-
-	],
-
-	/*
-	|--------------------------------------------------------------------------
 	| Permissions
 	|--------------------------------------------------------------------------
 	|
-	| List of permissions this extension has. These are shown in the user
-	| management area to build a graphical interface where permissions
-	| can be selected to allow or deny user access.
+	| Register here all the permissions that this extension has. These will
+	| be shown in the user management area to build a graphical interface
+	| where permissions can be selected to allow or deny user access.
 	|
-	| You can protect single or multiple controller methods at once.
-	|
-	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
-	| will be the label for the permission which is going to be displayed
-	| when editing the permissions and when access is denied.
-	|
-	| The permissions should follow the following structure:
-	|
-	|     Vendor\Namespace\Controller@method
-	|     Vendor\Namespace\Controller@method1,method2, ...
+	| For detailed instructions on how to register the permissions, please
+	| refer to the following url https://cartalyst.com/manual/permissions
 	|
 	*/
 
-	'permissions' => function()
+	'permissions' => function(Permissions $permissions)
 	{
-		return [
+		$permissions->group('menus', function($g)
+		{
+			$g->name = 'Menus';
 
-			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
-			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
-			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
-			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
+			$g->permission('menus.index', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.index');
 
-		];
-	},
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'index, grid');
+			});
 
-	/*
-	|--------------------------------------------------------------------------
-	| Widgets
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is started. You can register
-	| all your custom widgets here. Of course, Platform will guess the
-	| widget class for you, this is just for custom widgets or if you
-	| do not wish to make a new class for a very small widget.
-	|
-	*/
+			$g->permission('menus.create', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.create');
 
-	'widgets' => function()
-	{
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create');
+			});
 
+			$g->permission('menus.edit', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.edit');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit');
+			});
+
+			$g->permission('menus.delete', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.delete');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'delete');
+			});
+		});
 	},
 
 	/*
@@ -254,8 +232,10 @@ return [
 	| Settings
 	|--------------------------------------------------------------------------
 	|
-	| Register any settings for your extension. You can also configure
-	| the namespace and group that a setting belongs to.
+	| Register here all the settings that this extension has.
+	|
+	| For detailed instructions on how to register the settings, please
+	| refer to the following url https://cartalyst.com/manual/settings
 	|
 	*/
 
@@ -371,5 +351,22 @@ return [
 		],
 
 	],
+
+	/*
+	|--------------------------------------------------------------------------
+	| Widgets
+	|--------------------------------------------------------------------------
+	|
+	| Closure that is called when the extension is started. You can register
+	| all your custom widgets here. Of course, Platform will guess the
+	| widget class for you, this is just for custom widgets or if you
+	| do not wish to make a new class for a very small widget.
+	|
+	*/
+
+	'widgets' => function()
+	{
+
+	},
 
 ];
