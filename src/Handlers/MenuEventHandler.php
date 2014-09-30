@@ -19,10 +19,10 @@
 
 use Platform\Menus\Models\Menu;
 use Illuminate\Events\Dispatcher;
-use Cartalyst\Support\Base\EventHandler as BaseHandler;
+use Cartalyst\Support\Handlers\EventHandler;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
-class MenuEventHandler extends BaseHandler implements MenuEventHandlerInterface {
+class MenuEventHandler extends EventHandler implements MenuEventHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
