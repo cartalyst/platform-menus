@@ -309,14 +309,14 @@ return [
 		'main' => [
 
 			[
-				'slug'  => 'main-about-documentation',
+				'slug'  => 'main-documentation',
 				'name'  => 'Documentation',
 				'class' => '',
 				'uri'   => 'https://cartalyst.com/manual/platform',
 			],
 
 			[
-				'slug'  => 'main-about-license',
+				'slug'  => 'main-license',
 				'name'  => 'License',
 				'class' => '',
 				'uri'   => 'https://cartalyst.com/license',
@@ -344,14 +344,6 @@ return [
 				'class'      => '',
 				'uri'        => 'logout',
 				'visibility' => 'logged_in',
-			],
-
-			[
-				'slug'       => 'main-register',
-				'name'       => 'Register',
-				'class'      => '',
-				'uri'        => 'register',
-				'visibility' => 'logged_out',
 			],
 
 		],
