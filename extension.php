@@ -309,17 +309,23 @@ return [
 		'main' => [
 
 			[
-				'slug'       => 'main-home',
-				'name'       => 'Home',
-				'class'      => 'fa fa-home',
-				'uri'        => '/',
-				'visibility' => 'always',
+				'slug'  => 'main-about-documentation',
+				'name'  => 'Documentation',
+				'class' => '',
+				'uri'   => 'https://cartalyst.com/manual/platform',
+			],
+
+			[
+				'slug'  => 'main-about-license',
+				'name'  => 'License',
+				'class' => '',
+				'uri'   => 'https://cartalyst.com/license',
 			],
 
 			[
 				'slug'       => 'main-dashboard',
 				'name'       => 'Admin',
-				'class'      => 'fa fa-dashboard',
+				'class'      => '',
 				'uri'        => 'admin',
 				'visibility' => 'admin',
 			],
@@ -327,7 +333,7 @@ return [
 			[
 				'slug'       => 'main-login',
 				'name'       => 'Sign In',
-				'class'      => 'fa fa-sign-in',
+				'class'      => '',
 				'uri'        => 'login',
 				'visibility' => 'logged_out',
 			],
@@ -335,7 +341,7 @@ return [
 			[
 				'slug'       => 'main-logout',
 				'name'       => 'Logout',
-				'class'      => 'fa fa-home',
+				'class'      => '',
 				'uri'        => 'logout',
 				'visibility' => 'logged_in',
 			],
@@ -343,7 +349,7 @@ return [
 			[
 				'slug'       => 'main-register',
 				'name'       => 'Register',
-				'class'      => 'fa fa-pencil',
+				'class'      => '',
 				'uri'        => 'register',
 				'visibility' => 'logged_out',
 			],
