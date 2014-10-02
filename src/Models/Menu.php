@@ -24,10 +24,11 @@ use InvalidArgumentException;
 use Platform\Attributes\Traits\EntityTrait;
 use Platform\Menus\Types\TypeInterface;
 use RuntimeException;
+use Cartalyst\Support\Traits\NamespacedEntityTrait;
 
 class Menu extends EloquentNode implements EntityInterface {
 
-	use EntityTrait;
+	use EntityTrait, NamespacedEntityTrait;
 
 	/**
 	 * The table associated with the model.
