@@ -43,6 +43,8 @@ class MenuEventHandler extends EventHandler implements MenuEventHandlerInterface
 	{
 		$this->cache->forget('platform.menu.all');
 
+		$this->cache->forget('platform.menu.all.root');
+
 		$this->app['Platform\Menus\Repositories\MenuRepositoryInterface']->find($menu->id);
 	}
 
@@ -52,6 +54,8 @@ class MenuEventHandler extends EventHandler implements MenuEventHandlerInterface
 	public function onUpdate(Menu $menu)
 	{
 		$this->cache->forget('platform.menu.all');
+
+		$this->cache->forget('platform.menu.all.root');
 
 		$this->cache->forget("platform.menu.{$menu->id}");
 
@@ -66,6 +70,8 @@ class MenuEventHandler extends EventHandler implements MenuEventHandlerInterface
 	public function onDelete(Menu $menu)
 	{
 		$this->cache->forget('platform.menu.all');
+
+		$this->cache->forget('platform.menu.all.root');
 
 		$this->cache->forget("platform.menu.{$menu->id}");
 
