@@ -21,7 +21,7 @@ use DataGrid;
 use Illuminate\Support\MessageBag as Bag;
 use Input;
 use Lang;
-use Platform\Admin\Controllers\Admin\AdminController;
+use Platform\Access\Controllers\AdminController;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 use Redirect;
 use Response;
