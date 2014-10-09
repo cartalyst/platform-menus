@@ -76,7 +76,10 @@ class MenusServiceProvider extends ServiceProvider {
 
 		$this->registerMenuRepository();
 
-		$this->registerAttributesNamespaces();
+		// Register the attributes namespace
+		$this->app['platform.attributes']->registerNamespace(
+			$this->app['Platform\Menus\Models\Menu']
+		);
 
 		$this->registerEventHandlers();
 	}
@@ -158,18 +161,6 @@ class MenusServiceProvider extends ServiceProvider {
 		{
 			$this->app->bind($binding, 'Platform\Menus\Validator\MenusValidator');
 		}
-	}
-
-	/**
-	 * Register the attributes namespaces.
-	 *
-	 * @return void
-	 */
-	protected function registerAttributesNamespaces()
-	{
-		$model = $this->app['Platform\Attributes\Models\Attribute'];
-
-		$model->registerNamespace($this->app['Platform\Menus\Models\Menu']);
 	}
 
 	/**

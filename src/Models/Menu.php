@@ -81,6 +81,11 @@ class Menu extends EloquentNode implements EntityInterface {
 	protected $typeData = array();
 
 	/**
+	 * {@inheritDoc}
+	 */
+	protected static $entityNamespace = 'platform/menus';
+
+	/**
 	 * Get mutator for the "enabled" attribute.
 	 *
 	 * @param  mixed  $enabled
