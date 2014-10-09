@@ -77,7 +77,7 @@ class MenusServiceProvider extends ServiceProvider {
 		$this->registerMenuRepository();
 
 		// Register the attributes namespace
-		$this->app['platform.attributes']->registerNamespace(
+		$this->app['platform.attributes.manager']->registerNamespace(
 			$this->app['Platform\Menus\Models\Menu']
 		);
 
