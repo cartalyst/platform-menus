@@ -315,54 +315,56 @@ class Menu extends EloquentNode implements EntityInterface {
 
 		if (is_null($type)) return false;
 
-		if ( ! isset(static::$types[$type]))
+		$types = app('platform.menus.manager')->getTypes();
+
+		if ( ! array_key_exists($type, $types))
 		{
 			throw new RuntimeException("Menu type [{$type}] has not been registered.");
 		}
 
-		return static::$types[$type];
+		return $types[$type];
 	}
 
-	/**
-	 * Register a custom type with a menu.
-	 *
-	 * @param  \Platform\Menus\Types\TypeInterface  $type
-	 * @return void
-	 */
-	public static function registerType(TypeInterface $type)
-	{
-		static::$types[$type->getIdentifier()] = $type;
-	}
+	// /**
+	//  * Register a custom type with a menu.
+	//  *
+	//  * @param  \Platform\Menus\Types\TypeInterface  $type
+	//  * @return void
+	//  */
+	// public static function registerType(TypeInterface $type)
+	// {
+	// 	static::$types[$type->getIdentifier()] = $type;
+	// }
 
-	/**
-	 * Return all the registered types.
-	 *
-	 * @return array
-	 */
-	public static function getTypes()
-	{
-		return static::$types;
-	}
+	// /**
+	//  * Return all the registered types.
+	//  *
+	//  * @return array
+	//  */
+	// public static function getTypes()
+	// {
+	// 	return static::$types;
+	// }
 
-	/**
-	 * Return the type data.
-	 *
-	 * @return array
-	 */
-	public function getTypeData()
-	{
-		return $this->typeData;
-	}
+	// /**
+	//  * Return the type data.
+	//  *
+	//  * @return array
+	//  */
+	// public function getTypeData()
+	// {
+	// 	return $this->typeData;
+	// }
 
-	/**
-	 * Set the type data.
-	 *
-	 * @return void
-	 */
-	public function setTypeData(array $typeData)
-	{
-		$this->typeData = $typeData;
-	}
+	// /**
+	//  * Set the type data.
+	//  *
+	//  * @return void
+	//  */
+	// public function setTypeData(array $typeData)
+	// {
+	// 	$this->typeData = $typeData;
+	// }
 
 	/**
 	 * Handle dynamic method calls into the method.

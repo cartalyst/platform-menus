@@ -81,6 +81,7 @@ class Nav {
 		}
 		catch (Exception $e)
 		{
+			var_dump($e);
 			return;
 		}
 	}

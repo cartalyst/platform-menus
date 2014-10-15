@@ -19,9 +19,9 @@
 
 use Extension;
 use Extensions;
-use Illuminate\Support\ServiceProvider;
+use Cartalyst\Support\ServiceProvider;
 use Installer;
-use Platform\Menus\Repositories\IlluminateMenuRepository;
+use Platform\Menus\Repositories\MenuRepository;
 use Platform\Menus\Types\StaticType;
 
 class MenusServiceProvider extends ServiceProvider {
@@ -55,7 +55,7 @@ class MenusServiceProvider extends ServiceProvider {
 			$observer->afterDisable($extension);
 		});
 
-		$this->app['Platform\Menus\Models\Menu']->registerType($this->app['Platform\Menus\Types\StaticType']);
+		$this->app['platform.menus.manager']->registerType($this->app['Platform\Menus\Types\StaticType']);
 
 		$this->app['Platform\Menus\Models\Menu']->observe($observer);
 
@@ -81,7 +81,12 @@ class MenusServiceProvider extends ServiceProvider {
 			$this->app['Platform\Menus\Models\Menu']
 		);
 
-		$this->registerEventHandlers();
+		$this->bindIf('platform.menus.handler', 'Platform\Menus\Handlers\MenuEventHandler');
+
+
+
+		// Register the manager
+		$this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
 	}
 
 	/**
@@ -142,7 +147,7 @@ class MenusServiceProvider extends ServiceProvider {
 			{
 				$model = get_class($app['Platform\Menus\Models\Menu']);
 
-				return (new IlluminateMenuRepository($model, $app['events'], $app['cache']))
+				return (new MenuRepository($model, $app['events'], $app['cache']))
 					->setValidator($app['Platform\Menus\Validator\MenusValidatorInterface']);
 			});
 		}
@@ -170,10 +175,6 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	protected function registerEventHandlers()
 	{
-		$this->app->bindIf(
-			'Platform\Menus\Handlers\MenuEventHandlerInterface',
-			'Platform\Menus\Handlers\MenuEventHandler'
-		);
 	}
 
 }

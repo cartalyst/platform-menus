@@ -17,16 +17,14 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Support\Traits\EventTrait;
-use Cartalyst\Support\Traits\RepositoryTrait;
-use Cartalyst\Support\Traits\ValidatorTrait;
+use Cartalyst\Support\Traits;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Events\Dispatcher;
 use Lang;
 
-class IlluminateMenuRepository implements MenuRepositoryInterface {
+class MenuRepository implements MenuRepositoryInterface {
 
-	use EventTrait, RepositoryTrait, ValidatorTrait;
+	use Traits\EventTrait, Traits\RepositoryTrait, Traits\ValidatorTrait;
 
 	/**
 	 * The Eloquent menu model.
@@ -162,9 +160,7 @@ class IlluminateMenuRepository implements MenuRepositoryInterface {
 	 */
 	public function getTypes()
 	{
-		$model = $this->model;
-
-		return $model::getTypes();
+		return app('platform.menus.manager')->getTypes();
 	}
 
 	/**
