@@ -60,7 +60,7 @@ class MenuRepository implements MenuRepositoryInterface {
 
 		$this->setValidator($app['platform.menus.validator']);
 
-		$this->model = get_class($this->app['Platform\Content\Models\Content']);
+		$this->model = get_class($this->app['Platform\Menus\Models\Menu']);
 	}
 
 	/**
