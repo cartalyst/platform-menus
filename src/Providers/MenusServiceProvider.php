@@ -69,21 +69,24 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->registerMenusValidator();
-
 		$this->registerAfterInstallEvents();
-
-		// Register the menus 'static' type
-		$this->bindIf('platform.menus.types.static', 'Platform\Menus\Types\StaticType');
-
-		$this->registerMenuRepository();
 
 		// Register the attributes namespace
 		$this->app['platform.attributes.manager']->registerNamespace(
 			$this->app['Platform\Menus\Models\Menu']
 		);
 
+		// Register the repository
+		$this->bindIf('platform.menus', 'Platform\Menus\Repositories\MenuRepository');
+
+		// Register the menus 'static' type
+		$this->bindIf('platform.menus.types.static', 'Platform\Menus\Types\StaticType');
+
+		// Register the event handler
 		$this->bindIf('platform.menus.handler', 'Platform\Menus\Handlers\MenuEventHandler');
+
+		// Register the validator
+		$this->bindIf('platform.menus.validator', 'Platform\Menus\Validator\MenusValidator');
 
 		// Register the manager
 		$this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
@@ -96,14 +99,12 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	protected function registerAfterInstallEvents()
 	{
-		$app = $this->app;
-
 		// After platform finishes the installation process, we'll
 		// loop through each extension that exists and apply our
 		// after install and after enable filters on them.
-		Installer::after(function() use ($app)
+		Installer::after(function()
 		{
-			$observer = $app['Platform\Menus\Observer'];
+			$observer = $this->app['Platform\Menus\Observer'];
 
 			foreach (Extensions::allEnabled() as $extension)
 			{
@@ -112,51 +113,6 @@ class MenusServiceProvider extends ServiceProvider {
 				$observer->afterEnable($extension);
 			}
 		}, 10);
-	}
-
-	/**
-	 * Register the menu repository.
-	 *
-	 * @return void
-	 */
-	protected function registerMenuRepository()
-	{
-		$menuRepository = 'Platform\Menus\Repositories\MenuRepositoryInterface';
-
-		if ( ! $this->app->bound($menuRepository))
-		{
-			$this->app->bind($menuRepository, function($app)
-			{
-				$model = get_class($app['Platform\Menus\Models\Menu']);
-
-				return (new MenuRepository($model, $app['events'], $app['cache']))
-					->setValidator($app['Platform\Menus\Validator\MenusValidatorInterface']);
-			});
-		}
-	}
-
-	/**
-	 * Register the menus validator.
-	 *
-	 * @return void
-	 */
-	protected function registerMenusValidator()
-	{
-		$binding = 'Platform\Menus\Validator\MenusValidatorInterface';
-
-		if ( ! $this->app->bound($binding))
-		{
-			$this->app->bind($binding, 'Platform\Menus\Validator\MenusValidator');
-		}
-	}
-
-	/**
-	 * Register the event handlers.
-	 *
-	 * @return void
-	 */
-	protected function registerEventHandlers()
-	{
 	}
 
 }
