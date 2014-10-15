@@ -95,7 +95,7 @@ abstract class BaseType {
 	 * @param  array  $options
 	 * @return string
 	 */
-	public function getUrlAttribute(Menu $child, array $options = array())
+	public function getUrlAttribute(Menu $child, array $options = [])
 	{
 		$uri = $child->uri;
 
@@ -104,7 +104,7 @@ abstract class BaseType {
 			$uri = "{$beforeUri}/{$uri}";
 		}
 
-		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri, array(), false);
+		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri, [], false);
 	}
 
 	/**
