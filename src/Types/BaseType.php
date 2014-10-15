@@ -17,12 +17,17 @@
  * @link       http://cartalyst.com
  */
 
-use Illuminate\Routing\UrlGenerator;
-use Illuminate\Translation\Translator;
-use Illuminate\View\Factory;
 use Platform\Menus\Models\Menu;
+use Illuminate\Container\Container;
 
 abstract class BaseType {
+
+	/**
+	 * The container instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app;
 
 	/**
 	 * The URL Generator.
@@ -48,18 +53,18 @@ abstract class BaseType {
 	/**
 	 * Create a new type.
 	 *
-	 * @param  \Illuminate\Routing\UrlGenerator  $url
-	 * @param  \Illuminate\View\Factory  $view
-	 * @param  \Illuminate\Translation\Translator  $translator
+	 * @param  \Illuminate\Container\Container  $app
 	 * @return void
 	 */
-	public function __construct(UrlGenerator $url, Factory $view, Translator $translator)
+	public function __construct(Container $app)
 	{
-		$this->url = $url;
+		$this->app = $app;
 
-		$this->view = $view;
+		$this->url = $this->app['url'];
 
-		$this->translator = $translator;
+		$this->view = $this->app['view'];
+
+		$this->translator = $this->app['translator'];
 	}
 
 	/**

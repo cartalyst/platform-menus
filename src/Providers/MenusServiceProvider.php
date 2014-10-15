@@ -22,7 +22,6 @@ use Extensions;
 use Cartalyst\Support\ServiceProvider;
 use Installer;
 use Platform\Menus\Repositories\MenuRepository;
-use Platform\Menus\Types\StaticType;
 
 class MenusServiceProvider extends ServiceProvider {
 
@@ -55,7 +54,9 @@ class MenusServiceProvider extends ServiceProvider {
 			$observer->afterDisable($extension);
 		});
 
-		$this->app['platform.menus.manager']->registerType($this->app['Platform\Menus\Types\StaticType']);
+		$this->app['platform.menus.manager']->registerType(
+			$this->app['platform.menus.types.static']
+		);
 
 		$this->app['Platform\Menus\Models\Menu']->observe($observer);
 
@@ -72,7 +73,8 @@ class MenusServiceProvider extends ServiceProvider {
 
 		$this->registerAfterInstallEvents();
 
-		$this->registerMenuType();
+		// Register the menus 'static' type
+		$this->bindIf('platform.menus.types.static', 'Platform\Menus\Types\StaticType');
 
 		$this->registerMenuRepository();
 
@@ -82,8 +84,6 @@ class MenusServiceProvider extends ServiceProvider {
 		);
 
 		$this->bindIf('platform.menus.handler', 'Platform\Menus\Handlers\MenuEventHandler');
-
-
 
 		// Register the manager
 		$this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
@@ -112,24 +112,6 @@ class MenusServiceProvider extends ServiceProvider {
 				$observer->afterEnable($extension);
 			}
 		}, 10);
-	}
-
-	/**
-	 * Register the menu type.
-	 *
-	 * @return void
-	 */
-	protected function registerMenuType()
-	{
-		$menuType = 'Platform\Menus\Types\StaticType';
-
-		if ( ! $this->app->bound($menuType))
-		{
-			$this->app->bind($menuType, function($app)
-			{
-				return new StaticType($app['url'], $app['view'], $app['translator']);
-			});
-		}
 	}
 
 	/**
