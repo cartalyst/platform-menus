@@ -17,11 +17,8 @@
  * @link       http://cartalyst.com
  */
 
-use Extension;
-use Extensions;
+use Cartalyst\Extensions\Extension;
 use Cartalyst\Support\ServiceProvider;
-use Installer;
-use Platform\Menus\Repositories\MenuRepository;
 
 class MenusServiceProvider extends ServiceProvider {
 
@@ -61,7 +58,7 @@ class MenusServiceProvider extends ServiceProvider {
 		$this->app['Platform\Menus\Models\Menu']->observe($observer);
 
 		// Subscribe the registered event handlers
-		$this->app['events']->subscribe('Platform\Menus\Handlers\MenuEventHandlerInterface');
+		$this->app['events']->subscribe('platform.menus.handler.events');
 	}
 
 	/**
@@ -82,11 +79,14 @@ class MenusServiceProvider extends ServiceProvider {
 		// Register the menus 'static' type
 		$this->bindIf('platform.menus.types.static', 'Platform\Menus\Types\StaticType');
 
-		// Register the event handler
-		$this->bindIf('platform.menus.handler', 'Platform\Menus\Handlers\MenuEventHandler');
+		// Register the data handler
+		$this->bindIf('platform.menus.handler.data', 'Platform\Menus\Handlers\DataHandler');
 
 		// Register the validator
 		$this->bindIf('platform.menus.validator', 'Platform\Menus\Validator\MenusValidator');
+
+		// Register the event handler
+		$this->bindIf('platform.menus.handler.events', 'Platform\Menus\Handlers\EventHandler');
 
 		// Register the manager
 		$this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
@@ -102,11 +102,11 @@ class MenusServiceProvider extends ServiceProvider {
 		// After platform finishes the installation process, we'll
 		// loop through each extension that exists and apply our
 		// after install and after enable filters on them.
-		Installer::after(function()
+		$this->app['platform.installer']->after(function()
 		{
 			$observer = $this->app['Platform\Menus\Observer'];
 
-			foreach (Extensions::allEnabled() as $extension)
+			foreach ($this->app['extensions']->allEnabled() as $extension)
 			{
 				$observer->afterInstall($extension);
 

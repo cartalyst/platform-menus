@@ -19,7 +19,6 @@
 
 use Cartalyst\Support\Traits;
 use Illuminate\Container\Container;
-use Lang;
 
 class MenuRepository implements MenuRepositoryInterface {
 
@@ -38,6 +37,13 @@ class MenuRepository implements MenuRepositoryInterface {
 	 * @var \Illuminate\Cache\CacheManager
 	 */
 	protected $cache;
+
+	/**
+	 * The Data handler.
+	 *
+	 * @var \Platform\Menus\Handlers\DataHandlerInterface
+	 */
+	protected $data;
 
 	/**
 	 * The Eloquent menu model.
@@ -60,6 +66,8 @@ class MenuRepository implements MenuRepositoryInterface {
 
 		$this->setValidator($app['platform.menus.validator']);
 
+		$this->data = $this->app['platform.menus.handler.data'];
+
 		$this->model = get_class($this->app['Platform\Menus\Models\Menu']);
 	}
 
@@ -74,7 +82,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		{
 			$count = $menu->getChildrenCount();
 
-			$menu->items_count = Lang::choice('platform/menus::table.items', $count, compact('count'));
+			$menu->items_count = trans_choice('platform/menus::table.items', $count, compact('count'));
 		}
 
 		return $menus;
@@ -85,11 +93,10 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this->getCache()->rememberForever('platform.menu.all', function()
+		// return $this->createModel()->rememberForever('platform.menus.all')->findAll();
+		return $this->getCache()->rememberForever('platform.menus.all', function()
 		{
-			return $this
-				->createModel()
-				->findAll();
+			return $this->createModel()->findAll();
 		});
 	}
 
@@ -98,11 +105,10 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
-		return $this->getCache()->rememberForever('platform.menu.all.root', function()
+		// return $this->createModel()->rememberForever('platform.menus.all.root')->allRoot();
+		return $this->getCache()->rememberForever('platform.menus.all.root', function()
 		{
-			return $this
-				->createModel()
-				->allRoot();
+			return $this->createModel()->allRoot();
 		});
 	}
 
@@ -111,14 +117,11 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		return $this->getCache()->rememberForever("platform.menu.{$id}", function() use ($id)
-		{
-			return $this
-				->createModel()
-				->orWhere('slug', $id)
-				->orWhere('id', (int) $id)
-				->first();
-		});
+		$model = $this->createModel()->rememberForever('platform.menu.'.$id);
+
+		if (is_numeric($id)) return $model->find($id);
+
+		return $model->whereSlug($id)->first();
 	}
 
 	/**
@@ -126,14 +129,14 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		return $this->getCache()->rememberForever("platform.menu.root.{$id}", function() use ($id)
-		{
-			return $this->createModel()
-				->orWhere('slug', $id)
-				->orWhere('id', (int) $id)
-				->where($this->createModel()->getReservedAttributeName('left'), 1)
-				->first();
-		});
+		$model = $this->createModel();
+
+		$menu = $model->rememberForever('platform.menu.root.'.$id)
+					  ->where($model->getReservedAttributeName('left'), 1);
+
+		if (is_numeric($id)) return $menu->find($id);
+
+		return $menu->whereSlug($id)->first();
 	}
 
 	/**
@@ -141,13 +144,11 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findWhere($column, $value)
 	{
-		return $this->getCache()->remember("platform.menu.where.{$column}.{$value}", 24 * 60, function() use ($column, $value)
-		{
-			return $this
+		return $this
 				->createModel()
+				->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
 				->where($column, $value)
 				->first();
-		});
 	}
 
 	/**
@@ -197,7 +198,13 @@ class MenuRepository implements MenuRepositoryInterface {
 		// $menu = $this->createModel();
 
 		// // Fire the 'platform.menu.creating' event
-		// $data = $this->fireEvent('platform.menu.creating', [ $input ])[0];
+		// if ($this->fireEvent('platform.menu.creating') === false)
+		// {
+		// 	return false;
+		// }
+
+		// // Prepare the submitted data
+		// $data = $this->data->prepare($input);
 
 		// // Validate the submitted data
 		// $messages = $this->validForCreation($data);
@@ -249,10 +256,16 @@ class MenuRepository implements MenuRepositoryInterface {
 		$menu = $this->find($id);
 
 		// Fire the 'platform.menu.updating' event
-		$data = $this->fireEvent('platform.menu.updating', [ $menu, $input ])[0];
+		if ($this->fireEvent('platform.menu.updating', [ $menu ]) === false)
+		{
+			return false;
+		}
+
+		// Prepare the submitted data
+		$data = $this->data->prepare($input);
 
 		// Validate the submitted data
-		$messages = $this->validForUpdate($id, $data);
+		$messages = $this->validForUpdate($id, array_except($data, 'children'));
 
 		// Check if the validation returned any errors
 		if ($messages->isEmpty())
@@ -313,6 +326,34 @@ class MenuRepository implements MenuRepositoryInterface {
 		}
 
 		return $this->cache;
+	}
+
+	public function getPreparedMenu($id)
+	{
+		// Do we have a menu identifier?
+		if (isset($id))
+		{
+			// Get the menu information
+			if ( ! $menu = $this->findRoot($id)) return false;
+
+			// Get this menu children
+			$children = $menu->findChildren(0);
+		}
+		else
+		{
+			$menu = $this->createModel();
+		}
+
+		// Get the persisted slugs
+		$persistedSlugs = $this->slugs();
+
+		// Get a list of all the available roles
+		$roles = \Sentinel::getRoleRepository()->createModel()->all();
+
+		// Get all the registered menu types
+		$types = $this->getTypes();
+
+		return compact('menu', 'persistedSlugs', 'roles', 'types');
 	}
 
 }
