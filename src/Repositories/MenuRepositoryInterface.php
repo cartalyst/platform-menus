@@ -100,7 +100,7 @@ interface MenuRepositoryInterface {
 	 * Creates a menu with the given data.
 	 *
 	 * @param  array  $input
-	 * @return \Platform\Menus\Models\Menu
+	 * @return bool|array
 	 */
 	public function create(array $input);
 
@@ -109,7 +109,7 @@ interface MenuRepositoryInterface {
 	 *
 	 * @param  int  $id
 	 * @param  array  $input
-	 * @return \Platform\Menus\Models\Menu
+	 * @return bool|array
 	 */
 	public function update($id, array $input);
 
@@ -118,7 +118,7 @@ interface MenuRepositoryInterface {
 	 *
 	 * @param  int  $id
 	 * @param  array  $input
-	 * @return array
+	 * @return bool|array
 	 */
 	public function store($id, array $input);
 
