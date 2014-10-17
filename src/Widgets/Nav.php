@@ -18,19 +18,25 @@
  */
 
 use Exception;
+use Platform\Menus\Models\Menu;
+use Cartalyst\Sentinel\Sentinel;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
-use Sentinel;
-use URL;
-use View;
 
 class Nav {
 
 	/**
-	 * Menus repository.
+	 * The Menus repository.
 	 *
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
 	protected $menus;
+
+	/**
+	 * The Sentinel instance.
+	 *
+	 * @var \Cartalyst\Sentinel\Sentinel
+	 */
+	protected $sentinel;
 
 	/**
 	 * Holds the current request path information.
@@ -42,14 +48,17 @@ class Nav {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus)
+	public function __construct(Sentinel $sentinel, MenuRepositoryInterface $menus)
 	{
 		$this->menus = $menus;
 
-		$this->path = URL::current();
+		$this->sentinel = $sentinel;
+
+		$this->path = url()->current();
 	}
 
 	/**
@@ -60,7 +69,7 @@ class Nav {
 	 * @param  string  $cssClass
 	 * @param  string  $beforeUri
 	 * @param  string  $view
-	 * @return \View
+	 * @return \Illuminate\View\View
 	 */
 	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
 	{
@@ -77,11 +86,10 @@ class Nav {
 
 			$view = $view ?: 'platform/menus::widgets/nav';
 
-			return View::make($view, compact('children', 'cssClass'));
+			return view($view, compact('children', 'cssClass'));
 		}
 		catch (Exception $e)
 		{
-			var_dump($e);
 			return;
 		}
 	}
@@ -90,14 +98,14 @@ class Nav {
 	 * Returns the children for a menu with the given slug.
 	 *
 	 * @param  string  $slug
-	 * @param  int     $depth
+	 * @param  int  $depth
 	 * @return array
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
 		if ($menu = $this->menus->find($slug))
 		{
-			$user = Sentinel::check();
+			$user = $this->sentinel->check();
 
 			$visibilities = [
 				'always',
@@ -106,7 +114,7 @@ class Nav {
 
 			$roles = $user ? $user->roles->lists('id') : null;
 
-			if ($user && Sentinel::hasAnyAccess(['superuser', 'admin'])) $visibilities[] = 'admin';
+			if ($user && $this->sentinel->hasAnyAccess(['superuser', 'admin'])) $visibilities[] = 'admin';
 
 			return $menu->findDisplayableChildren($visibilities, $roles, $depth);
 		}
@@ -121,7 +129,7 @@ class Nav {
 	 * @param  string  $beforeUri
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child, $beforeUri = null)
+	protected function prepareChildRecursively(Menu $child, $beforeUri = null)
 	{
 		// Prepare the options array
 		$options = [
