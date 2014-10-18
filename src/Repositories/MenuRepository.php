@@ -93,6 +93,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
+		return $this->createModel()->findAll();
 		// return $this->createModel()->rememberForever('platform.menus.all')->findAll();
 		return $this->getCache()->rememberForever('platform.menus.all', function()
 		{
@@ -105,6 +106,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
+		return $this->createModel()->allRoot();
 		// return $this->createModel()->rememberForever('platform.menus.all.root')->allRoot();
 		return $this->getCache()->rememberForever('platform.menus.all.root', function()
 		{
@@ -117,7 +119,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		$model = $this->createModel()->rememberForever('platform.menu.'.$id);
+		$model = $this->createModel();//->rememberForever('platform.menu.'.$id);
 
 		if (is_numeric($id)) return $model->find($id);
 
@@ -131,7 +133,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->createModel();
 
-		$menu = $model->rememberForever('platform.menu.root.'.$id)
+		$menu = $model//->rememberForever('platform.menu.root.'.$id)
 					  ->where($model->getReservedAttributeName('left'), 1);
 
 		if (is_numeric($id)) return $menu->find($id);
@@ -146,7 +148,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		return $this
 				->createModel()
-				->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
+				//->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
 				->where($column, $value)
 				->first();
 	}
@@ -193,7 +195,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function create(array $input)
 	{
-		die;
 		// // Create a new menu
 		// $menu = $this->createModel();
 
@@ -251,7 +252,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function update($id, array $input)
 	{
-		die;
 		// Get the menu object
 		$menu = $this->find($id);
 
@@ -335,14 +335,14 @@ class MenuRepository implements MenuRepositoryInterface {
 		{
 			// Get the menu information
 			if ( ! $menu = $this->findRoot($id)) return false;
-
-			// Get this menu children
-			$children = $menu->findChildren(0);
 		}
 		else
 		{
 			$menu = $this->createModel();
 		}
+
+		// Get this menu children
+		$children = $menu->findChildren(0);
 
 		// Get the persisted slugs
 		$persistedSlugs = $this->slugs();
@@ -353,7 +353,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Get all the registered menu types
 		$types = $this->getTypes();
 
-		return compact('menu', 'persistedSlugs', 'roles', 'types');
+		return compact('menu', 'persistedSlugs', 'roles', 'types', 'children');
 	}
 
 }

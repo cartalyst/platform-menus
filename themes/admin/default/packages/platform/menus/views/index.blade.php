@@ -57,7 +57,7 @@
 
 			$.ajax({
 				type: 'POST',
-				url: '{{ URL::toAdmin('menus') }}',
+				url: '{{ url()->toAdmin('menus') }}',
 				data: {
 					action : action,
 					entries: entries
@@ -114,7 +114,7 @@
 
 			</div>
 
-			<a class="btn btn-primary" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
+			<a class="btn btn-primary" href="{{ url()->toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
 
 		</form>
 
@@ -124,7 +124,7 @@
 
 <br />
 
-<table data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="data-grid table table-striped table-bordered table-hover">
+<table data-source="{{ url()->toAdmin('menus/grid') }}" data-grid="main" class="data-grid table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th><input type="checkbox" name="checkAll" id="checkAll"></th>

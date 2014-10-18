@@ -83,13 +83,16 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	 * @param  \Platform\Menus\Models\Menu  $menu
 	 * @return void
 	 */
-	protected function flushCache(Content $menu)
+	protected function flushCache(Menu $menu)
 	{
 		$this->cache->forget('platform.menus.all');
 		$this->cache->forget('platform.menus.all.root');
 
 		$this->cache->forget('platform.menu.'.$menu->id);
 		$this->cache->forget('platform.menu.'.$menu->slug);
+		$this->cache->forget('platform.menu.root.'.$menu->id);
+		$this->cache->forget('platform.menu.root.'.$menu->slug);
+
 	}
 
 }

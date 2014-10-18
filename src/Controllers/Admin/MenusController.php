@@ -160,11 +160,11 @@ class MenusController extends AdminController {
 	 */
 	public function executeAction()
 	{
-		$action = request()->get('action');
+		$action = input('action');
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (request()->get('entries', []) as $entry)
+			foreach (input('entries', []) as $entry)
 			{
 				$this->menus->{$action}($entry);
 			}
@@ -205,10 +205,10 @@ class MenusController extends AdminController {
 	 * Processes the form.
 	 *
 	 * @param  string  $mode
-	 * @param  mixed   $slug
+	 * @param  mixed  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	protected function processForm($mode, $slug = null)
+	protected function processForm($mode, $id = null)
 	{
 		// Store the menus
 		list($messages, $menu) = $this->menus->store($id, request()->all());

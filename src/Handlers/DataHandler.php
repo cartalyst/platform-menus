@@ -25,7 +25,7 @@ class DataHandler implements DataHandlerInterface {
 	public function prepare(array $data)
 	{
 		// Get the tree
-		$tree = json_decode(request()->get('menu-tree', []), true);
+		$tree = json_decode(array_get($data, 'menu-tree', []), true);
 
 		// Prepare our children
 		$children = [];
@@ -41,8 +41,8 @@ class DataHandler implements DataHandlerInterface {
 		// Prepare the menu data for the API
 		return [
 			'children' => $children,
-			'slug'     => request()->get('menu-slug'),
-			'name'     => request()->get('menu-name'),
+			'slug'     => array_get($data, 'menu-slug'),
+			'name'     => array_get($data, 'menu-name'),
 		];
 	}
 
@@ -64,16 +64,16 @@ class DataHandler implements DataHandlerInterface {
 		$index = $child['id'];
 
 		$new_child = [
-			'name'       => request()->get("children.{$index}.name"),
-			'slug'       => request()->get("children.{$index}.slug"),
-			'enabled'    => request()->get("children.{$index}.enabled", 1),
-			'type'       => $type = request()->get("children.{$index}.type", 'static'),
-			'secure'     => request()->get("children.{$index}.secure", 0),
-			'visibility' => request()->get("children.{$index}.visibility", 'always'),
-			'roles'      => (array) request()->get("children.{$index}.roles", []),
-			'class'      => request()->get("children.{$index}.class"),
-			'target'     => request()->get("children.{$index}.target"),
-			'regex'      => request()->get("children.{$index}.regex"),
+			'name'       => input("children.{$index}.name"),
+			'slug'       => input("children.{$index}.slug"),
+			'enabled'    => input("children.{$index}.enabled", 1),
+			'type'       => $type = input("children.{$index}.type", 'static'),
+			'secure'     => input("children.{$index}.secure", 0),
+			'visibility' => input("children.{$index}.visibility", 'always'),
+			'roles'      => (array) input("children.{$index}.roles", []),
+			'class'      => input("children.{$index}.class"),
+			'target'     => input("children.{$index}.target"),
+			'regex'      => input("children.{$index}.regex"),
 		];
 
 		// Only append id if we are dealing with
@@ -84,10 +84,10 @@ class DataHandler implements DataHandlerInterface {
 		}
 
 		// Attach the type data
-		$new_child = array_merge($new_child, request()->get("children.{$index}.{$type}", []));
+		$new_child = array_merge($new_child, input("children.{$index}.{$type}", []));
 
 		// If we have children, call the function again
-		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
+		if ( ! empty($child['children']) && is_array($child['children']) && count($child['children']) > 0)
 		{
 			$grand_children = [];
 

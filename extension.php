@@ -171,8 +171,8 @@ return [
 			Route::get('grid', 'MenusController@grid');
 			Route::get('create', 'MenusController@create');
 			Route::post('create', 'MenusController@store');
-			Route::get('{id}/edit', 'MenusController@edit');
-			Route::post('{id}/edit', 'MenusController@update');
+			Route::get('{id}', 'MenusController@edit');
+			Route::post('{id}', 'MenusController@update');
 			Route::get('{id}/delete', 'MenusController@delete');
 		});
 	},
