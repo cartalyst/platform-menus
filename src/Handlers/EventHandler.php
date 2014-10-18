@@ -92,7 +92,6 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 		$this->cache->forget('platform.menu.'.$menu->slug);
 		$this->cache->forget('platform.menu.root.'.$menu->id);
 		$this->cache->forget('platform.menu.root.'.$menu->slug);
-
 	}
 
 }

@@ -93,7 +93,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this->createModel()->findAll();
 		// return $this->createModel()->rememberForever('platform.menus.all')->findAll();
 		return $this->getCache()->rememberForever('platform.menus.all', function()
 		{
@@ -106,7 +105,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
-		return $this->createModel()->allRoot();
 		// return $this->createModel()->rememberForever('platform.menus.all.root')->allRoot();
 		return $this->getCache()->rememberForever('platform.menus.all.root', function()
 		{
@@ -119,7 +117,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		$model = $this->createModel();//->rememberForever('platform.menu.'.$id);
+		$model = $this->createModel()->rememberForever('platform.menu.'.$id);
 
 		if (is_numeric($id)) return $model->find($id);
 
@@ -133,7 +131,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		$model = $this->createModel();
 
-		$menu = $model//->rememberForever('platform.menu.root.'.$id)
+		$menu = $model->rememberForever('platform.menu.root.'.$id)
 					  ->where($model->getReservedAttributeName('left'), 1);
 
 		if (is_numeric($id)) return $menu->find($id);
@@ -148,7 +146,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		return $this
 				->createModel()
-				//->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
+				->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
 				->where($column, $value)
 				->first();
 	}
