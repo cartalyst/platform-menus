@@ -53,6 +53,13 @@ class MenuRepository implements MenuRepositoryInterface {
 	protected $model;
 
 	/**
+	 * The Sentinel instance.
+	 *
+	 * @var \Cartalyst\Sentinel\Sentinel
+	 */
+	protected $sentinel;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param  \Illuminate\Container\Container  $app
@@ -63,6 +70,8 @@ class MenuRepository implements MenuRepositoryInterface {
 		$this->app = $app;
 
 		$this->setDispatcher($app['events']);
+
+		$this->sentinel = $this->app['sentinel'];
 
 		$this->setValidator($app['platform.menus.validator']);
 
@@ -193,56 +202,41 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function create(array $input)
 	{
-		// // Create a new menu
-		// $menu = $this->createModel();
+		// Create a new menu
+		$menu = $this->createModel();
 
-		// // Fire the 'platform.menu.creating' event
-		// if ($this->fireEvent('platform.menu.creating') === false)
-		// {
-		// 	return false;
-		// }
-
-		// // Prepare the submitted data
-		// $data = $this->data->prepare($input);
-
-		// // Validate the submitted data
-		// $messages = $this->validForCreation($data);
-
-		// // Check if the validation returned any errors
-		// if ($messages->isEmpty())
-		// {
-		// 	// Save the menu
-		// 	$menu->fill($data)->save();
-
-		// 	$menu->makeRoot();
-
-		// 	if ($children = $data['children'])
-		// 	{
-		// 		$menu->mapTree($children);
-		// 	}
-
-		// 	// Fire the 'platform.menu.created' event
-		// 	$this->fireEvent('platform.menu.created', $menu);
-		// }
-
-		// return [ $messages, $menu ];
-
-
-		$menu = new $this->model([
-			'name' => $data['name'],
-			'slug' => $data['slug'],
-		]);
-
-		$menu->makeRoot();
-
-		if ($children = $data['children'])
+		// Fire the 'platform.menu.creating' event
+		if ($this->fireEvent('platform.menu.creating') === false)
 		{
-			$menu->mapTree($children);
+			return false;
 		}
 
-		$this->dispatcher->fire('platform.menu.created', $menu);
+		// Prepare the submitted data
+		$data = $this->data->prepare($input);
 
-		return $menu;
+		// Validate the submitted data
+		$messages = $this->validForCreation($data);
+
+		// Check if the validation returned any errors
+		if ($messages->isEmpty())
+		{
+			// Update the menu
+			foreach (array_except($data, ['children']) as $key => $value)
+			{
+				$menu->{$key} = $value;
+			}
+
+			// Set this new menu as root
+			$menu->makeRoot();
+
+			// Set this menu children
+			$menu->mapTree(array_get($data, 'children', []));
+
+			// Fire the 'platform.menu.created' event
+			$this->fireEvent('platform.menu.created', $menu);
+		}
+
+		return [ $messages, $menu ];
 	}
 
 	/**
@@ -268,14 +262,14 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Check if the validation returned any errors
 		if ($messages->isEmpty())
 		{
+			// Update the menu
 			foreach (array_except($data, ['children']) as $key => $value)
 			{
 				$menu->{$key} = $value;
 			}
-
-			// Update the menu
 			$menu->save();
 
+			// Set this menu children
 			$menu->mapTree(array_get($data, 'children', []));
 
 			// Fire the 'platform.menu.updated' event
@@ -333,20 +327,20 @@ class MenuRepository implements MenuRepositoryInterface {
 		{
 			// Get the menu information
 			if ( ! $menu = $this->findRoot($id)) return false;
+
+			// Get this menu children
+			$children = $menu->findChildren(0);
 		}
 		else
 		{
 			$menu = $this->createModel();
 		}
 
-		// Get this menu children
-		$children = $menu->findChildren(0);
-
 		// Get the persisted slugs
 		$persistedSlugs = $this->slugs();
 
 		// Get a list of all the available roles
-		$roles = \Sentinel::getRoleRepository()->createModel()->all();
+		$roles = $this->sentinel->getRoleRepository()->createModel()->all();
 
 		// Get all the registered menu types
 		$types = $this->getTypes();
