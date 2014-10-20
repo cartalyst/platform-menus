@@ -17,8 +17,8 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\SentinelSentinel;
 use Platform\Menus\Models\Menu;
+use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Extensions\Extension;
 
 class Observer {
