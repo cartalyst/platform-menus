@@ -18,8 +18,8 @@
  */
 
 use Platform\Menus\Models\Menu;
-use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Extensions\Extension;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class Observer {
 
