@@ -24,6 +24,21 @@ class DataHandler implements DataHandlerInterface {
 	 */
 	public function prepare(array $data)
 	{
+		return [
+			'name'     => array_get($data, 'menu-name'),
+			'slug'     => array_get($data, 'menu-slug'),
+			'children' => $this->processSubmittedTree($data),
+		];
+	}
+
+	/**
+	 * Processes the submitted menu tree data.
+	 *
+	 * @param  array  $data
+	 * @return array
+	 */
+	protected function processSubmittedTree(array $data)
+	{
 		// Get the tree
 		$tree = json_decode(array_get($data, 'menu-tree', []), true);
 
@@ -32,24 +47,18 @@ class DataHandler implements DataHandlerInterface {
 
 		foreach ($tree as $child)
 		{
-			// Ensure no bad data is coming through from POST
-			if ( ! is_array($child)) continue;
-
-			$this->processChildRecursively($child, $children);
+			if (is_array($child))
+			{
+				$this->processChildRecursively($child, $children);
+			}
 		}
 
-		// Prepare the menu data for the API
-		return [
-			'children' => $children,
-			'slug'     => array_get($data, 'menu-slug'),
-			'name'     => array_get($data, 'menu-name'),
-		];
+		return $children;
 	}
 
-
 	/**
-	 * Recursively processes a child node by extracting POST data
-	 * from the admin UI so that we may structure a nice tree of
+	 * Recursively processes the child node by extracting
+	 * POST data so that we can structure a nice tree of
 	 * pure data to send off to the API.
 	 *
 	 * @param  array  $child
@@ -63,28 +72,28 @@ class DataHandler implements DataHandlerInterface {
 		// without anything being messed up.
 		$index = $child['id'];
 
-		$new_child = [
-			'name'       => input("children.{$index}.name"),
-			'slug'       => input("children.{$index}.slug"),
-			'enabled'    => input("children.{$index}.enabled", 1),
-			'type'       => $type = input("children.{$index}.type", 'static'),
-			'secure'     => input("children.{$index}.secure", 0),
-			'visibility' => input("children.{$index}.visibility", 'always'),
-			'roles'      => (array) input("children.{$index}.roles", []),
-			'class'      => input("children.{$index}.class"),
-			'target'     => input("children.{$index}.target"),
-			'regex'      => input("children.{$index}.regex"),
+		$data = input("children.{$index}");
+
+		// Prepare the new child data
+		$prepared = [
+			'name'       => array_get($data, 'name'),
+			'slug'       => array_get($data, 'slug'),
+			'enabled'    => array_get($data, 'enabled', 1),
+			'type'       => $type = array_get($data, 'type', 'static'),
+			'secure'     => array_get($data, 'secure', 0),
+			'visibility' => array_get($data, 'visibility', 'always'),
+			'roles'      => (array) array_get($data, 'roles', []),
+			'class'      => array_get($data, 'class'),
+			'target'     => array_get($data, 'target'),
+			'regex'      => array_get($data, 'regex'),
 		];
 
-		// Only append id if we are dealing with
-		// an existing menu item.
-		if (is_numeric($index))
-		{
-			$new_child['id'] = $index;
-		}
+		// Only append the menu item id if we are
+		// dealing with an existing menu item.
+		if (is_numeric($index)) $prepared['id'] = $index;
 
-		// Attach the type data
-		$new_child = array_merge($new_child, input("children.{$index}.{$type}", []));
+		// Attach the menu type data
+		$prepared = array_merge($prepared, array_get($data, $type, []));
 
 		// If we have children, call the function again
 		if ( ! empty($child['children']) && is_array($child['children']) && count($child['children']) > 0)
@@ -96,10 +105,10 @@ class DataHandler implements DataHandlerInterface {
 				$this->processChildRecursively($child, $grand_children);
 			}
 
-			$new_child['children'] = $grand_children;
+			$prepared['children'] = $grand_children;
 		}
 
-		$children[] = $new_child;
+		$children[] = $prepared;
 	}
 
 }

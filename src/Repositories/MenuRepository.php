@@ -22,14 +22,7 @@ use Illuminate\Container\Container;
 
 class MenuRepository implements MenuRepositoryInterface {
 
-	use Traits\EventTrait, Traits\RepositoryTrait, Traits\ValidatorTrait;
-
-	/**
-	 * The container instance.
-	 *
-	 * @var \Illuminate\Container\Container
-	 */
-	protected $app;
+	use Traits\ContainerTrait, Traits\EventTrait, Traits\RepositoryTrait, Traits\ValidatorTrait;
 
 	/**
 	 * The Illuminate Cache manager instance.
@@ -67,17 +60,17 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function __construct(Container $app)
 	{
-		$this->app = $app;
+		$this->setContainer($app);
+
+		$this->sentinel = $app['sentinel'];
 
 		$this->setDispatcher($app['events']);
 
-		$this->sentinel = $this->app['sentinel'];
+		$this->data = $app['platform.menus.handler.data'];
 
 		$this->setValidator($app['platform.menus.validator']);
 
-		$this->data = $this->app['platform.menus.handler.data'];
-
-		$this->model = get_class($this->app['Platform\Menus\Models\Menu']);
+		$this->setModel(get_class($app['Platform\Menus\Models\Menu']));
 	}
 
 	/**
@@ -348,7 +341,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		if ( ! $this->cache)
 		{
-			$this->cache = $this->app['cache'];
+			$this->cache = $this->container['cache'];
 		}
 
 		return $this->cache;

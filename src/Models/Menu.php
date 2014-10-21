@@ -50,7 +50,14 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('lft', 'rgt', 'menu', 'depth', 'created_at', 'updated_at');
+	protected $guarded = [
+		'lft',
+		'rgt',
+		'menu',
+		'depth',
+		'created_at',
+		'updated_at',
+	];
 
 	/**
 	 * Array of attributes reserved for the worker. These attributes
@@ -59,11 +66,11 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @var array
 	 */
-	protected $reservedAttributes = array(
+	protected $reservedAttributes = [
 		'left'  => 'lft',
 		'right' => 'rgt',
 		'tree'  => 'menu',
-	);
+	];
 
 	/**
 	 * Array of registered type relationships, where the key is the type
@@ -72,14 +79,14 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @var array
 	 */
-	protected static $types = array();
+	protected static $types =[];
 
 	/**
 	 * Hold the type data when saving the menu.
 	 *
 	 * @var array
 	 */
-	protected $typeData = array();
+	protected $typeData =[];
 
 	/**
 	 * {@inheritDoc}
@@ -113,26 +120,10 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @param  mixed  $roles
 	 * @return array
-	 * @throws \InvalidArgumentException
 	 */
 	public function getRolesAttribute($roles)
 	{
-		if ( ! $roles)
-		{
-			return array();
-		}
-
-		if (is_array($roles))
-		{
-			return $roles;
-		}
-
-		if ( ! $_roles = json_decode($roles, true))
-		{
-			throw new InvalidArgumentException("Cannot JSON decode roles [{$roles}].");
-		}
-
-		return $_roles;
+		return $roles ? json_decode($roles, true) : [];
 	}
 
 	/**
@@ -151,8 +142,9 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 
 		if ( ! empty($roles))
 		{
-			$roles = array_values(array_map('intval', $roles));
-			$this->attributes['roles'] = json_encode($roles);
+			$this->attributes['roles'] = json_encode(
+				array_values(array_map('intval', $roles))
+			);
 		}
 		else
 		{

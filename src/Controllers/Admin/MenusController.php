@@ -216,7 +216,7 @@ class MenusController extends AdminController {
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
-			return redirect()->toAdmin("menus/{$menu->id}")->withSuccess(
+			return redirect()->toAdmin("menus/{$menu->slug}")->withSuccess(
 				trans("platform/menus::message.success.{$mode}")
 			);
 		}
