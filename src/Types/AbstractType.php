@@ -20,7 +20,7 @@
 use Platform\Menus\Models\Menu;
 use Illuminate\Container\Container;
 
-abstract class BaseType {
+abstract class AbstractType {
 
 	/**
 	 * The container instance.

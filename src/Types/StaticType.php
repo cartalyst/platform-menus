@@ -19,7 +19,7 @@
 
 use Platform\Menus\Models\Menu;
 
-class StaticType extends BaseType implements TypeInterface {
+class StaticType extends AbstractType implements TypeInterface {
 
 	/**
 	 * Get the type identifier.

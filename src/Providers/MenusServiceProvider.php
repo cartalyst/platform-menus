@@ -27,38 +27,28 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		// Register the extension component namespaces
 		$this->package('platform/menus', 'platform/menus', __DIR__.'/../..');
 
-		$observer = $this->app['Platform\Menus\Observer'];
-
-		Extension::installed(function($extension) use ($observer)
-		{
-			$observer->afterInstall($extension);
-		});
-
-		Extension::uninstalled(function($extension) use ($observer)
-		{
-			$observer->afterUninstall($extension);
-		});
-
-		Extension::enabled(function($extension) use ($observer)
-		{
-			$observer->afterEnable($extension);
-		});
-
-		Extension::disabled(function($extension) use ($observer)
-		{
-			$observer->afterDisable($extension);
-		});
-
+		// Register the static menu type
 		$this->app['platform.menus.manager']->registerType(
 			$this->app['platform.menus.types.static']
 		);
 
-		$this->app['Platform\Menus\Models\Menu']->observe($observer);
-
 		// Subscribe the registered event handlers
 		$this->app['events']->subscribe('platform.menus.handler.events');
+
+		$observer = $this->app['platform.menus.observer'];
+
+		$this->app['Platform\Menus\Models\Menu']->observe($observer);
+
+		Extension::enabled(function($e) use ($observer) { $observer->afterEnable($e); });
+
+		Extension::disabled(function($e) use ($observer) { $observer->afterDisable($e); });
+
+		Extension::installed(function($e) use ($observer) { $observer->afterInstall($e); });
+
+		Extension::uninstalled(function($e) use ($observer){ $observer->afterUninstall($e); });
 	}
 
 	/**
@@ -78,6 +68,9 @@ class MenusServiceProvider extends ServiceProvider {
 
 		// Register the menus 'static' type
 		$this->bindIf('platform.menus.types.static', 'Platform\Menus\Types\StaticType');
+
+		// Register the menus observer
+		$this->bindIf('platform.menus.observer', 'Platform\Menus\Observer', true, false);
 
 		// Register the data handler
 		$this->bindIf('platform.menus.handler.data', 'Platform\Menus\Handlers\DataHandler');
@@ -104,7 +97,7 @@ class MenusServiceProvider extends ServiceProvider {
 		// after install and after enable filters on them.
 		$this->app['platform.installer']->after(function()
 		{
-			$observer = $this->app['Platform\Menus\Observer'];
+			$observer = $this->app['platform.menus.observer'];
 
 			foreach ($this->app['extensions']->allEnabled() as $extension)
 			{

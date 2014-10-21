@@ -19,8 +19,7 @@
 
 use Platform\Menus\Models\Menu;
 use Cartalyst\Extensions\Extension;
-use Cartalyst\Sentinel\Roles\RoleRepositoryInterface;
-use Platform\Menus\Repositories\MenuRepositoryInterface;
+use Illuminate\Container\Container;
 
 class Observer {
 
@@ -41,15 +40,14 @@ class Observer {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
-	 * @param  \Cartalyst\Sentinel\Roles\RoleRepositoryInterface  $roles
+	 * @param  \Illuminate\Container\Container  $app
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus, RoleRepositoryInterface $roles)
+	public function __construct(Container $app)
 	{
-		$this->menus = $menus;
+		$this->menus = $app['platform.menus'];
 
-		$this->roles = $roles;
+		$this->roles = $app['sentinel.roles'];
 	}
 
 	/**
