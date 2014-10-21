@@ -123,6 +123,22 @@ interface MenuRepositoryInterface {
 	public function store($id, array $input);
 
 	/**
+	 * Enables the given menu.
+	 *
+	 * @param  int  $id
+	 * @return bool|array
+	 */
+	public function enable($id);
+
+	/**
+	 * Disables the given menu.
+	 *
+	 * @param  int  $id
+	 * @return bool|array
+	 */
+	public function disable($id);
+
+	/**
 	 * Deletes the given menu.
 	 *
 	 * @param  int  $id

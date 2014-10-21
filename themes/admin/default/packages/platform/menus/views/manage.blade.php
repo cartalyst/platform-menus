@@ -3,14 +3,14 @@
 {{-- Page title --}}
 @section('title')
 	@parent
-	: {{{ trans("platform/menus::general.{$mode}") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}}
+	: {{{ trans("platform/menus::general.{$mode}") }}} {{{ $menu->exists ? '- ' . $menu->name : null }}}
 @stop
 
 {{-- Queue assets --}}
 {{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
 {{ Asset::queue('jquery.slugify', 'platform/js/slugify.js', 'jquery') }}
 {{ Asset::queue('jquery.sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
-{{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', array('jquery.slugify', 'jquery.sortable')) }}
+{{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', ['jquery.slugify', 'jquery.sortable']) }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery.menu-manager') }}
 
 {{-- Inline scripts --}}
@@ -41,7 +41,7 @@
 {{-- Page content --}}
 @section('content')
 
-<form id="menu-form" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
+<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8">
 
 	{{-- CSRF Token --}}
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -53,7 +53,7 @@
 			<button class="btn btn-success btn-lg" type="submit"><i class="fa fa-save"></i> {{{ trans('button.update') }}}</button>
 		</div>
 
-		<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
+		<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ $menu->name }}}</small></h1>
 
 	</div>
 
@@ -108,7 +108,7 @@
 					<div class="form-group{{ $errors->first('name', ' has-error') }}">
 						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
 
-						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
+						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" required>
 
 						<span class="help-block">{{{ $errors->first('name', ':message') }}}</span>
 					</div>
@@ -116,7 +116,7 @@
 					<div class="form-group{{ $errors->first('slug', ' has-error') }}">
 						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
 
-						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
+						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" required>
 
 						<span class="help-block">{{{ $errors->first('slug', ':message') }}}</span>
 					</div>

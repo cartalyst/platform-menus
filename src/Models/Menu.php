@@ -17,16 +17,17 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Attributes\EntityInterface;
-use Cartalyst\NestedSets\Nodes\EloquentNode;
-use Illuminate\Database\Query\Expression;
-use InvalidArgumentException;
-use Platform\Attributes\Traits\EntityTrait;
-use Platform\Menus\Types\TypeInterface;
 use RuntimeException;
+use InvalidArgumentException;
+use Platform\Menus\Types\TypeInterface;
+use Cartalyst\Attributes\EntityInterface;
+use Illuminate\Database\Query\Expression;
+use Platform\Attributes\Traits\EntityTrait;
+use Cartalyst\NestedSets\Nodes\EloquentNode;
+use Cartalyst\NestedSets\Nodes\NodeInterface;
 use Cartalyst\Support\Traits\NamespacedEntityTrait;
 
-class Menu extends EloquentNode implements EntityInterface {
+class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 
 	use EntityTrait, NamespacedEntityTrait;
 

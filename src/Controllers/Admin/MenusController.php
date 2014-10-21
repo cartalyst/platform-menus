@@ -210,7 +210,7 @@ class MenusController extends AdminController {
 	 */
 	protected function processForm($mode, $id = null)
 	{
-		// Store the menus
+		// Store the menu
 		list($messages, $menu) = $this->menus->store($id, request()->all());
 
 		// Do we have any errors?

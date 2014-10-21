@@ -112,6 +112,8 @@ class MenusServiceProvider extends ServiceProvider {
 
 				$observer->afterEnable($extension);
 			}
+
+			$this->app['cache']->flush();
 		}, 10);
 	}
 

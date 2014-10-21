@@ -163,6 +163,18 @@ class MenuRepository implements MenuRepositoryInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function findAllWhere($column, $value)
+	{
+		return $this
+				->createModel()
+				->remember('platform.menus.where.'.$column.'.'.$value, 24 * 60)
+				->where($column, $value)
+				->get();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function slugs()
 	{
 		return array_map(function($child)
@@ -230,7 +242,10 @@ class MenuRepository implements MenuRepositoryInterface {
 			$menu->makeRoot();
 
 			// Set this menu children
-			$menu->mapTree(array_get($data, 'children', []));
+			if ($children = array_get($data, 'children', null))
+			{
+				$menu->mapTree($children);
+			}
 
 			// Fire the 'platform.menu.created' event
 			$this->fireEvent('platform.menu.created', $menu);
@@ -270,7 +285,10 @@ class MenuRepository implements MenuRepositoryInterface {
 			$menu->save();
 
 			// Set this menu children
-			$menu->mapTree(array_get($data, 'children', []));
+			if ($children = array_get($data, 'children', null))
+			{
+				$menu->mapTree($children);
+			}
 
 			// Fire the 'platform.menu.updated' event
 			$this->fireEvent('platform.menu.updated', $menu);
@@ -285,6 +303,22 @@ class MenuRepository implements MenuRepositoryInterface {
 	public function store($id, array $input)
 	{
 		return ! $id ? $this->create($input) : $this->update($id, $input);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function enable($id)
+	{
+		return $this->update($id, ['enabled' => 1]);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function disable($id)
+	{
+		return $this->update($id, ['enabled' => 0]);
 	}
 
 	/**
