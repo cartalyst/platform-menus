@@ -146,11 +146,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findWhere($column, $value)
 	{
-		return $this
-				->createModel()
-				->remember('platform.menu.where.'.$column.'.'.$value, 24 * 60)
-				->where($column, $value)
-				->first();
+		return $this->createModel()->where($column, $value)->first();
 	}
 
 	/**
@@ -158,11 +154,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllWhere($column, $value)
 	{
-		return $this
-				->createModel()
-				->remember('platform.menus.where.'.$column.'.'.$value, 24 * 60)
-				->where($column, $value)
-				->get();
+		return $this->createModel()->where($column, $value)->get();
 	}
 
 	/**
