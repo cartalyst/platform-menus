@@ -258,19 +258,13 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	}
 
 	/**
-	 * Find a model by its primary key.
-	 *
-	 * @param  mixed  $id
-	 * @param  array  $columns
-	 * @return \Illuminate\Database\Eloquent\Model|Collection
+	 * {@inheritDoc}
 	 */
 	public static function find($id, $columns = ['*'])
 	{
 		if (is_numeric($id)) return parent::find($id, $columns);
 
-		$instance = new static;
-
-		return $instance->newQuery()->where('slug', '=', $id)->first($columns);
+		return (new static)->newQuery()->whereSlug($id)->first($columns);
 	}
 
 	/**
