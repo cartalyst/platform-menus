@@ -73,22 +73,6 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	];
 
 	/**
-	 * Array of registered type relationships, where the key is the type
-	 * (which is the relationship) and the value is a closure to resolve
-	 * the relationship.
-	 *
-	 * @var array
-	 */
-	protected static $types =[];
-
-	/**
-	 * Hold the type data when saving the menu.
-	 *
-	 * @var array
-	 */
-	protected $typeData =[];
-
-	/**
 	 * {@inheritDoc}
 	 */
 	protected static $entityNamespace = 'platform/menus';
@@ -158,10 +142,10 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @param  array  $visibilities
 	 * @param  array  $roles
-	 * @param  int    $depth
+	 * @param  int  $depth
 	 * @return array
 	 */
-	public function findDisplayableChildren(array $visibilities, array $roles = null, $depth = 0)
+	public function findDisplayableChildren(array $visibilities, array $roles = [], $depth = 0)
 	{
 		$worker = $this->createWorker();
 
@@ -175,7 +159,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 			// If we have roles set, we'll filter down to records who are likely
 			// to contain our role. This will speed up the filtering process
 			// later on.
-			if (isset($roles))
+			if ( ! empty($roles))
 			{
 				$query->whereNested(function($query) use ($roles, $worker)
 				{
@@ -240,12 +224,9 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 * @param  array  $roles
 	 * @return void
 	 */
-	protected function filterChildrenRoles(array &$children, array $roles = null)
+	protected function filterChildrenRoles(array &$children, array $roles = [])
 	{
-		if ( ! isset($roles))
-		{
-			return;
-		}
+		if (empty($roles)) return;
 
 		foreach ($children as $index => $child)
 		{
@@ -283,16 +264,13 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 * @param  array  $columns
 	 * @return \Illuminate\Database\Eloquent\Model|Collection
 	 */
-	public static function find($id, $columns = array('*'))
+	public static function find($id, $columns = ['*'])
 	{
+		if (is_numeric($id)) return parent::find($id, $columns);
+
 		$instance = new static;
 
-		if ( ! is_numeric($id))
-		{
-			return $instance->newQuery()->where('slug', '=', $id)->first($columns);
-		}
-
-		return parent::find($id, $columns);
+		return $instance->newQuery()->where('slug', '=', $id)->first($columns);
 	}
 
 	/**
@@ -318,52 +296,11 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 		return $types[$type];
 	}
 
-	// /**
-	//  * Register a custom type with a menu.
-	//  *
-	//  * @param  \Platform\Menus\Types\TypeInterface  $type
-	//  * @return void
-	//  */
-	// public static function registerType(TypeInterface $type)
-	// {
-	// 	static::$types[$type->getIdentifier()] = $type;
-	// }
-
-	// /**
-	//  * Return all the registered types.
-	//  *
-	//  * @return array
-	//  */
-	// public static function getTypes()
-	// {
-	// 	return static::$types;
-	// }
-
-	// /**
-	//  * Return the type data.
-	//  *
-	//  * @return array
-	//  */
-	// public function getTypeData()
-	// {
-	// 	return $this->typeData;
-	// }
-
-	// /**
-	//  * Set the type data.
-	//  *
-	//  * @return void
-	//  */
-	// public function setTypeData(array $typeData)
-	// {
-	// 	$this->typeData = $typeData;
-	// }
-
 	/**
 	 * Handle dynamic method calls into the method.
 	 *
 	 * @param  string  $method
-	 * @param  array   $parameters
+	 * @param  array  $parameters
 	 * @return mixed
 	 */
 	public function __call($method, $parameters)
@@ -399,7 +336,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 * Handle dynamic static method calls into the method.
 	 *
 	 * @param  string  $method
-	 * @param  array   $parameters
+	 * @param  array  $parameters
 	 * @return mixed
 	 */
 	public static function __callStatic($method, $parameters)

@@ -135,7 +135,7 @@ abstract class AbstractType {
 	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
-	public function afterSave(Menu $child){}
+	abstract public function afterSave(Menu $child);
 
 	/**
 	 * Event that is called before a children is deleted.
@@ -143,6 +143,6 @@ abstract class AbstractType {
 	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
-	public function beforeDelete(Menu $child) {}
+	abstract public function beforeDelete(Menu $child);
 
 }

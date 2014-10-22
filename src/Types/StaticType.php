@@ -34,12 +34,12 @@ class StaticType extends AbstractType implements TypeInterface {
 	/**
 	 * Event that is called after a menu children is saved.
 	 *
-	 * @param  \Platform\Menus\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
 	 */
 	public function afterSave(Menu $child)
 	{
-		$data = $child->getTypeData();
+		$data = $child->getAttributes();
 
 		if ($uri = array_get($data, 'uri'))
 		{
@@ -50,7 +50,7 @@ class StaticType extends AbstractType implements TypeInterface {
 	/**
 	 * Event that is called before a children is deleted.
 	 *
-	 * @param  \Platform\Menus\Menu  $child
+	 * @param  \Platform\Menus\Models\Menu  $child
 	 * @return void
 	 */
 	public function beforeDelete(Menu $child) {}
