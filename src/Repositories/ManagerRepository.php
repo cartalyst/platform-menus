@@ -42,7 +42,10 @@ class ManagerRepository implements ManagerRepositoryInterface {
 	 */
 	public function getType($type)
 	{
-		return array_get($this->types, $type, null);
+		if (array_key_exists($type, $this->types))
+		{
+			return $this->types[$type];
+		}
 	}
 
 	/**
