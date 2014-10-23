@@ -23,34 +23,11 @@ use Platform\Menus\Types\TypeInterface;
 class ManagerRepository implements ManagerRepositoryInterface {
 
 	/**
-	 * Array of registered namespaces.
-	 *
-	 * @var array
-	 */
-	protected $namespaces;
-
-	/**
 	 * Array of registered attribute types.
 	 *
 	 * @var array
 	 */
 	protected $types;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getNamespaces()
-	{
-		return $this->namespaces;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function registerNamespace(EntityInterface $entity)
-	{
-		$this->namespaces[] = $entity->getEntityNamespace();
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -63,17 +40,17 @@ class ManagerRepository implements ManagerRepositoryInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function registerType(TypeInterface $type)
+	public function getType($type)
 	{
-		$this->types[$type->getIdentifier()] = $type;
+		return array_get($this->types, $type, null);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getEntityHtmlForm(Menu $attribute, $entity)
+	public function registerType(TypeInterface $type)
 	{
-		return $this->types[$attribute->type]->getEntityFormHtml($attribute, $entity);
+		$this->types[$type->getIdentifier()] = $type;
 	}
 
 }

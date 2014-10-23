@@ -40,7 +40,7 @@ class DataHandler implements DataHandlerInterface {
 	protected function processSubmittedTree(array $data)
 	{
 		// Get the tree
-		$tree = json_decode(array_get($data, 'menu-tree', []), true);
+		$tree = json_decode(array_get($data, 'menu-tree', ''), true) ?: [];
 
 		// Prepare our children
 		$children = [];

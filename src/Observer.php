@@ -53,14 +53,14 @@ class Observer {
 	/**
 	 * Register an updating model event with the dispatcher.
 	 *
-	 * @param  \Closure|string  $callback
+	 * @param  \Platform\Menus\Models\Menu  $menu
 	 * @return void
 	 */
-	public function updating($model)
+	public function updating(Menu $menu)
 	{
-		if ($type = $model->getType())
+		if ($type = $this->menus->getManager()->getType($menu->type))
 		{
-			$type->afterSave($model);
+			$type->afterSave($menu);
 		}
 	}
 
@@ -90,9 +90,18 @@ class Observer {
 				if ($key == 'slug') $slugs[] = $value;
 			});
 
+			$slug = str_replace('_', '-', $slug);
+
 			// Load up the associated menu
-			$method = camel_case($slug).'Menu';
-			with($menu = Menu::{$method}())->findChildren();
+			if ( ! $menu = $this->menus->createModel()->whereSlug($slug)->first())
+			{
+				$menu = $this->menus->createRoot([
+					'name' => ucwords(str_replace('-', ' ', $slug)),
+					'slug' => $slug,
+				]);
+			}
+
+			$menu->findChildren();
 
 			$query = $this->menus
 				->createModel()

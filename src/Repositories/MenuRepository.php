@@ -168,6 +168,11 @@ class MenuRepository implements MenuRepositoryInterface {
 		}, $this->findAll());
 	}
 
+	public function getManager()
+	{
+		return app('platform.menus.manager');
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,6 +197,21 @@ class MenuRepository implements MenuRepositoryInterface {
 		$bindings = [ 'slug' => $this->find($id)->slug ];
 
 		return $this->validator->on('update')->bind($bindings)->validate($data);
+	}
+
+	public function createRoot(array $data)
+	{
+		$menu = $this->createModel();
+
+		foreach ($data as $key => $value)
+		{
+			$menu->{$key} = $value;
+		}
+
+		// Set this new menu as root
+		$menu->makeRoot();
+
+		return $menu;
 	}
 
 	/**

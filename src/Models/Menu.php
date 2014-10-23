@@ -17,9 +17,6 @@
  * @link       http://cartalyst.com
  */
 
-use RuntimeException;
-use InvalidArgumentException;
-use Platform\Menus\Types\TypeInterface;
 use Cartalyst\Attributes\EntityInterface;
 use Illuminate\Database\Query\Expression;
 use Platform\Attributes\Traits\EntityTrait;
@@ -102,12 +99,12 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	/**
 	 * Get mutator for the "roles" attribute.
 	 *
-	 * @param  mixed  $roles
+	 * @param  string  $roles
 	 * @return array
 	 */
 	public function getRolesAttribute($roles)
 	{
-		return $roles ? json_decode($roles, true) : [];
+		return json_decode($roles, true) ?: [];
 	}
 
 	/**
@@ -118,22 +115,11 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 */
 	public function setRolesAttribute($roles)
 	{
-		// If we get a string, let's just ensure it's a proper JSON string
-		if ( ! is_array($roles))
-		{
-			$roles = $this->getRolesAttribute($roles);
-		}
+		if ( ! is_array($roles)) $roles = $this->getRolesAttribute($roles);
 
-		if ( ! empty($roles))
-		{
-			$this->attributes['roles'] = json_encode(
-				array_values(array_map('intval', $roles))
-			);
-		}
-		else
-		{
-			$this->attributes['roles'] = '';
-		}
+		$roles = ! empty($roles) ? json_encode(array_values(array_map('intval', $roles))) : '';
+
+		$this->attributes['roles'] = $roles;
 	}
 
 	/**
@@ -166,18 +152,18 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 					foreach ($roles as $role)
 					{
 						$query->orWhere(
-							new Expression($worker->wrapColumn("node.roles")),
+							new Expression($worker->wrapColumn('node.roles')),
 							'LIKE',
 							"%{$role}%"
 						);
 					}
 
 					$query->orWhere(
-						new Expression($worker->wrapColumn("node.roles")),
+						new Expression($worker->wrapColumn('node.roles')),
 						''
 					)
 					->orWhereNull(
-						new Expression($worker->wrapColumn("node.roles"))
+						new Expression($worker->wrapColumn('node.roles'))
 					);
 				});
 			}
@@ -270,24 +256,11 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	/**
 	 * Return information about the provided type.
 	 *
-	 * @param  string  $type
 	 * @return array
-	 * @throws \RuntimeException
 	 */
-	public function getType($type = null)
+	public function getType()
 	{
-		$type = $type ?: $this->type;
-
-		if (is_null($type)) return false;
-
-		$types = app('platform.menus.manager')->getTypes();
-
-		if ( ! array_key_exists($type, $types))
-		{
-			throw new RuntimeException("Menu type [{$type}] has not been registered.");
-		}
-
-		return $types[$type];
+		return app('platform.menus.manager')->getType($this->type);
 	}
 
 	/**
@@ -320,42 +293,10 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 		{
 			array_unshift($parameters, $this);
 
-			return call_user_func_array(array($type, $method), $parameters);
+			return call_user_func_array([ $type, $method ], $parameters);
 		}
 
 		return parent::__call($method, $parameters);
-	}
-
-	/**
-	 * Handle dynamic static method calls into the method.
-	 *
-	 * @param  string  $method
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public static function __callStatic($method, $parameters)
-	{
-		// If we're making a call to a menu
-		if (ends_with($method, 'Menu'))
-		{
-			// Determine the slug the person was after
-			$slug = str_replace('_', '-', snake_case(substr($method, 0, -4)));
-
-			// Lazily create the menu item
-			if (is_null($menu = static::find($slug)))
-			{
-				$menu = new static(array(
-					'slug' => $slug,
-					'name' => ucwords(str_replace('-', ' ', $slug))
-				));
-
-				$menu->makeRoot();
-			}
-
-			return $menu;
-		}
-
-		return parent::__callStatic($method, $parameters);
 	}
 
 }

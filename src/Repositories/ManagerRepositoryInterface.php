@@ -37,13 +37,4 @@ interface ManagerRepositoryInterface {
 	 */
 	public function registerType(TypeInterface $type);
 
-	/**
-	 * Returns the entity html form.
-	 *
-	 * @param \Platform\Menus\Models\Menu  $menu
-	 * @param .. ?? ..  $entity
-	 * @return string
-	 */
-	public function getEntityHtmlForm(Menu $menu, $entity);
-
 }
