@@ -80,7 +80,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	{
 		$menus = $this->findAllRoot();
 
-		foreach ($menus as &$menu)
+		foreach ($menus as $menu)
 		{
 			$count = $menu->getChildrenCount();
 
