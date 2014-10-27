@@ -131,10 +131,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		$model = $this->createModel();
-
-		$menu = $model->rememberForever('platform.menu.root.'.$id)
-					  ->where($model->getReservedAttributeName('left'), 1);
+		$menu = $this->createModel()->where($model->getReservedAttributeName('left'), 1);
 
 		if (is_numeric($id)) return $menu->find($id);
 
@@ -178,7 +175,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function getTypes()
 	{
-		return app('platform.menus.manager')->getTypes();
+		return $this->getManager()->getTypes();
 	}
 
 	/**
