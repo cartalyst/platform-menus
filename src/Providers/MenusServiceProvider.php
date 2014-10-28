@@ -36,7 +36,7 @@ class MenusServiceProvider extends ServiceProvider {
 		);
 
 		// Subscribe the registered event handlers
-		$this->app['events']->subscribe('platform.menus.handler.events');
+		$this->app['events']->subscribe('platform.menus.handler.event');
 
 		$observer = $this->app['platform.menus.observer'];
 
@@ -79,7 +79,7 @@ class MenusServiceProvider extends ServiceProvider {
 		$this->bindIf('platform.menus.validator', 'Platform\Menus\Validator\MenusValidator');
 
 		// Register the event handler
-		$this->bindIf('platform.menus.handler.events', 'Platform\Menus\Handlers\EventHandler');
+		$this->bindIf('platform.menus.handler.event', 'Platform\Menus\Handlers\EventHandler');
 
 		// Register the manager
 		$this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
