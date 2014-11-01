@@ -27,7 +27,7 @@ class ManagerRepository implements ManagerRepositoryInterface {
 	 *
 	 * @var array
 	 */
-	protected $types;
+	protected $types = [];
 
 	/**
 	 * {@inheritDoc}
