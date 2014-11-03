@@ -346,6 +346,14 @@ return [
 				'visibility' => 'logged_in',
 			],
 
+			[
+				'slug'       => 'main-register',
+				'name'       => 'Register',
+				'class'      => '',
+				'uri'        => 'register',
+				'visibility' => 'logged_out',
+			],
+
 		],
 
 	],
