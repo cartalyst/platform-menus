@@ -131,7 +131,9 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		$menu = $this->createModel()->where($model->getReservedAttributeName('left'), 1);
+		$model = $this->createModel();
+
+		$menu = $model->where($model->getReservedAttributeName('left'), 1);
 
 		if (is_numeric($id)) return $menu->find($id);
 
