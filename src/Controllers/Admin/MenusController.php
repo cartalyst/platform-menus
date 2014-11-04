@@ -160,11 +160,11 @@ class MenusController extends AdminController {
 	 */
 	public function executeAction()
 	{
-		$action = input('action');
+		$action = request()->input('action');
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (input('entries', []) as $entry)
+			foreach (request()->input('entries', []) as $entry)
 			{
 				$this->menus->{$action}($entry);
 			}
