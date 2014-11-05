@@ -30,13 +30,6 @@ class MenusController extends AdminController {
 	protected $menus;
 
 	/**
-	 * {@inheritDoc}
-	 */
-	protected $csrfWhitelist = [
-		'executeAction',
-	];
-
-	/**
 	 * Holds all the mass actions we can execute.
 	 *
 	 * @var array
