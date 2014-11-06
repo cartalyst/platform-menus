@@ -40,8 +40,8 @@
 	"require": {
 		"php": ">=5.4.0",
 		"cartalyst/composer-installers": "1.1.*",
-		"cartalyst/nested-sets": "dev-master",
-		"platform/admin": "dev-master"
+		"cartalyst/nested-sets": "~2.0",
+		"platform/admin": "0.1.0"
 	},
 	"autoload": {
 		"classmap": [
@@ -55,7 +55,7 @@
 	"extra": {
 		"component": "extension",
 		"branch-alias": {
-			"dev-master": "2.0.x-dev"
+			"dev-master": "0.1.x-dev"
 		}
 	},
 	"minimum-stability": "dev"
