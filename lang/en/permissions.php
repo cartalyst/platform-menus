@@ -17,11 +17,11 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
 	'index'  => 'List Menus',
 	'create' => 'Create new Menus',
 	'edit'   => 'View / Edit Menus',
 	'delete' => 'Delete Menus',
 
-);
+];

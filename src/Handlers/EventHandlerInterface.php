@@ -25,30 +25,42 @@ interface EventHandlerInterface extends BaseEventHandlerInterface {
 	/**
 	 * When a menu is being created.
 	 *
+	 * @param  array  $data
 	 * @return mixed
 	 */
-	public function creating();
+	public function creating(array $data);
 
 	/**
 	 * When a menu is created.
 	 *
-	 * @param  \Platform\Menus\Models\Menus  $menu
+	 * @param  \Platform\Menus\Models\Menu  $menu
+	 * @param  array  $data
 	 * @return mixed
 	 */
-	public function created(Menu $menu);
+	public function created(Menu $menu, array $data);
 
 	/**
 	 * When a menu is being updated.
 	 *
-	 * @param  \Platform\Menus\Models\Menus  $menu
+	 * @param  \Platform\Menus\Models\Menu  $menu
+	 * @param  array  $data
 	 * @return mixed
 	 */
-	public function updated(Menu $menu);
+	public function updating(Menu $menu, array $data);
+
+	/**
+	 * When a menu is updated.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $menu
+	 * @param  array  $data
+	 * @return mixed
+	 */
+	public function updated(Menu $menu, array $data);
 
 	/**
 	 * When a menu is deleted.
 	 *
-	 * @param  \Platform\Menus\Models\Menus  $menu
+	 * @param  \Platform\Menus\Models\Menu  $menu
 	 * @return mixed
 	 */
 	public function deleted(Menu $menu);

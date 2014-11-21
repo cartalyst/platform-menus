@@ -17,10 +17,10 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
 	'title'  => 'Menus',
 	'create' => 'Create Menu',
 	'update' => 'Update Menu',
 
-);
+];

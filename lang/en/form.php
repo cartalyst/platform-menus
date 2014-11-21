@@ -17,17 +17,17 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
-	'create' => array(
+	'create' => [
 		'legend'      => 'New Item',
 		'description' => 'Add a new navigation item.',
-	),
+	],
 
-	'update' => array(
+	'update' => [
 		'legend'      => 'Edit Item',
 		'description' => 'Update an existing navigation item.',
-	),
+	],
 
 	'name'      => 'Name',
 	'name_help' => 'Type your menu item name.',
@@ -55,12 +55,12 @@ return array(
 	'visibility'      => 'Visibility',
 	'visibility_help' => 'When should this menu item be seen?',
 
-	'visibilities' => array(
+	'visibilities' => [
 		'always'     => 'Show Always',
 		'logged_in'  => 'Logged In',
 		'logged_out' => 'Logged Out',
 		'admin'      => 'Admin Only',
-	),
+	],
 
 	'roles'      => 'Roles',
 	'roles_help' => 'What user roles should be able to see this menu item?',
@@ -71,14 +71,14 @@ return array(
 	'target'      => 'Target',
 	'target_help' => 'The target attribute specifies where to open the menu item.',
 
-	'targets' => array(
+	'targets' => [
 		'self'   => 'Same Window',
 		'blank'  => 'New Window',
 		'parent' => 'Parent Frame',
 		'top'    => 'Top Frame (Main Document)',
-	),
+	],
 
 	'regex'      => 'Regular Expression',
 	'regex_help' => 'Regex pattern for advanced "selected" states.'
 
-);
+];

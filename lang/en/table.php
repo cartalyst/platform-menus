@@ -17,7 +17,7 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
 	'name'       => 'Menu Name',
 	'slug'       => 'Slug',
@@ -26,4 +26,4 @@ return array(
 	'items_count' => '# of Items',
 	'items'       => '{0} No items|{1} 1 item|[2,Inf] :count items',
 
-);
+];

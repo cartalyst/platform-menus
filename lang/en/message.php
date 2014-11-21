@@ -17,22 +17,22 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
 	'already_exists' => 'Menu already exists!',
 	'not_found'      => 'Menu [:id] either not a root menu item or does not exist.',
 	'no_children'    => 'No items!',
 
-	'success' => array(
+	'success' => [
 		'create' => 'Menu was successfully created.',
 		'update' => 'Menu was successfully updated.',
 		'delete' => 'Menu was successfully deleted.',
-	),
+	],
 
-	'error' => array(
+	'error' => [
 		'create' => 'There was an issue creating the menu. Please try again.',
 		'update' => 'There was an issue updating the menu. Please try again.',
 		'delete' => 'There was an issue deleting the menu. Please try again.',
-	),
+	],
 
-);
+];

@@ -95,7 +95,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		// return $this->createModel()->rememberForever('platform.menus.all')->findAll();
 		return $this->getCache()->rememberForever('platform.menus.all', function()
 		{
 			return $this->createModel()->findAll();
@@ -107,7 +106,6 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
-		// return $this->createModel()->rememberForever('platform.menus.all.root')->allRoot();
 		return $this->getCache()->rememberForever('platform.menus.all.root', function()
 		{
 			return $this->createModel()->allRoot();
@@ -159,6 +157,37 @@ class MenuRepository implements MenuRepositoryInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getPreparedMenu($id)
+	{
+		// Do we have a menu identifier?
+		if (isset($id))
+		{
+			// Get the menu information
+			if ( ! $menu = $this->findRoot($id)) return false;
+		}
+		else
+		{
+			$menu = $this->createModel();
+		}
+
+		// Get the persisted slugs
+		$persistedSlugs = $this->slugs();
+
+		// Get this menu children
+		$children = $menu->exists ? $menu->findChildren(0) : [];
+
+		// Get a list of all the available roles
+		$roles = $this->sentinel->getRoleRepository()->createModel()->all();
+
+		// Get all the registered menu types
+		$types = $this->getTypes();
+
+		return compact('menu', 'persistedSlugs', 'roles', 'types', 'children');
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function slugs()
 	{
 		return array_map(function($child)
@@ -167,9 +196,12 @@ class MenuRepository implements MenuRepositoryInterface {
 		}, $this->findAll());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getManager()
 	{
-		return app('platform.menus.manager');
+		return $this->container['platform.menus.manager'];
 	}
 
 	/**
@@ -198,6 +230,9 @@ class MenuRepository implements MenuRepositoryInterface {
 		return $this->validator->on('update')->bind($bindings)->validate($data);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function createRoot(array $data)
 	{
 		$menu = $this->createModel();
@@ -221,14 +256,11 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Create a new menu
 		$menu = $this->createModel();
 
-		// Fire the 'platform.menu.creating' event
-		if ($this->fireEvent('platform.menu.creating') === false)
-		{
-			return false;
-		}
-
 		// Prepare the submitted data
 		$data = $this->data->prepare($input);
+
+		// Fire the 'platform.menu.creating' event
+		$this->fireEvent('platform.menu.creating', [ $data ]);
 
 		// Validate the submitted data
 		$messages = $this->validForCreation($data);
@@ -252,7 +284,7 @@ class MenuRepository implements MenuRepositoryInterface {
 			}
 
 			// Fire the 'platform.menu.created' event
-			$this->fireEvent('platform.menu.created', $menu);
+			$this->fireEvent('platform.menu.created', [ $menu, $data ]);
 		}
 
 		return [ $messages, $menu ];
@@ -266,36 +298,36 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Get the menu object
 		$menu = $this->find($id);
 
-		// Fire the 'platform.menu.updating' event
-		if ($this->fireEvent('platform.menu.updating', [ $menu ]) === false)
-		{
-			return false;
-		}
-
 		// Prepare the submitted data
 		$data = $this->data->prepare($input);
 
+		// Fire the 'platform.menu.updating' event
+		$this->fireEvent('platform.menu.updating', [ $menu, $data ]);
+
+		// Get the menu children
+		$children = array_pull($data, 'children', []);
+
 		// Validate the submitted data
-		$messages = $this->validForUpdate($id, array_except($data, 'children'));
+		$messages = $this->validForUpdate($id, $data);
 
 		// Check if the validation returned any errors
 		if ($messages->isEmpty())
 		{
 			// Update the menu
-			foreach (array_except($data, ['children']) as $key => $value)
+			foreach ($data as $key => $value)
 			{
 				$menu->{$key} = $value;
 			}
 			$menu->save();
 
 			// Set this menu children
-			if ($children = array_get($data, 'children', null))
+			if ($children = $children)
 			{
 				$menu->mapTree($children);
 			}
 
 			// Fire the 'platform.menu.updated' event
-			$this->fireEvent('platform.menu.updated', $menu);
+			$this->fireEvent('platform.menu.updated', [ $menu, $data ]);
 		}
 
 		return [ $messages, $menu ];
@@ -314,7 +346,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function enable($id)
 	{
-		return $this->update($id, ['enabled' => 1]);
+		return $this->update($id, [ 'enabled' => 1 ]);
 	}
 
 	/**
@@ -322,7 +354,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function disable($id)
 	{
-		return $this->update($id, ['enabled' => 0]);
+		return $this->update($id, [ 'enabled' => 0 ]);
 	}
 
 	/**
@@ -334,7 +366,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		if ($menu = $this->find($id))
 		{
 			// Fire the 'platform.menu.deleted' event
-			$this->fireEvent('platform.menu.deleted', $menu);
+			$this->fireEvent('platform.menu.deleted', [ $menu ]);
 
 			// Delete the menu
 			$menu->deleteWithChildren();
@@ -356,34 +388,6 @@ class MenuRepository implements MenuRepositoryInterface {
 		}
 
 		return $this->cache;
-	}
-
-	public function getPreparedMenu($id)
-	{
-		// Do we have a menu identifier?
-		if (isset($id))
-		{
-			// Get the menu information
-			if ( ! $menu = $this->findRoot($id)) return false;
-
-			// Get this menu children
-			$children = $menu->findChildren(0);
-		}
-		else
-		{
-			$menu = $this->createModel();
-		}
-
-		// Get the persisted slugs
-		$persistedSlugs = $this->slugs();
-
-		// Get a list of all the available roles
-		$roles = $this->sentinel->getRoleRepository()->createModel()->all();
-
-		// Get all the registered menu types
-		$types = $this->getTypes();
-
-		return compact('menu', 'persistedSlugs', 'roles', 'types', 'children');
 	}
 
 }

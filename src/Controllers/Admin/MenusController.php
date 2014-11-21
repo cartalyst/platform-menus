@@ -23,7 +23,7 @@ use Platform\Menus\Repositories\MenuRepositoryInterface;
 class MenusController extends AdminController {
 
 	/**
-	 * Menus repository.
+	 * The Menus repository.
 	 *
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
@@ -85,7 +85,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Show the form for creating a new menu.
+	 * Shows the form for creating a new menu.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -95,7 +95,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Handle posting of the form for creating a new menu.
+	 * Handles posting of the form for creating a new menu.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -105,7 +105,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Show the form for updating a menu.
+	 * Shows the form for updating a menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return mixed
@@ -116,7 +116,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Handle posting of the form for updating a menu.
+	 * Handles posting of the form for updating a menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return \Illuminate\Http\RedirectResponse
@@ -127,7 +127,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Remove the specified menu.
+	 * Removes the specified menu.
 	 *
 	 * @param  mixed  $slug
 	 * @return \Illuminate\Http\RedirectResponse
@@ -136,12 +136,12 @@ class MenusController extends AdminController {
 	{
 		if ($this->menus->delete($slug))
 		{
-			return redirect()->toAdmin('menus')->withSuccess(
+			return redirect()->route('admin.menus.all')->withSuccess(
 				trans('platform/menus::message.success.delete')
 			);
 		}
 
-		return redirect()->toAdmin('menus')->withErrors(
+		return redirect()->route('admin.menus.all')->withErrors(
 			trans('platform/menus::message.error.delete')
 		);
 	}
@@ -179,12 +179,25 @@ class MenusController extends AdminController {
 	{
 		if ( ! $data = $this->menus->getPreparedMenu($id))
 		{
-			return redirect()->toAdmin('menus')->withErrors(
+			return redirect()->route('admin.menus.all')->withErrors(
 				trans('platform/menus::message.not_found', compact('id'))
 			);
 		}
 
-		extract($data);
+		// Get the menu object
+		$menu = $data['menu'];
+
+		// Get all the available user roles
+		$roles = $data['roles'];
+
+		// Get the registered menu types
+		$types = $data['types'];
+
+		// Get the menu children items
+		$children = $data['children'];
+
+		// Get all the current menu slugs
+		$persistedSlugs = $data['persistedSlugs'];
 
 		// Share some variables, because of views inheritance
 		view()->share(compact('roles', 'types'));
@@ -209,7 +222,7 @@ class MenusController extends AdminController {
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
-			return redirect()->toAdmin("menus/{$menu->slug}")->withSuccess(
+			return redirect()->route('admin.menu.edit', $menu->slug)->withSuccess(
 				trans("platform/menus::message.success.{$mode}")
 			);
 		}

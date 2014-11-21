@@ -40,7 +40,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function creating()
+	public function creating(array $data)
 	{
 
 	}
@@ -48,7 +48,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function created(Menu $menu)
+	public function created(Menu $menu, array $data)
 	{
 		$this->flushCache($menu);
 	}
@@ -56,7 +56,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function updating(Menu $menu)
+	public function updating(Menu $menu, array $data)
 	{
 
 	}
@@ -64,7 +64,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function updated(Menu $menu)
+	public function updated(Menu $menu, array $data)
 	{
 		$this->flushCache($menu);
 	}

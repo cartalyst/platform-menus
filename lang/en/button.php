@@ -17,9 +17,9 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+return [
 
 	'add_item'     => 'Add a new Item',
 	'more_options' => 'More options',
 
-);
+];

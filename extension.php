@@ -166,14 +166,18 @@ return [
 	{
 		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
 		{
-			Route::get('/', 'MenusController@index');
-			Route::post('/', 'MenusController@executeAction');
-			Route::get('grid', 'MenusController@grid');
-			Route::get('create', 'MenusController@create');
-			Route::post('create', 'MenusController@store');
-			Route::get('{id}', 'MenusController@edit');
-			Route::post('{id}', 'MenusController@update');
-			Route::get('{id}/delete', 'MenusController@delete');
+			Route::get('/' , ['as' => 'admin.menus.all', 'uses' => 'MenusController@index']);
+			Route::post('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@executeAction']);
+
+			Route::get('grid', ['as' => 'admin.menus.grid', 'uses' => 'MenusController@grid']);
+
+			Route::get('create' , ['as' => 'admin.menu.create', 'uses' => 'MenusController@create']);
+			Route::post('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@store']);
+
+			Route::get('{id}' , ['as' => 'admin.menu.edit', 'uses' => 'MenusController@edit']);
+			Route::post('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@update']);
+
+			Route::delete('{id}', ['as' => 'admin.menu.delete', 'uses' => 'MenusController@delete']);
 		});
 	},
 
@@ -195,7 +199,7 @@ return [
 	{
 		$permissions->group('menus', function($g)
 		{
-			$g->name = 'Menus';
+			$g->name = trans('platform/menus::general.title');
 
 			$g->permission('menus.index', function($p)
 			{
@@ -239,10 +243,7 @@ return [
 	|
 	*/
 
-	'settings' => function()
-	{
-
-	},
+	'settings' => null,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -370,9 +371,6 @@ return [
 	|
 	*/
 
-	'widgets' => function()
-	{
-
-	},
+	'widgets' => null,
 
 ];
