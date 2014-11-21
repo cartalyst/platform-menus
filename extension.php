@@ -292,7 +292,7 @@ return [
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
 				'class' => 'fa fa-cog',
-				'uri'   => 'admin/settings',
+				'uri'   => ':admin/settings',
 				'regex' => '/:admin\/settings/i',
 			],
 
