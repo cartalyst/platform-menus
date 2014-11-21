@@ -39,7 +39,7 @@
 @stop
 
 {{-- Page content --}}
-@section('content')
+@section('page')
 
 <form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8">
 
