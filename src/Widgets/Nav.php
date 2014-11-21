@@ -143,10 +143,13 @@ class Nav {
 
 		// Prepare the uri
 		$child->uri = $child->getUrl($options);
+		$child->uri = str_replace(':admin', admin_uri(), $child->uri);
 
 		// Do we have a regular expression for this item?
 		if ($regex = $child->regex)
 		{
+			$regex = str_replace(':admin', admin_uri(), $regex);
+
 			// Make sure that the regular expression is valid
 			if (@preg_match($regex, $this->path))
 			{

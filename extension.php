@@ -274,7 +274,7 @@ return [
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
-				'regex' => '/admin\/menus/i',
+				'regex' => '/:admin\/menus/i',
 			],
 
 		],
@@ -293,8 +293,8 @@ return [
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
 				'class' => 'fa fa-cog',
-				'uri'   => 'admin/settings',
-				'regex' => '/admin\/settings/i',
+				'uri'   => ':admin/settings',
+				'regex' => '/:admin\/settings/i',
 			],
 
 
