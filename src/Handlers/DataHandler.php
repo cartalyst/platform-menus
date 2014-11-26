@@ -80,7 +80,7 @@ class DataHandler implements DataHandlerInterface {
 			'slug'       => array_get($data, 'slug'),
 			'enabled'    => array_get($data, 'enabled', 1),
 			'type'       => $type = array_get($data, 'type', 'static'),
-			'secure'     => array_get($data, 'secure', 0),
+			'secure'     => array_get($data, 'secure'),
 			'visibility' => array_get($data, 'visibility', 'always'),
 			'roles'      => (array) array_get($data, 'roles', []),
 			'class'      => array_get($data, 'class'),

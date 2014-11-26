@@ -57,7 +57,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Type of the child
 			$table->string('type')->default('static');
 
-			$table->boolean('secure')->default(0);
+			$table->boolean('secure')->nullable();
 
 			// Specific to "static" menu children
 			$table->string('uri')->nullable();

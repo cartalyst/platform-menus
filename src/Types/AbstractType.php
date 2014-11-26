@@ -104,7 +104,7 @@ abstract class AbstractType {
 			$uri = "{$beforeUri}/{$uri}";
 		}
 
-		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri, [], false);
+		return $this->url->to($uri, [], $child->secure);
 	}
 
 	/**

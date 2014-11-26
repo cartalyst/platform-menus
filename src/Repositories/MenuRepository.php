@@ -260,7 +260,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		$data = $this->data->prepare($input);
 
 		// Fire the 'platform.menu.creating' event
-		$this->fireEvent('platform.menu.creating', [ $data ]);
+		$this->fireEvent('platform.menu.creating', [ $data ]);
 
 		// Validate the submitted data
 		$messages = $this->validForCreation($data);
@@ -321,13 +321,13 @@ class MenuRepository implements MenuRepositoryInterface {
 			$menu->save();
 
 			// Set this menu children
-			if ($children = $children)
+			if ($children)
 			{
 				$menu->mapTree($children);
 			}
 
 			// Fire the 'platform.menu.updated' event
-			$this->fireEvent('platform.menu.updated', [ $menu, $data ]);
+			$this->fireEvent('platform.menu.updated', [ $menu, $data ]);
 		}
 
 		return [ $messages, $menu ];

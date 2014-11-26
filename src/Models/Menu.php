@@ -75,7 +75,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	protected static $entityNamespace = 'platform/menus';
 
 	/**
-	 * Get mutator for the "enabled" attribute.
+	 * Get accessor for the "enabled" attribute.
 	 *
 	 * @param  mixed  $enabled
 	 * @return bool
@@ -86,18 +86,37 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	}
 
 	/**
-	 * Get mutator for the "secure" attribute.
+	 * Get accessor for the "secure" attribute.
 	 *
 	 * @param  mixed  $secure
 	 * @return bool
 	 */
 	public function getSecureAttribute($secure)
 	{
-		return (bool) $secure;
+		if ( ! is_null($secure))
+		{
+			return (bool) $secure;
+		}
 	}
 
 	/**
-	 * Get mutator for the "roles" attribute.
+	 * Get accessor for the "secure" attribute.
+	 *
+	 * @param  mixed  $secure
+	 * @return void
+	 */
+	public function setSecureAttribute($secure)
+	{
+		if (strlen($secure) === 0)
+		{
+			$secure = null;
+		}
+
+		$this->attributes['secure'] = $secure;
+	}
+
+	/**
+	 * Get accessor for the "roles" attribute.
 	 *
 	 * @param  string  $roles
 	 * @return array

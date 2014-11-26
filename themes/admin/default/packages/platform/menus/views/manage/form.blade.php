@@ -109,8 +109,9 @@
 
 						<div class="controls">
 							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control">
-								<option value="1"{{ ( ! empty($child) ? $child->secure : null) == 1 ? ' selected="selected"' : null }}>{{{ trans('general.yes') }}}</option>
-								<option value="0"{{ ( ! empty($child) ? $child->secure : null) == 0 ? ' selected="selected"' : null }}>{{{ trans('general.no') }}}</option>
+								<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('general.inherit') }}}</option>
+								<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('general.yes') }}}</option>
+								<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('general.no') }}}</option>
 							</select>
 						</div>
 					</div>
