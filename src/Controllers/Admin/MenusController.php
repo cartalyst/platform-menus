@@ -136,14 +136,14 @@ class MenusController extends AdminController {
 	{
 		if ($this->menus->delete($slug))
 		{
-			return redirect()->route('admin.menus.all')->withSuccess(
-				trans('platform/menus::message.success.delete')
-			);
+			$this->alerts->success(trans('platform/menus::message.success.delete'));
+
+			return redirect()->route('admin.menus.all');
 		}
 
-		return redirect()->route('admin.menus.all')->withErrors(
-			trans('platform/menus::message.error.delete')
-		);
+		$this->alerts->error(trans('platform/menus::message.error.delete'));
+
+		return redirect()->route('admin.menus.all');
 	}
 
 	/**
@@ -179,9 +179,9 @@ class MenusController extends AdminController {
 	{
 		if ( ! $data = $this->menus->getPreparedMenu($id))
 		{
-			return redirect()->route('admin.menus.all')->withErrors(
-				trans('platform/menus::message.not_found', compact('id'))
-			);
+			$this->alerts->error(trans('platform/menus::message.not_found', compact('id')));
+
+			return redirect()->route('admin.menus.all');
 		}
 
 		// Get the menu object
@@ -222,13 +222,14 @@ class MenusController extends AdminController {
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
-			return redirect()->route('admin.menu.edit', $menu->slug)->withSuccess(
-				trans("platform/menus::message.success.{$mode}")
-			);
+			$this->alerts->success(trans("platform/menus::message.success.{$mode}"));
+
+			return redirect()->route('admin.menu.edit', $menu->slug);
 		}
 
-		// Redirect to the previous page
-		return redirect()->back()->withInput()->withErrors($messages);
+		$this->alerts->error($messages, 'form');
+
+		return redirect()->back()->withInput();
 	}
 
 }
