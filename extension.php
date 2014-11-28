@@ -323,6 +323,7 @@ return [
 						'class' => 'fa fa-cog',
 						'uri'   => ':admin/',
 						'regex' => '/:admin\/',
+						'visibility' => 'logged_in',
 					],
 
 					[
