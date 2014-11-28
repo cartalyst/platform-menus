@@ -311,7 +311,7 @@ return [
 
 			[
 				'slug'     => 'account-profile',
-				'name'     => 'Access',
+				'name'     => 'Account',
 				'class'    => 'fa fa-user',
 				'uri'      => '',
 				'regex'    => '',
