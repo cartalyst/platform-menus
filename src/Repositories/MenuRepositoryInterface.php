@@ -146,11 +146,4 @@ interface MenuRepositoryInterface {
 	 */
 	public function delete($id);
 
-	/**
-	 * Returns the Illuminate Cache instance.
-	 *
-	 * @return \Illuminate\Cache\CacheManager
-	 */
-	public function getCache();
-
 }

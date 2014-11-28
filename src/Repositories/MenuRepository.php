@@ -95,7 +95,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAll()
 	{
-		return $this->getCache()->rememberForever('platform.menus.all', function()
+		return $this->container['cache']->rememberForever('platform.menus.all', function()
 		{
 			return $this->createModel()->findAll();
 		});
@@ -106,7 +106,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findAllRoot()
 	{
-		return $this->getCache()->rememberForever('platform.menus.all.root', function()
+		return $this->container['cache']->rememberForever('platform.menus.all.root', function()
 		{
 			return $this->createModel()->allRoot();
 		});
@@ -117,11 +117,14 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		$model = $this->createModel()->rememberForever('platform.menu.'.$id);
+		return $this->container['cache']->rememberForever('platform.menu.'.$id, function() use ($id)
+		{
+			$model = $this->createModel();
 
-		if (is_numeric($id)) return $model->find($id);
+			if (is_numeric($id)) return $model->find($id);
 
-		return $model->whereSlug($id)->first();
+			return $model->whereSlug($id)->first();
+		});
 	}
 
 	/**
@@ -129,13 +132,16 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		$model = $this->createModel();
+		return $this->container['cache']->rememberForever('platform.menu.root.'.$id, function() use ($id)
+		{
+			$model = $this->createModel();
 
-		$menu = $model->where($model->getReservedAttributeName('left'), 1);
+			$menu = $model->where($model->getReservedAttributeName('left'), 1);
 
-		if (is_numeric($id)) return $menu->find($id);
+			if (is_numeric($id)) return $menu->find($id);
 
-		return $menu->whereSlug($id)->first();
+			return $menu->whereSlug($id)->first();
+		});
 	}
 
 	/**
@@ -375,19 +381,6 @@ class MenuRepository implements MenuRepositoryInterface {
 		}
 
 		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getCache()
-	{
-		if ( ! $this->cache)
-		{
-			$this->cache = $this->container['cache'];
-		}
-
-		return $this->cache;
 	}
 
 }
