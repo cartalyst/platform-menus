@@ -307,52 +307,50 @@ return [
 
 		],
 
-		'main' => [
+		'account' => [
 
 			[
-				'slug'  => 'main-documentation',
-				'name'  => 'Documentation',
-				'class' => '',
-				'uri'   => 'https://cartalyst.com/manual/platform',
-			],
+				'slug'     => 'account-profile',
+				'name'     => 'Access',
+				'class'    => 'fa fa-user',
+				'uri'      => '',
+				'regex'    => '',
+				'children' => [
 
-			[
-				'slug'  => 'main-license',
-				'name'  => 'License',
-				'class' => '',
-				'uri'   => 'https://cartalyst.com/license',
-			],
+					[
+						'slug'  => 'account-admin',
+						'name'  => 'Administrator',
+						'class' => 'fa fa-cog',
+						'uri'   => ':admin/',
+						'regex' => '/:admin\/',
+					],
 
-			[
-				'slug'       => 'main-dashboard',
-				'name'       => 'Admin',
-				'class'      => '',
-				'uri'        => 'admin',
-				'visibility' => 'admin',
-			],
+					[
+						'slug'       => 'account-login',
+						'name'       => 'Sign In',
+						'class'      => '',
+						'uri'        => 'login',
+						'visibility' => 'logged_out',
+					],
 
-			[
-				'slug'       => 'main-login',
-				'name'       => 'Sign In',
-				'class'      => '',
-				'uri'        => 'login',
-				'visibility' => 'logged_out',
-			],
+					[
+						'slug'       => 'account-logout',
+						'name'       => 'Logout',
+						'class'      => '',
+						'uri'        => 'logout',
+						'visibility' => 'logged_in',
+					],
 
-			[
-				'slug'       => 'main-logout',
-				'name'       => 'Logout',
-				'class'      => '',
-				'uri'        => 'logout',
-				'visibility' => 'logged_in',
-			],
+					[
+						'slug'       => 'account-register',
+						'name'       => 'Register',
+						'class'      => '',
+						'uri'        => 'register',
+						'visibility' => 'logged_out',
+					],
 
-			[
-				'slug'       => 'main-register',
-				'name'       => 'Register',
-				'class'      => '',
-				'uri'        => 'register',
-				'visibility' => 'logged_out',
+				],
+
 			],
 
 		],
