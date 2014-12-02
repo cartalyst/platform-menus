@@ -318,12 +318,12 @@ return [
 				'children' => [
 
 					[
-						'slug'  => 'account-admin',
-						'name'  => 'Administrator',
-						'class' => 'fa fa-cog',
-						'uri'   => ':admin/',
-						'regex' => '/:admin\/',
-						'visibility' => 'logged_in',
+						'slug'       => 'account-admin',
+						'name'       => 'Administrator',
+						'class'      => 'fa fa-cog',
+						'uri'        => ':admin/',
+						'regex'      => '/:admin\/',
+						'visibility' => 'admin',
 					],
 
 					[
