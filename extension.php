@@ -339,26 +339,34 @@ return [
 		'account' => [
 
 			[
-				'slug'     => 'account-profile',
+				'slug'     => 'account',
 				'name'     => 'Account',
 				'class'    => 'fa fa-user',
-				'uri'      => 'profile',
+				'uri'      => '',
 				'regex'    => '',
 				'children' => [
 
 					[
 						'slug'       => 'account-admin',
 						'name'       => 'Administrator',
-						'class'      => 'fa fa-cog',
+						'class'      => 'fa fa-gears',
 						'uri'        => ':admin/',
 						'regex'      => '/:admin\/',
 						'visibility' => 'admin',
 					],
 
 					[
+						'slug'       => 'account-profile',
+						'name'       => 'Profile',
+						'class'      => 'fa fa-gear',
+						'uri'        => 'profile',
+						'visibility' => 'logged_in',
+					],
+
+					[
 						'slug'       => 'account-login',
 						'name'       => 'Sign In',
-						'class'      => '',
+						'class'      => 'fa fa-sign-in',
 						'uri'        => 'login',
 						'visibility' => 'logged_out',
 					],
@@ -366,7 +374,7 @@ return [
 					[
 						'slug'       => 'account-logout',
 						'name'       => 'Logout',
-						'class'      => '',
+						'class'      => 'fa fa-sign-out',
 						'uri'        => 'logout',
 						'visibility' => 'logged_in',
 					],
@@ -374,7 +382,7 @@ return [
 					[
 						'slug'       => 'account-register',
 						'name'       => 'Register',
-						'class'      => '',
+						'class'      => 'fa fa-edit',
 						'uri'        => 'register',
 						'visibility' => 'logged_out',
 					],
