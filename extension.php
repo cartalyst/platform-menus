@@ -339,7 +339,7 @@ return [
 		'account' => [
 
 			[
-				'slug'     => 'account',
+				'slug'     => 'account-menu',
 				'name'     => 'Account',
 				'class'    => 'fa fa-user',
 				'uri'      => '',
