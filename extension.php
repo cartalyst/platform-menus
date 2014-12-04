@@ -321,7 +321,7 @@ return [
 				'slug'  => 'main-docs',
 				'name'  => 'Documentation',
 				'class' => 'fa fa-graduation-cap',
-				'uri'   => 'https:://cartalyst.com/manual/platform',
+				'uri'   => 'https://cartalyst.com/manual/platform',
 				'target' => 'blank',
 			],
 
@@ -330,7 +330,7 @@ return [
 				'slug'  => 'main-license',
 				'name'  => 'License',
 				'class' => 'fa fa-book',
-				'uri'   => 'https:://cartalyst.com/license',
+				'uri'   => 'https://cartalyst.com/manual/platform',
 				'target' => 'blank',
 			],
 
