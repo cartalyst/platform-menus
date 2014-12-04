@@ -307,13 +307,42 @@ return [
 
 		],
 
+		'main' => [
+
+			[
+				'slug'   => 'main-support',
+				'name'   => 'Support',
+				'class'  => 'fa fa-life-ring',
+				'uri'    => 'https://cartalyst.com/support',
+				'target' => 'blank',
+			],
+
+			[
+				'slug'  => 'main-docs',
+				'name'  => 'Documentation',
+				'class' => 'fa fa-graduation-cap',
+				'uri'   => 'https:://cartalyst.com/manual/platform',
+				'target' => 'blank',
+			],
+
+
+			[
+				'slug'  => 'main-license',
+				'name'  => 'License',
+				'class' => 'fa fa-book',
+				'uri'   => 'https:://cartalyst.com/license',
+				'target' => 'blank',
+			],
+
+		],
+
 		'account' => [
 
 			[
 				'slug'     => 'account-profile',
 				'name'     => 'Account',
 				'class'    => 'fa fa-user',
-				'uri'      => '',
+				'uri'      => 'profile',
 				'regex'    => '',
 				'children' => [
 
