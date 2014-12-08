@@ -365,7 +365,6 @@ return [
 						'name'       => 'Administrator',
 						'class'      => 'fa fa-gears',
 						'uri'        => ':admin/',
-						'regex'      => '/:admin\/',
 						'visibility' => 'admin',
 					],
 
@@ -374,6 +373,7 @@ return [
 						'name'       => 'Profile',
 						'class'      => 'fa fa-gear',
 						'uri'        => 'profile',
+						'regex'      => '/(profile)\/',
 						'visibility' => 'logged_in',
 					],
 
