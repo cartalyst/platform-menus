@@ -323,7 +323,7 @@ return [
 				'children' => [
 
 					[
-						'slug'   => 'main-support',
+						'slug'   => 'main-help-support',
 						'name'   => 'Support',
 						'class'  => 'fa fa-bug',
 						'uri'    => 'https://cartalyst.com/support',
@@ -331,7 +331,7 @@ return [
 					],
 
 					[
-						'slug'  => 'main-docs',
+						'slug'  => 'main-help-docs',
 						'name'  => 'Documentation',
 						'class' => 'fa fa-graduation-cap',
 						'uri'   => 'https://cartalyst.com/manual/platform',
@@ -339,7 +339,7 @@ return [
 					],
 
 					[
-						'slug'  => 'main-license',
+						'slug'  => 'main-help-license',
 						'name'  => 'License',
 						'class' => 'fa fa-book',
 						'uri'   => 'https://cartalyst.com/manual/platform',
