@@ -158,9 +158,12 @@ class Nav {
 		}
 
 		// Check if the uri of the item matches the current request path
-		elseif ($child->uri === $this->path)
+		elseif ($child->getOriginal('uri') != '')
 		{
-			$child->isActive = true;
+			if ($child->uri === $this->path)
+			{
+				$child->isActive = true;
+			}
 		}
 
 		// Check if this item has sub items
