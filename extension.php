@@ -310,28 +310,44 @@ return [
 		'main' => [
 
 			[
-				'slug'   => 'main-support',
-				'name'   => 'Support',
-				'class'  => 'fa fa-life-ring',
-				'uri'    => 'https://cartalyst.com/support',
-				'target' => 'blank',
+				'slug'  => 'main-about',
+				'name'  => 'About',
+				'class' => 'fa fa-info',
+				'uri'   => 'prologue',
 			],
 
 			[
-				'slug'  => 'main-docs',
-				'name'  => 'Documentation',
-				'class' => 'fa fa-graduation-cap',
-				'uri'   => 'https://cartalyst.com/manual/platform',
-				'target' => 'blank',
-			],
+				'slug'     => 'main-help',
+				'name'     => 'Help',
+				'class'    => 'fa fa-life-ring',
+				'children' => [
 
+					[
+						'slug'   => 'main-support',
+						'name'   => 'Support',
+						'class'  => 'fa fa-bug',
+						'uri'    => 'https://cartalyst.com/support',
+						'target' => 'blank',
+					],
 
-			[
-				'slug'  => 'main-license',
-				'name'  => 'License',
-				'class' => 'fa fa-book',
-				'uri'   => 'https://cartalyst.com/manual/platform',
-				'target' => 'blank',
+					[
+						'slug'  => 'main-docs',
+						'name'  => 'Documentation',
+						'class' => 'fa fa-graduation-cap',
+						'uri'   => 'https://cartalyst.com/manual/platform',
+						'target' => 'blank',
+					],
+
+					[
+						'slug'  => 'main-license',
+						'name'  => 'License',
+						'class' => 'fa fa-book',
+						'uri'   => 'https://cartalyst.com/manual/platform',
+						'target' => 'blank',
+					],
+
+				],
+
 			],
 
 		],
@@ -342,8 +358,6 @@ return [
 				'slug'     => 'account-menu',
 				'name'     => 'Account',
 				'class'    => 'fa fa-user',
-				'uri'      => '',
-				'regex'    => '',
 				'children' => [
 
 					[
