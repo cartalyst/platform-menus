@@ -313,7 +313,7 @@ return [
 				'slug'  => 'main-about',
 				'name'  => 'About',
 				'class' => 'fa fa-info',
-				'uri'   => 'prologue',
+				'uri'   => 'about',
 			],
 
 			[
