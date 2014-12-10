@@ -342,7 +342,7 @@ return [
 						'slug'  => 'main-help-license',
 						'name'  => 'License',
 						'class' => 'fa fa-book',
-						'uri'   => 'https://cartalyst.com/manual/platform',
+						'uri'   => 'https://cartalyst.com/license',
 						'target' => 'blank',
 					],
 
