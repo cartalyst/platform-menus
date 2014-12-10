@@ -1,5 +1,7 @@
 # Menus
 
+[![Build Status](http://ci.cartalyst.com/build-status/svg/45)](http://ci.cartalyst.com/build-status/view/45)
+
 A Platform 2 Extension that allows you to manage all the menus throughout your website.
 
 Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well, rock on.
