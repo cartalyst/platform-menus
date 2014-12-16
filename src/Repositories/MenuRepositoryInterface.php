@@ -51,12 +51,28 @@ interface MenuRepositoryInterface {
 	public function find($id);
 
 	/**
+	 * Returns a menu by its slug.
+	 *
+	 * @param  string  $slug
+	 * @return \Platform\Menus\Models\Menu
+	 */
+	public function findBySlug($slug);
+
+	/**
 	 * Returns a root menu by its primary key or slug.
 	 *
 	 * @param  int  $id
 	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function findRoot($id);
+
+	/**
+	 * Returns a root menu by its slug.
+	 *
+	 * @param  string  $slug
+	 * @return \Platform\Menus\Models\Menu
+	 */
+	public function findRootBySlug($slug);
 
 	/**
 	 * Perform a basic search.
