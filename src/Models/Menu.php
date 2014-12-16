@@ -263,16 +263,6 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public static function find($id, $columns = ['*'])
-	{
-		if (is_numeric($id)) return parent::find($id, $columns);
-
-		return (new static)->newQuery()->whereSlug($id)->first($columns);
-	}
-
-	/**
 	 * Return information about the provided type.
 	 *
 	 * @return array

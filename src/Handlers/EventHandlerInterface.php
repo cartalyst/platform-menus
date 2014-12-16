@@ -34,10 +34,9 @@ interface EventHandlerInterface extends BaseEventHandlerInterface {
 	 * When a menu is created.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $menu
-	 * @param  array  $data
 	 * @return mixed
 	 */
-	public function created(Menu $menu, array $data);
+	public function created(Menu $menu);
 
 	/**
 	 * When a menu is being updated.
@@ -52,10 +51,9 @@ interface EventHandlerInterface extends BaseEventHandlerInterface {
 	 * When a menu is updated.
 	 *
 	 * @param  \Platform\Menus\Models\Menu  $menu
-	 * @param  array  $data
 	 * @return mixed
 	 */
-	public function updated(Menu $menu, array $data);
+	public function updated(Menu $menu);
 
 	/**
 	 * When a menu is deleted.

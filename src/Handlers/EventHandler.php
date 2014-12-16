@@ -48,7 +48,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function created(Menu $menu, array $data)
+	public function created(Menu $menu)
 	{
 		$this->flushCache($menu);
 	}
@@ -64,7 +64,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function updated(Menu $menu, array $data)
+	public function updated(Menu $menu)
 	{
 		$this->flushCache($menu);
 	}
@@ -89,10 +89,10 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface {
 		$this->cache->forget('platform.menus.all.root');
 
 		$this->cache->forget('platform.menu.'.$menu->id);
-		$this->cache->forget('platform.menu.'.$menu->slug);
+		$this->cache->forget('platform.menu.slug.'.$menu->slug);
 
 		$this->cache->forget('platform.menu.root.'.$menu->id);
-		$this->cache->forget('platform.menu.root.'.$menu->slug);
+		$this->cache->forget('platform.menu.root.slug.'.$menu->slug);
 	}
 
 }

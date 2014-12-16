@@ -18,6 +18,7 @@
  */
 
 use Cartalyst\Support\Traits;
+use Platform\Menus\Models\Menu;
 use Illuminate\Container\Container;
 
 class MenuRepository implements MenuRepositoryInterface {
@@ -117,13 +118,27 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function find($id)
 	{
-		return $this->container['cache']->rememberForever('platform.menu.'.$id, function() use ($id)
+		if ($id instanceof Menu) return $id;
+
+		if (is_numeric($id))
 		{
-			$model = $this->createModel();
+			return $this->container['cache']->rememberForever('platform.menu.'.$id, function() use ($id)
+			{
+				return $this->createmodel()->find($id);
+			});
+		}
 
-			if (is_numeric($id)) return $model->find($id);
+		return $this->findBySlug($id);
+	}
 
-			return $model->whereSlug($id)->first();
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findBySlug($slug)
+	{
+		return $this->container['cache']->rememberForever('platform.menu.slug.'.$slug, function() use ($slug)
+		{
+			return $this->createModel()->whereSlug($slug)->first();
 		});
 	}
 
@@ -132,15 +147,33 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function findRoot($id)
 	{
-		return $this->container['cache']->rememberForever('platform.menu.root.'.$id, function() use ($id)
+		if (is_numeric($id))
+		{
+			return $this->container['cache']->rememberForever('platform.menu.root.'.$id, function() use ($id)
+			{
+				$model = $this->createModel();
+
+				$menu = $model->where($model->getReservedAttributeName('left'), 1);
+
+				return $menu->find($id);
+			});
+		}
+
+		return $this->findRootBySlug($id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findRootBySlug($slug)
+	{
+		return $this->container['cache']->rememberForever('platform.menu.root.slug.'.$slug, function() use ($slug)
 		{
 			$model = $this->createModel();
 
 			$menu = $model->where($model->getReservedAttributeName('left'), 1);
 
-			if (is_numeric($id)) return $menu->find($id);
-
-			return $menu->whereSlug($id)->first();
+			return $menu->whereSlug($slug)->first();
 		});
 	}
 
@@ -229,29 +262,11 @@ class MenuRepository implements MenuRepositoryInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function validForUpdate($id, array $data)
+	public function validForUpdate(Menu $menu, array $data)
 	{
-		$bindings = [ 'slug' => $this->find($id)->slug ];
+		$bindings = [ 'slug' => $menu->slug ];
 
 		return $this->validator->on('update')->bind($bindings)->validate($data);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function createRoot(array $data)
-	{
-		$menu = $this->createModel();
-
-		foreach ($data as $key => $value)
-		{
-			$menu->{$key} = $value;
-		}
-
-		// Set this new menu as root
-		$menu->makeRoot();
-
-		return $menu;
 	}
 
 	/**
@@ -262,11 +277,14 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Create a new menu
 		$menu = $this->createModel();
 
+		// Fire the 'platform.menu.creating' event
+		if ($this->fireEvent('platform.menu.creating', [ $input ]) === false)
+		{
+			return false;
+		}
+
 		// Prepare the submitted data
 		$data = $this->data->prepare($input);
-
-		// Fire the 'platform.menu.creating' event
-		$this->fireEvent('platform.menu.creating', [ $data ]);
 
 		// Validate the submitted data
 		$messages = $this->validForCreation($data);
@@ -290,7 +308,7 @@ class MenuRepository implements MenuRepositoryInterface {
 			}
 
 			// Fire the 'platform.menu.created' event
-			$this->fireEvent('platform.menu.created', [ $menu, $data ]);
+			$this->fireEvent('platform.menu.created', [ $menu ]);
 		}
 
 		return [ $messages, $menu ];
@@ -304,17 +322,20 @@ class MenuRepository implements MenuRepositoryInterface {
 		// Get the menu object
 		$menu = $this->find($id);
 
+		// Fire the 'platform.menu.updating' event
+		if ($this->fireEvent('platform.menu.updating', [ $menu, $input ]) === false)
+		{
+			return false;
+		}
+
 		// Prepare the submitted data
 		$data = $this->data->prepare($input);
-
-		// Fire the 'platform.menu.updating' event
-		$this->fireEvent('platform.menu.updating', [ $menu, $data ]);
 
 		// Get the menu children
 		$children = array_pull($data, 'children', []);
 
 		// Validate the submitted data
-		$messages = $this->validForUpdate($id, $data);
+		$messages = $this->validForUpdate($menu, $data);
 
 		// Check if the validation returned any errors
 		if ($messages->isEmpty())
@@ -333,7 +354,7 @@ class MenuRepository implements MenuRepositoryInterface {
 			}
 
 			// Fire the 'platform.menu.updated' event
-			$this->fireEvent('platform.menu.updated', [ $menu, $data ]);
+			$this->fireEvent('platform.menu.updated', [ $menu ]);
 		}
 
 		return [ $messages, $menu ];
@@ -352,6 +373,8 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function enable($id)
 	{
+		$this->validator->byPass();
+
 		return $this->update($id, [ 'enabled' => 1 ]);
 	}
 
@@ -360,6 +383,8 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function disable($id)
 	{
+		$this->validator->byPass();
+
 		return $this->update($id, [ 'enabled' => 0 ]);
 	}
 
@@ -372,7 +397,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		if ($menu = $this->find($id))
 		{
 			// Fire the 'platform.menu.deleted' event
-			$this->fireEvent('platform.menu.deleted', [ $menu ]);
+			$this->fireEvent('platform.menu.deleted', [ $menu ]);
 
 			// Delete the menu
 			$menu->deleteWithChildren();

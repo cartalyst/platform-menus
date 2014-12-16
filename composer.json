@@ -48,6 +48,9 @@
 		"cartalyst/nested-sets": "~2.0",
 		"platform/access": "~1.0"
 	},
+	"require-dev": {
+		"cartalyst/testing": "~0.1"
+	},
 	"autoload": {
 		"classmap": [
 			"database/migrations",

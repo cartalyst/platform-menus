@@ -17,6 +17,8 @@
  * @link       http://cartalyst.com
  */
 
+use Platform\Menus\Models\Menu;
+
 interface MenuRepositoryInterface {
 
 	/**
@@ -90,11 +92,11 @@ interface MenuRepositoryInterface {
 	/**
 	 * Determine if the given menu is valid for updating.
 	 *
-	 * @param  int  $id
+	 * @param  \Platform\Menus\Models\Menu  $menu
 	 * @param  array  $input
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	public function validForUpdate($id, array $input);
+	public function validForUpdate(Menu $menu, array $input);
 
 	/**
 	 * Creates a menu with the given data.

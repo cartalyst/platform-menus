@@ -93,12 +93,12 @@ class Observer {
 			$slug = str_replace('_', '-', $slug);
 
 			// Load up the associated menu
-			if ( ! $menu = $this->menus->createModel()->whereSlug($slug)->first())
+			if ( ! $menu = $this->menus->findBySlug($slug))
 			{
-				$menu = $this->menus->createRoot([
-					'name' => ucwords(str_replace('-', ' ', $slug)),
-					'slug' => $slug,
-				]);
+				$menu = last($this->menus->create([
+					'menu-name' => ucwords(str_replace('-', ' ', $slug)),
+					'menu-slug' => $slug,
+				]));
 			}
 
 			$menu->findChildren();

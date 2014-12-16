@@ -18,7 +18,7 @@
  */
 
 use Platform\Menus\Models\Menu;
-use Illuminate\Support\Facades\HTML;
+use Illuminate\Html\HtmlBuilder;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
 class Dropdown {
@@ -31,14 +31,23 @@ class Dropdown {
 	protected $menus;
 
 	/**
+	 * The html builder instance.
+	 *
+	 * @var \Illuminate\Html\HtmlBuilder
+	 */
+	protected $html;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus)
+	public function __construct(MenuRepositoryInterface $menus, HtmlBuilder $html)
 	{
 		$this->menus = $menus;
+
+		$this->html = $html;
 	}
 
 	/**
@@ -90,7 +99,7 @@ class Dropdown {
 		}
 
 		// Prepare the attributes
-		$attributes = HTML::attributes($attributes);
+		$attributes = $this->html->attributes($attributes);
 
 		return view('platform/menus::widgets/dropdown', compact('items', 'attributes', 'options'));
 	}

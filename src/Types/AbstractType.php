@@ -68,6 +68,13 @@ abstract class AbstractType {
 	}
 
 	/**
+	 * Returns the type identifier.
+	 *
+	 * @return string
+	 */
+	abstract public function getIdentifier();
+
+	/**
 	 * Get a human friendly name for the type.
 	 *
 	 * @return string
@@ -126,7 +133,7 @@ abstract class AbstractType {
 	 */
 	public function getTemplateHtml()
 	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
+		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template");
 	}
 
 	/**
