@@ -284,7 +284,7 @@ return [
 			[
 				'slug'   => 'system-preview',
 				'name'   => 'Preview',
-				'class'  => 'fa fa-home',
+				'class'  => 'fa fa-laptop',
 				'uri'    => '/',
 				'target' => 'blank',
 			],
@@ -292,17 +292,16 @@ return [
 			[
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
-				'class' => 'fa fa-cog',
+				'class' => 'fa fa-sliders',
 				'uri'   => ':admin/settings',
 				'regex' => '/:admin\/settings/i',
 			],
-
 
 			[
 				'slug'  => 'system-logout',
 				'name'  => 'Sign Out',
 				'class' => 'fa fa-sign-out',
-				'uri'   => 'logout',
+				'uri'   => '/logout',
 			],
 
 		],
