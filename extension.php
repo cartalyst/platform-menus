@@ -350,6 +350,7 @@ return [
 				'slug'     => 'account-menu',
 				'name'     => 'Account',
 				'class'    => 'fa fa-user',
+				'regex'    => '/profile/i',
 				'children' => [
 
 					[
@@ -365,7 +366,6 @@ return [
 						'name'       => 'Profile',
 						'class'      => 'fa fa-gear',
 						'uri'        => 'profile',
-						'regex'      => '/(profile)\/',
 						'visibility' => 'logged_in',
 					],
 
