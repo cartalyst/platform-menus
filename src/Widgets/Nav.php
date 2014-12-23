@@ -141,6 +141,9 @@ class Nav {
 		// Prepare the target
 		$child->target = "_{$child->target}";
 
+		// Store the original uri
+		$originalUri = $child->uri;
+
 		// Prepare the uri
 		$child->uri = $child->getUrl($options);
 		$child->uri = str_replace(':admin', admin_uri(), $child->uri);
@@ -158,12 +161,9 @@ class Nav {
 		}
 
 		// Check if the uri of the item matches the current request path
-		elseif ($child->getOriginal('uri') != '')
+		elseif ($originalUri != '' && $child->uri == $this->path)
 		{
-			if ($child->uri === $this->path)
-			{
-				$child->isActive = true;
-			}
+			$child->isActive = true;
 		}
 
 		// Check if this item has sub items
