@@ -46,7 +46,7 @@ class MenusValidatorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_validate()
 	{
-		$rules = $rules = [
+		$rules = [
 			'name' => 'required',
 			'slug' => 'required|unique:menus',
 		];
