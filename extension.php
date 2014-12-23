@@ -297,13 +297,6 @@ return [
 				'regex' => '/:admin\/settings/i',
 			],
 
-			[
-				'slug'  => 'system-logout',
-				'name'  => 'Sign Out',
-				'class' => 'fa fa-sign-out',
-				'uri'   => '/logout',
-			],
-
 		],
 
 		'main' => [
