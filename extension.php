@@ -177,9 +177,8 @@ return [
 			Route::get('create' , ['as' => 'admin.menu.create', 'uses' => 'MenusController@create']);
 			Route::post('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@store']);
 
-			Route::get('{id}' , ['as' => 'admin.menu.edit', 'uses' => 'MenusController@edit']);
-			Route::post('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@update']);
-
+			Route::get('{id}'   , ['as' => 'admin.menu.edit'  , 'uses' => 'MenusController@edit']);
+			Route::post('{id}'  , ['as' => 'admin.menu.edit'  , 'uses' => 'MenusController@update']);
 			Route::delete('{id}', ['as' => 'admin.menu.delete', 'uses' => 'MenusController@delete']);
 		});
 	},
