@@ -202,7 +202,7 @@ return [
 	{
 		$permissions->group('menus', function($g)
 		{
-			$g->name = trans('platform/menus::general.title');
+			$g->name = trans('platform/menus::common.title');
 
 			$g->permission('menus.index', function($p)
 			{
