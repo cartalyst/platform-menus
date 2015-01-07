@@ -373,7 +373,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function enable($id)
 	{
-		$this->validator->byPass();
+		$this->validator->bypass();
 
 		return $this->update($id, [ 'enabled' => 1 ]);
 	}
@@ -383,7 +383,7 @@ class MenuRepository implements MenuRepositoryInterface {
 	 */
 	public function disable($id)
 	{
-		$this->validator->byPass();
+		$this->validator->bypass();
 
 		return $this->update($id, [ 'enabled' => 0 ]);
 	}

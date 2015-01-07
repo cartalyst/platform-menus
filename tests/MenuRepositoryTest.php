@@ -545,7 +545,7 @@ class MenuRepositoryTest extends IlluminateTestCase {
 
 		$model = $this->shouldReceiveFind();
 
-		$this->app['platform.menus.validator']->shouldReceive('byPass')
+		$this->app['platform.menus.validator']->shouldReceive('bypass')
 			->once();
 
 		$this->app['events']->shouldReceive('fire')
@@ -599,7 +599,7 @@ class MenuRepositoryTest extends IlluminateTestCase {
 
 		$model = $this->shouldReceiveFind();
 
-		$this->app['platform.menus.validator']->shouldReceive('byPass')
+		$this->app['platform.menus.validator']->shouldReceive('bypass')
 			->once();
 
 		$this->app['events']->shouldReceive('fire')
