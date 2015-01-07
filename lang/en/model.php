@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -79,6 +79,13 @@ return [
 	],
 
 	'regex'      => 'Regular Expression',
-	'regex_help' => 'Regex pattern for advanced "selected" states.'
+	'regex_help' => 'Regex pattern for advanced "selected" states.',
+
+	'name'       => 'Menu Name',
+	'slug'       => 'Slug',
+	'created_at' => 'Created At',
+
+	'items_count' => '# of Items',
+	'items'       => '{0} No items|{1} 1 item|[2,Inf] :count items',
 
 ];

@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -164,7 +164,10 @@ return [
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
+		Route::group([
+			'prefix'    => admin_uri().'/menus',
+			'namespace' => 'Platform\Menus\Controllers\Admin'
+		], function()
 		{
 			Route::get('/' , ['as' => 'admin.menus.all', 'uses' => 'MenusController@index']);
 			Route::post('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@executeAction']);

@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -81,7 +81,7 @@ abstract class AbstractType {
 	 */
 	public function getName()
 	{
-		return $this->translator->trans("platform/menus::form.type_{$this->getIdentifier()}");
+		return $this->translator->trans("platform/menus::model.type_{$this->getIdentifier()}");
 	}
 
 	/**

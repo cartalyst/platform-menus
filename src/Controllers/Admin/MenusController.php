@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -81,7 +81,14 @@ class MenusController extends AdminController {
 			'direction' => 'desc',
 		];
 
-		return datagrid($this->menus->grid(), $columns, $settings);
+		$transformer = function($element)
+		{
+			$element['edit_uri'] = route('admin.menu.edit', $element['id']);
+
+			return $element;
+		};
+
+		return datagrid($this->menus->grid(), $columns, $settings, $transformer);
 	}
 
 	/**

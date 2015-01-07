@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -85,7 +85,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		{
 			$count = $menu->getChildrenCount();
 
-			$menu->items_count = trans_choice('platform/menus::table.items', $count, compact('count'));
+			$menu->items_count = trans_choice('platform/menus::model.items', $count, compact('count'));
 		}
 
 		return $menus;
