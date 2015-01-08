@@ -58,7 +58,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 
 	/**
 	 * Array of attributes reserved for the worker. These attributes
-	 * cannot be set publically, only internally and shouldn't
+	 * cannot be set publicly, only internally and shouldn't
 	 * really be set outside this class.
 	 *
 	 * @var array
@@ -82,7 +82,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 */
 	public function getEnabledAttribute($enabled)
 	{
-		return (bool) $enabled;
+		return ($this->exists || $enabled) ? (bool) $enabled : true;
 	}
 
 	/**

@@ -234,7 +234,7 @@ class MenusController extends AdminController {
 		{
 			$this->alerts->success(trans("platform/menus::message.success.{$mode}"));
 
-			return redirect()->route('admin.menu.edit', $menu->slug);
+			return redirect()->route('admin.menu.edit', $menu->id);
 		}
 
 		$this->alerts->error($messages, 'form');
