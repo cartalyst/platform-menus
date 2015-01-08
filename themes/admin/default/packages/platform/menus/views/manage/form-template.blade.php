@@ -1,8 +1,8 @@
 <script type="text/template" id="form-template">
 
-<div class="well well-md item-box-white-bg hide" data-item-form="<%= slug %>" data-item-parent="<%= parent_id %>">
+<div class="well well-md item-box-white-bg" data-item-form="<%= slug %>" data-item-parent="<%= parent_id %>">
 
-	<input type="hidden" id="<%= slug %>_current-slug" value="<%= slug %>">
+	<input type="hidden" id="<%= slug %>_current-slug" value="<%= slug %>">test
 
 	<h4>
 		{{{ trans('platform/menus::model.update.legend') }}}

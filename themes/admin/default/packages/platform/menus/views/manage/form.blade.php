@@ -5,7 +5,8 @@
 	$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
 	$selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 ?>
-<div class="well well-md hide item-box-white-bg" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
+
+<div class="hide" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">
 
 	<input type="hidden" id="{{ sprintf($childId, 'current-slug') }}" value="{{ ! empty($child) ? $child->slug : null }}">
 
