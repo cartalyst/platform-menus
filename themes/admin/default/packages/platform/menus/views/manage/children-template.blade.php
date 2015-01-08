@@ -2,9 +2,6 @@
 
 <li data-item-id="<%= slug %>">
 
-
-
-
 	<div class="item-handle"><i class="fa fa-arrows-alt"></i></div>
 
 	<div class="item-name" data-item="<%= slug %>">

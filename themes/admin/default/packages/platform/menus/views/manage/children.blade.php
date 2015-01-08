@@ -31,11 +31,11 @@
 
 	</div>
 
-	@if ( ! empty($child) and $children = $child->getChildren())
+
 	<ol>
-
+		@if ( ! empty($child) and $children = $child->getChildren())
 		@each('platform/menus::manage/children', $children, 'child')
-
+		@endif
 	</ol>
-	@endif
+
 </li>
