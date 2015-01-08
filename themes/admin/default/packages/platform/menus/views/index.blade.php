@@ -51,20 +51,20 @@
 					<ul class="nav navbar-nav navbar-left">
 
 						<li class="disabled">
-							<a class="disabled" data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
+							<a data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
 								<i class="fa fa-eye-slash"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.disable') }}}</span>
 							</a>
 						</li>
 
 						<li class="disabled">
 							<a data-grid-bulk-action="enable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.enable') }}}">
-								<i class="fa fa-eye"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.enable') }}}</span>
+								<i class="fa fa-eye"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.enable') }}}</span>
 							</a>
 						</li>
 
 						<li class="danger disabled">
 							<a data-grid-bulk-action="delete" data-toggle="tooltip" data-target="modal-confirm" data-original-title="{{{ trans('action.bulk.delete') }}}">
-								<i class="fa fa-trash-o"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.delete') }}}</span>
+								<i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.delete') }}}</span>
 							</a>
 						</li>
 
@@ -171,7 +171,7 @@
 
 	</header>
 
-	<main class="panel-body">
+	<div class="panel-body">
 
 		{{-- Grid: Applied Filters --}}
 		<div class="btn-toolbar" role="toolbar" aria-label="data-grid-applied-filters">
@@ -180,7 +180,7 @@
 
 		</div>
 
-	</main>
+	</div>
 
 	{{-- Grid: Table --}}
 	<div class="table-responsive">
