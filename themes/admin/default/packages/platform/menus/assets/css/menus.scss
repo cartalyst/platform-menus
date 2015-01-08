@@ -34,8 +34,13 @@ ol li.placeholder {
 
 		margin:6px 0;
 		padding:0;
+
 		.panel-heading,
 		.panel-footer {
+			padding-right: 0;
+			padding-left: 0;
+			margin-right: auto;
+			margin-left: auto;
 			border:none;
 		}
 
