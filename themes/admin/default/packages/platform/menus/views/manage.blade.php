@@ -7,7 +7,7 @@
 @stop
 
 {{-- Queue assets --}}
-{{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
+{{ Asset::queue('menus', 'platform/menus::css/menus.scss', 'style') }}
 
 {{ Asset::queue('slugify', 'platform/js/slugify.js', 'jquery') }}
 {{ Asset::queue('sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
@@ -42,9 +42,9 @@
 @parent
 @stop
 
-{{-- Page content --}}
+{{-- Page --}}
 @section('page')
-<section class="panel panel-default panel-tabs">
+<section class="panel panel-default">
 
 	<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8" data-parsley-validate>
 
@@ -107,117 +107,72 @@
 
 		<div class="panel-body">
 
-			<hr>
+	{{-- Form: General --}}
+	<fieldset>
 
-			<div class="row container-fluid">
+				<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
 
-				<div class="col-md-4">
+				<div class="row">
+					<div class="col-sm-6">
+						{{-- Name --}}
+						<div class="form-group{{ Alert::form('name', ' has-error') }}">
 
+							<label class="control-label" for="menu-name">
+								<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.name_help') }}}"></i>
+								{{ trans('platform/menus::model.name') }}
+							</label>
 
+							<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
 
-					<fieldset>
+							<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						{{-- Slug --}}
+						<div class="form-group{{ Alert::form('slug', ' has-error') }}">
+							<label class="control-label" for="menu-slug">
+								<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.slug_help') }}}"></i>
+								{{ trans('platform/menus::model.slug') }}
+							</label>
 
-						<legend>Create Link</legend>
+							<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
 
-						<div class="btn btn-default btn-block item-name" data-item-add data-item="new-child">{{{ trans('platform/menus::action.add_item') }}}</div>
+							<span class="help-block"></span>
+						</div>
+					</div>
 
+				</div>
 
-						{{-- Items form --}}
+				{{-- Underscore form template --}}
+				<div data-forms>
+					@include('platform/menus::manage/form-template')
+				</div>
+
+			</fieldset>
+
+			{{-- Form: Structure --}}
+			<fieldset>
+
+				<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
+
+				@if ( empty($children) )
+
+					<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
+
+				@endif
+
+				<div id="sortable">
+					<ol class="items">
 						@if ( ! empty($children))
-						@each('platform/menus::manage/form', $children, 'child')
+						@each('platform/menus::manage/children', $children, 'child')
 						@endif
 
-						{{-- New children form --}}
-						@include('platform/menus::manage/form')
-
-						{{-- Underscore form template --}}
-						<div data-forms>
-							@include('platform/menus::manage/form-template')
-						</div>
-
-					</fieldset>
-
+						{{-- Underscore children template --}}
+						@include('platform/menus::manage/children-template')
+					</ol>
 				</div>
 
-				<div class="col-md-8">
-
-					<fieldset>
-
-						<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
-
-						<div class="row">
-							<div class="col-md-6">
-
-								{{-- Name --}}
-								<div class="form-group{{ Alert::form('name', ' has-error') }}">
-
-									<label class="control-label" for="menu-name">
-										<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/content::model.name_help') }}}"></i>
-										{{ trans('platform/menus::model.name') }}
-									</label>
-
-									<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/content::model.name') }}}" required data-parsley-trigger="change">
-
-									<span class="help-block"></span>
-								</div>
-
-
-							</div>
-							<div class="col-md-6">
-
-								{{-- Name --}}
-								<div class="form-group{{ Alert::form('slug', ' has-error') }}">
-									<label class="control-label" for="menu-slug">
-									<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/content::model.slug_help') }}}"></i>
-									{{ trans('platform/menus::model.slug') }}
-									</label>
-
-									<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/content::model.name') }}}" required data-parsley-trigger="change">
-
-									<span class="help-block"></span>
-								</div>
-
-							</div>
-
-						</div>
-
-					</fieldset>
-
-
-					<fieldset>
-
-						<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
-
-							<div class="container" id="no-children">
-
-								<h1>{{ trans('platform/menus::message.no_children') }}</h1>
-
-								<p>&nbsp;</p>
-
-								<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="fa fa-plus"></i> {{{ trans('platform/menus::action.add_item') }}}</button></p>
-
-							</div>
-
-						</div>
-
-
-
-						<div id="sortable">
-							<ol class="items">
-								@if ( ! empty($children))
-								@each('platform/menus::manage/children', $children, 'child')
-								@endif
-
-								{{-- Underscore children template --}}
-								@include('platform/menus::manage/children-template')
-							</ol>
-						</div>
-
-					</fieldset>
-
-				</div>
-
-			</div>
+			</fieldset>
 
 		</div>
 

@@ -29,11 +29,17 @@ return [
 		'description' => 'Update an existing navigation item.',
 	],
 
-	'name'      => 'Name',
+	'name'      => 'Menu Name',
 	'name_help' => 'Type your menu item name.',
 
-	'slug'      => 'Slug',
+	'slug'      => 'Short Name',
 	'slug_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
+
+	'name_item'      => 'Link Name',
+	'name_item_help' => 'Type your menu item name.',
+
+	'slug_item'      => 'Short Name',
+	'slug_item_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
 
 	'enabled'      => 'Status',
 	'enabled_help' => 'What is this menu item status?',
@@ -81,11 +87,12 @@ return [
 	'regex'      => 'Regular Expression',
 	'regex_help' => 'Regex pattern for advanced "selected" states.',
 
-	'name'       => 'Menu Name',
-	'slug'       => 'Slug',
 	'created_at' => 'Created At',
 
 	'items_count' => '# of Items',
 	'items'       => '{0} No items|{1} 1 item|[2,Inf] :count items',
+
+	'item_details' => 'Details',
+	'advanced_settings' => 'Advanced Settings',
 
 ];

@@ -1,4 +1,5 @@
-<li data-item-id="{{ $child->id }}">
+<ol>
+<li data-item-id="">
 
 	<div class="panel panel-default panel-menu">
 
@@ -6,7 +7,7 @@
 
 			<span class="item-handle"><i class="fa fa-arrows-alt"></i></span>
 
-			<span class="item-name" data-item-name="{{ $child->id }}">{{ $child->name }}</span>
+			<span class="item-name">Add Item</span>
 
 
 			<!-- <span class="item-status{{ $child->enabled == 0 ? null : ' hide' }}" data-item-status="{{ $child->id }}"><i class="fa fa-eye-slash"></i></span> -->
@@ -31,11 +32,5 @@
 
 	</div>
 
-	@if ( ! empty($child) and $children = $child->getChildren())
-	<ol>
-
-		@each('platform/menus::manage/children', $children, 'child')
-
-	</ol>
-	@endif
 </li>
+</ol>
