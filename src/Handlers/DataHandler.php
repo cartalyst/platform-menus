@@ -24,11 +24,13 @@ class DataHandler implements DataHandlerInterface {
 	 */
 	public function prepare(array $data)
 	{
-		return [
-			'name'     => array_get($data, 'menu-name'),
-			'slug'     => array_get($data, 'menu-slug'),
-			'children' => $this->processSubmittedTree($data),
-		];
+		$data['name'] = array_get($data, 'menu-name');
+		$data['slug'] = array_get($data, 'menu-slug');
+		$data['children'] = $this->processSubmittedTree($data);
+
+		unset($data['menu-name'], $data['menu-slug']);
+
+		return array_filter($data, 'self::isNotNull');
 	}
 
 	/**
@@ -109,6 +111,17 @@ class DataHandler implements DataHandlerInterface {
 		}
 
 		$children[] = $prepared;
+	}
+
+	/**
+	 * Checks if the given value is not null.
+	 *
+	 * @param  mixed  $value
+	 * @return bool
+	 */
+	protected function isNotNull($value)
+	{
+		return ! is_null($value);
 	}
 
 }

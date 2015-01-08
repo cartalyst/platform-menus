@@ -77,7 +77,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	/**
 	 * Get accessor for the "enabled" attribute.
 	 *
-	 * @param  mixed  $enabled
+	 * @param  int  $enabled
 	 * @return bool
 	 */
 	public function getEnabledAttribute($enabled)

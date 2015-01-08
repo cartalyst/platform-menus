@@ -37,7 +37,7 @@ class MenusController extends AdminController {
 	protected $actions = [
 		'enable',
 		'delete',
-		'disable'
+		'disable',
 	];
 
 	/**
@@ -167,7 +167,7 @@ class MenusController extends AdminController {
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (request()->input('entries', []) as $entry)
+			foreach (request()->input('rows', []) as $entry)
 			{
 				$this->menus->{$action}($entry);
 			}
