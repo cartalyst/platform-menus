@@ -5,9 +5,16 @@
 		<tr data-grid-row>
 			<td><input data-grid-checkbox type="checkbox" name="row[]" value="<%= r.id %>"></td>
 			<td><a href="<%= r.edit_uri %>"><%= r.name %></a></td>
-			<td><%= r.slug %></td>
+			<td class="hidden-xs"><%= r.slug %></td>
 			<td><%= r.items_count %></td>
-			<td><%= moment(r.created_at).format('MMM DD, YYYY') %></td>
+			<td>
+				<% if (r.enabled == 1) { %>
+					{{{ trans('common.enabled') }}}
+				<% } else { %>
+					{{{ trans('common.disabled') }}}
+				<% } %>
+			</td>
+			<td class="hidden-xs"><%= moment(r.created_at).format('MMM DD, YYYY') %></td>
 		</tr>
 
 	<% }); %>

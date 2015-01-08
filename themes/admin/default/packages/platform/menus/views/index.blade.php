@@ -50,19 +50,19 @@
 
 					<ul class="nav navbar-nav navbar-left">
 
-						<li class="hide disabled">
+						<li class="disabled">
 							<a class="disabled" data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
 								<i class="fa fa-eye-slash"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.disable') }}}</span>
 							</a>
 						</li>
 
-						<li class="hide disabled">
+						<li class="disabled">
 							<a data-grid-bulk-action="enable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.enable') }}}">
 								<i class="fa fa-eye"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.enable') }}}</span>
 							</a>
 						</li>
 
-						<li class="hide danger disabled">
+						<li class="danger disabled">
 							<a data-grid-bulk-action="delete" data-toggle="tooltip" data-target="modal-confirm" data-original-title="{{{ trans('action.bulk.delete') }}}">
 								<i class="fa fa-trash-o"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.delete') }}}</span>
 							</a>
@@ -191,7 +191,8 @@
 					<th><input data-grid-checkbox="all" type="checkbox"></th>
 					<th class="sortable" data-sort="name">{{{ trans('platform/menus::model.name') }}}</th>
 					<th class="sortable hidden-xs" data-sort="slug">{{{ trans('platform/menus::model.slug') }}}</th>
-					<th class="sortable" data-sort="enabled">{{{ trans('platform/menus::model.items_count') }}}</th>
+					<th class="sortable" data-sort="items_count">{{{ trans('platform/menus::model.items_count') }}}</th>
+					<th class="sortable" data-sort="enabled">{{{ trans('platform/menus::model.enabled') }}}</th>
 					<th class="sortable hidden-xs" data-sort="created_at">{{{ trans('model.created_at') }}}</th>
 				</tr>
 			</thead>

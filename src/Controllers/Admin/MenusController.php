@@ -35,7 +35,9 @@ class MenusController extends AdminController {
 	 * @var array
 	 */
 	protected $actions = [
+		'enable',
 		'delete',
+		'disable'
 	];
 
 	/**
@@ -73,6 +75,7 @@ class MenusController extends AdminController {
 			'name',
 			'slug',
 			'items_count',
+			'enabled',
 			'created_at',
 		];
 
@@ -114,34 +117,34 @@ class MenusController extends AdminController {
 	/**
 	 * Shows the form for updating a menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return mixed
 	 */
-	public function edit($slug)
+	public function edit($id)
 	{
-		return $this->showForm('update', $slug);
+		return $this->showForm('update', $id);
 	}
 
 	/**
 	 * Handles posting of the form for updating a menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function update($slug)
+	public function update($id)
 	{
-		return $this->processForm('update', $slug);
+		return $this->processForm('update', $id);
 	}
 
 	/**
 	 * Removes the specified menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function delete($slug)
+	public function delete($id)
 	{
-		if ($this->menus->delete($slug))
+		if ($this->menus->delete($id))
 		{
 			$this->alerts->success(trans('platform/menus::message.success.delete'));
 
