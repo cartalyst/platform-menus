@@ -470,7 +470,13 @@
 				// Check if this is an unique slug
 				if ( ! self.isUniqueSlug(slug))
 				{
-					alert('The slug [' + slug + '] is already taken!');
+					//alert('The slug [' + slug + '] is already taken!');
+
+					var message = 'The slug [' + slug + '] is already taken!';
+
+					// need to pass modal-notice, plus message.
+					Platform.App.modals();
+
 				}
 
 				// Check if the form is valid
@@ -603,7 +609,8 @@
 				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
 				{
-					alert('The slug [' + slug + '] is already taken!');
+					//alert('The slug [' + slug + '] is already taken!');
+					Platform.App.modals('modal-confirm');
 				}
 
 				// Check if the form is valid
