@@ -29,23 +29,17 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	use EntityTrait, NamespacedEntityTrait;
 
 	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
+	 * {@inheritDoc}
 	 */
 	protected $table = 'menus';
 
 	/**
-	 * The primary key for the model.
-	 *
-	 * @var string
+	 * {@inheritDoc}
 	 */
 	protected $primaryKey = 'id';
 
 	/**
-	 * The attributes that aren't mass assignable.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
 	protected $guarded = [
 		'lft',
@@ -57,11 +51,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	];
 
 	/**
-	 * Array of attributes reserved for the worker. These attributes
-	 * cannot be set publicly, only internally and shouldn't
-	 * really be set outside this class.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
 	protected $reservedAttributes = [
 		'left'  => 'lft',
@@ -250,16 +240,6 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 			$this->filterChildrenRoles($grandChildren, $roles);
 			$child->setChildren($grandChildren);
 		}
-	}
-
-	/**
-	 * Return the guarded attributes.
-	 *
-	 * @return array
-	 */
-	public function getGuarded()
-	{
-		return $this->guarded;
 	}
 
 	/**

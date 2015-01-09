@@ -13,7 +13,7 @@
 {{ Asset::queue('sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
 {{ Asset::queue('validate', 'platform/js/validate.js', 'jquery') }}
 {{ Asset::queue('selectize', 'selectize/js/selectize.js', 'jquery') }}
-{{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'jquery') }}
+{{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'slugify') }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'menu-manager') }}
 
 
@@ -144,9 +144,7 @@
 				</div>
 
 				{{-- Underscore form template --}}
-				<div data-forms>
-					@include('platform/menus::manage/form-template')
-				</div>
+				@include('platform/menus::manage/form-template')
 
 			</fieldset>
 
@@ -162,15 +160,17 @@
 				@endif
 
 				<div id="sortable">
+
 					<ol class="items">
 						@if ( ! empty($children))
 						@each('platform/menus::manage/children', $children, 'child')
 						@endif
-
-						{{-- Underscore children template --}}
-						@include('platform/menus::manage/children-template')
 					</ol>
+
 				</div>
+
+				{{-- New children form --}}
+				@include('platform/menus::manage/form')
 
 			</fieldset>
 
