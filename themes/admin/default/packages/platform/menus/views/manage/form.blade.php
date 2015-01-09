@@ -63,15 +63,15 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 			<div class="col-sm-2">
 
-
 				{{-- Item Type --}}
 				<div class="form-group">
-					<label class="control-label" for="{{ sprintf($childId, 'type') }}">{{{ trans('platform/menus::model.type') }}}</label>
-
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.type_help') }}}"></i>
+					<label class="control-label" for="{{ sprintf($childId, 'type') }}">
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.type_help') }}}"></i>
+						{{{ trans('platform/menus::model.type') }}}
+					</label>
 
 					<div class="controls">
-						<select data-item-url-type="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}" class="form-control input-sm">
+						<select class="form-control input-sm" data-item-url-type="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'type') }}" id="{{ sprintf($childId, 'type') }}">
 							@foreach ($types as $type)
 							<option value="{{ $type->getIdentifier() }}"{{ ( ! empty($child) ? $child->type : null) == $type->getIdentifier() ? ' selected="selected"' : null }}>{{ $type->getName() }}</option>
 							@endforeach
@@ -81,8 +81,6 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 			</div>
 
-
-
 			<div class="col-sm-4">
 
 				{{-- Generate the types inputs --}}
@@ -90,11 +88,9 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 				{{ $type->getFormHtml( ! empty($child) ? $child : null) }}
 				@endforeach
 
-
 			</div>
 
 		</div>
-
 
 	</fieldset>
 
@@ -106,7 +102,9 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 			<legend>{{{ trans('platform/menus::model.advanced_settings') }}}</legend>
 
 			<div class="row">
+
 				<div class="col-sm-3">
+
 					{{-- Enabled --}}
 					<div class="form-group">
 						<label class="control-label" for="{{ sprintf($childId, 'enabled') }}">
@@ -120,65 +118,6 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 								<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('common.disabled') }}}</option>
 							</select>
 						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-
-					{{-- Parent --}}
-					<div class="form-group">
-
-						<label class="control-label" for="{{ sprintf($childId, 'parent') }}">
-							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.parent_help') }}}"></i>
-							{{{ trans('platform/menus::model.parent') }}}
-						</label>
-
-						<div class="controls">
-							<select class="form-control input-sm" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}"></select>
-						</div>
-
-					</div>
-
-				</div>
-				<div class="col-sm-3">
-
-					{{-- Secure --}}
-					<div class="form-group">
-						<label class="control-label" for="{{ sprintf($childId, 'secure') }}">{{{ trans('platform/menus::model.secure') }}}</label>
-
-						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.secure_help') }}}"></i>
-
-						<div class="controls">
-							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control input-sm">
-								<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('common.inherit') }}}</option>
-								<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('common.yes') }}}</option>
-								<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('common.no') }}}</option>
-							</select>
-						</div>
-					</div>
-
-				</div>
-				<div class="col-sm-3">
-
-
-
-				</div>
-			</div>
-
-			<div class="row">
-
-				<div class="col-sm-3">
-
-
-					{{-- Class --}}
-					<div class="form-group">
-
-						<label class="control-label" for="{{ sprintf($childId, 'class') }}">
-							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.class_help') }}}"></i>
-							{{{ trans('platform/menus::model.class') }}}
-						</label>
-
-						<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'class') }}" id="{{ sprintf($childId, 'class') }}" class="form-control input-sm" value="{{ ! empty($child) ? $child->class : null }}">
-
 					</div>
 
 				</div>
@@ -208,6 +147,63 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 				<div class="col-sm-3">
 
+					{{-- Secure --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ sprintf($childId, 'secure') }}">{{{ trans('platform/menus::model.secure') }}}</label>
+
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.secure_help') }}}"></i>
+
+						<div class="controls">
+							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control input-sm">
+								<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('common.inherit') }}}</option>
+								<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('common.yes') }}}</option>
+								<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('common.no') }}}</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-sm-3">
+
+					{{-- Parent --}}
+					<div class="form-group">
+
+						<label class="control-label" for="{{ sprintf($childId, 'parent') }}">
+							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.parent_help') }}}"></i>
+							{{{ trans('platform/menus::model.parent') }}}
+						</label>
+
+						<div class="controls">
+							<select class="form-control input-sm" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}"></select>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="row">
+
+				<div class="col-sm-4">
+
+					{{-- Class --}}
+					<div class="form-group">
+
+						<label class="control-label" for="{{ sprintf($childId, 'class') }}">
+							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.class_help') }}}"></i>
+							{{{ trans('platform/menus::model.class') }}}
+						</label>
+
+						<input data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" type="text" name="{{ sprintf($childName, 'class') }}" id="{{ sprintf($childId, 'class') }}" class="form-control input-sm" value="{{ ! empty($child) ? $child->class : null }}">
+
+					</div>
+
+				</div>
+
+				<div class="col-sm-4">
+
 					{{-- Regular Expression --}}
 					<div class="form-group">
 
@@ -222,7 +218,7 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 				</div>
 
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 
 					{{-- Visibility --}}
 					<div class="form-group">

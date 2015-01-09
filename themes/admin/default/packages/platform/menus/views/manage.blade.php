@@ -16,7 +16,6 @@
 {{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'slugify') }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'menu-manager') }}
 
-
 {{-- Inline scripts --}}
 @section('scripts')
 @parent
@@ -167,9 +166,9 @@
 
 							<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
 
-							<span class="new-item"><i class="fa fa-plus"></i></span>
+								<span class="new-item"><i class="fa fa-plus"></i></span>
 
-							<span class="item-name"></i> Create New Link</span>
+								<span class="item-name"></i> Create New Link</span>
 
 								<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
@@ -211,10 +210,6 @@
 					</div>
 
 				</div>
-
-
-
-
 
 			</div>
 

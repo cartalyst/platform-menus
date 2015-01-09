@@ -15,21 +15,35 @@ body.dragging, body.dragging * {
 	z-index: 2000;
 }
 
-ol {
+
+
+.items {
 	list-style: none;
 }
 
-ol li {
+.items li {
 	display: block;
 }
 
-ol li.placeholder {
+.items li.placeholder {
 	padding: 0;
 	position: relative;
 	background:#EAF2F8;
 	height: 42px;
 	border-radius:4px;
 	border:1px dashed #ddd;
+}
+
+.item-name {
+
+	display: inline-block;
+	padding:0 12px;
+
+}
+
+.item-status {
+	padding-right:8px;
+	color:#999;
 }
 
 .panel {
@@ -71,7 +85,7 @@ ol li.placeholder {
 		.panel-body {
 
 			border-top:1px solid #ddd;
-			padding-bottom:0;
+			padding:0 16px;
 
 			legend {
 				span {
@@ -127,11 +141,6 @@ ol li.placeholder {
 	z-index: 2000;
 }
 
-.item-name {
 
-	display: inline-block;
-	padding:0 12px;
-
-}
 
 
