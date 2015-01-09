@@ -227,14 +227,14 @@ class MenusController extends AdminController {
 	protected function processForm($mode, $id = null)
 	{
 		// Store the menu
-		list($messages, $menu) = $this->menus->store($id, request()->all());
+		list($messages) = $this->menus->store($id, request()->all());
 
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
 			$this->alerts->success(trans("platform/menus::message.success.{$mode}"));
 
-			return redirect()->route('admin.menu.edit', $menu->id);
+			return redirect()->route('admin.menus.all');
 		}
 
 		$this->alerts->error($messages, 'form');
