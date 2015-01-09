@@ -542,7 +542,7 @@
 					newItemForm.find('[data-options]').addClass('hide');
 
 					// Move the item to the correct destination
-					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
+					$('[data-item-id="' + slug + '"]').prependTo('.items');
 
 					// We have unsaved changes
 					options.unsavedChanges = true;
