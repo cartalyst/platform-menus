@@ -8,7 +8,7 @@
 
 			<span class="item-handle"><i class="fa fa-arrows-alt"></i></span>
 
-			<span class="item-name" data-item-name="<%= slug %>"><%= slug %></span>
+			<span class="item-name" data-item-name="<%= slug %>"><%= name %></span>
 
 			<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
