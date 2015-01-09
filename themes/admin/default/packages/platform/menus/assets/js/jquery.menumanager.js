@@ -39,7 +39,6 @@
 		// Underscore template elements
 		templates : {
 
-			item : '#item-template',
 			form : '#form-template'
 
 		},
@@ -506,8 +505,7 @@
 					});
 
 					// Append the new menu item
-					$(options.sortable.selector).append(_.template($(options.templates.item).html(), data));
-					$('[data-forms]').append(_.template($(options.templates.form).html(), data));
+					$(options.sortable.selector).append(_.template($(options.templates.form).html(), data));
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
@@ -562,7 +560,7 @@
 					$('.' + formOpt.errorClass).removeClass(formOpt.errorClass);
 
 					// Hide the add new item form box
-					newItemForm.addClass('hide');
+					// newItemForm.addClass('hide');
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
