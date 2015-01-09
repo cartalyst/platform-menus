@@ -107,8 +107,8 @@
 
 		<div class="panel-body">
 
-	{{-- Form: General --}}
-	<fieldset>
+			{{-- Form: General --}}
+			<fieldset>
 
 				<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
 
@@ -155,28 +155,62 @@
 
 				@if ( empty($children) )
 
-					<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
+				<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
 
 				@endif
+
+
 
 				<div id="sortable">
 
 					<ol class="items">
-						@if ( ! empty($children))
-						@each('platform/menus::manage/children', $children, 'child')
-						@endif
-					</ol>
+						<li>
+						{{-- New children form --}}
+						<div class="panel panel-default panel-menu">
 
-				</div>
+							<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
 
-				{{-- New children form --}}
-				@include('platform/menus::manage/form')
+								<span class="item-name">New Item</span>
 
-			</fieldset>
+								<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
-		</div>
+							</header>
 
-	</form>
+							<div class="panel-body collapse" id="panel-new">
+
+								<div class="row">
+
+									<div class="col-md-12">
+
+										@include('platform/menus::manage/form')
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+
+					</li>
+
+					{{-- Menu Items --}}
+					@if ( ! empty($children))
+					@each('platform/menus::manage/children', $children, 'child')
+					@endif
+
+				</ol>
+
+			</div>
+
+
+
+		</fieldset>
+
+	</div>
+
+</form>
 
 </section>
 @stop

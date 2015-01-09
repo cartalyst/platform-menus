@@ -14,9 +14,8 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 	<fieldset>
 
 		<legend>
+
 			{{{ trans('platform/menus::model.item_details') }}}
-
-
 
 			<span class="pull-right" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.advanced_settings') }}}</span>
 

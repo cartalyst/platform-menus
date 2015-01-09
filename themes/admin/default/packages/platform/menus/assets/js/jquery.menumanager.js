@@ -166,7 +166,7 @@
 			$(this.opt.sortable.selector).sortable({
 
 				placeholder: '<li class="placeholder"></li>',
-				handle: 'div.item-handle',
+				handle: '.item-handle',
 				onDrop: function (item, container, _super) {
 
 					// Get the parent id
