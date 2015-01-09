@@ -107,13 +107,16 @@
 
 		<div class="panel-body">
 
-			{{-- Form: General --}}
-			<fieldset>
+			<div class="row">
 
-				<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
+				<div class="col-md-3">
 
-				<div class="row">
-					<div class="col-sm-6">
+					{{-- Form: General --}}
+					<fieldset>
+
+						<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
+
+
 						{{-- Name --}}
 						<div class="form-group{{ Alert::form('name', ' has-error') }}">
 
@@ -126,8 +129,7 @@
 
 							<span class="help-block"></span>
 						</div>
-					</div>
-					<div class="col-sm-6">
+
 						{{-- Slug --}}
 						<div class="form-group{{ Alert::form('slug', ' has-error') }}">
 							<label class="control-label" for="menu-slug">
@@ -139,38 +141,35 @@
 
 							<span class="help-block"></span>
 						</div>
-					</div>
+
+						{{-- Underscore form template --}}
+						@include('platform/menus::manage/form-template')
+
+					</fieldset>
 
 				</div>
 
-				{{-- Underscore form template --}}
-				@include('platform/menus::manage/form-template')
+				<div class="col-md-9">
 
-			</fieldset>
+					{{-- Form: Structure --}}
+					<fieldset>
 
-			{{-- Form: Structure --}}
-			<fieldset>
+						<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
 
-				<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
+						@if ( empty($children) )
 
-				@if ( empty($children) )
+						<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
 
-				<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
+						@endif
 
-				@endif
-
-
-
-				<div id="sortable">
-
-					<ol class="items">
-						<li>
 						{{-- New children form --}}
 						<div class="panel panel-default panel-menu">
 
 							<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
 
-								<span class="item-name">New Item</span>
+							<span class="new-item"><i class="fa fa-plus"></i></span>
+
+							<span class="item-name"></i> Create New Link</span>
 
 								<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
@@ -192,25 +191,34 @@
 
 						</div>
 
+						<hr>
 
-					</li>
+						<div id="sortable">
 
-					{{-- Menu Items --}}
-					@if ( ! empty($children))
-					@each('platform/menus::manage/children', $children, 'child')
-					@endif
+							<ol class="items">
 
-				</ol>
+
+								{{-- Menu Items --}}
+								@if ( ! empty($children))
+								@each('platform/menus::manage/children', $children, 'child')
+								@endif
+
+							</ol>
+
+
+						</fieldset>
+
+					</div>
+
+				</div>
+
+
+
+
 
 			</div>
 
+		</form>
 
-
-		</fieldset>
-
-	</div>
-
-</form>
-
-</section>
-@stop
+	</section>
+	@stop

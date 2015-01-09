@@ -71,6 +71,7 @@ ol li.placeholder {
 		.panel-body {
 
 			border-top:1px solid #ddd;
+			padding-bottom:0;
 
 			legend {
 				span {
@@ -79,8 +80,13 @@ ol li.placeholder {
 					display: inline-block;
 					padding:4px 8px 0 8px;
 
+					border-left:1px solid #ddd;
+
 					&:last-child {
-						border-right:1px solid #ddd;
+						border-left:none;
+					}
+					&:hover {
+						color:#428bca;
 					}
 				}
 			}
@@ -93,6 +99,13 @@ ol li.placeholder {
 			border-left:1px solid #ddd;
 		}
 	}
+}
+
+.new-item {
+	display: inline-block;
+	border-right:1px solid #ddd;
+	padding:0 12px;
+	z-index: 2000;
 }
 
 .no-items {

@@ -17,11 +17,14 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 			{{{ trans('platform/menus::model.item_details') }}}
 
-			<span class="pull-right" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.advanced_settings') }}}</span>
-
 			@if ( ! empty($child))
-			<span class="pull-right text-danger" data-item-remove="{{{ $child->id }}}"><i class="fa fa-trash"></i> {{{ trans('action.remove') }}}</span>
+			<span class="pull-right" data-item-update="{{{ $child->id }}}"><i class="fa fa-save"></i> {{{ trans('action.update') }}}</span>
+			<span class="pull-right" data-item-remove="{{{ $child->id }}}"><i class="fa fa-trash"></i> {{{ trans('action.remove') }}}</span>
+			@else
+			<span class="pull-right" data-item-create><i class="fa fa-plus"></i> {{{ trans('action.add') }}}</span>
 			@endif
+
+			<span class="pull-right" data-toggle-options="{{{ ! empty($child) ? $child->id : 'new-child' }}}"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.advanced_settings') }}}</span>
 
 		</legend>
 
@@ -58,48 +61,9 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 			</div>
 
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 
-				{{-- Enabled --}}
-				<div class="form-group">
-					<label class="control-label" for="{{ sprintf($childId, 'enabled') }}">
-						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.enabled_help') }}}"></i>
-						{{{ trans('platform/menus::model.enabled') }}}
-					</label>
 
-					<div class="controls">
-						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'enabled') }}" id="{{ sprintf($childId, 'enabled') }}" class="form-control input-sm">
-							<option value="1"{{ ( ! empty($child) ? $child->enabled : 1) == 1 ? ' selected="selected"' : null }}>{{{ trans('common.enabled') }}}</option>
-							<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('common.disabled') }}}</option>
-						</select>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="col-sm-3">
-
-				{{-- Parent --}}
-				<div class="form-group">
-
-					<label class="control-label" for="{{ sprintf($childId, 'parent') }}">
-						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.parent_help') }}}"></i>
-						{{{ trans('platform/menus::model.parent') }}}
-					</label>
-
-					<div class="controls">
-						<select class="form-control input-sm" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}"></select>
-					</div>
-
-				</div>
-
-			</div>
-
-		</div>
-
-		<div class="row">
-
-			<div class="col-sm-3">
 				{{-- Item Type --}}
 				<div class="form-group">
 					<label class="control-label" for="{{ sprintf($childId, 'type') }}">{{{ trans('platform/menus::model.type') }}}</label>
@@ -114,35 +78,23 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 						</select>
 					</div>
 				</div>
+
 			</div>
 
-			<div class="col-sm-3">
-				{{-- Secure --}}
-				<div class="form-group">
-					<label class="control-label" for="{{ sprintf($childId, 'secure') }}">{{{ trans('platform/menus::model.secure') }}}</label>
 
-					<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.secure_help') }}}"></i>
 
-					<div class="controls">
-						<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control input-sm">
-							<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('common.inherit') }}}</option>
-							<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('common.yes') }}}</option>
-							<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('common.no') }}}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 
 				{{-- Generate the types inputs --}}
 				@foreach ($types as $type)
 				{{ $type->getFormHtml( ! empty($child) ? $child : null) }}
 				@endforeach
 
+
 			</div>
 
 		</div>
+
 
 	</fieldset>
 
@@ -152,6 +104,65 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 		<fieldset>
 
 			<legend>{{{ trans('platform/menus::model.advanced_settings') }}}</legend>
+
+			<div class="row">
+				<div class="col-sm-3">
+					{{-- Enabled --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ sprintf($childId, 'enabled') }}">
+							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.enabled_help') }}}"></i>
+							{{{ trans('platform/menus::model.enabled') }}}
+						</label>
+
+						<div class="controls">
+							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'enabled') }}" id="{{ sprintf($childId, 'enabled') }}" class="form-control input-sm">
+								<option value="1"{{ ( ! empty($child) ? $child->enabled : 1) == 1 ? ' selected="selected"' : null }}>{{{ trans('common.enabled') }}}</option>
+								<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('common.disabled') }}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-3">
+
+					{{-- Parent --}}
+					<div class="form-group">
+
+						<label class="control-label" for="{{ sprintf($childId, 'parent') }}">
+							<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.parent_help') }}}"></i>
+							{{{ trans('platform/menus::model.parent') }}}
+						</label>
+
+						<div class="controls">
+							<select class="form-control input-sm" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-parents name="{{ sprintf($childName, 'parent') }}" id="{{ sprintf($childId, 'parent') }}"></select>
+						</div>
+
+					</div>
+
+				</div>
+				<div class="col-sm-3">
+
+					{{-- Secure --}}
+					<div class="form-group">
+						<label class="control-label" for="{{ sprintf($childId, 'secure') }}">{{{ trans('platform/menus::model.secure') }}}</label>
+
+						<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.secure_help') }}}"></i>
+
+						<div class="controls">
+							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'secure') }}" id="{{ sprintf($childId, 'secure') }}" class="form-control input-sm">
+								<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('common.inherit') }}}</option>
+								<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('common.yes') }}}</option>
+								<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('common.no') }}}</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-sm-3">
+
+
+
+				</div>
+			</div>
 
 			<div class="row">
 
@@ -265,13 +276,5 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 		</fieldset>
 
 	</div>
-
-	<hr>
-
-	@if ( ! empty($child))
-		<button class="btn btn-primary btn-block" data-item-update="{{{ $child->id }}}">{{{ trans('action.update') }}}</button>
-	@else
-		<button class="btn btn-primary btn-block" data-item-create>{{{ trans('action.add') }}}</button>
-	@endif
 
 </div>
