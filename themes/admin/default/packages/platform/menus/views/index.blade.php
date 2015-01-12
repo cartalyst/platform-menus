@@ -215,4 +215,9 @@
 	@include('platform/menus::grid/index/no_results')
 
 </section>
+
+@if (config('platform.app.help'))
+	@include('platform/menus::help')
+@endif
+
 @stop
