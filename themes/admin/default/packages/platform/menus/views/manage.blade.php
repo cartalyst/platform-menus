@@ -43,7 +43,7 @@
 
 {{-- Page --}}
 @section('page')
-<section class="panel panel-default">
+<section class="panel panel-default panel-tabs">
 
 	<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8" data-parsley-validate>
 
@@ -64,13 +64,9 @@
 							<span class="icon-bar"></span>
 						</button>
 
-						<ul class="nav navbar-nav navbar-cancel">
-							<li>
-								<a class="tip" href="{{ route('admin.menus.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
-									<i class="fa fa-reply"></i>  <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
-								</a>
-							</li>
-						</ul>
+						<a class="btn btn-navbar-cancel navbar-btn pull-left tip" href="{{ route('admin.menus.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
+							<i class="fa fa-reply"></i>  <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
+						</a>
 
 						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ $menu->exists ? $menu->name : null }}}</small></span>
 					</div>
