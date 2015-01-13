@@ -102,106 +102,122 @@
 
 		<div class="panel-body">
 
-			<div class="row">
+			<div role="tabpanel">
 
-				<div class="col-md-3">
+				{{-- Form: Tabs --}}
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('common.tabs.general') }}}</a></li>
+				</ul>
+
+				<div class="tab-content">
 
 					{{-- Form: General --}}
-					<fieldset>
+					<div role="tabpanel" class="tab-pane fade in active" id="general">
 
-						<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
+						<div class="row">
+
+							<div class="col-md-3">
+
+								{{-- Form: General --}}
+								<fieldset>
+
+									<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
 
 
-						{{-- Name --}}
-						<div class="form-group{{ Alert::form('name', ' has-error') }}">
+									{{-- Name --}}
+									<div class="form-group{{ Alert::form('name', ' has-error') }}">
 
-							<label class="control-label" for="menu-name">
-								<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.name_help') }}}"></i>
-								{{ trans('platform/menus::model.name') }}
-							</label>
+										<label class="control-label" for="menu-name">
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.name_help') }}}"></i>
+											{{ trans('platform/menus::model.name') }}
+										</label>
 
-							<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
+										<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
 
-							<span class="help-block"></span>
-						</div>
+										<span class="help-block"></span>
+									</div>
 
-						{{-- Slug --}}
-						<div class="form-group{{ Alert::form('slug', ' has-error') }}">
-							<label class="control-label" for="menu-slug">
-								<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.slug_help') }}}"></i>
-								{{ trans('platform/menus::model.slug') }}
-							</label>
+									{{-- Slug --}}
+									<div class="form-group{{ Alert::form('slug', ' has-error') }}">
+										<label class="control-label" for="menu-slug">
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.slug_help') }}}"></i>
+											{{ trans('platform/menus::model.slug') }}
+										</label>
 
-							<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
+										<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
 
-							<span class="help-block"></span>
-						</div>
+										<span class="help-block"></span>
+									</div>
 
-						{{-- Underscore form template --}}
-						@include('platform/menus::manage/form-template')
+									{{-- Underscore form template --}}
+									@include('platform/menus::manage/form-template')
 
-					</fieldset>
+								</fieldset>
 
-				</div>
+							</div>
 
-				<div class="col-md-9">
+							<div class="col-md-9">
 
-					{{-- Form: Structure --}}
-					<fieldset>
+								{{-- Form: Structure --}}
+								<fieldset>
 
-						<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
+									<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
 
-						@if ( empty($children) )
+									@if ( empty($children) )
 
-						<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
+									<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
 
-						@endif
+									@endif
 
-						{{-- New children form --}}
-						<div class="panel panel-default panel-menu">
+									{{-- New children form --}}
+									<div class="panel panel-default panel-menu">
 
-							<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
+										<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
 
-								<span class="new-item"><i class="fa fa-plus"></i></span>
+											<span class="new-item"><i class="fa fa-plus"></i></span>
 
-								<span class="item-name"></i> Create New Link</span>
+											<span class="item-name"></i> Create New Link</span>
 
-								<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
+											<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
-							</header>
+										</header>
 
-							<div class="panel-body collapse" id="panel-new">
+										<div class="panel-body collapse" id="panel-new">
 
-								<div class="row">
+											<div class="row">
 
-									<div class="col-md-12">
+												<div class="col-md-12">
 
-										@include('platform/menus::manage/form')
+													@include('platform/menus::manage/form')
+
+												</div>
+
+											</div>
+
+										</div>
 
 									</div>
 
-								</div>
+									<hr>
+
+									<div id="sortable">
+
+										<ol class="items">
+
+											{{-- Menu Items --}}
+											@if ( ! empty($children))
+											@each('platform/menus::manage/children', $children, 'child')
+											@endif
+
+										</ol>
+
+									</div>
+
+								</fieldset>
 
 							</div>
 
 						</div>
-
-						<hr>
-
-						<div id="sortable">
-
-							<ol class="items">
-
-
-								{{-- Menu Items --}}
-								@if ( ! empty($children))
-								@each('platform/menus::manage/children', $children, 'child')
-								@endif
-
-							</ol>
-
-
-						</fieldset>
 
 					</div>
 
@@ -209,7 +225,9 @@
 
 			</div>
 
-		</form>
+		</div>
 
-	</section>
-	@stop
+	</form>
+
+</section>
+@stop
