@@ -135,10 +135,6 @@ class NavWidgetTest extends IlluminateTestCase {
 		$child->shouldReceive('getUrl')
 			->once();
 
-		$child->shouldReceive('getOriginal')
-			->once()
-			->andReturn('foo');
-
 		$this->app['sentinel']->shouldReceive('check')
 			->once();
 
@@ -189,10 +185,6 @@ class NavWidgetTest extends IlluminateTestCase {
 			->andReturn('admin/foo');
 
 		$menu->shouldReceive('getAttribute');
-
-		$menu->shouldReceive('getOriginal')
-			->once()
-			->andReturn('foo');
 
 		$menu->shouldReceive('getUrl')
 			->once();

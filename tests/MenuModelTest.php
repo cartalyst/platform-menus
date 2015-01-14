@@ -42,6 +42,8 @@ class MenuModelTest extends IlluminateTestCase {
 	{
 		$enabled = 0;
 
+		$this->menu->exists = true;
+
 		$this->menu->enabled = $enabled;
 
 		$this->assertFalse($this->menu->enabled);

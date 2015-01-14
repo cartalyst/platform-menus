@@ -131,9 +131,6 @@ class AdminMenusControllerTest extends IlluminateTestCase {
 			->once()
 			->andReturn(true);
 
-		$model->shouldReceive('getAttribute')
-			->once();
-
 		$this->redirect('route');
 
 		$this->controller->store();
@@ -163,9 +160,6 @@ class AdminMenusControllerTest extends IlluminateTestCase {
 		$message->shouldReceive('isEmpty')
 			->once()
 			->andReturn(true);
-
-		$model->shouldReceive('getAttribute')
-			->once();
 
 		$this->redirect('route');
 
@@ -243,7 +237,7 @@ class AdminMenusControllerTest extends IlluminateTestCase {
 
 		$this->app['request']->shouldReceive('input')
 			->once()
-			->with('entries', [])
+			->with('rows', [])
 			->andReturn([1]);
 
 		$this->menus->shouldReceive('delete')
