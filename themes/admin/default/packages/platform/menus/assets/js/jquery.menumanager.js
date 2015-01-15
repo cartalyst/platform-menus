@@ -690,14 +690,14 @@
 				// Confirmation message
 				var message = 'Are you sure you want to delete this menu item?';
 
-				// Confirm if the user wants to remove the item
-				if (confirm(message) == true)
-				{
-					// Get this item id
-					var itemId = $(this).data('item-remove');
+				// Get this item id
+				var itemId = $(this).data('item-remove');
 
+				// Confirm if the user wants to remove the item
+				Platform.App.modals(e, message, 'modal-confirm', function()
+				{
 					// Find the item
-					var item = $('[data-item="' + itemId + '"]').closest('li');
+					var item = $('[data-item-id="' + itemId + '"]').closest('li');
 					var list = item.children(options.sortable.containerSelector);
 
 					// Check if we have children
@@ -732,7 +732,9 @@
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
-				}
+
+					$('#modal-confirm').modal('hide');
+				});
 
 			});
 
