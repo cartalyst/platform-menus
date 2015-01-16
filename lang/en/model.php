@@ -32,13 +32,13 @@ return [
 	'name'      => 'Menu Name',
 	'name_help' => 'Type your menu item name.',
 
-	'slug'      => 'Short Name',
+	'slug'      => 'Slug',
 	'slug_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
 
 	'name_item'      => 'Link Name',
 	'name_item_help' => 'Type your menu item name.',
 
-	'slug_item'      => 'Short Name',
+	'slug_item'      => 'Slug',
 	'slug_item_help' => 'Single word, no spaces and no special words. Dashes are allowed.',
 
 	'enabled'      => 'Status',
