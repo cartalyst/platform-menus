@@ -197,7 +197,7 @@ return [
 	|
 	*/
 
-	'permissions' => function(Permissions $permissions)
+	'permissions' => function(Permissions $permissions, Application $app)
 	{
 		$permissions->group('menus', function($g)
 		{
@@ -245,7 +245,10 @@ return [
 	|
 	*/
 
-	'settings' => null,
+	'settings' => function(Settings $settings, Application $app)
+	{
+
+	},
 
 	/*
 	|--------------------------------------------------------------------------
