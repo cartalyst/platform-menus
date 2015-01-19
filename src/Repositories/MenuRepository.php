@@ -85,7 +85,7 @@ class MenuRepository implements MenuRepositoryInterface {
 		{
 			$count = $menu->getChildrenCount();
 
-			$menu->items_count = trans_choice('platform/menus::model.items', $count, compact('count'));
+			$menu->items_count = trans_choice('platform/menus::model.general.items', $count, compact('count'));
 		}
 
 		return $menus;

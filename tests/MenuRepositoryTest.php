@@ -90,7 +90,7 @@ class MenuRepositoryTest extends IlluminateTestCase {
 
 		$this->app['translator']
 			->shouldReceive('transChoice')
-			->with('platform/menus::model.items', 2, ['count' => 2], 'messages', '')
+			->with('platform/menus::model.general.items', 2, ['count' => 2], 'messages', '')
 			->once()
 			->andReturn(2);
 
