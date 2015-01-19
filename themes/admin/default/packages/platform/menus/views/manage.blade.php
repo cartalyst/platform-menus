@@ -106,7 +106,7 @@
 
 				{{-- Form: Tabs --}}
 				<ul class="nav nav-tabs" role="tablist">
-					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('common.tabs.general') }}}</a></li>
+					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('platform/menus::common.tabs.general') }}}</a></li>
 				</ul>
 
 				<div class="tab-content">
@@ -128,11 +128,11 @@
 									<div class="form-group{{ Alert::form('name', ' has-error') }}">
 
 										<label class="control-label" for="menu-name">
-											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.name_help') }}}"></i>
-											{{ trans('platform/menus::model.name') }}
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.name_help') }}}"></i>
+											{{ trans('platform/menus::model.general.name') }}
 										</label>
 
-										<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
+										<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.general.name') }}}" required data-parsley-trigger="change">
 
 										<span class="help-block"></span>
 									</div>
@@ -140,11 +140,11 @@
 									{{-- Slug --}}
 									<div class="form-group{{ Alert::form('slug', ' has-error') }}">
 										<label class="control-label" for="menu-slug">
-											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.slug_help') }}}"></i>
-											{{ trans('platform/menus::model.slug') }}
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.slug_help') }}}"></i>
+											{{ trans('platform/menus::model.general.slug') }}
 										</label>
 
-										<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.name') }}}" required data-parsley-trigger="change">
+										<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.general.name') }}}" required data-parsley-trigger="change">
 
 										<span class="help-block"></span>
 									</div>

@@ -81,7 +81,7 @@ abstract class AbstractType {
 	 */
 	public function getName()
 	{
-		return $this->translator->trans("platform/menus::model.type_{$this->getIdentifier()}");
+		return $this->translator->trans("platform/menus::model.general.type_{$this->getIdentifier()}");
 	}
 
 	/**

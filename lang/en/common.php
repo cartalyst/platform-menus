@@ -21,4 +21,9 @@ return [
 
 	'title'  => 'Menus',
 
+	'tabs' => [
+		'general'    => 'Menu',
+		'attributes' => 'Attributes',
+	],
+
 ];

@@ -28,9 +28,9 @@
 							<fieldset>
 
 								<legend>
-									{{{ trans('platform/menus::model.item_details') }}}
+									{{{ trans('platform/menus::model.general.item_details') }}}
 
-									<span class="pull-right" data-toggle-options="<%= slug %>"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.advanced_settings') }}}</span>
+									<span class="pull-right" data-toggle-options="<%= slug %>"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.general.advanced_settings') }}}</span>
 
 									@if ( ! empty($child))
 									<span class="pull-right text-danger" data-item-remove="<%= slug %>"><i class="fa fa-trash"></i> {{{ trans('action.remove') }}}</span>
@@ -46,8 +46,8 @@
 										<div class="form-group">
 
 											<label class="control-label" for="<%= slug %>_name">
-												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.name_item_help') }}}"></i>
-												{{{ trans('platform/menus::model.name_item') }}}
+												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.name_item_help') }}}"></i>
+												{{{ trans('platform/menus::model.general.name_item') }}}
 											</label>
 
 											<input class="form-control input-sm" data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][name]" id="<%= slug %>_name" value="<%= name %>">
@@ -61,8 +61,8 @@
 										{{-- Slug --}}
 										<div class="form-group">
 											<label class="control-label" for="<%= slug %>_slug">
-												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.slug_item_help') }}}"></i>
-												{{{ trans('platform/menus::model.slug_item') }}}
+												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.slug_item_help') }}}"></i>
+												{{{ trans('platform/menus::model.general.slug_item') }}}
 											</label>
 
 											<input class="form-control input-sm" data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][slug]" id="<%= slug %>_slug" value="<%= slug %>">
@@ -75,9 +75,10 @@
 
 										{{-- Item Type --}}
 										<div class="form-group">
-											<label class="control-label" for="<%= slug %>_type">{{{ trans('platform/menus::model.type') }}}</label>
-
-											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.type_help') }}}"></i>
+											<label class="control-label" for="<%= slug %>_type">
+												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.type_help') }}}"></i>
+												{{{ trans('platform/menus::model.general.type') }}}
+											</label>
 
 											<div class="controls">
 												<select data-item-url-type="<%= slug %>" data-item-form="<%= slug %>" name="children[<%= slug %>][type]" id="<%= slug %>_type" class="form-control input-sm">
@@ -108,7 +109,7 @@
 
 								<fieldset>
 
-									<legend>{{{ trans('platform/menus::model.advanced_settings') }}}</legend>
+									<legend>{{{ trans('platform/menus::model.general.advanced_settings') }}}</legend>
 
 									<div class="row">
 
@@ -117,8 +118,8 @@
 											{{-- Enabled --}}
 											<div class="form-group">
 												<label class="control-label" for="<%= slug %>_enabled">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.enabled_help') }}}"></i>
-													{{{ trans('platform/menus::model.enabled') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.enabled_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.enabled') }}}
 												</label>
 
 												<div class="controls">
@@ -137,16 +138,16 @@
 											<div class="form-group">
 
 												<label class="control-label" for="children[<%= slug %>][target]">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.target_help') }}}"></i>
-													{{{ trans('platform/menus::model.target') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.target_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.target') }}}
 												</label>
 
 												<div class="controls">
 													<select data-item-form="<%= slug %>" name="children[<%= slug %>][target]" id="<%= slug %>_target" class="form-control">
-														<option value="self"<%= target == 'self' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.targets.self') }}}</option>
-														<option value="new_children"<%= target == 'new_children' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.targets.blank') }}}</option>
-														<option value="parent_frame"<%= target == 'parent_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.targets.parent') }}}</option>
-														<option value="top_frame"<%= target == 'top_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.targets.top') }}}</option>
+														<option value="self"<%= target == 'self' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.self') }}}</option>
+														<option value="new_children"<%= target == 'new_children' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.blank') }}}</option>
+														<option value="parent_frame"<%= target == 'parent_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.parent') }}}</option>
+														<option value="top_frame"<%= target == 'top_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.top') }}}</option>
 													</select>
 
 												</div>
@@ -161,8 +162,8 @@
 											<div class="form-group">
 
 												<label class="control-label" for="<%= slug %>_parent">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.parent_help') }}}"></i>
-													{{{ trans('platform/menus::model.parent') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.parent_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.parent') }}}
 												</label>
 
 												<div class="controls">
@@ -177,9 +178,10 @@
 
 											{{-- Secure --}}
 											<div class="form-group">
-												<label class="control-label" for="<%= slug %>_secure">{{{ trans('platform/menus::model.secure') }}}</label>
-
-												<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.secure_help') }}}"></i>
+												<label class="control-label" for="<%= slug %>_secure">
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.secure_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.secure') }}}
+												</label>
 
 												<div class="controls">
 													<select data-item-form="<%= slug %>" name="children[<%= slug %>][secure]" id="<%= slug %>_secure" class="form-control input-sm">
@@ -202,8 +204,8 @@
 											<div class="form-group">
 
 												<label class="control-label" for="<%= slug %>_class">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.class_help') }}}"></i>
-													{{{ trans('platform/menus::model.class') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.class_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.class') }}}
 												</label>
 
 												<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][class]" id="<%= slug %>_class" class="form-control" value="<%= klass %>">
@@ -218,8 +220,8 @@
 											<div class="form-group">
 
 												<label class="control-label" for="children[<%= slug %>][regex]">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.regex_help') }}}"></i>
-													{{{ trans('platform/menus::model.regex') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.regex_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.regex') }}}
 												</label>
 
 												<input data-item-form="<%= slug %>" type="text" name="children[<%= slug %>][regex]" id="<%= slug %>_regex" class="form-control" value="<%= regex %>">
@@ -234,16 +236,16 @@
 											<div class="form-group">
 
 												<label class="control-label" for="children[<%= slug %>][visibility]">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.visibility_help') }}}"></i>
-													{{{ trans('platform/menus::model.visibility') }}}
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.visibility_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.visibility') }}}
 												</label>
 
 												<div class="controls">
 													<select data-item-form="<%= slug %>" data-item-visibility="<%= slug %>" name="children[<%= slug %>][visibility]" id="<%= slug %>_visibility" class="form-control">
-														<option value="always"<%= visibility == 'always' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.visibilities.always') }}}</option>
-														<option value="logged_in"<%= visibility == 'logged_in' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.visibilities.logged_in') }}}</option>
-														<option value="logged_out"<%= visibility == 'logged_out' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.visibilities.logged_out') }}}</option>
-														<option value="admin"<%= visibility == 'admin' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.visibilities.admin') }}}</option>
+														<option value="always"<%= visibility == 'always' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.always') }}}</option>
+														<option value="logged_in"<%= visibility == 'logged_in' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.logged_in') }}}</option>
+														<option value="logged_out"<%= visibility == 'logged_out' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.logged_out') }}}</option>
+														<option value="admin"<%= visibility == 'admin' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.admin') }}}</option>
 													</select>
 												</div>
 
