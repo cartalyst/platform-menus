@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Types;
+<?php namespace Platform\Menus\Tests\Types;
 /**
  * Part of the Platform Menus extension.
  *
@@ -17,28 +17,27 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Models\Menu;
+use Mockery as m;
+use Cartalyst\Testing\IlluminateTestCase;
+use Platform\Menus\Types\StaticType;
 
-class StaticType extends AbstractType implements TypeInterface {
+class StaticTypeTest extends IlluminateTestCase {
 
 	/**
-	 * Get the type identifier.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
-	public function getIdentifier()
+	public function setUp()
 	{
-		return 'static';
+		parent::setUp();
+
+		// Repository
+		$this->type = new StaticType($this->app);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function afterSave(Menu $child) {}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function beforeDelete(Menu $child) {}
+	/** @test */
+	public function it_has_static_identifier()
+	{
+		$this->assertEquals('static', $this->type->getIdentifier());
+	}
 
 }

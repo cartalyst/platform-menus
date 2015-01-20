@@ -7,51 +7,60 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use HTML;
+use Platform\Menus\Models\Menu;
+use Illuminate\Html\HtmlBuilder;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
-use View;
 
 class Dropdown {
 
 	/**
-	 * Menus repository.
+	 * The Menus repository.
 	 *
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
 	protected $menus;
 
 	/**
+	 * The html builder instance.
+	 *
+	 * @var \Illuminate\Html\HtmlBuilder
+	 */
+	protected $html;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus)
+	public function __construct(MenuRepositoryInterface $menus, HtmlBuilder $html)
 	{
 		$this->menus = $menus;
+
+		$this->html = $html;
 	}
 
 	/**
 	 * Returns an HTML dropdown with all the root menus.
 	 *
-	 * @param  int    $current
+	 * @param  int  $current
 	 * @param  array  $attributes
-	 * @param  array  $customOptions
-	 * @return \View
+	 * @param  array  $options
+	 * @return \Illuminate\View\View
 	 */
-	public function root($current = null, $attributes = array(), $customOptions = array())
+	public function root($current = null, array $attributes = [], array $options = [])
 	{
-		return $this->renderDropdown($this->menus->allRoot(), $current, $attributes, $customOptions);
+		return $this->renderDropdown($this->menus->allRoot(), $current, $attributes, $options);
 	}
 
 	/**
@@ -59,29 +68,29 @@ class Dropdown {
 	 * the provided menu slug.
 	 *
 	 * @param  string  $slug
-	 * @param  int     $depth
-	 * @param  int     $current
-	 * @param  array   $attributes
-	 * @param  array   $customOptions
-	 * @return \View
+	 * @param  int  $depth
+	 * @param  int  $current
+	 * @param  array  $attributes
+	 * @param  array  $options
+	 * @return \Illuminate\View\View
 	 */
-	public function show($slug, $depth, $current = null, $attributes = array(), $customOptions = array())
+	public function show($slug, $depth, $current = null, array $attributes = [], array $options = [])
 	{
 		$menu = $this->menus->find($slug);
 
-		return $this->renderDropdown($menu->findChildren($depth), $current, $attributes, $customOptions);
+		return $this->renderDropdown($menu->findChildren($depth), $current, $attributes, $options);
 	}
 
 	/**
 	 * Render the view with the dropdown items.
 	 *
-	 * @param  array   $items
-	 * @param  int     $current
-	 * @param  array   $attributes
-	 * @param  array   $customOptions
-	 * @return \View
+	 * @param  array  $items
+	 * @param  int  $current
+	 * @param  array  $attributes
+	 * @param  array  $options
+	 * @return \Illuminate\View\View
 	 */
-	protected function renderDropdown($items, $current, $attributes, $customOptions)
+	protected function renderDropdown(array $items, $current, array $attributes, array $options)
 	{
 		// Loop through and prepare the items for display
 		foreach ($items as $item)
@@ -90,9 +99,9 @@ class Dropdown {
 		}
 
 		// Prepare the attributes
-		$attributes = HTML::attributes($attributes);
+		$attributes = $this->html->attributes($attributes);
 
-		return View::make('platform/menus::widgets/dropdown', compact('items', 'attributes', 'customOptions'));
+		return view('platform/menus::widgets/dropdown', compact('items', 'attributes', 'options'));
 	}
 
 	/**
@@ -102,7 +111,7 @@ class Dropdown {
 	 * @param  string  $current
 	 * @return void
 	 */
-	protected function prepareItemsRecursively($item, $current = null)
+	protected function prepareItemsRecursively(Menu $item, $current = null)
 	{
 		// Get this item children
 		$item->children = $item->getChildren();

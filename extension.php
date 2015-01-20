@@ -7,19 +7,20 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Extensions\ExtensionInterface;
-use Cartalyst\Extensions\Extension;
 use Illuminate\Foundation\Application;
+use Cartalyst\Extensions\ExtensionInterface;
+use Cartalyst\Settings\Repository as Settings;
+use Cartalyst\Permissions\Container as Permissions;
 
 return [
 
@@ -81,7 +82,7 @@ return [
 	|
 	*/
 
-	'version' => '2.0.0',
+	'version' => '1.0.0',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -100,7 +101,7 @@ return [
 
 	'require' => [
 
-		'platform/admin',
+		'platform/access',
 
 	],
 
@@ -132,102 +133,19 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Register Callback
+	| Service Providers
 	|--------------------------------------------------------------------------
 	|
-	| Closure that is called when the extension is registered. This can do
-	| all the needed custom logic upon registering.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
+	| Define your extension service providers here. They will be dynamically
+	| registered without having to include them in app/config/app.php.
 	|
 	*/
 
-	'register' => function(ExtensionInterface $extension, Application $app)
-	{
-		// After platform finishes the installation process, we'll
-		// loop through each extension that exists and apply our
-		// after install and after enable filters on them.
-		Installer::after(function() use ($app)
-		{
-			$observer = $app['Platform\Menus\Observer'];
+	'providers' => [
 
-			foreach (Extensions::allEnabled() as $extension)
-			{
-				$observer->afterInstall($extension);
+		'Platform\Menus\Providers\MenusServiceProvider',
 
-				$observer->afterEnable($extension);
-			}
-		}, 10);
-
-		$menuType = 'Platform\Menus\Types\StaticType';
-
-		if ( ! $app->bound($menuType))
-		{
-			$app->bind($menuType, function($app)
-			{
-				return new Platform\Menus\Types\StaticType($app['url'], $app['view'], $app['translator']);
-			});
-		}
-
-		$menuRepository = 'Platform\Menus\Repositories\MenuRepositoryInterface';
-
-		if ( ! $app->bound($menuRepository))
-		{
-			$app->bind($menuRepository, function($app)
-			{
-				$model = get_class($app['Platform\Menus\Models\Menu']);
-
-				return new Platform\Menus\Repositories\DbMenuRepository($model, $app['events']);
-			});
-		}
-	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Boot Callback
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is booted. This can do
-	| all the needed custom logic upon booting.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
-	|
-	*/
-
-	'boot' => function(ExtensionInterface $extension, Application $app)
-	{
-		$observer = $app['Platform\Menus\Observer'];
-
-		Extension::installed(function($extension) use ($observer)
-		{
-			$observer->afterInstall($extension);
-		});
-
-		Extension::uninstalled(function($extension) use ($observer)
-		{
-			$observer->afterUninstall($extension);
-		});
-
-		Extension::enabled(function($extension) use ($observer)
-		{
-			$observer->afterEnable($extension);
-		});
-
-		Extension::disabled(function($extension) use ($observer)
-		{
-			$observer->afterDisable($extension);
-		});
-
-		$app['Platform\Menus\Models\Menu']->registerType($app['Platform\Menus\Types\StaticType']);
-
-		$app['Platform\Menus\Models\Menu']->observe($observer);
-	},
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -246,90 +164,73 @@ return [
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(['prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'], function()
+		Route::group([
+			'prefix'    => admin_uri().'/menus',
+			'namespace' => 'Platform\Menus\Controllers\Admin'
+		], function()
 		{
-			Route::get('/', 'MenusController@index');
-			Route::post('/', 'MenusController@executeAction');
-			Route::get('grid', 'MenusController@grid');
-			Route::get('create', 'MenusController@create');
-			Route::post('create', 'MenusController@store');
-			Route::get('{id}/edit', 'MenusController@edit');
-			Route::post('{id}/edit', 'MenusController@update');
-			Route::get('{id}/delete', 'MenusController@delete');
+			Route::get('/' , ['as' => 'admin.menus.all', 'uses' => 'MenusController@index']);
+			Route::post('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@executeAction']);
+
+			Route::get('grid', ['as' => 'admin.menus.grid', 'uses' => 'MenusController@grid']);
+
+			Route::get('create' , ['as' => 'admin.menu.create', 'uses' => 'MenusController@create']);
+			Route::post('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@store']);
+
+			Route::get('{id}'   , ['as' => 'admin.menu.edit'  , 'uses' => 'MenusController@edit']);
+			Route::post('{id}'  , ['as' => 'admin.menu.edit'  , 'uses' => 'MenusController@update']);
+			Route::delete('{id}', ['as' => 'admin.menu.delete', 'uses' => 'MenusController@delete']);
 		});
 	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Database Seeds
-	|--------------------------------------------------------------------------
-	|
-	| Platform provides a very simple way to seed your database with test
-	| data using seed classes. All seed classes should be stored on the
-	| `database/seeds` directory within your extension folder.
-	|
-	| The order you register your seed classes is the order they'll run.
-	|
-	| The seeds array should follow the following structure:
-	|
-	|	Vendor\Namespace\Database\Seeds\FooSeeder
-	|	Vendor\Namespace\Database\Seeds\BarSeeder
-	|
-	*/
-
-	'seeds' => [
-
-	],
 
 	/*
 	|--------------------------------------------------------------------------
 	| Permissions
 	|--------------------------------------------------------------------------
 	|
-	| List of permissions this extension has. These are shown in the user
-	| management area to build a graphical interface where permissions
-	| can be selected to allow or deny user access.
+	| Register here all the permissions that this extension has. These will
+	| be shown in the user management area to build a graphical interface
+	| where permissions can be selected to allow or deny user access.
 	|
-	| You can protect single or multiple controller methods at once.
-	|
-	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
-	| will be the label for the permission which is going to be displayed
-	| when editing the permissions and when access is denied.
-	|
-	| The permissions should follow the following structure:
-	|
-	|     Vendor\Namespace\Controller@method
-	|     Vendor\Namespace\Controller@method1,method2, ...
+	| For detailed instructions on how to register the permissions, please
+	| refer to the following url https://cartalyst.com/manual/permissions
 	|
 	*/
 
-	'permissions' => function()
+	'permissions' => function(Permissions $permissions, Application $app)
 	{
-		return [
+		$permissions->group('menus', function($g)
+		{
+			$g->name = trans('platform/menus::common.title');
 
-			'Platform\Menus\Controllers\Admin\MenusController@index,grid' => Lang::get('platform/menus::permissions.index'),
-			'Platform\Menus\Controllers\Admin\MenusController@create'     => Lang::get('platform/menus::permissions.create'),
-			'Platform\Menus\Controllers\Admin\MenusController@edit'       => Lang::get('platform/menus::permissions.edit'),
-			'Platform\Menus\Controllers\Admin\MenusController@delete'     => Lang::get('platform/menus::permissions.delete'),
+			$g->permission('menus.index', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.index');
 
-		];
-	},
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'index, grid');
+			});
 
-	/*
-	|--------------------------------------------------------------------------
-	| Widgets
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is started. You can register
-	| all your custom widgets here. Of course, Platform will guess the
-	| widget class for you, this is just for custom widgets or if you
-	| do not wish to make a new class for a very small widget.
-	|
-	*/
+			$g->permission('menus.create', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.create');
 
-	'widgets' => function()
-	{
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create');
+			});
 
+			$g->permission('menus.edit', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.edit');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit');
+			});
+
+			$g->permission('menus.delete', function($p)
+			{
+				$p->label = trans('platform/menus::permissions.delete');
+
+				$p->controller('Platform\Menus\Controllers\Admin\MenusController', 'delete');
+			});
+		});
 	},
 
 	/*
@@ -337,12 +238,14 @@ return [
 	| Settings
 	|--------------------------------------------------------------------------
 	|
-	| Register any settings for your extension. You can also configure
-	| the namespace and group that a setting belongs to.
+	| Register here all the settings that this extension has.
+	|
+	| For detailed instructions on how to register the settings, please
+	| refer to the following url https://cartalyst.com/manual/settings
 	|
 	*/
 
-	'settings' => function()
+	'settings' => function(Settings $settings, Application $app)
 	{
 
 	},
@@ -376,7 +279,7 @@ return [
 				'name'  => 'Menus',
 				'class' => 'fa fa-th-list',
 				'uri'   => 'menus',
-				'regex' => '/admin\/menus/i',
+				'regex' => '/:admin\/menus/i',
 			],
 
 		],
@@ -386,7 +289,7 @@ return [
 			[
 				'slug'   => 'system-preview',
 				'name'   => 'Preview',
-				'class'  => 'fa fa-home',
+				'class'  => 'fa fa-laptop',
 				'uri'    => '/',
 				'target' => 'blank',
 			],
@@ -394,17 +297,9 @@ return [
 			[
 				'slug'  => 'system-settings',
 				'name'  => 'Settings',
-				'class' => 'fa fa-cog',
-				'uri'   => 'admin/settings',
-				'regex' => '/admin\/settings/i',
-			],
-
-
-			[
-				'slug'  => 'system-logout',
-				'name'  => 'Sign Out',
-				'class' => 'fa fa-sign-out',
-				'uri'   => 'logout',
+				'class' => 'fa fa-sliders',
+				'uri'   => ':admin/settings',
+				'regex' => '/:admin\/settings/i',
 			],
 
 		],
@@ -412,47 +307,117 @@ return [
 		'main' => [
 
 			[
-				'slug'       => 'main-home',
-				'name'       => 'Home',
-				'class'      => 'fa fa-home',
-				'uri'        => '/',
-				'visibility' => 'always',
+				'slug'  => 'main-about',
+				'name'  => 'About',
+				'class' => 'fa fa-info',
+				'uri'   => 'about',
 			],
 
 			[
-				'slug'       => 'main-dashboard',
-				'name'       => 'Admin',
-				'class'      => 'fa fa-dashboard',
-				'uri'        => 'admin',
-				'visibility' => 'admin',
+				'slug'     => 'main-help',
+				'name'     => 'Help',
+				'class'    => 'fa fa-life-ring',
+				'children' => [
+
+					[
+						'slug'   => 'main-help-support',
+						'name'   => 'Support',
+						'class'  => 'fa fa-bug',
+						'uri'    => 'https://cartalyst.com/support',
+						'target' => 'blank',
+					],
+
+					[
+						'slug'  => 'main-help-docs',
+						'name'  => 'Documentation',
+						'class' => 'fa fa-graduation-cap',
+						'uri'   => 'https://cartalyst.com/manual/platform',
+						'target' => 'blank',
+					],
+
+					[
+						'slug'  => 'main-help-license',
+						'name'  => 'License',
+						'class' => 'fa fa-book',
+						'uri'   => 'https://cartalyst.com/license',
+						'target' => 'blank',
+					],
+
+				],
+
 			],
 
-			[
-				'slug'       => 'main-login',
-				'name'       => 'Sign In',
-				'class'      => 'fa fa-sign-in',
-				'uri'        => 'login',
-				'visibility' => 'logged_out',
-			],
+		],
+
+		'account' => [
 
 			[
-				'slug'       => 'main-logout',
-				'name'       => 'Logout',
-				'class'      => 'fa fa-home',
-				'uri'        => 'logout',
-				'visibility' => 'logged_in',
-			],
+				'slug'     => 'account-menu',
+				'name'     => 'Account',
+				'class'    => 'fa fa-user',
+				'regex'    => '/profile/i',
+				'children' => [
 
-			[
-				'slug'       => 'main-register',
-				'name'       => 'Register',
-				'class'      => 'fa fa-pencil',
-				'uri'        => 'register',
-				'visibility' => 'logged_out',
+					[
+						'slug'       => 'account-admin',
+						'name'       => 'Administrator',
+						'class'      => 'fa fa-gears',
+						'uri'        => ':admin/',
+						'visibility' => 'admin',
+					],
+
+					[
+						'slug'       => 'account-profile',
+						'name'       => 'Profile',
+						'class'      => 'fa fa-gear',
+						'uri'        => 'profile',
+						'visibility' => 'logged_in',
+					],
+
+					[
+						'slug'       => 'account-login',
+						'name'       => 'Sign In',
+						'class'      => 'fa fa-sign-in',
+						'uri'        => 'login',
+						'visibility' => 'logged_out',
+					],
+
+					[
+						'slug'       => 'account-logout',
+						'name'       => 'Logout',
+						'class'      => 'fa fa-sign-out',
+						'uri'        => 'logout',
+						'visibility' => 'logged_in',
+					],
+
+					[
+						'slug'       => 'account-register',
+						'name'       => 'Register',
+						'class'      => 'fa fa-edit',
+						'uri'        => 'register',
+						'visibility' => 'logged_out',
+					],
+
+				],
+
 			],
 
 		],
 
 	],
+
+	/*
+	|--------------------------------------------------------------------------
+	| Widgets
+	|--------------------------------------------------------------------------
+	|
+	| Closure that is called when the extension is started. You can register
+	| all your custom widgets here. Of course, Platform will guess the
+	| widget class for you, this is just for custom widgets or if you
+	| do not wish to make a new class for a very small widget.
+	|
+	*/
+
+	'widgets' => null,
 
 ];

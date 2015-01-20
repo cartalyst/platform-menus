@@ -7,30 +7,36 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 use Exception;
+use Platform\Menus\Models\Menu;
+use Cartalyst\Sentinel\Sentinel;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
-use Sentinel;
-use URL;
-use View;
 
 class Nav {
 
 	/**
-	 * Menus repository.
+	 * The Menus repository.
 	 *
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
 	protected $menus;
+
+	/**
+	 * The Sentinel instance.
+	 *
+	 * @var \Cartalyst\Sentinel\Sentinel
+	 */
+	protected $sentinel;
 
 	/**
 	 * Holds the current request path information.
@@ -42,14 +48,17 @@ class Nav {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface
+	 * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
+	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus)
+	public function __construct(Sentinel $sentinel, MenuRepositoryInterface $menus)
 	{
 		$this->menus = $menus;
 
-		$this->path = URL::current();
+		$this->sentinel = $sentinel;
+
+		$this->path = url()->current();
 	}
 
 	/**
@@ -60,7 +69,7 @@ class Nav {
 	 * @param  string  $cssClass
 	 * @param  string  $beforeUri
 	 * @param  string  $view
-	 * @return \View
+	 * @return \Illuminate\View\View
 	 */
 	public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
 	{
@@ -77,7 +86,7 @@ class Nav {
 
 			$view = $view ?: 'platform/menus::widgets/nav';
 
-			return View::make($view, compact('children', 'cssClass'));
+			return view($view, compact('children', 'cssClass'));
 		}
 		catch (Exception $e)
 		{
@@ -89,25 +98,24 @@ class Nav {
 	 * Returns the children for a menu with the given slug.
 	 *
 	 * @param  string  $slug
-	 * @param  int     $depth
+	 * @param  int  $depth
 	 * @return array
 	 */
 	protected function getChildrenForSlug($slug, $depth = 0)
 	{
 		if ($menu = $this->menus->find($slug))
 		{
-			$loggedIn = Sentinel::check();
+			$user = $this->sentinel->check();
 
-			$visibilities = [
+			$roles = $user ? $user->roles->lists('id') : [];
+
+			$visibilities = array_filter([
 				'always',
-				$loggedIn ? 'logged_in' : 'logged_out',
-			];
+				$user ? 'logged_in' : 'logged_out',
+				($user && $this->sentinel->hasAnyAccess(['superuser', 'admin'])) ? 'admin' : null,
+			]);
 
-			$groups = $loggedIn ? Sentinel::getGroups()->lists('id') : null;
-
-			if ($loggedIn and Sentinel::hasAccess('admin')) $visibilities[] = 'admin';
-
-			return $menu->findDisplayableChildren($visibilities, $groups, $depth);
+			return $menu->findDisplayableChildren($visibilities, $roles, $depth);
 		}
 
 		return [];
@@ -120,7 +128,7 @@ class Nav {
 	 * @param  string  $beforeUri
 	 * @return void
 	 */
-	protected function prepareChildRecursively($child, $beforeUri = null)
+	protected function prepareChildRecursively(Menu $child, $beforeUri = null)
 	{
 		// Prepare the options array
 		$options = [
@@ -133,12 +141,18 @@ class Nav {
 		// Prepare the target
 		$child->target = "_{$child->target}";
 
+		// Store the original uri
+		$originalUri = $child->uri;
+
 		// Prepare the uri
 		$child->uri = $child->getUrl($options);
+		$child->uri = str_replace(':admin', admin_uri(), $child->uri);
 
 		// Do we have a regular expression for this item?
 		if ($regex = $child->regex)
 		{
+			$regex = str_replace(':admin', admin_uri(), $regex);
+
 			// Make sure that the regular expression is valid
 			if (@preg_match($regex, $this->path))
 			{
@@ -147,13 +161,16 @@ class Nav {
 		}
 
 		// Check if the uri of the item matches the current request path
-		elseif ($child->uri === $this->path)
+		elseif ($originalUri != '')
 		{
-			$child->isActive = true;
+			if ($child->uri === $this->path)
+			{
+				$child->isActive = true;
+			}
 		}
 
 		// Check if this item has sub items
-		$child->hasSubItems = ($child->children and $child->depth > 1);
+		$child->hasSubItems = ($child->children && $child->depth > 1);
 
 		// Recursive!
 		foreach ($child->children as $grandChild)

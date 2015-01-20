@@ -6,13 +6,13 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -39,7 +39,6 @@
 		// Underscore template elements
 		templates : {
 
-			item : '#item-template',
 			form : '#form-template'
 
 		},
@@ -60,7 +59,7 @@
 			// children items, this contains the children hierarchy.
 			tree : 'menu-tree',
 
-			group : '.form-group',
+			role : '.form-role',
 
 			errorClass : 'has-error',
 
@@ -110,8 +109,8 @@
 					input : '#child_visibility'
 				},
 
-				groups : {
-					input : '#child_groups'
+				roles : {
+					input : '#child_roles'
 				},
 
 				klass : {
@@ -167,7 +166,7 @@
 			$(this.opt.sortable.selector).sortable({
 
 				placeholder: '<li class="placeholder"></li>',
-				handle: 'div.item-handle',
+				handle: '.item-handle',
 				onDrop: function (item, container, _super) {
 
 					// Get the parent id
@@ -410,11 +409,11 @@
 
 				if ($.inArray(selectedOption, ['logged_in', 'admin']) > -1)
 				{
-					$('[data-item-groups="' + item + '"]').removeClass('hide');
+					$('[data-item-roles="' + item + '"]').removeClass('hide');
 				}
 				else
 				{
-					$('[data-item-groups="' + item + '"]').addClass('hide');
+					$('[data-item-roles="' + item + '"]').addClass('hide');
 				}
 
 			});
@@ -457,7 +456,7 @@
 				var typeInput       = self.prepareInput('new-child', formOpt.children.type.input);
 				var secureInput     = self.prepareInput('new-child', formOpt.children.secure.input);
 				var visibilityInput = self.prepareInput('new-child', formOpt.children.visibility.input);
-				var groupsInput     = self.prepareInput('new-child', formOpt.children.groups.input);
+				var rolesInput      = self.prepareInput('new-child', formOpt.children.roles.input);
 				var classInput      = self.prepareInput('new-child', formOpt.children.klass.input);
 				var targetInput     = self.prepareInput('new-child', formOpt.children.target.input);
 				var regexInput      = self.prepareInput('new-child', formOpt.children.regex.input);
@@ -471,7 +470,9 @@
 				// Check if this is an unique slug
 				if ( ! self.isUniqueSlug(slug))
 				{
-					alert('The slug [' + slug + '] is already taken!');
+					var message = 'The slug [' + slug + '] is already taken!';
+
+					Platform.App.modals(e, message, 'modal-notice');
 				}
 
 				// Check if the form is valid
@@ -489,7 +490,7 @@
 						'secure' : secureInput.val(),
 
 						'visibility' : visibilityInput.val(),
-						'groups'     : groupsInput.val(),
+						'roles'     : rolesInput.val(),
 
 						'klass'  : classInput.val(),
 						'target' : targetInput.val(),
@@ -506,8 +507,7 @@
 					});
 
 					// Append the new menu item
-					$(options.sortable.selector).append(_.template($(options.templates.item).html(), data));
-					$('[data-forms]').append(_.template($(options.templates.form).html(), data));
+					$(options.sortable.selector).append(_.template($(options.templates.form).html(), data));
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
@@ -523,8 +523,8 @@
 					targetInput.val('self');
 					regexInput.val('');
 					visibilityInput.val('always');
-					$('[data-item-groups="new-child"]').addClass('hide');
-					groupsInput.val('');
+					$('[data-item-roles="new-child"]').addClass('hide');
+					rolesInput.val('');
 
 					// Get the new item form box
 					var newItemForm = $('[data-item-form="new-child"]');
@@ -544,7 +544,7 @@
 					newItemForm.find('[data-options]').addClass('hide');
 
 					// Move the item to the correct destination
-					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
+					$('[data-item-id="' + slug + '"]').prependTo('.items');
 
 					// We have unsaved changes
 					options.unsavedChanges = true;
@@ -562,7 +562,7 @@
 					$('.' + formOpt.errorClass).removeClass(formOpt.errorClass);
 
 					// Hide the add new item form box
-					newItemForm.addClass('hide');
+					// newItemForm.addClass('hide');
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
@@ -605,7 +605,9 @@
 				// Check if this is an unique slug
 				if ( ! self.isSameSlug(currentSlug, slug) & ! self.isUniqueSlug(slug))
 				{
-					alert('The slug [' + slug + '] is already taken!');
+					var message = 'The slug [' + slug + '] is already taken!';
+
+					Platform.App.modals(e, message, 'modal-notice');
 				}
 
 				// Check if the form is valid
@@ -688,14 +690,14 @@
 				// Confirmation message
 				var message = 'Are you sure you want to delete this menu item?';
 
-				// Confirm if the user wants to remove the item
-				if (confirm(message) == true)
-				{
-					// Get this item id
-					var itemId = $(this).data('item-remove');
+				// Get this item id
+				var itemId = $(this).data('item-remove');
 
+				// Confirm if the user wants to remove the item
+				Platform.App.modals(e, message, 'modal-confirm', function()
+				{
 					// Find the item
-					var item = $('[data-item="' + itemId + '"]').closest('li');
+					var item = $('[data-item-id="' + itemId + '"]').closest('li');
 					var list = item.children(options.sortable.containerSelector);
 
 					// Check if we have children
@@ -730,7 +732,9 @@
 
 					// Refresh the parents dropdowns
 					self.renderParentsDropdowns();
-				}
+
+					$('#modal-confirm').modal('hide');
+				});
 
 			});
 
@@ -1030,7 +1034,7 @@
 		 */
 		showError : function(input) {
 
-			$(input).closest(this.opt.form.group).addClass(this.opt.form.errorClass);
+			$(input).closest(this.opt.form.role).addClass(this.opt.form.errorClass);
 
 		},
 
@@ -1042,7 +1046,7 @@
 		 */
 		hideError : function(input) {
 
-			$(input).closest(this.opt.form.group).removeClass(this.opt.form.errorClass);
+			$(input).closest(this.opt.form.role).removeClass(this.opt.form.errorClass);
 
 		}
 

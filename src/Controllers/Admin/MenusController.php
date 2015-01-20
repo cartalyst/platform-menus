@@ -7,38 +7,23 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use DataGrid;
-use Illuminate\Support\MessageBag as Bag;
-use Input;
-use Lang;
-use Platform\Admin\Controllers\Admin\AdminController;
+use Platform\Access\Controllers\AdminController;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
-use Redirect;
-use Response;
-use Sentinel;
-use View;
 
 class MenusController extends AdminController {
 
 	/**
-	 * {@inheritDoc}
-	 */
-	protected $csrfWhitelist = [
-		'executeAction',
-	];
-
-	/**
-	 * Menus repository.
+	 * The Menus repository.
 	 *
 	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
 	 */
@@ -50,7 +35,9 @@ class MenusController extends AdminController {
 	 * @var array
 	 */
 	protected $actions = [
+		'enable',
 		'delete',
+		'disable',
 	];
 
 	/**
@@ -73,7 +60,7 @@ class MenusController extends AdminController {
 	 */
 	public function index()
 	{
-		return View::make('platform/menus::index');
+		return view('platform/menus::index');
 	}
 
 	/**
@@ -83,26 +70,33 @@ class MenusController extends AdminController {
 	 */
 	public function grid()
 	{
-		$data = $this->menus->grid();
-
 		$columns = [
 			'id',
 			'name',
 			'slug',
 			'items_count',
+			'enabled',
 			'created_at',
 		];
 
 		$settings = [
 			'sort'      => 'created_at',
 			'direction' => 'desc',
+			'pdf_view'  => 'pdf',
 		];
 
-		return DataGrid::make($data, $columns, $settings);
+		$transformer = function($element)
+		{
+			$element['edit_uri'] = route('admin.menu.edit', $element['id']);
+
+			return $element;
+		};
+
+		return datagrid($this->menus->grid(), $columns, $settings, $transformer);
 	}
 
 	/**
-	 * Show the form for creating a new menu.
+	 * Shows the form for creating a new menu.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -112,7 +106,7 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Handle posting of the form for creating a new menu.
+	 * Handles posting of the form for creating a new menu.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -122,45 +116,45 @@ class MenusController extends AdminController {
 	}
 
 	/**
-	 * Show the form for updating a menu.
+	 * Shows the form for updating a menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return mixed
 	 */
-	public function edit($slug)
+	public function edit($id)
 	{
-		return $this->showForm('update', $slug);
+		return $this->showForm('update', $id);
 	}
 
 	/**
-	 * Handle posting of the form for updating a menu.
+	 * Handles posting of the form for updating a menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function update($slug)
+	public function update($id)
 	{
-		return $this->processForm('update', $slug);
+		return $this->processForm('update', $id);
 	}
 
 	/**
-	 * Remove the specified menu.
+	 * Removes the specified menu.
 	 *
-	 * @param  mixed  $slug
+	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function delete($slug)
+	public function delete($id)
 	{
-		if ($this->menus->delete($slug))
+		if ($this->menus->delete($id))
 		{
-			$message = Lang::get('platform/menus::message.success.delete');
+			$this->alerts->success(trans('platform/menus::message.success.delete'));
 
-			return Redirect::toAdmin('menus')->withSuccess($message);
+			return redirect()->route('admin.menus.all');
 		}
 
-		$message = Lang::get('platform/menus::message.error.delete');
+		$this->alerts->error(trans('platform/menus::message.error.delete'));
 
-		return Redirect::toAdmin('menus')->withErrors($message);
+		return redirect()->route('admin.menus.all');
 	}
 
 	/**
@@ -170,60 +164,57 @@ class MenusController extends AdminController {
 	 */
 	public function executeAction()
 	{
-		$action = Input::get('action');
+		$action = request()->input('action');
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (Input::get('entries', []) as $entry)
+			foreach (request()->input('rows', []) as $entry)
 			{
 				$this->menus->{$action}($entry);
 			}
 
-			return Response::json('Success');
+			return response('Success');
 		}
 
-		return Response::json('Failed', 500);
+		return response('Failed', 500);
 	}
 
 	/**
 	 * Shows the form.
 	 *
 	 * @param  string  $mode
-	 * @param  mixed   $slug
+	 * @param  mixed  $id
 	 * @return mixed
 	 */
-	protected function showForm($mode, $slug = null)
+	protected function showForm($mode, $id = null)
 	{
-		// Do we have a menu identifier?
-		if (isset($slug))
+		if ( ! $data = $this->menus->getPreparedMenu($id))
 		{
-			// Get the menu information
-			if ( ! $menu = $this->menus->findRoot($slug))
-			{
-				$message = Lang::get('platform/menus::message.not_found', ['id' => $slug]);
+			$this->alerts->error(trans('platform/menus::message.not_found', compact('id')));
 
-				return Redirect::toAdmin('menus')->withErrors($message);
-			}
-
-			// Get this menu children
-			$children = $menu->findChildren(0);
+			return redirect()->route('admin.menus.all');
 		}
 
-		// Get the persisted slugs
-		$persistedSlugs = $this->menus->slugs();
+		// Get the menu object
+		$menu = $data['menu'];
 
-		// Get a list of all the available groups
-		$groups = Sentinel::getGroupRepository()->createModel()->all();
+		// Get all the available user roles
+		$roles = $data['roles'];
 
-		// Get all the registered menu types
-		$types = $this->menus->getTypes();
+		// Get the registered menu types
+		$types = $data['types'];
+
+		// Get the menu children items
+		$children = $data['children'];
+
+		// Get all the current menu slugs
+		$persistedSlugs = $data['persistedSlugs'];
 
 		// Share some variables, because of views inheritance
-		View::share(compact('groups', 'types'));
+		view()->share(compact('roles', 'types'));
 
-		// Show the page
-		return View::make('platform/menus::manage', compact(
-			'mode', 'menu', 'children', 'persistedSlugs'
+		return view('platform/menus::manage', compact(
+			'menu', 'children', 'persistedSlugs', 'mode'
 		));
 	}
 
@@ -231,126 +222,25 @@ class MenusController extends AdminController {
 	 * Processes the form.
 	 *
 	 * @param  string  $mode
-	 * @param  mixed   $slug
+	 * @param  mixed  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	protected function processForm($mode, $slug = null)
+	protected function processForm($mode, $id = null)
 	{
-		// Get the tree
-		$tree = json_decode(Input::get('menu-tree', []), true);
-
-		// Prepare our children
-		$children = [];
-
-		foreach ($tree as $child)
-		{
-			// Ensure no bad data is coming through from POST
-			if ( ! is_array($child))
-			{
-				continue;
-			}
-
-			$this->processChildRecursively($child, $children);
-		}
-
-		// Prepare the menu data for the API
-		$input = [
-			'children' => $children,
-			'slug'     => Input::get('menu-slug'),
-			'name'     => Input::get('menu-name'),
-		];
-
-		// Do we have a menu identifier?
-		if ($slug)
-		{
-			// Check if the input is valid
-			$messages = $this->menus->validForUpdate($slug, $input);
-
-			// Do we have any errors?
-			if ($messages->isEmpty())
-			{
-				// Update the menu
-				$menu = $this->menus->update($slug, $input);
-			}
-		}
-		else
-		{
-			// Check if the input is valid
-			$messages = $this->menus->validForCreation($input);
-
-			// Do we have any errors?
-			if ($messages->isEmpty())
-			{
-				// Create the menu
-				$menu = $this->menus->create($input);
-			}
-		}
+		// Store the menu
+		list($messages) = $this->menus->store($id, request()->all());
 
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
-			// Prepare the success message
-			$message = Lang::get("platform/menus::message.success.{$mode}");
+			$this->alerts->success(trans("platform/menus::message.success.{$mode}"));
 
-			return Redirect::toAdmin("menus/{$menu->slug}/edit")->withSuccess($message);
+			return redirect()->route('admin.menus.all');
 		}
 
-		return Redirect::back()->withInput()->withErrors($messages);
-	}
+		$this->alerts->error($messages, 'form');
 
-	/**
-	 * Recursively processes a child node by extracting POST data
-	 * from the admin UI so that we may structure a nice tree of
-	 * pure data to send off to the API.
-	 *
-	 * @param  array  $child
-	 * @param  array  $children
-	 * @return void
-	 */
-	protected function processChildRecursively($child, &$children)
-	{
-		// Existing menu children will be passing an ID to us. This
-		// is advantageous to us, since a menu slug can be changed
-		// without anything being messed up.
-		$index = $child['id'];
-
-		$new_child = [
-			'name'       => Input::get("children.{$index}.name"),
-			'slug'       => Input::get("children.{$index}.slug"),
-			'enabled'    => Input::get("children.{$index}.enabled", 1),
-			'type'       => $type = Input::get("children.{$index}.type", 'static'),
-			'secure'     => Input::get("children.{$index}.secure", 0),
-			'visibility' => Input::get("children.{$index}.visibility", 'always'),
-			'groups'     => (array) Input::get("children.{$index}.groups", []),
-			'class'      => Input::get("children.{$index}.class"),
-			'target'     => Input::get("children.{$index}.target"),
-			'regex'      => Input::get("children.{$index}.regex"),
-		];
-
-		// Only append id if we are dealing with
-		// an existing menu item.
-		if (is_numeric($index))
-		{
-			$new_child['id'] = $index;
-		}
-
-		// Attach the type data
-		$new_child = array_merge($new_child, Input::get("children.{$index}.{$type}", []));
-
-		// If we have children, call the function again
-		if ( ! empty($child['children']) and is_array($child['children']) and count($child['children']) > 0)
-		{
-			$grand_children = [];
-
-			foreach ($child['children'] as $child)
-			{
-				$this->processChildRecursively($child, $grand_children);
-			}
-
-			$new_child['children'] = $grand_children;
-		}
-
-		$children[] = $new_child;
+		return redirect()->back()->withInput();
 	}
 
 }

@@ -2,75 +2,18 @@
 
 {{-- Page title --}}
 @section('title')
-	@parent
-	: {{{ trans('platform/menus::general.title') }}}
+@parent
+ {{{ trans('platform/menus::common.title') }}}
 @stop
 
 {{-- Queue assets --}}
+{{ Asset::queue('bootstrap-daterange', 'bootstrap/css/daterangepicker-bs3.css', 'style') }}
+
+{{ Asset::queue('moment', 'moment/js/moment.js', 'jquery') }}
+{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'jquery') }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
-{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'underscore') }}
-{{ Asset::queue('moment', 'moment/js/moment.js') }}
-
-{{-- Inline scripts --}}
-@section('scripts')
-@parent
-<script>
-	jQuery(document).ready(function($)
-	{
-		var dg = $.datagrid('main', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
-			loader: '.loading',
-			scroll: '.data-grid',
-			callback: function()
-			{
-				$('#checkAll').prop('checked', false);
-
-				$('#actions').prop('disabled', true);
-			}
-		});
-
-		$(document).on('click', '#checkAll', function()
-		{
-			$('input:checkbox').not(this).prop('checked', this.checked);
-
-			var status = $('input[name="entries[]"]:checked').length > 0;
-
-			$('#actions').prop('disabled', ! status);
-		});
-
-		$(document).on('click', 'input[name="entries[]"]', function()
-		{
-			var status = $('input[name="entries[]"]:checked').length > 0;
-
-			$('#actions').prop('disabled', ! status);
-		});
-
-		$(document).on('click', '[data-action]', function(e)
-		{
-			e.preventDefault();
-
-			var action = $(this).data('action');
-
-			var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
-			{
-				return +e.value;
-			});
-
-			$.ajax({
-				type: 'POST',
-				url: '{{ URL::toAdmin('menus') }}',
-				data: {
-					action : action,
-					entries: entries
-				},
-				success: function(response)
-				{
-					dg.refresh();
-				}
-			});
-		});
-	});
-</script>
-@stop
+{{ Asset::queue('index', 'platform/menus::js/index.js', 'platform') }}
+{{ Asset::queue('bootstrap-daterange', 'bootstrap/js/daterangepicker.js', 'jquery') }}
 
 {{-- Inline styles --}}
 @section('styles')
@@ -78,71 +21,203 @@
 @stop
 
 {{-- Page content --}}
-@section('content')
+@section('page')
 
-{{-- Page header --}}
-<div class="page-header">
+{{-- Grid --}}
+<section class="panel panel-default panel-grid">
 
-	<h1>{{{ trans('platform/menus::general.title') }}}</h1>
+	{{-- Grid: Header --}}
+	<header class="panel-heading">
 
-</div>
+		<nav class="navbar navbar-default navbar-actions">
 
-<div class="row">
+			<div class="container-fluid">
 
-	<div class="col-lg-7">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#actions">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
 
-		{{-- Data Grid : Applied Filters --}}
-		<div class="data-grid_applied" data-grid="main"></div>
+					<span class="navbar-brand">{{{ trans('platform/menus::common.title') }}}</span>
 
-	</div>
+				</div>
 
-	<div class="col-lg-5 text-right">
+				{{-- Grid: Actions --}}
+				<div class="collapse navbar-collapse" id="actions">
 
-		<form method="post" action="" accept-charset="utf-8" data-search data-grid="main" class="form-inline" role="form">
+					<ul class="nav navbar-nav navbar-left">
 
-			<div class="form-group">
+						<li class="disabled">
+							<a data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
+								<i class="fa fa-eye-slash"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.disable') }}}</span>
+							</a>
+						</li>
 
-				<div class="loading"></div>
+						<li class="disabled">
+							<a data-grid-bulk-action="enable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.enable') }}}">
+								<i class="fa fa-eye"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.enable') }}}</span>
+							</a>
+						</li>
+
+						<li class="danger disabled">
+							<a data-grid-bulk-action="delete" data-toggle="tooltip" data-target="modal-confirm" data-original-title="{{{ trans('action.bulk.delete') }}}">
+								<i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.delete') }}}</span>
+							</a>
+						</li>
+
+						<li class="dropdown disabled">
+							<a href="#" data-grid-exporter class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
+								<i class="fa fa-download"></i> <span class="visible-xs-inline">{{{ trans('action.export') }}}</span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a data-download="pdf"><i class="fa fa-file-pdf-o"></i> PDF</a></li>
+								<li><a data-download="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+								<li><a data-download="json"><i class="fa fa-file-code-o"></i> JSON</a></li>
+							</ul>
+						</li>
+
+						<li class="primary">
+							<a href="{{ route('admin.menu.create') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.create') }}}">
+								<i class="fa fa-plus"></i>  <span class="visible-xs-inline">{{{ trans('action.create') }}}</span>
+							</a>
+						</li>
+
+					</ul>
+
+					{{-- Grid: Filters --}}
+					<form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-search data-grid="main" role="form">
+
+						<div class="input-group">
+
+							<span class="input-group-btn">
+
+								<button class="btn btn-default" type="button" disabled>
+									{{{ trans('common.filters') }}}
+								</button>
+
+								<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+
+								<ul class="dropdown-menu" role="menu">
+
+									<li>
+										<a data-grid="main" data-filter="enabled:1" data-label="enabled::{{{ trans('common.all_enabled') }}}" data-reset>
+											<i class="fa fa-eye"></i> {{{ trans('common.show_enabled') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-grid="main" data-filter="enabled:0" data-label="enabled::{{{ trans('common.all_disabled') }}}" data-reset>
+											<i class="fa fa-eye-slash"></i> {{{ trans('common.show_disabled') }}}
+										</a>
+									</li>
+
+									<li class="divider"></li>
+
+									<li>
+										<a data-grid-calendar-preset="day">
+											<i class="fa fa-calendar"></i> {{{ trans('date.day') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-grid-calendar-preset="week">
+											<i class="fa fa-calendar"></i> {{{ trans('date.week') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-grid-calendar-preset="month">
+											<i class="fa fa-calendar"></i> {{{ trans('date.month') }}}
+										</a>
+									</li>
+
+								</ul>
+
+								<button class="btn btn-default hidden-xs" type="button" data-grid-calendar data-range-filter="created_at">
+									<i class="fa fa-calendar"></i>
+								</button>
+
+							</span>
+
+							<input class="form-control" name="filter" type="text" placeholder="{{{ trans('common.search') }}}">
+
+							<span class="input-group-btn">
+
+								<button class="btn btn-default" type="submit">
+									<span class="fa fa-search"></span>
+								</button>
+
+								<button class="btn btn-default" data-grid="main" data-reset>
+									<i class="fa fa-refresh fa-sm"></i>
+								</button>
+
+							</span>
+
+						</div>
+
+					</form>
+
+				</div>
 
 			</div>
 
-			<div class="form-group has-feedback">
+		</nav>
 
-				<input name="filter" type="text" placeholder="{{{ trans('general.search') }}}" class="form-control">
+	</header>
 
-				<span class="glyphicon fa fa-search form-control-feedback"></span>
+	<div class="panel-body">
 
-			</div>
+		{{-- Grid: Applied Filters --}}
+		<div class="btn-toolbar" role="toolbar" aria-label="data-grid-applied-filters">
 
-			<a class="btn btn-primary" href="{{ URL::toAdmin('menus/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
+			<div id="data-grid_applied" class="btn-group" data-grid="main"></div>
 
-		</form>
+		</div>
 
 	</div>
 
-</div>
+	{{-- Grid: Table --}}
+	<div class="table-responsive">
 
-<br />
+		<table id="data-grid" class="table table-hover" data-source="{{ route('admin.menus.grid') }}" data-grid="main">
+			<thead>
+				<tr>
+					<th><input data-grid-checkbox="all" type="checkbox"></th>
+					<th class="sortable" data-sort="name">{{{ trans('platform/menus::model.general.name') }}}</th>
+					<th class="sortable hidden-xs" data-sort="slug">{{{ trans('platform/menus::model.general.slug') }}}</th>
+					<th class="sortable" data-sort="items_count">{{{ trans('platform/menus::model.general.items_count') }}}</th>
+					<th class="sortable" data-sort="enabled">{{{ trans('platform/menus::model.general.enabled') }}}</th>
+					<th class="sortable hidden-xs" data-sort="created_at">{{{ trans('model.created_at') }}}</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 
-<table data-source="{{ URL::toAdmin('menus/grid') }}" data-grid="main" class="data-grid table table-striped table-bordered table-hover">
-	<thead>
-		<tr>
-			<th><input type="checkbox" name="checkAll" id="checkAll"></th>
-			<th data-sort="name" class="col-md-5 sortable">{{{ trans('platform/menus::table.name') }}}</th>
-			<th data-sort="slug" class="col-md-2 sortable">{{{ trans('platform/menus::table.slug') }}}</th>
-			<th data-sort="items_count" class="col-md-2 sortable">{{{ trans('platform/menus::table.items_count') }}}</th>
-			<th data-sort="created_at" class="col-md-3 sortable">{{{ trans('platform/menus::table.created_at') }}}</th>
-		</tr>
-	</thead>
-	<tbody></tbody>
-</table>
+	</div>
 
-{{-- Data Grid : Pagination --}}
-<div class="data-grid_pagination" data-grid="main"></div>
+	<footer class="panel-footer clearfix">
 
-@include('platform/menus::grid/results')
-@include('platform/menus::grid/pagination')
-@include('platform/menus::grid/filters')
-@include('platform/menus::grid/no_results')
+		{{-- Grid: Pagination --}}
+		<div id="data-grid_pagination" data-grid="main"></div>
+
+	</footer>
+
+	{{-- Grid: templates --}}
+	@include('platform/menus::grid/index/results')
+	@include('platform/menus::grid/index/pagination')
+	@include('platform/menus::grid/index/filters')
+	@include('platform/menus::grid/index/no_results')
+
+</section>
+
+@if (config('platform.app.help'))
+	@include('platform/menus::help')
+@endif
 
 @stop

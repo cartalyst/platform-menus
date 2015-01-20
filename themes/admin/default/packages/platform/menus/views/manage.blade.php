@@ -2,16 +2,19 @@
 
 {{-- Page title --}}
 @section('title')
-	@parent
-	: {{{ trans("platform/menus::general.{$mode}") }}} {{{ ! empty($menu) ? '- ' . $menu->name : null }}}
+@parent
+ {{{ trans("action.{$mode}") }}} {{{ trans('platform/menus::common.title') }}}
 @stop
 
 {{-- Queue assets --}}
-{{ Asset::queue('menus', 'platform/menus::css/menus.css', 'styles') }}
-{{ Asset::queue('jquery.slugify', 'platform/js/slugify.js', 'jquery') }}
-{{ Asset::queue('jquery.sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
-{{ Asset::queue('jquery.menu-manager', 'platform/menus::js/jquery.menumanager.js', array('jquery.slugify', 'jquery.sortable')) }}
-{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery.menu-manager') }}
+{{ Asset::queue('menus', 'platform/menus::css/menus.scss', 'style') }}
+
+{{ Asset::queue('slugify', 'platform/js/slugify.js', 'jquery') }}
+{{ Asset::queue('sortable', 'platform/menus::js/jquery.sortable.js', 'jquery') }}
+{{ Asset::queue('validate', 'platform/js/validate.js', 'jquery') }}
+{{ Asset::queue('selectize', 'selectize/js/selectize.js', 'jquery') }}
+{{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'slugify') }}
+{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'menu-manager') }}
 
 {{-- Inline scripts --}}
 @section('scripts')
@@ -27,7 +30,7 @@
 
 		// Register the available types
 		@foreach ($types as $type)
-			MenuManager.registerType('{{ $type->getName() }}', '{{ $type->getIdentifier() }}');
+		MenuManager.registerType('{{ $type->getName() }}', '{{ $type->getIdentifier() }}');
 		@endforeach
 	});
 </script>
@@ -38,110 +41,193 @@
 @parent
 @stop
 
-{{-- Page content --}}
-@section('content')
+{{-- Page --}}
+@section('page')
+<section class="panel panel-default panel-tabs">
 
-<form id="menu-form" action="{{ Request::fullUrl() }}" method="POST" accept-char="UTF-8">
+	<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8" data-parsley-validate>
 
-	{{-- CSRF Token --}}
-	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		{{-- CSRF Token --}}
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-	{{-- Page header --}}
-	<div class="page-header">
+		<header class="panel-heading">
 
-		<div class="pull-right">
-			<button class="btn btn-success btn-lg" type="submit"><i class="fa fa-save"></i> {{{ trans('button.update') }}}</button>
-		</div>
+			<nav class="navbar navbar-default navbar-actions">
 
-		<h1>{{{ trans("platform/menus::general.{$mode}") }}} <small>{{{ ! empty($menu) ? $menu->name : null }}}</small></h1>
+				<div class="container-fluid">
 
-	</div>
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#actions">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
 
-	<div class="row">
+						<a class="btn btn-navbar-cancel navbar-btn pull-left tip" href="{{ route('admin.menus.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
+							<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
+						</a>
 
-		{{-- Menu Items --}}
-		<div class="col-md-7">
+						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ $menu->exists ? $menu->name : null }}}</small></span>
+					</div>
 
-			<div data-no-items class="jumbotron{{ ! empty($children) ? ' hide' : null }}">
+					{{-- Form: Actions --}}
+					<div class="collapse navbar-collapse" id="actions">
 
-				<div class="container" id="no-children">
+						<ul class="nav navbar-nav navbar-right">
 
-					<h1>{{ trans('platform/menus::message.no_children') }}</h1>
+							@if ($menu->exists and $mode != 'copy')
+							<li>
+								<a href="{{ route('admin.menu.delete', $menu->id) }}" class="tip" data-action-delete data-toggle="tooltip" data-original-title="{{{ trans('action.delete') }}}" type="delete">
+									<i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.delete') }}}</span>
+								</a>
+							</li>
+							@endif
 
-					<p>&nbsp;</p>
+							<li>
+								<button class="btn btn-primary navbar-btn" data-toggle="tooltip" data-original-title="{{{ trans('action.save') }}}">
+									<i class="fa fa-save"></i> <span class="visible-xs-inline">{{{ trans('action.save') }}}</span>
+								</button>
+							</li>
 
-					<p><button class="btn btn-primary btn-md" data-item-add data-item="new-child"><i class="fa fa-plus"></i> {{{ trans('platform/menus::button.add_item') }}}</button></p>
+						</ul>
+
+					</div>
+
+				</div>
+
+			</nav>
+
+		</header>
+
+		<div class="panel-body">
+
+			<div role="tabpanel">
+
+				{{-- Form: Tabs --}}
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('platform/menus::common.tabs.general') }}}</a></li>
+				</ul>
+
+				<div class="tab-content">
+
+					{{-- Form: General --}}
+					<div role="tabpanel" class="tab-pane fade in active" id="general">
+
+						<div class="row">
+
+							<div class="col-md-3">
+
+								{{-- Form: General --}}
+								<fieldset>
+
+									<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
+
+
+									{{-- Name --}}
+									<div class="form-group{{ Alert::form('name', ' has-error') }}">
+
+										<label class="control-label" for="menu-name">
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.name_help') }}}"></i>
+											{{ trans('platform/menus::model.general.name') }}
+										</label>
+
+										<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ $menu->exists ? $menu->name : null }}}" placeholder="{{{ trans('platform/menus::model.general.name') }}}" required data-parsley-trigger="change">
+
+										<span class="help-block"></span>
+									</div>
+
+									{{-- Slug --}}
+									<div class="form-group{{ Alert::form('slug', ' has-error') }}">
+										<label class="control-label" for="menu-slug">
+											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.slug_help') }}}"></i>
+											{{ trans('platform/menus::model.general.slug') }}
+										</label>
+
+										<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ $menu->exists ? $menu->slug : null }}}" placeholder="{{{ trans('platform/menus::model.general.name') }}}" required data-parsley-trigger="change">
+
+										<span class="help-block"></span>
+									</div>
+
+									{{-- Underscore form template --}}
+									@include('platform/menus::manage/form-template')
+
+								</fieldset>
+
+							</div>
+
+							<div class="col-md-9">
+
+								{{-- Form: Structure --}}
+								<fieldset>
+
+									<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
+
+									@if ( empty($children) )
+
+									<p class="no-items lead text-center">{{ trans('platform/menus::message.no_children') }}</p>
+
+									@endif
+
+									{{-- New children form --}}
+									<div class="panel panel-default panel-menu">
+
+										<header class="panel-heading collapsed" data-toggle="collapse" data-target="#panel-new" aria-expanded="false" aria-controls="panel-new">
+
+											<span class="new-item"><i class="fa fa-plus"></i></span>
+
+											<span class="item-name"></i> Create New Link</span>
+
+											<span class="panel-close small pull-right tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
+
+										</header>
+
+										<div class="panel-body collapse" id="panel-new">
+
+											<div class="row">
+
+												<div class="col-md-12">
+
+													@include('platform/menus::manage/form')
+
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<hr>
+
+									<div id="sortable">
+
+										<ol class="items">
+
+											{{-- Menu Items --}}
+											@if ( ! empty($children))
+											@each('platform/menus::manage/children', $children, 'child')
+											@endif
+
+										</ol>
+
+									</div>
+
+								</fieldset>
+
+							</div>
+
+						</div>
+
+					</div>
 
 				</div>
 
 			</div>
 
-			<ol class="items{{ empty($children) ? ' hide' : null }}" data-item-add>
-				<li class="item-add">
-					<div class="item-name" data-item="new-child">{{{ trans('platform/menus::button.add_item') }}}</div>
-				</li>
-			</ol>
-
-			<div id="sortable">
-				<ol class="items">
-					@if ( ! empty($children))
-					@each('platform/menus::manage/children', $children, 'child')
-					@endif
-
-					{{-- Underscore children template --}}
-					@include('platform/menus::manage/children-template')
-				</ol>
-			</div>
-
 		</div>
 
-		{{-- Sidebar --}}
-		<div class="col-md-5">
+	</form>
 
-			{{-- Root form --}}
-			<div class="well well-md item-box-borderless" data-root-form>
-
-				<fieldset>
-
-					<legend>Menu Details</legend>
-
-					<div class="form-group{{ $errors->first('name', ' has-error') }}">
-						<label class="control-label" for="menu-name">{{ trans('platform/menus::form.name') }}</label>
-
-						<input type="text" class="form-control" name="menu-name" id="menu-name" value="{{{ ! empty($menu) ? $menu->name : null }}}" required>
-
-						<span class="help-block">{{{ $errors->first('name', ':message') }}}</span>
-					</div>
-
-					<div class="form-group{{ $errors->first('slug', ' has-error') }}">
-						<label class="control-label" for="menu-slug">{{ trans('platform/menus::form.slug') }}</label>
-
-						<input type="text" class="form-control" name="menu-slug" id="menu-slug" value="{{{ ! empty($menu) ? $menu->slug : null }}}" required>
-
-						<span class="help-block">{{{ $errors->first('slug', ':message') }}}</span>
-					</div>
-
-				</fieldset>
-
-			</div>
-
-			{{-- Items form --}}
-			@if ( ! empty($children))
-			@each('platform/menus::manage/form', $children, 'child')
-			@endif
-
-			{{-- New children form --}}
-			@include('platform/menus::manage/form')
-
-			{{-- Underscore form template --}}
-			<div data-forms>
-				@include('platform/menus::manage/form-template')
-			</div>
-
-		</div>
-
-	</div>
-
-</form>
-
+</section>
 @stop

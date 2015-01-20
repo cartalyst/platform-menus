@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Types;
+<?php namespace Platform\Menus\Repositories;
 /**
  * Part of the Platform Menus extension.
  *
@@ -18,27 +18,42 @@
  */
 
 use Platform\Menus\Models\Menu;
+use Platform\Menus\Types\TypeInterface;
 
-class StaticType extends AbstractType implements TypeInterface {
+class ManagerRepository implements ManagerRepositoryInterface {
 
 	/**
-	 * Get the type identifier.
+	 * Array of registered attribute types.
 	 *
-	 * @return string
+	 * @var array
 	 */
-	public function getIdentifier()
+	protected $types = [];
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getTypes()
 	{
-		return 'static';
+		return $this->types;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function afterSave(Menu $child) {}
+	public function getType($type)
+	{
+		if (array_key_exists($type, $this->types))
+		{
+			return $this->types[$type];
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function beforeDelete(Menu $child) {}
+	public function registerType(TypeInterface $type)
+	{
+		$this->types[$type->getIdentifier()] = $type;
+	}
 
 }

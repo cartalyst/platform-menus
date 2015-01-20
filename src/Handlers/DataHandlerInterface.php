@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Types;
+<?php namespace Platform\Menus\Handlers;
 /**
  * Part of the Platform Menus extension.
  *
@@ -17,28 +17,14 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Models\Menu;
-
-class StaticType extends AbstractType implements TypeInterface {
+interface DataHandlerInterface {
 
 	/**
-	 * Get the type identifier.
+	 * Prepares the given data for being stored.
 	 *
-	 * @return string
+	 * @param  array  $data
+	 * @return mixed
 	 */
-	public function getIdentifier()
-	{
-		return 'static';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function afterSave(Menu $child) {}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function beforeDelete(Menu $child) {}
+	public function prepare(array $data);
 
 }

@@ -7,13 +7,13 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -57,7 +57,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 			// Type of the child
 			$table->string('type')->default('static');
 
-			$table->boolean('secure')->default(0);
+			$table->boolean('secure')->nullable();
 
 			// Specific to "static" menu children
 			$table->string('uri')->nullable();
@@ -70,7 +70,7 @@ class MigrationPlatformMenusInstallMenus extends Migration {
 
 			// User visibility flag
 			$table->string('visibility')->default('always');
-			$table->text('groups')->nullable();
+			$table->text('roles')->nullable();
 
 			// Regular expression field so that we can have a more
 			// flexible way to set the "selected" class on a item.

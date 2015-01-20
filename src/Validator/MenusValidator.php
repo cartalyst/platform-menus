@@ -1,4 +1,4 @@
-<?php namespace Platform\Menus\Types;
+<?php namespace Platform\Menus\Validator;
 /**
  * Part of the Platform Menus extension.
  *
@@ -17,28 +17,24 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Models\Menu;
+use Cartalyst\Support\Validator;
 
-class StaticType extends AbstractType implements TypeInterface {
+class MenusValidator extends Validator implements MenusValidatorInterface {
 
 	/**
-	 * Get the type identifier.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
-	public function getIdentifier()
+	protected $rules = [
+		'name' => 'required',
+		'slug' => 'required|unique:menus',
+	];
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function onUpdate()
 	{
-		return 'static';
+		$this->rules['slug'] .= ",slug,{slug},slug";
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function afterSave(Menu $child) {}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function beforeDelete(Menu $child) {}
 
 }

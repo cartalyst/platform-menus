@@ -7,22 +7,27 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use Illuminate\Routing\UrlGenerator;
-use Illuminate\Translation\Translator;
-use Illuminate\View\Factory;
 use Platform\Menus\Models\Menu;
+use Illuminate\Container\Container;
 
-abstract class BaseType {
+abstract class AbstractType {
+
+	/**
+	 * The container instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app;
 
 	/**
 	 * The URL Generator.
@@ -48,19 +53,26 @@ abstract class BaseType {
 	/**
 	 * Create a new type.
 	 *
-	 * @param  \Illuminate\Routing\UrlGenerator  $url
-	 * @param  \Illuminate\View\Factory  $view
-	 * @param  \Illuminate\Translation\Translator  $translator
+	 * @param  \Illuminate\Container\Container  $app
 	 * @return void
 	 */
-	public function __construct(UrlGenerator $url, Factory $view, Translator $translator)
+	public function __construct(Container $app)
 	{
-		$this->url = $url;
+		$this->app = $app;
 
-		$this->view = $view;
+		$this->url = $this->app['url'];
 
-		$this->translator = $translator;
+		$this->view = $this->app['view'];
+
+		$this->translator = $this->app['translator'];
 	}
+
+	/**
+	 * Returns the type identifier.
+	 *
+	 * @return string
+	 */
+	abstract public function getIdentifier();
 
 	/**
 	 * Get a human friendly name for the type.
@@ -69,7 +81,7 @@ abstract class BaseType {
 	 */
 	public function getName()
 	{
-		return $this->translator->trans("platform/menus::form.type_{$this->getIdentifier()}");
+		return $this->translator->trans("platform/menus::model.general.type_{$this->getIdentifier()}");
 	}
 
 	/**
@@ -90,7 +102,7 @@ abstract class BaseType {
 	 * @param  array  $options
 	 * @return string
 	 */
-	public function getUrlAttribute(Menu $child, array $options = array())
+	public function getUrlAttribute(Menu $child, array $options = [])
 	{
 		$uri = $child->uri;
 
@@ -99,7 +111,7 @@ abstract class BaseType {
 			$uri = "{$beforeUri}/{$uri}";
 		}
 
-		return $child->secure ? $this->url->secure($uri) : $this->url->to($uri, array(), false);
+		return $this->url->to($uri, [], $child->secure);
 	}
 
 	/**
@@ -121,7 +133,7 @@ abstract class BaseType {
 	 */
 	public function getTemplateHtml()
 	{
-		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template", compact('child'));
+		return $this->view->make("platform/menus::types/{$this->getIdentifier()}/template");
 	}
 
 	/**
@@ -130,7 +142,7 @@ abstract class BaseType {
 	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
-	public function afterSave(Menu $child){}
+	abstract public function afterSave(Menu $child);
 
 	/**
 	 * Event that is called before a children is deleted.
@@ -138,6 +150,6 @@ abstract class BaseType {
 	 * @param  \Platform\Menus\Menu  $child
 	 * @return void
 	 */
-	public function beforeDelete(Menu $child) {}
+	abstract public function beforeDelete(Menu $child);
 
 }

@@ -7,35 +7,60 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Extensions\Extension;
 use Platform\Menus\Models\Menu;
-use Sentinel;
+use Cartalyst\Extensions\Extension;
+use Illuminate\Container\Container;
 
 class Observer {
 
 	/**
-	 * Register an updating model event with the dispatcher.
+	 * The Menus repository instance.
 	 *
-	 * @param  \Closure|string  $callback
+	 * @var \Platform\Menus\Repositories\MenuRepositoryInterface
+	 */
+	protected $menus;
+
+	/**
+	 * The Sentinel Roles repository instance.
+	 *
+	 * @var \Cartalyst\Sentinel\Roles\RoleRepositoryInterface
+	 */
+	protected $roles;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Illuminate\Container\Container  $app
 	 * @return void
 	 */
-	public function updating($model)
+	public function __construct(Container $app)
 	{
-		if ($type = $model->getType())
-		{
-			$model->setTypeData($model->getAttributes());
+		$this->menus = $app['platform.menus'];
 
-			$type->afterSave($model);
+		$this->roles = $app['sentinel.roles'];
+	}
+
+	/**
+	 * Register an updating model event with the dispatcher.
+	 *
+	 * @param  \Platform\Menus\Models\Menu  $menu
+	 * @return void
+	 */
+	public function updating(Menu $menu)
+	{
+		if ($type = $this->menus->getManager()->getType($menu->type))
+		{
+			$type->afterSave($menu);
 		}
 	}
 
@@ -53,26 +78,35 @@ class Observer {
 		{
 			// Now, we'll prepare the children, which will fill in
 			// the blanks
-			$this->recursivelyPrepareChildren($extension, $children);
+			$this->prepareChildren($extension, $children);
 
 			// Now, we'll loop through our new array and we'll compare that
 			// to the children in the database. Any children in the database
 			// not matching our array which are assigned to this extension
 			// will be removed.
-			$slugs = array();
+			$slugs = [];
 			array_walk_recursive($children, function($value, $key) use (&$slugs)
 			{
 				if ($key == 'slug') $slugs[] = $value;
 			});
 
-			// Load up the associated menu
-			$method = camel_case($slug).'Menu';
-			with($menu = Menu::$method())->findChildren();
+			$slug = str_replace('_', '-', $slug);
 
-			$query = with(new Menu)
-				->newQuery()
-				->where('extension', '=', $extension->getSlug())
-				->where('menu', '=', $menu->getKey())
+			// Load up the associated menu
+			if ( ! $menu = $this->menus->findBySlug($slug))
+			{
+				$menu = last($this->menus->create([
+					'menu-name' => ucwords(str_replace('-', ' ', $slug)),
+					'menu-slug' => $slug,
+				]));
+			}
+
+			$menu->findChildren();
+
+			$query = $this->menus
+				->createModel()
+				->whereMenu($menu->getKey())
+				->whereExtension($extension->getSlug())
 				->where('slug', 'like', "%{$slug}-%");
 
 			if (count($slugs))
@@ -83,6 +117,7 @@ class Observer {
 			foreach ($query->get() as $child)
 			{
 				$child->refresh();
+
 				$child->delete();
 			}
 
@@ -93,7 +128,7 @@ class Observer {
 			$this->recursivelyPurgeExisting($children, $existing);
 
 			$tree = array_merge_recursive($existing, $children);
-			$this->recursivelyPrepareAttributes($tree);
+			$this->prepareChildrenAttributes($tree);
 
 			// Because we have just taken our existing hierarchy
 			// and added to it, we can save on the overhead of
@@ -103,14 +138,12 @@ class Observer {
 			$menu->mapTreeAndKeep($tree);
 		}
 
-		$children = with(new Menu)
-		    ->newQuery()
-		    ->where('extension', '=', $extension->getSlug())
-		    ->get();
+		$children = $this->menus->createModel()->whereExtension($extension->getSlug())->get();
 
 		foreach ($children as $child)
 		{
 			$child->enabled = false;
+
 			$child->save();
 		}
 	}
@@ -128,7 +161,7 @@ class Observer {
 		foreach ($menus as $slug => $children)
 		{
 			// Build up an array of all the slugs present in the children array
-			$slugs = array();
+			$slugs = [];
 			if (is_array($children) and ! empty($children))
 			{
 				array_walk_recursive($children, function($value, $key) use (&$slugs)
@@ -137,9 +170,7 @@ class Observer {
 				});
 			}
 
-			$query = with(new Menu)
-				->newQuery()
-				->where('extension', '=', $extension->getSlug());
+			$query = $this->menus->createModel()->whereExtension($extension->getSlug());
 
 			if (count($slugs) > 0)
 			{
@@ -151,6 +182,7 @@ class Observer {
 			foreach ($query->get() as $child)
 			{
 				$child->refresh();
+
 				$child->delete();
 			}
 		}
@@ -164,14 +196,12 @@ class Observer {
 	 */
 	public function afterEnable(Extension $extension)
 	{
-		$children = with(new Menu)
-			->newQuery()
-			->where('extension', '=', $extension->getSlug())
-			->get();
+		$children = $this->menus->createModel()->whereExtension($extension->getSlug())->get();
 
 		foreach ($children as $child)
 		{
 			$child->enabled = true;
+
 			$child->save();
 		}
 	}
@@ -184,14 +214,12 @@ class Observer {
 	 */
 	public function afterDisable(Extension $extension)
 	{
-		$children = with(new Menu)
-			->newQuery()
-			->where('extension', '=', $extension->getSlug())
-			->get();
+		$children = $this->menus->createModel()->whereExtension($extension->getSlug())->get();
 
 		foreach ($children as $child)
 		{
 			$child->enabled = false;
+
 			$child->save();
 		}
 	}
@@ -216,7 +244,7 @@ class Observer {
 			return;
 		}
 
-		$valid = array();
+		$valid = [];
 
 		// If there's no children, we'll observe an uninstall
 		// event for the child. This'll remove any children
@@ -228,38 +256,6 @@ class Observer {
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * Prepares children for the fancy mapping process that will occur,
-	 * including validating attributes.
-	 *
-	 * @param  \Cartalyst\Extensions\Extension  $extension
-	 * @param  array  $children
-	 * @return void
-	 */
-	protected function recursivelyPrepareChildren(Extension $extension, &$children)
-	{
-		foreach ($children as &$child)
-		{
-			if ( ! isset($child['slug']))
-			{
-				throw new \InvalidArgumentException("All menu children require a slug to be mapped from extension.php, Extension [{$extension->getSlug()}] has one or more slugs missing from it's menu children.");
-			}
-
-			$child['extension'] = $extension->getSlug();
-
-			if ( ! isset($child['type'])) $child['type']             = 'static';
-			if ( ! isset($child['visibility'])) $child['visibility'] = 'always';
-			if ( ! isset($child['children'])) $child['children']     = array();
-
-			if ( ! is_array($child['children']))
-			{
-				throw new \InvalidArgumentException("Menu child [{$child['slug']}] for Extension [{$extension->getSlug()}] has a children property that is not an array.");
-			}
-
-			$this->recursivelyPrepareChildren($extension, $child['children']);
-		}
 	}
 
 	/**
@@ -295,7 +291,7 @@ class Observer {
 	 *
 	 * @param  array  $child
 	 * @param  array  $existing
-	 * @return void
+	 * @return mixed
 	 */
 	protected function findAndUpdateExisting(array $child, array &$existing)
 	{
@@ -316,30 +312,70 @@ class Observer {
 	}
 
 	/**
+	 * Prepares children for the fancy mapping process that will occur,
+	 * including validating attributes.
+	 *
+	 * @param  \Cartalyst\Extensions\Extension  $extension
+	 * @param  array  $children
+	 * @return void
+	 */
+	protected function prepareChildren(Extension $extension, &$children)
+	{
+		// Get the extension slug
+		$slug = $extension->getSlug();
+
+		// Prepare some sensible defaults
+		$defaults = [
+			'type'       => 'static',
+			'visibility' => 'always',
+			'children'   => [],
+			'extension'  =>  $slug,
+		];
+
+		foreach ($children as &$child)
+		{
+			$child = array_merge($defaults, $child);
+
+			if ( ! isset($child['slug']))
+			{
+				throw new \InvalidArgumentException("All menu children require a slug to be mapped from extension.php, Extension [{$slug}] has one or more slugs missing from it's menu children.");
+			}
+
+			if ( ! is_array($child['children']))
+			{
+				throw new \InvalidArgumentException("Menu child [{$child['slug']}] for Extension [{$slug}] has a children property that is not an array.");
+			}
+
+			$this->prepareChildren($extension, $child['children']);
+		}
+	}
+
+	/**
 	 * Strip the guaraded attributes from a tree of children.
 	 *
 	 * @param  array  $children
 	 * @return void
 	 */
-	protected function recursivelyPrepareAttributes(array &$children)
+	protected function prepareChildrenAttributes(array &$children)
 	{
-		$guarded = with(new Menu)->getGuarded();
+		// Get all the guarded attributes
+		$guarded = $this->menus->createModel()->getGuarded();
 
+		// Get all the available roles
+		$roles = $this->roles->createModel()->lists('id', 'slug');
+
+		// Loop through the children
 		foreach ($children as &$child)
 		{
 			$child = array_except($child, $guarded);
 
-			if (isset($child['groups']) and is_array($child['groups']))
+			if (isset($child['roles']) && is_array($child['roles']))
 			{
-				$groups = Sentinel::getGroupRepository()
-					->createModel()
-					->newQuery()
-					->lists('id', 'slug');
-
-				$child['groups'] = array_values(array_intersect_key($groups, array_flip($child['groups'])));
+				$child['roles'] = array_values(array_intersect_key($roles, array_flip($child['roles'])));
 			}
 
-			$this->recursivelyPrepareAttributes($child['children']);
+			// Perform a recursive call
+			$this->prepareChildrenAttributes($child['children']);
 		}
 	}
 

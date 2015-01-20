@@ -7,146 +7,128 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\NestedSets\Nodes\EloquentNode;
+use Cartalyst\Attributes\EntityInterface;
 use Illuminate\Database\Query\Expression;
-use InvalidArgumentException;
-use Platform\Menus\Types\TypeInterface;
-use RuntimeException;
+use Platform\Attributes\Traits\EntityTrait;
+use Cartalyst\NestedSets\Nodes\EloquentNode;
+use Cartalyst\NestedSets\Nodes\NodeInterface;
+use Cartalyst\Support\Traits\NamespacedEntityTrait;
 
-class Menu extends EloquentNode {
+class Menu extends EloquentNode implements EntityInterface, NodeInterface {
+
+	use EntityTrait, NamespacedEntityTrait;
 
 	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
+	 * {@inheritDoc}
 	 */
 	protected $table = 'menus';
 
 	/**
-	 * The primary key for the model.
-	 *
-	 * @var string
+	 * {@inheritDoc}
 	 */
 	protected $primaryKey = 'id';
 
 	/**
-	 * The attributes that aren't mass assignable.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
-	protected $guarded = array('lft', 'rgt', 'menu', 'depth', 'created_at', 'updated_at');
+	protected $guarded = [
+		'lft',
+		'rgt',
+		'menu',
+		'depth',
+		'created_at',
+		'updated_at',
+	];
 
 	/**
-	 * Array of attributes reserved for the worker. These attributes
-	 * cannot be set publically, only internally and shouldn't
-	 * really be set outside this class.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
-	protected $reservedAttributes = array(
+	protected $reservedAttributes = [
 		'left'  => 'lft',
 		'right' => 'rgt',
 		'tree'  => 'menu',
-	);
+	];
 
 	/**
-	 * Array of registered type relationships, where the key is the type
-	 * (which is the relationship) and the value is a closure to resolve
-	 * the relationship.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
-	protected static $types = array();
+	protected static $entityNamespace = 'platform/menus';
 
 	/**
-	 * Hold the type data when saving the menu.
+	 * Get accessor for the "enabled" attribute.
 	 *
-	 * @var array
-	 */
-	protected $typeData = array();
-
-	/**
-	 * Get mutator for the "enabled" attribute.
-	 *
-	 * @param  mixed  $enabled
+	 * @param  int  $enabled
 	 * @return bool
 	 */
 	public function getEnabledAttribute($enabled)
 	{
-		return (bool) $enabled;
+		return ($this->exists || $enabled) ? (bool) $enabled : true;
 	}
 
 	/**
-	 * Get mutator for the "secure" attribute.
+	 * Get accessor for the "secure" attribute.
 	 *
 	 * @param  mixed  $secure
 	 * @return bool
 	 */
 	public function getSecureAttribute($secure)
 	{
-		return (bool) $secure;
+		if ( ! is_null($secure))
+		{
+			return (bool) $secure;
+		}
 	}
 
 	/**
-	 * Get mutator for the "groups" attribute.
+	 * Get accessor for the "secure" attribute.
 	 *
-	 * @param  mixed  $groups
-	 * @return array
-	 * @throws \InvalidArgumentException
-	 */
-	public function getGroupsAttribute($groups)
-	{
-		if ( ! $groups)
-		{
-			return array();
-		}
-
-		if (is_array($groups))
-		{
-			return $groups;
-		}
-
-		if ( ! $_groups = json_decode($groups, true))
-		{
-			throw new InvalidArgumentException("Cannot JSON decode groups [{$groups}].");
-		}
-
-		return $_groups;
-	}
-
-	/**
-	 * Set mutator for the "groups" attribute.
-	 *
-	 * @param  array  $groups
+	 * @param  mixed  $secure
 	 * @return void
 	 */
-	public function setGroupsAttribute($groups)
+	public function setSecureAttribute($secure)
 	{
-		// If we get a string, let's just ensure it's a proper JSON string
-		if ( ! is_array($groups))
+		if (strlen($secure) === 0)
 		{
-			$groups = $this->getGroupsAttribute($groups);
+			$secure = null;
 		}
 
-		if ( ! empty($groups))
-		{
-			$groups = array_values(array_map('intval', $groups));
-			$this->attributes['groups'] = json_encode($groups);
-		}
-		else
-		{
-			$this->attributes['groups'] = '';
-		}
+		$this->attributes['secure'] = $secure;
+	}
+
+	/**
+	 * Get accessor for the "roles" attribute.
+	 *
+	 * @param  string  $roles
+	 * @return array
+	 */
+	public function getRolesAttribute($roles)
+	{
+		return json_decode($roles, true) ?: [];
+	}
+
+	/**
+	 * Set mutator for the "roles" attribute.
+	 *
+	 * @param  array  $roles
+	 * @return void
+	 */
+	public function setRolesAttribute($roles)
+	{
+		if ( ! is_array($roles)) $roles = $this->getRolesAttribute($roles);
+
+		$roles = ! empty($roles) ? json_encode(array_values(array_map('intval', $roles))) : '';
+
+		$this->attributes['roles'] = $roles;
 	}
 
 	/**
@@ -154,43 +136,43 @@ class Menu extends EloquentNode {
 	 * which satisfy any of the provided visibilities.
 	 *
 	 * @param  array  $visibilities
-	 * @param  array  $groups
-	 * @param  int    $depth
+	 * @param  array  $roles
+	 * @param  int  $depth
 	 * @return array
 	 */
-	public function findDisplayableChildren(array $visibilities, array $groups = null, $depth = 0)
+	public function findDisplayableChildren(array $visibilities, array $roles = [], $depth = 0)
 	{
 		$worker = $this->createWorker();
 
-		$children = $this->filterChildren(function($query) use ($visibilities, $groups, $worker)
+		$children = $this->filterChildren(function($query) use ($visibilities, $roles, $worker)
 		{
 			$query->whereIn(
 				new Expression($worker->wrapColumn('node.visibility')),
 				$visibilities
 			);
 
-			// If we have groups set, we'll filter down to records who are likely
-			// to contain our group. This will speed up the filtering process
+			// If we have roles set, we'll filter down to records who are likely
+			// to contain our role. This will speed up the filtering process
 			// later on.
-			if (isset($groups))
+			if ( ! empty($roles))
 			{
-				$query->whereNested(function($query) use ($groups, $worker)
+				$query->whereNested(function($query) use ($roles, $worker)
 				{
-					foreach ($groups as $group)
+					foreach ($roles as $role)
 					{
 						$query->orWhere(
-							new Expression($worker->wrapColumn("node.groups")),
+							new Expression($worker->wrapColumn('node.roles')),
 							'LIKE',
-							"%{$group}%"
+							"%{$role}%"
 						);
 					}
 
 					$query->orWhere(
-						new Expression($worker->wrapColumn("node.groups")),
+						new Expression($worker->wrapColumn('node.roles')),
 						''
 					)
 					->orWhereNull(
-						new Expression($worker->wrapColumn("node.groups"))
+						new Expression($worker->wrapColumn('node.roles'))
 					);
 				});
 			}
@@ -199,7 +181,7 @@ class Menu extends EloquentNode {
 
 		$this->filterChildrenStatus($children);
 
-		$this->filterChildrenGroups($children, $groups);
+		$this->filterChildrenRoles($children, $roles);
 
 		return $children;
 	}
@@ -231,24 +213,21 @@ class Menu extends EloquentNode {
 	}
 
 	/**
-	 * Filters children based on their groups.
+	 * Filters children based on their roles.
 	 *
 	 * @param  array  $children
-	 * @param  array  $groups
+	 * @param  array  $roles
 	 * @return void
 	 */
-	protected function filterChildrenGroups(array &$children, array $groups = null)
+	protected function filterChildrenRoles(array &$children, array $roles = [])
 	{
-		if ( ! isset($groups))
-		{
-			return;
-		}
+		if (empty($roles)) return;
 
 		foreach ($children as $index => $child)
 		{
-			if (count($child->groups) > 0)
+			if (count($child->roles) > 0)
 			{
-				$matching = array_intersect($child->groups, $groups);
+				$matching = array_intersect($child->roles, $roles);
 
 				if (count($matching) === 0)
 				{
@@ -258,107 +237,26 @@ class Menu extends EloquentNode {
 			}
 
 			$grandChildren = $child->getChildren();
-			$this->filterChildrenGroups($grandChildren, $groups);
+			$this->filterChildrenRoles($grandChildren, $roles);
 			$child->setChildren($grandChildren);
 		}
 	}
 
 	/**
-	 * Return the guarded attributes.
-	 *
-	 * @return array
-	 */
-	public function getGuarded()
-	{
-		return $this->guarded;
-	}
-
-	/**
-	 * Find a model by its primary key.
-	 *
-	 * @param  mixed  $id
-	 * @param  array  $columns
-	 * @return \Illuminate\Database\Eloquent\Model|Collection
-	 */
-	public static function find($id, $columns = array('*'))
-	{
-		$instance = new static;
-
-		if ( ! is_numeric($id))
-		{
-			return $instance->newQuery()->where('slug', '=', $id)->first($columns);
-		}
-
-		return parent::find($id, $columns);
-	}
-
-	/**
 	 * Return information about the provided type.
 	 *
-	 * @param  string  $type
-	 * @return array
-	 * @throws \RuntimeException
-	 */
-	public function getType($type = null)
-	{
-		$type = $type ?: $this->type;
-
-		if (is_null($type)) return false;
-
-		if ( ! isset(static::$types[$type]))
-		{
-			throw new RuntimeException("Menu type [{$type}] has not been registered.");
-		}
-
-		return static::$types[$type];
-	}
-
-	/**
-	 * Register a custom type with a menu.
-	 *
-	 * @param  \Platform\Menus\Types\TypeInterface  $type
-	 * @return void
-	 */
-	public static function registerType(TypeInterface $type)
-	{
-		static::$types[$type->getIdentifier()] = $type;
-	}
-
-	/**
-	 * Return all the registered types.
-	 *
 	 * @return array
 	 */
-	public static function getTypes()
+	public function getType()
 	{
-		return static::$types;
-	}
-
-	/**
-	 * Return the type data.
-	 *
-	 * @return array
-	 */
-	public function getTypeData()
-	{
-		return $this->typeData;
-	}
-
-	/**
-	 * Set the type data.
-	 *
-	 * @return void
-	 */
-	public function setTypeData(array $typeData)
-	{
-		$this->typeData = $typeData;
+		return app('platform.menus.manager')->getType($this->type);
 	}
 
 	/**
 	 * Handle dynamic method calls into the method.
 	 *
 	 * @param  string  $method
-	 * @param  array   $parameters
+	 * @param  array  $parameters
 	 * @return mixed
 	 */
 	public function __call($method, $parameters)
@@ -384,42 +282,10 @@ class Menu extends EloquentNode {
 		{
 			array_unshift($parameters, $this);
 
-			return call_user_func_array(array($type, $method), $parameters);
+			return call_user_func_array([ $type, $method ], $parameters);
 		}
 
 		return parent::__call($method, $parameters);
-	}
-
-	/**
-	 * Handle dynamic static method calls into the method.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return mixed
-	 */
-	public static function __callStatic($method, $parameters)
-	{
-		// If we're making a call to a menu
-		if (ends_with($method, 'Menu'))
-		{
-			// Determine the slug the person was after
-			$slug = str_replace('_', '-', snake_case(substr($method, 0, -4)));
-
-			// Lazily create the menu item
-			if (is_null($menu = static::find($slug)))
-			{
-				$menu = new static(array(
-					'slug' => $slug,
-					'name' => ucwords(str_replace('-', ' ', $slug))
-				));
-
-				$menu->makeRoot();
-			}
-
-			return $menu;
-		}
-
-		return parent::__callStatic($method, $parameters);
 	}
 
 }

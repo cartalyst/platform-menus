@@ -7,15 +7,17 @@
  * Licensed under the Cartalyst PSL License.
  *
  * This source file is subject to the Cartalyst PSL License that is
- * bundled with this package in the license.txt file.
+ * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.0.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
+
+use Platform\Menus\Models\Menu;
 
 interface MenuRepositoryInterface {
 
@@ -49,12 +51,28 @@ interface MenuRepositoryInterface {
 	public function find($id);
 
 	/**
+	 * Returns a menu by its slug.
+	 *
+	 * @param  string  $slug
+	 * @return \Platform\Menus\Models\Menu
+	 */
+	public function findBySlug($slug);
+
+	/**
 	 * Returns a root menu by its primary key or slug.
 	 *
 	 * @param  int  $id
 	 * @return \Platform\Menus\Models\Menu
 	 */
 	public function findRoot($id);
+
+	/**
+	 * Returns a root menu by its slug.
+	 *
+	 * @param  string  $slug
+	 * @return \Platform\Menus\Models\Menu
+	 */
+	public function findRootBySlug($slug);
 
 	/**
 	 * Perform a basic search.
@@ -82,36 +100,61 @@ interface MenuRepositoryInterface {
 	/**
 	 * Determine if the given menu is valid for creation.
 	 *
-	 * @param  array  $data
+	 * @param  array  $input
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	public function validForCreation(array $data);
+	public function validForCreation(array $input);
 
 	/**
 	 * Determine if the given menu is valid for updating.
 	 *
-	 * @param  int  $id
-	 * @param  array  $data
+	 * @param  \Platform\Menus\Models\Menu  $menu
+	 * @param  array  $input
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	public function validForUpdate($id, array $data);
+	public function validForUpdate(Menu $menu, array $input);
 
 	/**
 	 * Creates a menu with the given data.
 	 *
-	 * @param  array  $data
-	 * @return \Platform\Menus\Models\Menu
+	 * @param  array  $input
+	 * @return bool|array
 	 */
-	public function create(array $data);
+	public function create(array $input);
 
 	/**
 	 * Updates a menu with the given data.
 	 *
 	 * @param  int  $id
-	 * @param  array  $data
-	 * @return \Platform\Menus\Models\Menu
+	 * @param  array  $input
+	 * @return bool|array
 	 */
-	public function update($id, array $data);
+	public function update($id, array $input);
+
+	/**
+	 * Creates or updates the given menu.
+	 *
+	 * @param  int  $id
+	 * @param  array  $input
+	 * @return bool|array
+	 */
+	public function store($id, array $input);
+
+	/**
+	 * Enables the given menu.
+	 *
+	 * @param  int  $id
+	 * @return bool|array
+	 */
+	public function enable($id);
+
+	/**
+	 * Disables the given menu.
+	 *
+	 * @param  int  $id
+	 * @return bool|array
+	 */
+	public function disable($id);
 
 	/**
 	 * Deletes the given menu.
