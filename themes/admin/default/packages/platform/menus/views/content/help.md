@@ -5,15 +5,27 @@ Features include conditional visibilities based on roles.
 
 ### Widgets
 
-`@widget('platform/menus::nav.show', [ 'slug', 'depth', 'cssClass', 'beforeUri', 'view' ])`
+`@nav('slug', 'depth', 'cssClass', 'beforeUri', 'view')`
 
 This blade call will allow you to output the selected menu on your views.
 
 	// Outputs the platform `admin` menu
-	@widget('platform/menus::nav.show', [ 'admin', 0, 'menu menu--sidebar', admin_uri(), 'partials/navigation/sidebar' ])
+	@nav('admin', 0, 'menu menu--sidebar', admin_uri(), 'partials/navigation/sidebar')
 
 	// Outputs the `foo` menu
-	@widget('platform/menus::nav.show', [ 'foo' ])
+	@nav('foo')
+
+`@nav('slug', 'depth', 'current', 'attributes', 'options')`
+
+This blade call will allow you to output the selected menu as a dropdown on your views.
+
+$slug, $depth, $current = null, array $attributes = [], array $options = []
+
+	// Outputs the platform `admin` menu as a dropdown with the `foo` item selected.
+	@dropdown('admin', 0, 'foo')
+
+	// Outputs the `foo` menu as a dropdown
+	@dropdown('foo')
 
 ---
 

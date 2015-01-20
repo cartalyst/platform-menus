@@ -10,7 +10,7 @@
 {{ Asset::queue('menus', 'platform/menus::css/menus.scss', 'style') }}
 
 {{ Asset::queue('slugify', 'platform/js/slugify.js', 'jquery') }}
-{{ Asset::queue('sortable', 'platform/menus::js/jquery.sortable.js', 'jquery')}}
+{{ Asset::queue('sortable', 'platform/menus::js/jquery.sortable.js', 'jquery') }}
 {{ Asset::queue('validate', 'platform/js/validate.js', 'jquery') }}
 {{ Asset::queue('selectize', 'selectize/js/selectize.js', 'jquery') }}
 {{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'slugify') }}

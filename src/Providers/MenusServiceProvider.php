@@ -38,6 +38,9 @@ class MenusServiceProvider extends ServiceProvider {
 		// Subscribe the registered event handlers
 		$this->app['events']->subscribe('platform.menus.handler.event');
 
+		// Register the Blade @nav, @dropdown widgets
+		$this->registerBladeWidgets();
+
 		$observer = $this->app['platform.menus.observer'];
 
 		$this->app['Platform\Menus\Models\Menu']->observe($observer);
@@ -108,6 +111,32 @@ class MenusServiceProvider extends ServiceProvider {
 
 			$this->app['cache']->flush();
 		}, 10);
+	}
+
+	/**
+	 * Registers the @nav, @dropdown blade calls.
+	 *
+	 * @return void
+	 */
+	protected function registerBladeWidgets()
+	{
+		$this->app['blade.compiler']->extend(function($value)
+		{
+			$pattern = '/(\s*)@nav(\(.*?\).*(\(\))?.*\)?\s*?)/';
+
+			$replace = '<?php echo Widget::make("platform/menus::nav.show", array$2); ?>';
+
+			return preg_replace($pattern, $replace, $value);
+		});
+
+		$this->app['blade.compiler']->extend(function($value)
+		{
+			$pattern = '/(\s*)@dropdown(\(.*?\).*(\(\))?.*\)?\s*?)/';
+
+			$replace = '<?php echo Widget::make("platform/menus::dropdown.show", array$2); ?>';
+
+			return preg_replace($pattern, $replace, $value);
+		});
 	}
 
 }
