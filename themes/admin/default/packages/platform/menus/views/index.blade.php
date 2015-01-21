@@ -20,6 +20,11 @@
 @parent
 @stop
 
+{{-- Inline scripts --}}
+@section('scripts')
+@parent
+@stop
+
 {{-- Page content --}}
 @section('page')
 

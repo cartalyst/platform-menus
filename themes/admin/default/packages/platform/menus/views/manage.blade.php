@@ -16,6 +16,11 @@
 {{ Asset::queue('menu-manager', 'platform/menus::js/jquery.menumanager.js', 'slugify') }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'menu-manager') }}
 
+{{-- Inline styles --}}
+@section('styles')
+@parent
+@stop
+
 {{-- Inline scripts --}}
 @section('scripts')
 @parent
@@ -34,11 +39,6 @@
 		@endforeach
 	});
 </script>
-@stop
-
-{{-- Inline styles --}}
-@section('styles')
-@parent
 @stop
 
 {{-- Page --}}
