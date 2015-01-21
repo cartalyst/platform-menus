@@ -3,9 +3,9 @@ Features include conditional visibilities based on roles.
 
 ---
 
-### Widgets
+### Blade Calls
 
-`@nav('slug', 'depth', 'cssClass', 'beforeUri', 'view')`
+#### @nav('slug', 'depth', 'cssClass', 'beforeUri', 'view')
 
 This blade call will allow you to output the selected menu on your views.
 
@@ -15,11 +15,11 @@ This blade call will allow you to output the selected menu on your views.
 	// Outputs the `foo` menu
 	@nav('foo')
 
-`@nav('slug', 'depth', 'current', 'attributes', 'options')`
+---
+
+#### @nav('slug', 'depth', 'current', 'attributes', 'options')
 
 This blade call will allow you to output the selected menu as a dropdown on your views.
-
-$slug, $depth, $current = null, array $attributes = [], array $options = []
 
 	// Outputs the platform `admin` menu as a dropdown with the `foo` item selected.
 	@dropdown('admin', 0, 'foo')

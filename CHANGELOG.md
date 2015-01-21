@@ -13,4 +13,21 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ### v1.0.0 - 2015-01-20
 
-- Initial release.
+- Can create, update, delete menus.
+- Can assign menu name & slug.
+- Can enabled/disable.
+- Can create, update, delete menu links.
+- Can sort menu links using nested sets model.
+- Can set link name & slug.
+- Can set link type. static | page
+- Can set URI.
+- Can enable/disable link.
+- Can set link target. same window | new window | parent window | top frame
+- Can set https. inherit | yes | no
+- Can select link parent.
+- Can set link class.
+- Can set link Regular Expression.
+- Can set Visibility. Show Always | Logged in | Logged out | Admin Only
+- Can restrict to roles.
+- Has blade call `@nav('slug', 'depth', 'cssClass', 'beforeUri', 'view')`
+- Has blade call `@dropdown('slug', 'depth', 'selected')`.
