@@ -125,7 +125,7 @@
 
 
 									{{-- Name --}}
-									<div class="form-group{{ Alert::form('name', ' has-error') }}">
+									<div class="form-group{{ Alert::onForm('name', ' has-error') }}">
 
 										<label class="control-label" for="menu-name">
 											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.name_help') }}}"></i>
@@ -138,7 +138,7 @@
 									</div>
 
 									{{-- Slug --}}
-									<div class="form-group{{ Alert::form('slug', ' has-error') }}">
+									<div class="form-group{{ Alert::onForm('slug', ' has-error') }}">
 										<label class="control-label" for="menu-slug">
 											<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.slug_help') }}}"></i>
 											{{ trans('platform/menus::model.general.slug') }}
