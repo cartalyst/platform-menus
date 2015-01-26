@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.0.1 - 2015-01-23
+
+`FIXED`
+
+- Fixed an issue on the latest underscore.js version.
+
 ### v1.0.0 - 2015-01-23
 
 - Can create, update, delete menus.
