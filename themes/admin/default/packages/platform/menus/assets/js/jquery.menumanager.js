@@ -506,8 +506,13 @@
 
 					});
 
+					// Prepare the template
+					var template = _.template($(options.templates.form).html());
+
 					// Append the new menu item
-					$(options.sortable.selector).append(_.template($(options.templates.form).html(), data));
+					$(options.sortable.selector).append(
+						template(data)
+					);
 
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
