@@ -1,4 +1,4 @@
-<select{{ $attributes }}>
+<select{!! $attributes !!}>
 @foreach ($options as $id => $value)
 <option value="{{ $id }}">{{ $value }}</option>
 @endforeach

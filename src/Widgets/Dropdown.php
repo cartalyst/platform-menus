@@ -31,23 +31,14 @@ class Dropdown {
 	protected $menus;
 
 	/**
-	 * The html builder instance.
-	 *
-	 * @var \Illuminate\Html\HtmlBuilder
-	 */
-	protected $html;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
 	 * @return void
 	 */
-	public function __construct(MenuRepositoryInterface $menus, HtmlBuilder $html)
+	public function __construct(MenuRepositoryInterface $menus)
 	{
 		$this->menus = $menus;
-
-		$this->html = $html;
 	}
 
 	/**
@@ -99,7 +90,7 @@ class Dropdown {
 		}
 
 		// Prepare the attributes
-		$attributes = $this->html->attributes($attributes);
+		$attributes = $this->attributes($attributes);
 
 		return view('platform/menus::widgets/dropdown', compact('items', 'attributes', 'options'));
 	}
@@ -127,6 +118,26 @@ class Dropdown {
 		{
 			$this->prepareItemsRecursively($children, $current);
 		}
+	}
+
+	/**
+	 * Prepares attributes as a string.
+	 *
+	 * @param  array  $attributes
+	 * @return string
+	 */
+	protected function attributes($attributes)
+	{
+		$out = [];
+
+		foreach ($attributes as $key => $value)
+		{
+			$element = $key.'="'.$value.'"';
+
+			if ( ! is_null($element)) $out[] = $element;
+		}
+
+		return count($out) > 0 ? (' '.implode(' ', $out)) : null;
 	}
 
 }
