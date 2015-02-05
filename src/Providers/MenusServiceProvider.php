@@ -27,9 +27,6 @@ class MenusServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		// Register the extension component namespaces
-		$this->package('platform/menus', 'platform/menus', __DIR__.'/../..');
-
 		// Register the static menu type
 		$this->app['platform.menus.manager']->registerType(
 			$this->app['platform.menus.types.static']
