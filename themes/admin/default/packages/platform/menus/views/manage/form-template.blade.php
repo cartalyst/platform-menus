@@ -95,7 +95,7 @@
 
 										{{-- Generate the types inputs --}}
 										@foreach ($types as $type)
-										{{ $type->getTemplateHtml() }}
+										{!! $type->getTemplateHtml() !!}
 										@endforeach
 
 									</div>

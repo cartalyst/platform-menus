@@ -85,7 +85,7 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 				{{-- Generate the types inputs --}}
 				@foreach ($types as $type)
-				{{ $type->getFormHtml( ! empty($child) ? $child : null) }}
+				{!! $type->getFormHtml( ! empty($child) ? $child : null) !!}
 				@endforeach
 
 			</div>

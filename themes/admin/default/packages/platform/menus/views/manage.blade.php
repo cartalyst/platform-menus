@@ -31,7 +31,7 @@
 		var MenuManager = $.menumanager('#menu-form');
 
 		// Set the persisted slugs
-		MenuManager.setPersistedSlugs({{ json_encode($persistedSlugs) }});
+		MenuManager.setPersistedSlugs({!! json_encode($persistedSlugs) !!});
 
 		// Register the available types
 		@foreach ($types as $type)
