@@ -255,6 +255,15 @@
 			// Pre-render the parents dropdowns
 			self.renderParentsDropdowns();
 
+			// Add menu item to the tree when pressing `enter`
+			$(document).keypress(function(e) {
+				if(e.which == 13) {
+					e.preventDefault();
+
+					$('[data-item-form="new-child"]').find('[data-item-create]').trigger('click');
+				}
+			});
+
 			// Clean the input values when there are changes
 			$document.on('change', 'input[type="text"]', function() {
 
