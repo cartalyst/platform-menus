@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.0.2 - 2015-02-18
+
+`FIXED`
+
+- A bug causing the form to be submitted when pressing enter.
+
 ### v1.0.1 - 2015-01-26
 
 `FIXED`
