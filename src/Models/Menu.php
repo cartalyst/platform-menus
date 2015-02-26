@@ -17,16 +17,17 @@
  * @link       http://cartalyst.com
  */
 
+use Illuminate\Database\Eloquent\Model;
 use Cartalyst\Attributes\EntityInterface;
 use Illuminate\Database\Query\Expression;
+use Cartalyst\NestedSets\Nodes\NodeTrait;
 use Platform\Attributes\Traits\EntityTrait;
-use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Cartalyst\NestedSets\Nodes\NodeInterface;
 use Cartalyst\Support\Traits\NamespacedEntityTrait;
 
-class Menu extends EloquentNode implements EntityInterface, NodeInterface {
+class Menu extends Model implements EntityInterface, NodeInterface {
 
-	use EntityTrait, NamespacedEntityTrait;
+	use EntityTrait, NamespacedEntityTrait, NodeTrait;
 
 	/**
 	 * {@inheritDoc}
@@ -147,7 +148,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 		$children = $this->filterChildren(function($query) use ($visibilities, $roles, $worker)
 		{
 			$query->whereIn(
-				new Expression($worker->wrapColumn('node.visibility')),
+				new Expression($worker->wrap('node.visibility')),
 				$visibilities
 			);
 
@@ -161,18 +162,18 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 					foreach ($roles as $role)
 					{
 						$query->orWhere(
-							new Expression($worker->wrapColumn('node.roles')),
+							new Expression($worker->wrap('node.roles')),
 							'LIKE',
 							"%{$role}%"
 						);
 					}
 
 					$query->orWhere(
-						new Expression($worker->wrapColumn('node.roles')),
+						new Expression($worker->wrap('node.roles')),
 						''
 					)
 					->orWhereNull(
-						new Expression($worker->wrapColumn('node.roles'))
+						new Expression($worker->wrap('node.roles'))
 					);
 				});
 			}
