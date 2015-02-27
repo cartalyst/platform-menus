@@ -244,6 +244,10 @@ class AdminMenusControllerTest extends IlluminateTestCase {
 			->once()
 			->with(1);
 
+		$this->app['response']->shouldReceive('make')
+			->with('Success', 200, [])
+			->once();
+
 		$this->controller->executeAction();
 	}
 
@@ -254,6 +258,10 @@ class AdminMenusControllerTest extends IlluminateTestCase {
 			->once()
 			->with('action')
 			->andReturn('foo');
+
+		$this->app['response']->shouldReceive('make')
+			->with('Failed', 500, [])
+			->once();
 
 		$this->controller->executeAction();
 	}

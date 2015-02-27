@@ -56,9 +56,6 @@ class DropdownWidgetTest extends IlluminateTestCase {
 			->once()
 			->andReturn($menu);
 
-		$this->app['html']->shouldReceive('attributes')
-			->once();
-
 		$this->app['view']->shouldReceive('make')
 			->with('platform/menus::widgets/dropdown', ['items' => [], 'attributes' => [], 'options' => []], [])
 			->once();
@@ -114,9 +111,6 @@ class DropdownWidgetTest extends IlluminateTestCase {
 			->with('children')
 			->once()
 			->andReturn([]);
-
-		$this->app['html']->shouldReceive('attributes')
-			->once();
 
 		$this->app['view']->shouldReceive('make')
 			->with('platform/menus::widgets/dropdown', ['items' => [$menu], 'attributes' => [], 'options' => []], [])
