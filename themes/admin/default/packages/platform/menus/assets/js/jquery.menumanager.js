@@ -600,6 +600,9 @@
 
 				// Get the item form box
 				var formBox = $('[data-item-form="' + formId + '"]');
+				
+				// Get the item panel box
+				var panelBox = $('#panel-' + formId);
 
 				// Get the current slug
 				var currentSlug = $('#' + formId + '_current-slug').val();
@@ -643,8 +646,8 @@
 					// We have unsaved changes
 					options.unsavedChanges = true;
 
-					// Hide the form item box
-					formBox.addClass('hide');
+					// Hide the panel box
+					panelBox.collapse('hide');
 
 					// Have we changed the parent of the item?
 					if (currentParentId != parentId)
