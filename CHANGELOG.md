@@ -11,9 +11,21 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.1 - 2015-04-10
+
+`FIXED`
+
+- A bug that prevented menu items from expanding again after hitting update.
+
 ### v2.0.0 - 2015-03-05
 
 - Updated for Platform 3.
+
+### v1.0.3 - 2015-04-10
+
+`FIXED`
+
+- A bug that prevented menu items from expanding again after hitting update.
 
 ### v1.0.2 - 2015-02-18
 
