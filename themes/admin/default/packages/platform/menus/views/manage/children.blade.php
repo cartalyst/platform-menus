@@ -32,7 +32,9 @@
 
 	<ol>
 		@if ( ! empty($child) and $children = $child->getChildren())
-		@each('platform/menus::manage/children', $children, 'child')
+		@foreach ($children as $_child)
+			@include('platform/menus::manage/children', ['child' => $_child, 'parentId' => $child->id])
+		@endforeach
 		@endif
 	</ol>
 

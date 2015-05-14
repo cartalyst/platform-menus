@@ -2,7 +2,7 @@
 $childId   = ! empty($child) ? "{$child->id}_%s" : 'new-child_%s';
 $childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
 $mode = ! empty($child) ? 'update' : 'create';
-$parentId = ( ! empty($child) and $child->depth > 1) ? $child->getParent()->id : 0;
+$parentId = ! empty($parentId) ? $parentId : 0;
 $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 ?>
 
