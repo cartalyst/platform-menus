@@ -32,10 +32,7 @@
 
 									<span class="pull-right" data-toggle-options="<%= slug %>"><i class="fa fa-wrench"></i> {{{ trans('platform/menus::model.general.advanced_settings') }}}</span>
 
-									@if ( ! empty($child))
 									<span class="pull-right text-danger" data-item-remove="<%= slug %>"><i class="fa fa-trash"></i> {{{ trans('action.remove') }}}</span>
-									@endif
-
 								</legend>
 
 								<div class="row">
@@ -83,7 +80,7 @@
 											<div class="controls">
 												<select data-item-url-type="<%= slug %>" data-item-form="<%= slug %>" name="children[<%= slug %>][type]" id="<%= slug %>_type" class="form-control input-sm">
 													@foreach ($types as $type)
-													<option value="{{ $type->getIdentifier() }}"{{ ( ! empty($child) ? $child->type : null) == $type->getIdentifier() ? ' selected="selected"' : null }}>{{ $type->getName() }}</option>
+													<option value="{{ $type->getIdentifier() }}"<%= type == '{{ $type->getIdentifier() }}' ? ' selected="selected"' : null %>>{{ $type->getName() }}</option>
 													@endforeach
 												</select>
 											</div>
@@ -105,7 +102,7 @@
 							</fieldset>
 
 							{{-- Options --}}
-							<div  class="hide" data-options>
+							<div class="hide" data-options>
 
 								<fieldset>
 
@@ -124,8 +121,8 @@
 
 												<div class="controls">
 													<select data-item-form="<%= slug %>" name="children[<%= slug %>][enabled]" id="<%= slug %>_enabled" class="form-control input-sm">
-														<option value="1"{{ ( ! empty($child) ? $child->enabled : 1) == 1 ? ' selected="selected"' : null }}>{{{ trans('common.enabled') }}}</option>
-														<option value="0"{{ ( ! empty($child) ? $child->enabled : 1) == 0 ? ' selected="selected"' : null }}>{{{ trans('common.disabled') }}}</option>
+														<option value="1"<%= enabled == true ? ' selected="selected"' : null %>>{{{ trans('common.enabled') }}}</option>
+														<option value="0"<%= enabled == false ? ' selected="selected"' : null %>>{{{ trans('common.disabled') }}}</option>
 													</select>
 												</div>
 											</div>
@@ -158,6 +155,26 @@
 
 										<div class="col-sm-3">
 
+											{{-- Secure --}}
+											<div class="form-group">
+												<label class="control-label" for="<%= slug %>_secure">
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.secure_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.secure') }}}
+												</label>
+
+												<div class="controls">
+													<select data-item-form="<%= slug %>" name="children[<%= slug %>][secure]" id="<%= slug %>_secure" class="form-control input-sm">
+														<option value=""<%= secure == null ? ' selected="selected"' : null %>>{{{ trans('common.inherit') }}}</option>
+														<option value="1"<%= secure == true ? ' selected="selected"' : null %>>{{{ trans('common.yes') }}}</option>
+														<option value="0"<%= secure == false ? ' selected="selected"' : null %>>{{{ trans('common.no') }}}</option>
+													</select>
+												</div>
+											</div>
+
+										</div>
+
+										<div class="col-sm-3">
+
 											{{-- Parent --}}
 											<div class="form-group">
 
@@ -170,26 +187,6 @@
 													<select class="form-control input-sm" data-item-form="<%= slug %>" data-parents name="children[<%= slug %>][parent]" id="<%= slug %>_parent"></select>
 												</div>
 
-											</div>
-
-										</div>
-
-										<div class="col-sm-3">
-
-											{{-- Secure --}}
-											<div class="form-group">
-												<label class="control-label" for="<%= slug %>_secure">
-													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.secure_help') }}}"></i>
-													{{{ trans('platform/menus::model.general.secure') }}}
-												</label>
-
-												<div class="controls">
-													<select data-item-form="<%= slug %>" name="children[<%= slug %>][secure]" id="<%= slug %>_secure" class="form-control input-sm">
-														<option value=""{{ ( ! empty($child) ? $child->secure : null) === null ? ' selected="selected"' : null }}>{{{ trans('common.inherit') }}}</option>
-														<option value="1"{{ ( ! empty($child) ? $child->secure : null) === true ? ' selected="selected"' : null }}>{{{ trans('common.yes') }}}</option>
-														<option value="0"{{ ( ! empty($child) ? $child->secure : null) === false ? ' selected="selected"' : null }}>{{{ trans('common.no') }}}</option>
-													</select>
-												</div>
 											</div>
 
 										</div>
@@ -246,6 +243,37 @@
 														<option value="logged_in"<%= visibility == 'logged_in' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.logged_in') }}}</option>
 														<option value="logged_out"<%= visibility == 'logged_out' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.logged_out') }}}</option>
 														<option value="admin"<%= visibility == 'admin' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.visibilities.admin') }}}</option>
+													</select>
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="row">
+
+										<div class="col-sm-12">
+
+											{{-- Roles --}}
+											<div class="form-group<%= _.contains(['logged_in', 'admin'], visibility) ? '' : 'hide' %>" data-item-roles="<%= slug %>">
+
+												<label class="control-label" for="new-child_roles">
+													<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.roles_help') }}}"></i>
+													{{{ trans('platform/menus::model.general.roles') }}}
+												</label>
+
+												<div class="controls">
+													<select data-item-form="new-child" name="new-child_roles[]" id="new-child_roles" class="form-control input-sm" multiple="true">
+														@foreach ($roles as $role)
+															<%
+															var selected = _.find(roles, function(role) {
+																return role == '{{ $role->id }}';
+															});
+															%>
+															<option value="{{{ $role->id }}}" <%= selected == '{{ $role->id }}' ? ' selected="selected"' : null %>>{{{ $role->name }}}</option>
+														@endforeach
 													</select>
 												</div>
 
