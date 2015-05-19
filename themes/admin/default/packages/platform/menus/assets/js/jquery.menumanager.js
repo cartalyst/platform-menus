@@ -526,6 +526,9 @@
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
 
+					// Refresh visibility roles
+					$('[data-item-visibility]').trigger('change');
+
 					// Clean the new form item inputs
 					nameInput.val('');
 					self.slugify($(formOpt.root.slug).val(), slugInput);
@@ -558,7 +561,7 @@
 					newItemForm.find('[data-options]').addClass('hide');
 
 					// Move the item to the correct destination
-					$('[data-item-id="' + slug + '"]').prependTo('.items');
+					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
 
 					// We have unsaved changes
 					options.unsavedChanges = true;
@@ -870,13 +873,34 @@
 		},
 
 		/**
-		 *
+		 * Renders parents dropdown fields.
 		 *
 		 * @return void
 		 */
 		renderParentsDropdowns : function() {
 
 			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.sortable.selector), 0));
+
+			this.setParentsDropdown();
+
+		},
+
+		/**
+		 * Sets the correct parent active on dropdowns.
+		 *
+		 * @return void
+		 */
+		setParentsDropdown : function() {
+
+			var parent;
+
+			_.each($('li[data-item-id]'), function (li) {
+				parent = $(li).parents('li:eq(0)').data('item-id');
+
+				if (parent !== undefined) {
+					$(li).find('option[value="'+parent+'"]').prop('selected', 'selected');
+				}
+			});
 
 		},
 
