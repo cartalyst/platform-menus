@@ -170,16 +170,10 @@
 				onDrop: function (item, container, _super) {
 
 					// Get the parent id
-					var parentId = item.parent('ol').parent('li').data('item-id');
+					var parentId = item.parent('ol').parent('li').data('item-id') || 0;
 
 					// Get the item id
 					var itemId = item.data('item-id');
-
-					// Make sure we have a proper parent id
-					if (parentId == null)
-					{
-						var parentId = 0;
-					}
 
 					// Update the parent id on the item form box
 					$('[data-item-form="' + itemId + '"]').data('item-parent', parentId);
@@ -870,14 +864,19 @@
 		},
 
 		/**
-		 *
+		 * Prepare the item parents selector
 		 *
 		 * @return void
 		 */
 		renderParentsDropdowns : function() {
 
-			$('[data-parents]').html('<option value="0">-- Top Level --</option>' + this.convertToDropdown($(this.opt.sortable.selector), 0));
+			var self = this;
+			$('[data-item-form]').each(function() {
+				var select = $(this).find('[data-parents]');
 
+				select.html('<option value="0">-- Top Level --</option>' + self.convertToDropdown($(self.opt.sortable.selector), 0));
+				select.val($(this).data('item-parent'));
+			});
 		},
 
 		/**
