@@ -18,9 +18,9 @@
  */
 
 use Cartalyst\Attributes\EntityInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
 use Platform\Attributes\Traits\EntityTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Cartalyst\NestedSets\Nodes\EloquentNode;
 use Cartalyst\NestedSets\Nodes\NodeInterface;
 use Cartalyst\Support\Traits\NamespacedEntityTrait;
@@ -197,7 +197,6 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 
 		}, $depth);
 
-		// Eager load pages, attached to menu items
 		Collection::make($children)->load('page');
 
 		$this->filterChildrenPageVisibility($children, $visibilities);
@@ -214,6 +213,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 *
 	 * @param  array  $children
 	 * @param  array  $visibilities
+	 * @return void
 	 */
 	protected function filterChildrenPageVisibility(array &$children, array $visibilities = [])
 	{
@@ -252,7 +252,7 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 				continue;
 			}
 
-			if (($page = $child->page) && !$page->enabled)
+			if (($page = $child->page) && ! $page->enabled)
 			{
 				unset($children[$index]);
 				continue;
@@ -301,7 +301,9 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 			}
 
 			$grandChildren = $child->getChildren();
+
 			$this->filterChildrenRoles($grandChildren, $roles);
+
 			$child->setChildren($grandChildren);
 		}
 	}
