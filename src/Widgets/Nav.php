@@ -105,6 +105,11 @@ class Nav {
 	{
 		if ($menu = $this->menus->find($slug))
 		{
+			if ( ! $menu->enabled)
+			{
+				return [];
+			}
+
 			$user = $this->sentinel->check();
 
 			$roles = $user ? $user->roles->lists('id') : [];

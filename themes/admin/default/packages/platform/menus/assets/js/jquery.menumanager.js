@@ -520,6 +520,9 @@
 					// Add the item to the array
 					options.persistedSlugs.push(slug);
 
+					// Refresh visibility roles
+					$('[data-item-visibility]').trigger('change');
+
 					// Clean the new form item inputs
 					nameInput.val('');
 					self.slugify($(formOpt.root.slug).val(), slugInput);
@@ -552,7 +555,7 @@
 					newItemForm.find('[data-options]').addClass('hide');
 
 					// Move the item to the correct destination
-					$('[data-item-id="' + slug + '"]').prependTo('.items');
+					$('[data-item-id="' + slug + '"]').appendTo('[data-item-id="' + parentId + '"] > ol');
 
 					// We have unsaved changes
 					options.unsavedChanges = true;
@@ -864,7 +867,7 @@
 		},
 
 		/**
-		 * Prepare the item parents selector
+		 * Renders parents dropdown fields.
 		 *
 		 * @return void
 		 */
