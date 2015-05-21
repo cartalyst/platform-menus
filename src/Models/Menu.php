@@ -18,6 +18,7 @@
  */
 
 use Cartalyst\Attributes\EntityInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
 use Platform\Attributes\Traits\EntityTrait;
 use Cartalyst\NestedSets\Nodes\EloquentNode;
@@ -63,6 +64,13 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	 * {@inheritDoc}
 	 */
 	protected static $entityNamespace = 'platform/menus';
+
+	/**
+	 * The Eloquent pages model name.
+	 *
+	 * @var string
+	 */
+	protected static $pagesModel = 'Platform\Pages\Models\Page';
 
 	/**
 	 * Get accessor for the "enabled" attribute.
@@ -132,6 +140,16 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	}
 
 	/**
+	 * Returns the page relationship.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function page()
+	{
+		return $this->belongsTo(static::$pagesModel, 'page_id');
+	}
+
+	/**
 	 * Filters children and returns an array of children
 	 * which satisfy any of the provided visibilities.
 	 *
@@ -179,11 +197,43 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 
 		}, $depth);
 
+		// Eager load pages, attached to menu items
+		Collection::make($children)->load('page');
+
+		$this->filterChildrenPageVisibility($children, $visibilities);
+
 		$this->filterChildrenStatus($children);
 
 		$this->filterChildrenRoles($children, $roles);
 
 		return $children;
+	}
+
+	/**
+	 * Filters children pages based on their visibility settings.
+	 *
+	 * @param  array  $children
+	 * @param  array  $visibilities
+	 */
+	protected function filterChildrenPageVisibility(array &$children, array $visibilities = [])
+	{
+		if (empty($visibilities)) return;
+
+		foreach ($children as $index => $child)
+		{
+			if ($page = $child->page)
+			{
+				if ( ! in_array($page->visibility, $visibilities))
+				{
+					unset($children[$index]);
+					continue;
+				}
+			}
+
+			$grandChildren = $child->getChildren();
+			$this->filterChildrenPageVisibility($grandChildren, $visibilities);
+			$child->setChildren($grandChildren);
+		}
 	}
 
 	/**
@@ -199,7 +249,12 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 			if ( ! $child->enabled)
 			{
 				unset($children[$index]);
+				continue;
+			}
 
+			if (($page = $child->page) && !$page->enabled)
+			{
+				unset($children[$index]);
 				continue;
 			}
 
@@ -233,6 +288,15 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 				{
 					unset($children[$index]);
 					continue;
+				}
+
+				if ($page = $child->page)
+				{
+					if (count(array_intersect($page->roles, $roles)) === 0)
+					{
+						unset($children[$index]);
+						continue;
+					}
 				}
 			}
 
