@@ -11,6 +11,19 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.1.0 - 2015-05-30
+
+`ADDED`
+
+- Check for page permissions when displaying menus.
+
+`FIXED`
+
+- Optimized menu display on menu manager.
+- Various fixes applied on the jQuery Menu Mananger plugin.
+- Menu children from being shown when the root menu was disabled.
+- Incorrect target option having the wrong values on the markup.
+
 ### v1.0.3 - 2015-04-10
 
 `FIXED`
