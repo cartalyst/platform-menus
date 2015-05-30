@@ -142,9 +142,9 @@
 												<div class="controls">
 													<select data-item-form="<%= slug %>" name="children[<%= slug %>][target]" id="<%= slug %>_target" class="form-control">
 														<option value="self"<%= target == 'self' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.self') }}}</option>
-														<option value="new_children"<%= target == 'new_children' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.blank') }}}</option>
-														<option value="parent_frame"<%= target == 'parent_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.parent') }}}</option>
-														<option value="top_frame"<%= target == 'top_frame' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.top') }}}</option>
+														<option value="blank"<%= target == 'blank' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.blank') }}}</option>
+														<option value="parent"<%= target == 'parent' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.parent') }}}</option>
+														<option value="top"<%= target == 'top' ? ' selected="selected"' : null %>>{{{ trans('platform/menus::model.general.targets.top') }}}</option>
 													</select>
 
 												</div>
