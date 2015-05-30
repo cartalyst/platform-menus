@@ -134,10 +134,10 @@ $selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
 
 						<div class="controls">
 							<select data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" name="{{ sprintf($childName, 'target') }}" id="{{ sprintf($childId, 'target') }}" class="form-control input-sm">
-								<option value="self"{{ ( ! empty($child) ? $child->target : null) == 'self' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::model.general.targets.self') }}}</option>
-								<option value="new_children"{{ ( ! empty($child) ? $child->target : null) == 'new_children' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::model.general.targets.blank') }}}</option>
-								<option value="parent_frame"{{ ( ! empty($child) ? $child->target : null) == 'parent_frame' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::model.general.targets.parent') }}}</option>
-								<option value="top_frame"{{ ( ! empty($child) ? $child->target : null) == 'top_frame' ? ' selected="selected"' : null }}>{{{ trans('platform/menus::model.general.targets.top') }}}</option>
+								<option value="self"{!! ( ! empty($child) ? $child->target : null) == 'self' ? ' selected="selected"' : null !!}>{{{ trans('platform/menus::model.general.targets.self') }}}</option>
+								<option value="blank"{!! ( ! empty($child) ? $child->target : null) == 'blank' ? ' selected="selected"' : null !!}>{{{ trans('platform/menus::model.general.targets.blank') }}}</option>
+								<option value="parent"{!! ( ! empty($child) ? $child->target : null) == 'parent' ? ' selected="selected"' : null !!}>{{{ trans('platform/menus::model.general.targets.parent') }}}</option>
+								<option value="top"{!! ( ! empty($child) ? $child->target : null) == 'top' ? ' selected="selected"' : null !!}>{{{ trans('platform/menus::model.general.targets.top') }}}</option>
 							</select>
 						</div>
 
