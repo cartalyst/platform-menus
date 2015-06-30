@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.1.2 - 2015-06-30
+
+`UPDATES`
+
+- Consistency tweaks.
+
 ### v1.1.1 - 2015-06-13
 
 `FIXED`
