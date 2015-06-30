@@ -41,13 +41,14 @@
 </script>
 @stop
 
-{{-- Page --}}
+{{-- Page content --}}
 @section('page')
 <section class="panel panel-default panel-tabs">
 
-	<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8" data-parsley-validate>
+	{{-- Form --}}
+	<form id="menu-form" action="{{ request()->fullUrl() }}" method="POST" accept-char="UTF-8" autocomplete="off" data-parsley-validate>
 
-		{{-- CSRF Token --}}
+		{{-- Form: CSRF Token --}}
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 		<header class="panel-heading">
@@ -106,19 +107,18 @@
 
 				{{-- Form: Tabs --}}
 				<ul class="nav nav-tabs" role="tablist">
-					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('platform/menus::common.tabs.general') }}}</a></li>
+					<li class="active" role="presentation"><a href="#general-tab" aria-controls="general-tab" role="tab" data-toggle="tab">{{{ trans('platform/menus::common.tabs.general') }}}</a></li>
 				</ul>
 
 				<div class="tab-content">
 
-					{{-- Form: General --}}
-					<div role="tabpanel" class="tab-pane fade in active" id="general">
+					{{-- Tab: General --}}
+					<div role="tabpanel" class="tab-pane fade in active" id="general-tab">
 
 						<div class="row">
 
 							<div class="col-md-3">
 
-								{{-- Form: General --}}
 								<fieldset>
 
 									<legend>{{{ $menu->exists ? $menu->name : null }}} Menu</legend>
@@ -158,7 +158,6 @@
 
 							<div class="col-md-9">
 
-								{{-- Form: Structure --}}
 								<fieldset>
 
 									<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>

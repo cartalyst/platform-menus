@@ -17,7 +17,6 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Bulk delete selector listener.
 
-
 ### v2.1.0 - 2015-05-30
 
 `ADDED`
@@ -40,6 +39,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 ### v2.0.0 - 2015-03-05
 
 - Updated for Platform 3.
+
+### v1.1.2 - 2015-06-30
+
+`UPDATES`
+
+- Consistency tweaks.
 
 ### v1.1.1 - 2015-06-13
 
