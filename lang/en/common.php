@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -19,11 +20,11 @@
 
 return [
 
-	'title'  => 'Menus',
+    'title'  => 'Menus',
 
-	'tabs' => [
-		'general'    => 'Menu',
-		'attributes' => 'Attributes',
-	],
+    'tabs' => [
+        'general'    => 'Menu',
+        'attributes' => 'Attributes',
+    ],
 
 ];

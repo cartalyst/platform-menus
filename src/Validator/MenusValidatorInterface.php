@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Validator;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,20 +11,21 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-interface MenusValidatorInterface {
+namespace Platform\Menus\Validator;
 
-	/**
-	 * Updating a menu scenario.
-	 *
-	 * @return void
-	 */
-	public function onUpdate();
-
+interface MenusValidatorInterface
+{
+    /**
+     * Updating a menu scenario.
+     *
+     * @return void
+     */
+    public function onUpdate();
 }

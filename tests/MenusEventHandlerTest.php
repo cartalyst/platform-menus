@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Tests;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,129 +11,130 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Tests;
+
 use Mockery as m;
 use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Handlers\EventHandler;
 
-class MenuEventHandlerTest extends IlluminateTestCase {
+class MenusEventHandlerTest extends IlluminateTestCase
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp()
-	{
-		parent::setUp();
+        // Handler
+        $this->handler = new EventHandler($this->app);
+    }
 
-		// Handler
-		$this->handler = new EventHandler($this->app);
-	}
+    /** @test */
+    public function test_subscribe()
+    {
+        $class = get_class($this->handler);
 
-	/** @test */
-	public function test_subscribe()
-	{
-		$class = get_class($this->handler);
+        $this->app['events']->shouldReceive('listen')
+            ->once()
+            ->with('platform.menu.creating', $class.'@creating');
 
-		$this->app['events']->shouldReceive('listen')
-			->once()
-			->with('platform.menu.creating', $class.'@creating');
+        $this->app['events']->shouldReceive('listen')
+            ->once()
+            ->with('platform.menu.created', $class.'@created');
 
-		$this->app['events']->shouldReceive('listen')
-			->once()
-			->with('platform.menu.created', $class.'@created');
+        $this->app['events']->shouldReceive('listen')
+            ->once()
+            ->with('platform.menu.updating', $class.'@updating');
 
-		$this->app['events']->shouldReceive('listen')
-			->once()
-			->with('platform.menu.updating', $class.'@updating');
+        $this->app['events']->shouldReceive('listen')
+            ->once()
+            ->with('platform.menu.updated', $class.'@updated');
 
-		$this->app['events']->shouldReceive('listen')
-			->once()
-			->with('platform.menu.updated', $class.'@updated');
+        $this->app['events']->shouldReceive('listen')
+            ->once()
+            ->with('platform.menu.deleted', $class.'@deleted');
 
-		$this->app['events']->shouldReceive('listen')
-			->once()
-			->with('platform.menu.deleted', $class.'@deleted');
+        $this->handler->subscribe($this->app['events']);
+    }
 
-		$this->handler->subscribe($this->app['events']);
-	}
+    /** @test */
+    public function test_created()
+    {
+        $menu = m::mock('Platform\Menus\Models\Menu');
 
-	/** @test */
-	public function test_created()
-	{
-		$menu = m::mock('Platform\Menus\Models\Menu');
+        $this->shouldFlushCache($menu);
 
-		$this->shouldFlushCache($menu);
+        $this->handler->created($menu, []);
+    }
 
-		$this->handler->created($menu, []);
-	}
+    /** @test */
+    public function test_updated()
+    {
+        $menu = m::mock('Platform\Menus\Models\Menu');
 
-	/** @test */
-	public function test_updated()
-	{
-		$menu = m::mock('Platform\Menus\Models\Menu');
+        $this->shouldFlushCache($menu);
 
-		$this->shouldFlushCache($menu);
+        $this->handler->updated($menu, []);
+    }
 
-		$this->handler->updated($menu, []);
-	}
+    /** @test */
+    public function test_deleted()
+    {
+        $menu = m::mock('Platform\Menus\Models\Menu');
 
-	/** @test */
-	public function test_deleted()
-	{
-		$menu = m::mock('Platform\Menus\Models\Menu');
+        $this->shouldFlushCache($menu);
 
-		$this->shouldFlushCache($menu);
+        $this->handler->deleted($menu);
+    }
 
-		$this->handler->deleted($menu);
-	}
+    /**
+     * Sets expected method calls for flushing cache.
+     *
+     * @param  \Platform\Content\Models\Content  $menu
+     * @return void
+     */
+    protected function shouldFlushCache($menu)
+    {
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with("platform.menu.1");
 
-	/**
-	 * Sets expected method calls for flushing cache.
-	 *
-	 * @param  \Platform\Content\Models\Content  $menu
-	 * @return void
-	 */
-	protected function shouldFlushCache($menu)
-	{
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with("platform.menu.1");
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with('platform.menu.root.1');
 
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with('platform.menu.root.1');
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with('platform.menu.slug.foo');
 
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with('platform.menu.slug.foo');
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with('platform.menu.root.slug.foo');
 
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with('platform.menu.root.slug.foo');
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with('platform.menus.all');
 
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with('platform.menus.all');
+        $this->app['cache']->shouldReceive('forget')
+            ->once()
+            ->with('platform.menus.all.root');
 
-		$this->app['cache']->shouldReceive('forget')
-			->once()
-			->with('platform.menus.all.root');
+        $menu->shouldReceive('getAttribute')
+            ->twice()
+            ->with('id')
+            ->andReturn(1);
 
-		$menu->shouldReceive('getAttribute')
-			->twice()
-			->with('id')
-			->andReturn(1);
-
-		$menu->shouldReceive('getAttribute')
-			->twice()
-			->with('slug')
-			->andReturn('foo');
-	}
-
+        $menu->shouldReceive('getAttribute')
+            ->twice()
+            ->with('slug')
+            ->andReturn('foo');
+    }
 }

@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Tests;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,260 +11,261 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Tests;
+
 use Mockery as m;
 use Platform\Menus\Models\Menu;
 use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Controllers\Admin\MenusController;
 
-class AdminMenusControllerTest extends IlluminateTestCase {
+class AdminMenusControllerTest extends IlluminateTestCase
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp()
-	{
-		parent::setUp();
+        // Foundation Controller expectations
+        $this->app['sentinel']->shouldReceive('getUser');
+        $this->app['view']->shouldReceive('share');
 
-		// Foundation Controller expectations
-		$this->app['sentinel']->shouldReceive('getUser');
-		$this->app['view']->shouldReceive('share');
+        // Menus repository
+        $this->menus = m::mock('Platform\Menus\Repositories\MenuRepositoryInterface');
 
-		// Menus repository
-		$this->menus = m::mock('Platform\Menus\Repositories\MenuRepositoryInterface');
+        // Controller
+        $this->controller = new MenusController($this->menus);
+    }
 
-		// Controller
-		$this->controller = new MenusController($this->menus);
-	}
+    /** @test */
+    public function index_route()
+    {
+        $this->app['view']->shouldReceive('make')
+            ->atLeast()
+            ->once();
 
-	/** @test */
-	public function index_route()
-	{
-		$this->app['view']->shouldReceive('make')
-			->atLeast()
-			->once();
+        $this->controller->index();
+    }
 
-		$this->controller->index();
-	}
+    /** @test */
+    public function create_route()
+    {
+        $this->app['view']->shouldReceive('make')
+            ->atLeast()
+            ->once();
 
-	/** @test */
-	public function create_route()
-	{
-		$this->app['view']->shouldReceive('make')
-			->atLeast()
-			->once();
+        $this->menus->shouldReceive('getPreparedMenu')
+            ->once()
+            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
 
-		$this->menus->shouldReceive('getPreparedMenu')
-			->once()
-			->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
+        $this->controller->create();
+    }
 
-		$this->controller->create();
-	}
+    /** @test */
+    public function edit_route()
+    {
+        $this->app['view']->shouldReceive('make')
+            ->atLeast()
+            ->once();
 
-	/** @test */
-	public function edit_route()
-	{
-		$this->app['view']->shouldReceive('make')
-			->atLeast()
-			->once();
+        $this->menus->shouldReceive('getPreparedMenu')
+            ->once()
+            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
 
-		$this->menus->shouldReceive('getPreparedMenu')
-			->once()
-			->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
+        $this->controller->edit(1);
+    }
 
-		$this->controller->edit(1);
-	}
+    /** @test */
+    public function edit_non_existing()
+    {
+        $this->app['alerts']->shouldReceive('error')
+            ->once();
 
-	/** @test */
-	public function edit_non_existing()
-	{
-		$this->app['alerts']->shouldReceive('error')
-			->once();
+        $this->menus->shouldReceive('getPreparedMenu')
+            ->once();
 
-		$this->menus->shouldReceive('getPreparedMenu')
-			->once();
+        $this->trans()->redirect('route');
 
-		$this->trans()->redirect('route');
+        $this->controller->edit(1);
+    }
 
-		$this->controller->edit(1);
-	}
+    /** @test */
+    public function datagrid()
+    {
+        $this->app['datagrid']->shouldReceive('make')
+            ->once();
 
-	/** @test */
-	public function datagrid()
-	{
-		$this->app['datagrid']->shouldReceive('make')
-			->once();
+        $this->menus->shouldReceive('grid')
+            ->once();
 
-		$this->menus->shouldReceive('grid')
-			->once();
+        $this->controller->grid();
+    }
 
-		$this->controller->grid();
-	}
+    /** @test */
+    public function store()
+    {
+        $this->app['alerts']->shouldReceive('success')
+            ->once();
 
-	/** @test */
-	public function store()
-	{
-		$this->app['alerts']->shouldReceive('success')
-			->once();
+        $this->trans();
 
-		$this->trans();
+        $menuData = [
+            'slug' => 'foo',
+        ];
 
-		$menuData = [
-			'slug' => 'foo',
-		];
+        $this->app['request']->shouldReceive('all')
+            ->once()
+            ->andReturn($menuData);
 
-		$this->app['request']->shouldReceive('all')
-			->once()
-			->andReturn($menuData);
+        $this->menus->shouldReceive('store')
+            ->once()
+            ->with(null, $menuData)
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
 
-		$this->menus->shouldReceive('store')
-			->once()
-			->with(null, $menuData)
-			->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+        $message->shouldReceive('isEmpty')
+            ->once()
+            ->andReturn(true);
 
-		$message->shouldReceive('isEmpty')
-			->once()
-			->andReturn(true);
+        $this->redirect('route');
 
-		$this->redirect('route');
+        $this->controller->store();
+    }
 
-		$this->controller->store();
-	}
+    /** @test */
+    public function update_route()
+    {
+        $this->app['alerts']->shouldReceive('success')
+            ->once();
 
-	/** @test */
-	public function update_route()
-	{
-		$this->app['alerts']->shouldReceive('success')
-			->once();
+        $this->trans();
 
-		$this->trans();
+        $menuData = [
+            'slug' => 'foo',
+        ];
 
-		$menuData = [
-			'slug' => 'foo',
-		];
+        $this->app['request']->shouldReceive('all')
+            ->once()
+            ->andReturn($menuData);
 
-		$this->app['request']->shouldReceive('all')
-			->once()
-			->andReturn($menuData);
+        $this->menus->shouldReceive('store')
+            ->once()
+            ->with(1, $menuData)
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
 
-		$this->menus->shouldReceive('store')
-			->once()
-			->with(1, $menuData)
-			->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+        $message->shouldReceive('isEmpty')
+            ->once()
+            ->andReturn(true);
 
-		$message->shouldReceive('isEmpty')
-			->once()
-			->andReturn(true);
+        $this->redirect('route');
 
-		$this->redirect('route');
+        $this->controller->update(1, $menuData);
+    }
 
-		$this->controller->update(1, $menuData);
-	}
+    /** @test */
+    public function update_invalid_route()
+    {
+        $this->app['alerts']->shouldReceive('error')
+            ->once();
 
-	/** @test */
-	public function update_invalid_route()
-	{
-		$this->app['alerts']->shouldReceive('error')
-			->once();
+        $menuData = [
+            'slug' => 'foo',
+        ];
 
-		$menuData = [
-			'slug' => 'foo',
-		];
+        $this->app['request']->shouldReceive('all')
+            ->once()
+            ->andReturn($menuData);
 
-		$this->app['request']->shouldReceive('all')
-			->once()
-			->andReturn($menuData);
+        $this->menus->shouldReceive('store')
+            ->once()
+            ->with(1, $menuData)
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
 
-		$this->menus->shouldReceive('store')
-			->once()
-			->with(1, $menuData)
-			->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+        $message->shouldReceive('isEmpty')
+            ->once()
+            ->andReturn(false);
 
-		$message->shouldReceive('isEmpty')
-			->once()
-			->andReturn(false);
+        $this->redirect('back')->redirect('withInput');
 
-		$this->redirect('back')->redirect('withInput');
+        $this->controller->update(1, $menuData);
+    }
 
-		$this->controller->update(1, $menuData);
-	}
+    /** @test */
+    public function delete_route()
+    {
+        $this->app['alerts']->shouldReceive('success')
+            ->once();
 
-	/** @test */
-	public function delete_route()
-	{
-		$this->app['alerts']->shouldReceive('success')
-			->once();
+        $this->trans();
 
-		$this->trans();
+        $this->menus->shouldReceive('delete')
+            ->once()
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
 
-		$this->menus->shouldReceive('delete')
-			->once()
-			->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+        $this->redirect('route');
 
-		$this->redirect('route');
+        $this->controller->delete(1);
+    }
 
-		$this->controller->delete(1);
-	}
+    /** @test */
+    public function delete_not_existing_route()
+    {
+        $this->app['alerts']->shouldReceive('error')
+            ->once();
 
-	/** @test */
-	public function delete_not_existing_route()
-	{
-		$this->app['alerts']->shouldReceive('error')
-			->once();
+        $this->trans();
 
-		$this->trans();
+        $this->menus->shouldReceive('delete')
+            ->once();
 
-		$this->menus->shouldReceive('delete')
-			->once();
+        $this->redirect('route');
 
-		$this->redirect('route');
+        $this->controller->delete(1);
+    }
 
-		$this->controller->delete(1);
-	}
+    /** @test */
+    public function execute_action()
+    {
+        $this->app['request']->shouldReceive('input')
+            ->once()
+            ->with('action')
+            ->andReturn('delete');
 
-	/** @test */
-	public function execute_action()
-	{
-		$this->app['request']->shouldReceive('input')
-			->once()
-			->with('action')
-			->andReturn('delete');
+        $this->app['request']->shouldReceive('input')
+            ->once()
+            ->with('rows', [])
+            ->andReturn([1]);
 
-		$this->app['request']->shouldReceive('input')
-			->once()
-			->with('rows', [])
-			->andReturn([1]);
+        $this->menus->shouldReceive('delete')
+            ->once()
+            ->with(1);
 
-		$this->menus->shouldReceive('delete')
-			->once()
-			->with(1);
+        $this->app['response']->shouldReceive('make')
+            ->with('Success', 200, [])
+            ->once();
 
-		$this->app['response']->shouldReceive('make')
-			->with('Success', 200, [])
-			->once();
+        $this->controller->executeAction();
+    }
 
-		$this->controller->executeAction();
-	}
+    /** @test */
+    public function execute_non_existing_action()
+    {
+        $this->app['request']->shouldReceive('input')
+            ->once()
+            ->with('action')
+            ->andReturn('foo');
 
-	/** @test */
-	public function execute_non_existing_action()
-	{
-		$this->app['request']->shouldReceive('input')
-			->once()
-			->with('action')
-			->andReturn('foo');
+        $this->app['response']->shouldReceive('make')
+            ->with('Failed', 500, [])
+            ->once();
 
-		$this->app['response']->shouldReceive('make')
-			->with('Failed', 500, [])
-			->once();
-
-		$this->controller->executeAction();
-	}
-
+        $this->controller->executeAction();
+    }
 }

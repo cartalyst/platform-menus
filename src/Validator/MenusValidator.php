@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Validator;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,31 +11,32 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Validator;
+
 use Cartalyst\Support\Validator;
 
-class MenusValidator extends Validator implements MenusValidatorInterface {
+class MenusValidator extends Validator implements MenusValidatorInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    protected $rules = [
+        'name' => 'required',
+        'slug' => 'required|unique:menus',
+    ];
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $rules = [
-		'name' => 'required',
-		'slug' => 'required|unique:menus',
-	];
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function onUpdate()
-	{
-		$this->rules['slug'] .= ",slug,{slug},slug";
-	}
-
+    /**
+     * {@inheritDoc}
+     */
+    public function onUpdate()
+    {
+        $this->rules['slug'] .= ",slug,{slug},slug";
+    }
 }

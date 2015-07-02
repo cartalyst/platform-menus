@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Repositories;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,31 +11,32 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Repositories;
+
 use Platform\Menus\Models\Menu;
 use Platform\Menus\Types\TypeInterface;
 
-interface ManagerRepositoryInterface {
+interface ManagerRepositoryInterface
+{
+    /**
+     * Returns all the registered menu types.
+     *
+     * @return array
+     */
+    public function getTypes();
 
-	/**
-	 * Returns all the registered menu types.
-	 *
-	 * @return array
-	 */
-	public function getTypes();
-
-	/**
-	 * Registers an menu type.
-	 *
-	 * @param  \Platform\Menus\Types\TypeInterface  $type
-	 * @return void
-	 */
-	public function registerType(TypeInterface $type);
-
+    /**
+     * Registers an menu type.
+     *
+     * @param  \Platform\Menus\Types\TypeInterface  $type
+     * @return void
+     */
+    public function registerType(TypeInterface $type);
 }

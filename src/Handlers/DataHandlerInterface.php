@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Handlers;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,21 +11,22 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-interface DataHandlerInterface {
+namespace Platform\Menus\Handlers;
 
-	/**
-	 * Prepares the given data for being stored.
-	 *
-	 * @param  array  $data
-	 * @return mixed
-	 */
-	public function prepare(array $data);
-
+interface DataHandlerInterface
+{
+    /**
+     * Prepares the given data for being stored.
+     *
+     * @param  array  $data
+     * @return mixed
+     */
+    public function prepare(array $data);
 }

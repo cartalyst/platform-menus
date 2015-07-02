@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Tests\Types;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,34 +11,35 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Tests\Types;
+
 use Mockery as m;
 use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Types\StaticType;
 
-class StaticTypeTest extends IlluminateTestCase {
+class StaticTypeTest extends IlluminateTestCase
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp()
-	{
-		parent::setUp();
+        // Repository
+        $this->type = new StaticType($this->app);
+    }
 
-		// Repository
-		$this->type = new StaticType($this->app);
-	}
-
-	/** @test */
-	public function it_has_static_identifier()
-	{
-		$this->assertEquals('static', $this->type->getIdentifier());
-	}
-
+    /** @test */
+    public function it_has_static_identifier()
+    {
+        $this->assertEquals('static', $this->type->getIdentifier());
+    }
 }

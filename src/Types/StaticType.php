@@ -1,4 +1,5 @@
-<?php namespace Platform\Menus\Types;
+<?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,35 +11,40 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    2.1.2
+ * @version    3.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Menus\Types;
+
 use Platform\Menus\Models\Menu;
 
-class StaticType extends AbstractType implements TypeInterface {
+class StaticType extends AbstractType implements TypeInterface
+{
+    /**
+     * Get the type identifier.
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return 'static';
+    }
 
-	/**
-	 * Get the type identifier.
-	 *
-	 * @return string
-	 */
-	public function getIdentifier()
-	{
-		return 'static';
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function afterSave(Menu $child)
+    {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function afterSave(Menu $child) {}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function beforeDelete(Menu $child) {}
-
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeDelete(Menu $child)
+    {
+    }
 }
