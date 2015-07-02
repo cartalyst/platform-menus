@@ -351,7 +351,7 @@ class Observer
         $guarded = $this->menus->createModel()->getGuarded();
 
         // Get all the available roles
-        $roles = $this->roles->createModel()->lists('id', 'slug');
+        $roles = $this->roles->createModel()->lists('id', 'slug')->toArray();
 
         // Loop through the children
         foreach ($children as &$child) {
