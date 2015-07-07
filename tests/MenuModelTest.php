@@ -88,21 +88,6 @@ class MenuModelTest extends IlluminateTestCase
     }
 
     /** @test */
-    public function it_can_retrieve_guarded_attributes()
-    {
-        $guarded = [
-            'lft',
-            'rgt',
-            'menu',
-            'depth',
-            'created_at',
-            'updated_at',
-        ];
-
-        $this->assertSame($guarded, $this->menu->getGuarded());
-    }
-
-    /** @test */
     public function it_can_retrieve_the_menu_type()
     {
         $this->app['platform.menus.manager']->shouldReceive('getType')
@@ -182,7 +167,7 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'));
 
         $processor->shouldReceive('processSelect')
-            ->twice()
+            ->times(3)
             ->andReturn([]);
 
         $connection->shouldReceive('select');
