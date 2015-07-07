@@ -125,9 +125,34 @@ class NavWidgetTest extends IlluminateTestCase {
 			->with('regex')
 			->andReturn('/:admin\/foo/i');
 
-		$menu->shouldReceive('getAttribute');
+		$menu->shouldReceive('getAttribute')
+			->with('enabled')
+			->once()
+			->andReturn(true);
 
-		$child->shouldReceive('getAttribute');
+		$menu->shouldReceive('getAttribute')
+			->with('target')
+			->once();
+
+		$menu->shouldReceive('getAttribute')
+			->with('uri')
+			->twice();
+
+		$menu->shouldReceive('getAttribute')
+			->with('depth')
+			->once();
+
+		$child->shouldReceive('getAttribute')
+			->with('target')
+			->once();
+
+		$child->shouldReceive('getAttribute')
+			->with('uri')
+			->twice();
+
+		$child->shouldReceive('getAttribute')
+			->with('regex')
+			->once();
 
 		$menu->shouldReceive('getUrl')
 			->once();
@@ -144,7 +169,7 @@ class NavWidgetTest extends IlluminateTestCase {
 			->andReturn($menu);
 
 		$this->app['view']->shouldReceive('make')
-			->with('platform/menus::widgets/nav', ['children' => [ $menu ], 'cssClass' => ''], [])
+			->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
 			->once();
 
 		$widget->show('foo', 1);
@@ -184,7 +209,18 @@ class NavWidgetTest extends IlluminateTestCase {
 			->with('uri')
 			->andReturn('admin/foo');
 
-		$menu->shouldReceive('getAttribute');
+		$menu->shouldReceive('getAttribute')
+			->with('enabled')
+			->once()
+			->andReturn(true);
+
+		$menu->shouldReceive('getAttribute')
+			->with('target')
+			->once();
+
+		$menu->shouldReceive('getAttribute')
+			->with('regex')
+			->once();
 
 		$menu->shouldReceive('getUrl')
 			->once();
