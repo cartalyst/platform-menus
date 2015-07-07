@@ -50,7 +50,8 @@
 		"platform/foundation": "1.0.*"
 	},
 	"require-dev": {
-		"cartalyst/testing": "~1.0"
+		"cartalyst/testing": "~1.0",
+		"platform/pages": "~1.0"
 	},
 	"autoload": {
 		"classmap": [
