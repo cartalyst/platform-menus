@@ -50,7 +50,7 @@
 		"platform/foundation": "3.0.*"
 	},
 	"require-dev": {
-		"cartalyst/testing": "~2.0",
+		"cartalyst/testing": "~2.0@dev",
 		"platform/pages": "~3.0"
 	},
 	"autoload": {
