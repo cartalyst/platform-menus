@@ -22,6 +22,7 @@ namespace Platform\Menus\Tests;
 
 use Mockery as m;
 use Platform\Menus\Observer;
+use Illuminate\Support\Collection;
 use Cartalyst\Testing\IlluminateTestCase;
 
 class MenuObserverTest extends IlluminateTestCase
@@ -169,7 +170,7 @@ class MenuObserverTest extends IlluminateTestCase
         $role->shouldReceive('lists')
             ->with('id', 'slug')
             ->twice()
-            ->andReturn([
+            ->andReturn(new Collection([
                 [
                     'id' => 1,
                     'slug' => 'admin',
@@ -178,7 +179,7 @@ class MenuObserverTest extends IlluminateTestCase
                     'id' => 2,
                     'slug' => 'subscribers',
                 ],
-            ]);
+            ]));
 
         $menu->shouldReceive('mapTreeAndKeep')
             ->once();
