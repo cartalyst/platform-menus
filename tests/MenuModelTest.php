@@ -179,7 +179,11 @@ class MenuModelTest extends IlluminateTestCase
         $connection = $model->getConnection();
 
         $connection->shouldReceive('getPostProcessor')
-            ->andReturn(m::mock('Illuminate\Database\Query\Processors\Processor'));
+            ->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'));
+
+        $processor->shouldReceive('processSelect')
+            ->twice()
+            ->andReturn([]);
 
         $connection->shouldReceive('select');
 
@@ -203,13 +207,14 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn($builder);
 
         $builder->shouldReceive('whereNested')
-            ->with(m::on(function ($callback) use ($builder) {
+            ->with(m::on(function($callback) use ($builder)
+            {
                 $callback($builder);
                 return true;
             }))
             ->andReturn($builder);
 
-        $builder->shouldReceive('orWhere')
+		$builder->shouldReceive('orWhere')
             ->andReturn($builder);
 
         $builder->shouldReceive('orWhereNull')
