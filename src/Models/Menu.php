@@ -42,13 +42,20 @@ class Menu extends EloquentNode implements EntityInterface, NodeInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $guarded = [
-		'lft',
-		'rgt',
-		'menu',
-		'depth',
-		'created_at',
-		'updated_at',
+	protected $fillable = [
+		'slug',
+		'extension',
+		'name',
+		'type',
+		'page_id',
+		'secure',
+		'uri',
+		'class',
+		'target',
+		'visibility',
+		'roles',
+		'regex',
+		'enabled',
 	];
 
 	/**
