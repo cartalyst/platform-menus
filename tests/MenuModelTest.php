@@ -179,7 +179,7 @@ class MenuModelTest extends IlluminateTestCase {
 			->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'));
 
 		$processor->shouldReceive('processSelect')
-			->times(3)
+			->twice()
 			->andReturn([]);
 
 		$connection->shouldReceive('select');
