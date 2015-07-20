@@ -1,6 +1,6 @@
 # Menus
 
-[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=2.0)](https://magnum.travis-ci.com/cartalyst/platform-menus)
+[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=2.1)](https://magnum.travis-ci.com/cartalyst/platform-menus)
 
 A Platform 2 Extension that allows you to manage all the menus throughout your website.
 
