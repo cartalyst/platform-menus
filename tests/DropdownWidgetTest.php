@@ -35,9 +35,6 @@ class DropdownWidgetTest extends IlluminateTestCase
     {
         parent::setUp();
 
-        // Additional IoC bindings
-        $this->app['html'] = m::mock('Illuminate\Html\HtmlBuilder');
-
         // Menu repository
         $this->menu = m::mock('Platform\Menus\Repositories\MenuRepositoryInterface');
     }
@@ -45,7 +42,7 @@ class DropdownWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_show_a_menu()
     {
-        $widget = new Dropdown($this->menu, $this->app['html']);
+        $widget = new Dropdown($this->menu);
 
         $menu = m::mock('Platform\Menus\Models\Menu');
 
@@ -69,7 +66,7 @@ class DropdownWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_render_html_with_root_menus()
     {
-        $widget = new Dropdown($this->menu, $this->app['html']);
+        $widget = new Dropdown($this->menu);
 
         $menu = m::mock('Platform\Menus\Models\Menu');
 

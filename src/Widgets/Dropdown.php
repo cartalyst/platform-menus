@@ -21,7 +21,6 @@
 namespace Platform\Menus\Widgets;
 
 use Platform\Menus\Models\Menu;
-use Illuminate\Html\HtmlBuilder;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
 class Dropdown
