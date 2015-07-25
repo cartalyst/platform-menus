@@ -50,13 +50,6 @@ class MenuRepository implements MenuRepositoryInterface
     protected $model;
 
     /**
-     * The Sentinel instance.
-     *
-     * @var \Cartalyst\Sentinel\Sentinel
-     */
-    protected $sentinel;
-
-    /**
      * Constructor.
      *
      * @param  \Illuminate\Container\Container  $app
@@ -65,8 +58,6 @@ class MenuRepository implements MenuRepositoryInterface
     public function __construct(Container $app)
     {
         $this->setContainer($app);
-
-        $this->sentinel = $app['sentinel'];
 
         $this->setDispatcher($app['events']);
 
@@ -211,7 +202,7 @@ class MenuRepository implements MenuRepositoryInterface
         $children = $menu->exists ? $menu->findChildren(0) : [];
 
         // Get a list of all the available roles
-        $roles = $this->sentinel->getRoleRepository()->createModel()->all();
+        $roles = $this->container['platform.roles']->findAll();
 
         // Get all the registered menu types
         $types = $this->getTypes();
