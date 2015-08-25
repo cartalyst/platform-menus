@@ -199,7 +199,7 @@ class MenuModelTest extends IlluminateTestCase
             }))
             ->andReturn($builder);
 
-		$builder->shouldReceive('orWhere')
+        $builder->shouldReceive('orWhere')
             ->andReturn($builder);
 
         $builder->shouldReceive('orWhereNull')
