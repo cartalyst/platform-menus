@@ -89,7 +89,7 @@ class Observer
             // will be removed.
             $slugs = [];
             array_walk_recursive($children, function ($value, $key) use (&$slugs) {
-                if ($key == 'slug') {
+                if ($key === 'slug') {
                     $slugs[] = $value;
                 }
             });
@@ -165,7 +165,7 @@ class Observer
             $slugs = [];
             if (is_array($children) and ! empty($children)) {
                 array_walk_recursive($children, function ($value, $key) use (&$slugs) {
-                    if ($key == 'slug') {
+                    if ($key === 'slug') {
                         $slugs[] = $value;
                     }
                 });
