@@ -31,6 +31,7 @@ class MenuRepositoryTest extends IlluminateTestCase {
 
 		// Additional Bindings
 		$this->app['sentinel.menus']              = m::mock('Cartalyst\Sentinel\Menus\MenuRepositoryInterface');
+		$this->app['platform.roles']              = m::mock('Platform\Roles\Repositories\RoleRepositoryInterface');
 		$this->app['platform.menus.handler.data'] = m::mock('Platform\Menus\Handlers\DataHandlerInterface');
 		$this->app['platform.menus.manager']      = m::mock('Platform\Menus\Repositories\ManagerRepository');
 		$this->app['platform.menus.validator']    = m::mock('Cartalyst\Support\Validator');
@@ -289,6 +290,10 @@ class MenuRepositoryTest extends IlluminateTestCase {
 	/** @test */
 	public function it_can_retrieve_prepared_menus()
 	{
+		$this->app['platform.roles']
+			->shouldReceive('findAll')
+			->once();
+
 		$model = $this->shouldReceiveCreateModel(2);
 
 		$model->shouldReceive('findAll')
@@ -302,18 +307,6 @@ class MenuRepositoryTest extends IlluminateTestCase {
 				$callback();
 				return true;
 			}))
-			->andReturn([]);
-
-		$this->app['sentinel']->shouldReceive('getRoleRepository')
-			->once()
-			->andReturn($roleRepository = m::mock('Cartalyst\Sentinel\Roles\RoleRepositoryInterface'));
-
-		$roleRepository->shouldReceive('createModel')
-			->once()
-			->andReturn($role = m::mock('Cartalyst\Roles\EloquentRole'));
-
-		$role->shouldReceive('all')
-			->once()
 			->andReturn([]);
 
 		$this->app['platform.menus.manager']->shouldReceive('getTypes')
@@ -331,6 +324,10 @@ class MenuRepositoryTest extends IlluminateTestCase {
 	/** @test */
 	public function it_create_a_new_model_if_the_passed_id_cannot_be_found()
 	{
+		$this->app['platform.roles']
+			->shouldReceive('findAll')
+			->once();
+
 		$model = $this->shouldReceiveCreateModel(2);
 
 		$model->shouldReceive('findAll')
@@ -344,18 +341,6 @@ class MenuRepositoryTest extends IlluminateTestCase {
 				$callback();
 				return true;
 			}))
-			->andReturn([]);
-
-		$this->app['sentinel']->shouldReceive('getRoleRepository')
-			->once()
-			->andReturn($roleRepository = m::mock('Cartalyst\Sentinel\Roles\RoleRepositoryInterface'));
-
-		$roleRepository->shouldReceive('createModel')
-			->once()
-			->andReturn($role = m::mock('Cartalyst\Roles\EloquentRole'));
-
-		$role->shouldReceive('all')
-			->once()
 			->andReturn([]);
 
 		$this->app['platform.menus.manager']->shouldReceive('getTypes')
