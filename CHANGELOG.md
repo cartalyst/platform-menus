@@ -15,6 +15,36 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Updated for Platform 4.
 
+### v2.2.1 - 2015-08-24
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
+### v2.2.0 - 2015-07-20
+
+`REVISED`
+
+- Use `fillable` instead of `guarded` on the model.
+
+`UPDATED`
+
+- Bumped `access`, `content` extensions' version.
+
+### v2.1.3 - 2015-08-24
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
 ### v2.1.2 - 2015-06-30
 
 `UPDATES`
@@ -50,9 +80,39 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Updated for Platform 3.
 
+### v1.2.1 - 2015-08-24
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
+### v1.2.0 - 2015-07-16
+
+`REVISED`
+
+- Use `fillable` instead of `guarded` on the model.
+
+`UPDATED`
+
+- Bumped `access`, `content` extensions' version.
+
+### v1.1.3 - 2015-08-24
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
 ### v1.1.2 - 2015-06-30
 
-`UPDATES`
+`UPDATED`
 
 - Consistency tweaks.
 
