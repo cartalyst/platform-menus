@@ -6,7 +6,7 @@ $childName = ! empty($child) ? "children[{$child->id}]%s" : 'new-child_%s';
 <div class="form-group{{ ( ! empty($child) and $child->type != 'static') ? ' hide' : null }}" data-item-type="static">
 
 	<label class="control-label" for="{{ sprintf($childId, 'static_uri') }}">
-		<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::mdoel.uri_help') }}}"></i>
+		<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('platform/menus::model.general.uri_help') }}}"></i>
 		{{{ trans('platform/menus::model.general.uri') }}}
 	</label>
 

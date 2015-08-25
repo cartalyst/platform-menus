@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.0.0
+ * @version    3.1.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -46,13 +46,20 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * {@inheritDoc}
      */
-    protected $guarded = [
-        'lft',
-        'rgt',
-        'menu',
-        'depth',
-        'created_at',
-        'updated_at',
+    protected $fillable = [
+        'slug',
+        'extension',
+        'name',
+        'type',
+        'page_id',
+        'secure',
+        'uri',
+        'class',
+        'target',
+        'visibility',
+        'roles',
+        'regex',
+        'enabled',
     ];
 
     /**

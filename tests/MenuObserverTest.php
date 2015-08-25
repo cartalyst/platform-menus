@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.0.0
+ * @version    3.1.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -81,7 +81,7 @@ class MenuObserverTest extends IlluminateTestCase
                     'slug'  => 'admin-menus',
                     'name'  => 'Menus',
                     'uri'   => 'menus',
-                    'roles' => [1, 2],
+                    'roles' => ['admin', 'subscribers'],
                     'regex' => '/:admin\/menus/i',
                 ],
 
@@ -135,6 +135,7 @@ class MenuObserverTest extends IlluminateTestCase
             ->andReturn($menu);
 
         $menu->shouldReceive('whereNotIn')
+            ->with('slug', ['admin-menus'])
             ->once()
             ->andReturn($menu);
 
@@ -202,7 +203,7 @@ class MenuObserverTest extends IlluminateTestCase
         $extension->shouldReceive('getAttribute')
             ->with('menus')
             ->once()
-            ->andReturn([['slug' => 'foo']]);
+            ->andReturn([['slug' => 'foo', 'roles' => ['admin', 'subscribers']]]);
 
         $this->menu->shouldReceive('createModel')
             ->once()
@@ -214,6 +215,7 @@ class MenuObserverTest extends IlluminateTestCase
 
         $menu->shouldReceive('orWhereIn')
             ->once()
+            ->with('slug', ['foo'])
             ->andReturn($menu);
 
         $menu->shouldReceive('whereExtension')
