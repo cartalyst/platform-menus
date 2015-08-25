@@ -21,7 +21,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Wrong language key used on the popover helper.
 
-### v1.1.3 - 2015-06-30
+### v1.1.2 - 2015-06-30
 
 `UPDATED`
 
