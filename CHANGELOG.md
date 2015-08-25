@@ -21,9 +21,19 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Bumped `access`, `content` extensions' version.
 
+### v1.1.3 - 2015-08-24
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
 ### v1.1.2 - 2015-06-30
 
-`UPDATES`
+`UPDATED`
 
 - Consistency tweaks.
 
