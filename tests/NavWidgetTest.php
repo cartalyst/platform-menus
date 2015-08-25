@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.1.0
+ * @version    3.1.1
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -128,34 +128,26 @@ class NavWidgetTest extends IlluminateTestCase
             ->with('regex')
             ->andReturn('/:admin\/foo/i');
 
-		$menu->shouldReceive('getAttribute')
-			->with('enabled')
-			->once()
-			->andReturn(true);
+        $menu->shouldReceive('getAttribute')
+            ->with('enabled')
+            ->once()
+            ->andReturn(true);
 
-		$menu->shouldReceive('getAttribute')
-			->with('target')
-			->once();
+        $menu->shouldReceive('getAttribute')
+            ->with('target')
+            ->once();
 
-		$menu->shouldReceive('getAttribute')
-			->with('uri')
-			->twice();
+        $menu->shouldReceive('getAttribute')
+            ->with('uri')
+            ->twice();
 
-		$menu->shouldReceive('getAttribute')
-			->with('depth')
-			->once();
+        $menu->shouldReceive('getAttribute')
+            ->with('depth')
+            ->once();
 
-		$child->shouldReceive('getAttribute')
-			->with('target')
-			->once();
-
-		$child->shouldReceive('getAttribute')
-			->with('uri')
-			->twice();
-
-		$child->shouldReceive('getAttribute')
-			->with('regex')
-			->once();
+        $child->shouldReceive('getAttribute')
+            ->with('regex')
+            ->once();
 
         $child->shouldReceive('getAttribute');
 
@@ -173,9 +165,9 @@ class NavWidgetTest extends IlluminateTestCase
             ->once()
             ->andReturn($menu);
 
-		$this->app['view']->shouldReceive('make')
-			->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
-			->once();
+        $this->app['view']->shouldReceive('make')
+            ->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
+            ->once();
 
         $widget->show('foo', 1);
     }
@@ -214,18 +206,18 @@ class NavWidgetTest extends IlluminateTestCase
             ->with('uri')
             ->andReturn('admin/foo');
 
-		$menu->shouldReceive('getAttribute')
-			->with('enabled')
-			->once()
-			->andReturn(true);
+        $menu->shouldReceive('getAttribute')
+            ->with('enabled')
+            ->once()
+            ->andReturn(true);
 
-		$menu->shouldReceive('getAttribute')
-			->with('target')
-			->once();
+        $menu->shouldReceive('getAttribute')
+            ->with('target')
+            ->once();
 
-		$menu->shouldReceive('getAttribute')
-			->with('regex')
-			->once();
+        $menu->shouldReceive('getAttribute')
+            ->with('regex')
+            ->once();
 
         $menu->shouldReceive('getUrl')
             ->once();

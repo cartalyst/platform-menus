@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.1.0
+ * @version    3.1.1
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -199,7 +199,7 @@ class MenuModelTest extends IlluminateTestCase
             }))
             ->andReturn($builder);
 
-		$builder->shouldReceive('orWhere')
+        $builder->shouldReceive('orWhere')
             ->andReturn($builder);
 
         $builder->shouldReceive('orWhereNull')
