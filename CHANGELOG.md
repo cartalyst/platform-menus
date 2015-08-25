@@ -11,6 +11,20 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.1 - 2015-08-24
+
+`REMOVED`
+
+- Usage of Illuminate\Html package.
+
+`UPDATED`
+
+- Minor consistency tweaks.
+
+`FIXED`
+
+- Wrong language key used on the popover helper.
+
 ### v3.0.0 - 2015-07-07
 
 - Updated for Platform 4.
