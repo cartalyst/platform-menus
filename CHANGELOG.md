@@ -11,7 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-### v3.1.1 - 2015-08-24
+### v3.1.2 - 2015-09-14
+
+`ADDED`
+
+- Missing permissions.
+
+### v3.1.2 - 2015-08-24
 
 `REMOVED`
 
@@ -34,6 +40,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 `UPDATED`
 
 - Bumped `access`, `content` extensions' version.
+
+### v3.0.2 - 2015-09-14
+
+`ADDED`
+
+- Missing permissions.
 
 ### v3.0.1 - 2015-08-24
 

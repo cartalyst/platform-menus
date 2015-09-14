@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.1.1
+ * @version    3.1.2
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'version' => '3.1.1',
+    'version' => '3.1.2',
 
     /*
     |--------------------------------------------------------------------------
@@ -208,13 +208,13 @@ return [
             $g->permission('menus.create', function ($p) {
                 $p->label = trans('platform/menus::permissions.create');
 
-                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create');
+                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create, store');
             });
 
             $g->permission('menus.edit', function ($p) {
                 $p->label = trans('platform/menus::permissions.edit');
 
-                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit');
+                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit, update');
             });
 
             $g->permission('menus.delete', function ($p) {
