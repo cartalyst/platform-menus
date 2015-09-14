@@ -208,13 +208,13 @@ return [
             $g->permission('menus.create', function ($p) {
                 $p->label = trans('platform/menus::permissions.create');
 
-                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create');
+                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'create, store');
             });
 
             $g->permission('menus.edit', function ($p) {
                 $p->label = trans('platform/menus::permissions.edit');
 
-                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit');
+                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'edit, update');
             });
 
             $g->permission('menus.delete', function ($p) {
