@@ -107,14 +107,14 @@ class Nav
                 return [];
             }
 
-            $user = $this->sentinel->check();
+            $user = $this->sentinel->getUser();
 
             $roles = $user ? $user->roles->lists('id')->toArray() : [];
 
             $visibilities = array_filter([
                 'always',
                 $user ? 'logged_in' : 'logged_out',
-                ($user && $this->sentinel->hasAnyAccess(['superuser', 'admin'])) ? 'admin' : null,
+                ($user && $user->hasAnyAccess(['superuser', 'admin'])) ? 'admin' : null,
             ]);
 
             return $menu->findDisplayableChildren($visibilities, $roles, $depth);
