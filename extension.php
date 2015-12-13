@@ -163,22 +163,24 @@ return [
     */
 
     'routes' => function (ExtensionInterface $extension, Application $app) {
-        Route::group([
-            'prefix'    => admin_uri().'/menus',
-            'namespace' => 'Platform\Menus\Controllers\Admin'
-        ], function () {
-            Route::get('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@index']);
-            Route::post('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@executeAction']);
+        if (! $app->routesAreCached()) {
+            Route::group([
+                'prefix'    => admin_uri().'/menus',
+                'namespace' => 'Platform\Menus\Controllers\Admin'
+            ], function () {
+                Route::get('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@index']);
+                Route::post('/', ['as' => 'admin.menus.all', 'uses' => 'MenusController@executeAction']);
 
-            Route::get('grid', ['as' => 'admin.menus.grid', 'uses' => 'MenusController@grid']);
+                Route::get('grid', ['as' => 'admin.menus.grid', 'uses' => 'MenusController@grid']);
 
-            Route::get('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@create']);
-            Route::post('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@store']);
+                Route::get('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@create']);
+                Route::post('create', ['as' => 'admin.menu.create', 'uses' => 'MenusController@store']);
 
-            Route::get('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@edit']);
-            Route::post('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@update']);
-            Route::delete('{id}', ['as' => 'admin.menu.delete', 'uses' => 'MenusController@delete']);
-        });
+                Route::get('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@edit']);
+                Route::post('{id}', ['as' => 'admin.menu.edit', 'uses' => 'MenusController@update']);
+                Route::delete('{id}', ['as' => 'admin.menu.delete', 'uses' => 'MenusController@delete']);
+            });
+        }
     },
 
     /*
