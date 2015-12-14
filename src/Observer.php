@@ -222,6 +222,23 @@ class Observer
     }
 
     /**
+     * Observer after an extension is upgraded.
+     *
+     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @return void
+     */
+    public function afterUpgrade(Extension $extension)
+    {
+        $this->afterUnInstall($extension);
+
+        $this->afterInstall($extension);
+
+        if ($extension->isEnabled()) {
+            $this->afterEnable($extension);
+        }
+    }
+
+    /**
      * Extract all valid menus from an extension.php file,
      * returnin an array where the key is a menu slug and
      * the value is an array of children.
