@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.2.0 - 2016-01-20
+
+`UPDATED`
+
+- Bumped `access` extension version.
+
 ### v3.1.2 - 2015-09-14
 
 `ADDED`
@@ -61,7 +67,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Wrong language key used on the popover helper.
 
-### v3.0.0 - 2015-07-07
+### v3.0.0 - 2015-07-06
 
 - Updated for Platform 4.
 

@@ -1,8 +1,8 @@
 # Menus
 
-[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=master)](https://magnum.travis-ci.com/cartalyst/platform-menus)
+[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=3.2)](https://magnum.travis-ci.com/cartalyst/platform-menus)
 
-A Platform 2 Extension that allows you to manage all the menus throughout your website.
+A Platform 4 Extension that allows you to manage all the menus throughout your website.
 
 Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, rock on.
 
@@ -12,6 +12,7 @@ Reader-friendly Documentation can be found here. [Menus Manual](https://cartalys
 
 Raw files can be found via this projects docs/version branch.
 
+- [3.0](https://github.com/cartalyst/platform-menus/tree/docs/3.0)
 - [2.0](https://github.com/cartalyst/platform-menus/tree/docs/2.0)
 - [1.0](https://github.com/cartalyst/platform-menus/tree/docs/1.0)
 
@@ -19,6 +20,7 @@ Raw files can be found via this projects docs/version branch.
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [3.0](CHANGELOG.md) - 2015-07-06
 - [2.0](CHANGELOG.md) - 2015-03-05
 - [1.0](CHANGELOG.md) - 2015-01-23
 
@@ -41,4 +43,4 @@ Bug reports, feature requests, and pull requests can be submitted by following o
 
 This software is released under the [Cartalyst PSL](LICENSE) License.
 
-© 2011-2015 Cartalyst LLC, All rights reserved.
+© 2011-2016 Cartalyst LLC, All rights reserved.
