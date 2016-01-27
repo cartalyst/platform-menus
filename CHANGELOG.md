@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.2.1 - 2016-01-27
+
+`REVISED`
+
+- Reverted handling post upgrading menus.
+
 ### v3.2.0 - 2016-01-20
 
 `REVISED`
