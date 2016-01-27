@@ -52,8 +52,6 @@ class MenusServiceProvider extends ServiceProvider
         Extension::installed(function ($e) use ($observer) { $observer->afterInstall($e); });
 
         Extension::uninstalled(function ($e) use ($observer) { $observer->afterUninstall($e); });
-
-        Extension::upgraded(function ($e) use ($observer) { $observer->afterUpgrade($e); });
     }
 
     /**
