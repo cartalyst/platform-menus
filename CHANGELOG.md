@@ -41,6 +41,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 - Bumped `access`, `content` extensions' version.
 
+### v3.0.3 - 2016-06-30
+
+`FIXED`
+
+- Dropdown widget view on frontend.
+
 ### v3.0.2 - 2015-09-14
 
 `ADDED`
