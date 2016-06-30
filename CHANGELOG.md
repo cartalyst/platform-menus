@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.2.2 - 2016-06-30
+
+`FIXED`
+
+- Dropdown widget view on frontend.
+
 ### v3.2.1 - 2016-01-27
 
 `REVISED`
