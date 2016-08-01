@@ -1,6 +1,6 @@
 # Menus
 
-[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=3.2)](https://magnum.travis-ci.com/cartalyst/platform-menus)
+[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=4.0)](https://magnum.travis-ci.com/cartalyst/platform-menus)
 
 A Platform 4 Extension that allows you to manage all the menus throughout your website.
 
@@ -12,14 +12,16 @@ Reader-friendly Documentation can be found here. [Menus Manual](https://cartalys
 
 Raw files can be found via this projects docs/version branch.
 
+- [4.0](https://github.com/cartalyst/platform-menus/tree/docs/4.0)
 - [3.0](https://github.com/cartalyst/platform-menus/tree/docs/3.0)
 - [2.0](https://github.com/cartalyst/platform-menus/tree/docs/2.0)
 - [1.0](https://github.com/cartalyst/platform-menus/tree/docs/1.0)
 
-## Changelog
+## Change Log
 
-Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
+Important versions listed below. Refer to the [Change Log](CHANGELOG.md) for a full history of the project.
 
+- [4.0](CHANGELOG.md) - TBA
 - [3.0](CHANGELOG.md) - 2015-07-06
 - [2.0](CHANGELOG.md) - 2015-03-05
 - [1.0](CHANGELOG.md) - 2015-01-23
@@ -28,7 +30,7 @@ Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a fu
 
 The following support channels can be used for contact.
 
-- [Twitter](https://cartalyst.com/@twitter)
+- [Twitter](https://twitter.com/cartalyst)
 - [Email](mailto:help@cartalyst.com)
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).

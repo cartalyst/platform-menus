@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    3.2.2
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2016, Cartalyst LLC
@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'version' => '3.2.0',
+    'version' => '4.0.0',
 
     /*
     |--------------------------------------------------------------------------
