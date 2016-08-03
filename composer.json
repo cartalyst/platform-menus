@@ -24,8 +24,8 @@
         "php": ">=5.5.9",
         "cartalyst/composer-installers": "1.2.*",
         "cartalyst/nested-sets": "3.0.*",
-        "platform/access": "dev-feature/five",
-        "platform/foundation": "dev-feature/five"
+        "platform/access": "4.0.*",
+        "platform/foundation": "4.0.*"
     },
     "require-dev": {
         "cartalyst/testing": "~2.0@dev",
