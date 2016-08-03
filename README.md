@@ -2,7 +2,7 @@
 
 [![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=4.0)](https://magnum.travis-ci.com/cartalyst/platform-menus)
 
-A Platform 4 Extension that allows you to manage all the menus throughout your website.
+A Platform 5 Extension that allows you to manage all the menus throughout your website.
 
 Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, rock on.
 
@@ -21,7 +21,7 @@ Raw files can be found via this projects docs/version branch.
 
 Important versions listed below. Refer to the [Change Log](CHANGELOG.md) for a full history of the project.
 
-- [4.0](CHANGELOG.md) - TBA
+- [4.0](CHANGELOG.md) - 2016-08-03
 - [3.0](CHANGELOG.md) - 2015-07-06
 - [2.0](CHANGELOG.md) - 2015-03-05
 - [1.0](CHANGELOG.md) - 2015-01-23
