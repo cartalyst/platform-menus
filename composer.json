@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "cartalyst/testing": "~2.0@dev",
-        "platform/pages": "~3.1"
+        "platform/pages": "~4.0"
     },
     "autoload": {
         "classmap": [
