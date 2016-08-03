@@ -8,7 +8,7 @@ The best and easiest way to install the Menus extension is with [Composer](http:
 
 Open your `composer.json` file and add the following to the `require` array:
 
-	"platform/menus": "1.0.*"
+	"platform/menus": "2.0.*"
 
 Add the following lines after the `require` array on your `composer.json` file:
 
