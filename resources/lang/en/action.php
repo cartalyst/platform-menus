@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    4.0.1
+ * @version    5.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2016, Cartalyst LLC
@@ -20,9 +20,7 @@
 
 return [
 
-    'index'  => 'List Menus',
-    'create' => 'Create new Menus',
-    'edit'   => 'View / Edit Menus',
-    'delete' => 'Delete Menus',
+    'add_item'     => 'Add a new Item',
+    'more_options' => 'More options',
 
 ];

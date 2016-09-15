@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    4.0.1
+ * @version    5.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2016, Cartalyst LLC
@@ -23,7 +23,6 @@ namespace Platform\Menus\Widgets;
 use Exception;
 use Platform\Menus\Models\Menu;
 use Cartalyst\Sentinel\Sentinel;
-use Illuminate\Contracts\Routing\Registrar as Router;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
 class Nav
@@ -54,14 +53,11 @@ class Nav
      *
      * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
      * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
-     * @param  \Illuminate\Contracts\Routing\Registrar  $router
      * @return void
      */
-    public function __construct(Sentinel $sentinel, MenuRepositoryInterface $menus, Router $router)
+    public function __construct(Sentinel $sentinel, MenuRepositoryInterface $menus)
     {
         $this->menus = $menus;
-
-        $this->router = $router;
 
         $this->sentinel = $sentinel;
 
@@ -150,13 +146,9 @@ class Nav
         // Store the original uri
         $originalUri = $child->uri;
 
-        if ($this->router->has($originalUri)) {
-            $child->uri = route($originalUri);
-        } else {
-            // Prepare the uri
-            $child->uri = $child->getUrl($options);
-            $child->uri = str_replace(':admin', admin_uri(), $child->uri);
-        }
+        // Prepare the uri
+        $child->uri = $child->getUrl($options);
+        $child->uri = str_replace(':admin', admin_uri(), $child->uri);
 
         // Do we have a regular expression for this item?
         if ($regex = $child->regex) {
