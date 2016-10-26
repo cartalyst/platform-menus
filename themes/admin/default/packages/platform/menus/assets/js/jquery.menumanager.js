@@ -59,7 +59,7 @@
 			// children items, this contains the children hierarchy.
 			tree : 'menu-tree',
 
-			role : '.form-role',
+			role : '.form-group',
 
 			errorClass : 'has-error',
 
