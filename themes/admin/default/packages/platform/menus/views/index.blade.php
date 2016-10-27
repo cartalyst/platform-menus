@@ -221,8 +221,6 @@
 
 </section>
 
-@if (config('platform.app.help'))
-	@include('platform/menus::help')
-@endif
+@help('platform/menus::help')
 
 @stop
