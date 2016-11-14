@@ -132,12 +132,12 @@ class MenusServiceProvider extends ServiceProvider
     {
         $this->app['blade.compiler']->directive('nav', function($value)
         {
-            return "<?php echo Widget::make('platform/menus::nav.show', array($value)); ?>";
+            return "<?php echo app('widgets')->make('platform/menus::nav.show', array($value)); ?>";
         });
 
         $this->app['blade.compiler']->directive('dropdown', function($value)
         {
-            return "<?php echo Widget::make('platform/menus::dropdown.show', array($value)); ?>";
+            return "<?php echo app('widgets')->make('platform/menus::dropdown.show', array($value)); ?>";
         });
     }
 }
