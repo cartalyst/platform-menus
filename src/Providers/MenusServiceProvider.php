@@ -61,6 +61,8 @@ class MenusServiceProvider extends ServiceProvider
     {
         $this->registerAfterInstallEvents();
 
+        $this->registerNestedSetsPackage();
+
         // Register the attributes namespace
         $this->app['platform.attributes.manager']->registerNamespace(
             $this->app['Platform\Menus\Models\Menu']
@@ -86,6 +88,16 @@ class MenusServiceProvider extends ServiceProvider
 
         // Register the manager
         $this->bindIf('platform.menus.manager', 'Platform\Menus\Repositories\ManagerRepository');
+    }
+
+    /**
+     * Register the Cartalyst Nested Sets package.
+     *
+     * @return void
+     */
+    protected function registerNestedSetsPackage()
+    {
+        $this->app->register('Cartalyst\NestedSets\Laravel\NestedSetsServiceProvider');
     }
 
     /**
