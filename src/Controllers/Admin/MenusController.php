@@ -73,28 +73,26 @@ class MenusController extends AdminController
      */
     public function grid()
     {
-        $columns = [
-            'id',
-            'name',
-            'slug',
-            'items_count',
-            'enabled',
-            'created_at',
-        ];
-
         $settings = [
+            'columns' => [
+                'id',
+                'name',
+                'slug',
+                'items_count',
+                'enabled',
+                'created_at',
+            ],
             'sort'      => 'created_at',
             'direction' => 'desc',
             'pdf_view'  => 'pdf',
+            'transformer' => function ($element) {
+                $element['edit_uri'] = route('admin.menu.edit', $element['id']);
+
+                return $element;
+            },
         ];
 
-        $transformer = function ($element) {
-            $element['edit_uri'] = route('admin.menu.edit', $element['id']);
-
-            return $element;
-        };
-
-        return datagrid($this->menus->grid(), $columns, $settings, $transformer);
+        return datagrid($this->menus->grid(), $settings);
     }
 
     /**

@@ -109,7 +109,7 @@ class Nav
 
             $user = $this->sentinel->check();
 
-            $roles = $user ? $user->roles->lists('id')->toArray() : [];
+            $roles = $user ? $user->roles->pluck('id')->toArray() : [];
 
             $visibilities = array_filter([
                 'always',
