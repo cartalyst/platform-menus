@@ -113,7 +113,7 @@ class MenusServiceProvider extends ServiceProvider
         $this->app['platform.installer']->after(function () {
             $observer = $this->app['platform.menus.observer'];
 
-            foreach ($this->app['extensions']->allEnabled() as $extension) {
+            foreach ($this->app['extensions']->getBag()->enabled() as $extension) {
                 $observer->afterInstall($extension);
 
                 $observer->afterEnable($extension);
