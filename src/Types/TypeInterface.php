@@ -41,7 +41,7 @@ interface TypeInterface
     /**
      * Returns the name for the menu child.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @return string
      */
     public function getNameAttribute(Menu $child);
