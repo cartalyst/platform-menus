@@ -90,7 +90,7 @@ abstract class AbstractType
     /**
      * Get the name for the menu child.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @return string
      */
     public function getNameAttribute(Menu $child)
@@ -101,7 +101,7 @@ abstract class AbstractType
     /**
      * Get the URL for the menu child.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @param  array  $options
      * @return string
      */
@@ -120,7 +120,7 @@ abstract class AbstractType
      * Return the form HTML template for a edit child of this type as well
      * as creating new children.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @return \View
      */
     public function getFormHtml(Menu $child = null)
@@ -141,7 +141,7 @@ abstract class AbstractType
     /**
      * Event that is called after a menu children is saved.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @return void
      */
     abstract public function afterSave(Menu $child);
@@ -149,7 +149,7 @@ abstract class AbstractType
     /**
      * Event that is called before a children is deleted.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param  \Platform\Menus\Models\Menu  $child
      * @return void
      */
     abstract public function beforeDelete(Menu $child);
