@@ -122,7 +122,7 @@ class Observer
                 $child->delete();
             }
 
-            // Firstly, we'll purge the existing children (and any descendents)
+            // Firstly, we'll purge the existing children (and any descendants)
             // from the children array and put them in the existing array.
             $tree     = $menu->toArray();
             $existing = $tree['children'];
@@ -223,7 +223,7 @@ class Observer
 
     /**
      * Extract all valid menus from an extension.php file,
-     * returnin an array where the key is a menu slug and
+     * returning an array where the key is a menu slug and
      * the value is an array of children.
      *
      * @param  \Cartalyst\Extensions\Extension  $extension
@@ -234,7 +234,7 @@ class Observer
         $menus = $extension->menus;
 
         // If the attribute physically doesn't exist, we'll just
-        // skip. They may have chosen to create the items progamatically
+        // skip. They may have chosen to create the items programmatically
         // so we won't want to remove everything they've done.
         if (! is_array($menus)) {
             return;
@@ -340,7 +340,7 @@ class Observer
     }
 
     /**
-     * Strip the guaraded attributes from a tree of children.
+     * Strip the guarded attributes from a tree of children.
      *
      * @param  array  $children
      * @return void
