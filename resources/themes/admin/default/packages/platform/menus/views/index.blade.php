@@ -195,11 +195,11 @@
 			<thead>
 				<tr>
 					<th><input data-grid-checkbox="all" type="checkbox"></th>
-					<th class="sortable" data-sort="name">{{{ trans('platform/menus::model.general.name') }}}</th>
-					<th class="sortable hidden-xs" data-sort="slug">{{{ trans('platform/menus::model.general.slug') }}}</th>
-					<th class="sortable" data-sort="items_count">{{{ trans('platform/menus::model.general.items_count') }}}</th>
-					<th class="sortable" data-sort="enabled">{{{ trans('platform/menus::model.general.enabled') }}}</th>
-					<th class="sortable hidden-xs" data-sort="created_at">{{{ trans('model.created_at') }}}</th>
+					<th class="sortable" data-grid-sort="name">{{{ trans('platform/menus::model.general.name') }}}</th>
+					<th class="sortable hidden-xs" data-grid-sort="slug">{{{ trans('platform/menus::model.general.slug') }}}</th>
+					<th class="sortable" data-grid-sort="items_count">{{{ trans('platform/menus::model.general.items_count') }}}</th>
+					<th class="sortable" data-grid-sort="enabled">{{{ trans('platform/menus::model.general.enabled') }}}</th>
+					<th class="sortable hidden-xs" data-grid-sort="created_at">{{{ trans('model.created_at') }}}</th>
 				</tr>
 			</thead>
 			<tbody data-grid-layout="results"></tbody>
