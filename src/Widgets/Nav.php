@@ -148,9 +148,13 @@ class Nav
         $child->target = "_{$child->target}";
 
         // Store the original uri
-        $originalUri = $child->uri;
+        $originalUri = $routerUri = $child->uri;
 
-        if ($this->router->has($originalUri)) {
+        if ($beforeUri) {
+            $routerUri = $beforeUri.'/'.$routerUri;
+        }
+
+        if ($this->router->has($routerUri)) {
             $child->uri = route($originalUri);
         } else {
             // Prepare the uri
