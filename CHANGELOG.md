@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v4.0.2 - 2017-01-19
+
+`FIXED`
+
+- A bug that ignored the prefix during admin link generation when the same uri exists on the frontend.
+
 ### v4.0.1 - 2016-10-27
 
 `ADDED`
