@@ -24,13 +24,13 @@
         "php": ">=5.6.4",
         "cartalyst/composer-installers": "^2.0",
         "cartalyst/nested-sets": "^3.0",
-        "platform/access": "~5.0",
-        "platform/foundation": "~5.0"
+        "platform/access": "~6.0",
+        "platform/foundation": "~6.0"
     },
     "require-dev": {
         "laravel/framework": "~5.3",
         "cartalyst/testing": "~2.0@dev",
-        "platform/pages": "~5.0"
+        "platform/pages": "~6.0"
     },
     "autoload": {
         "classmap": [
