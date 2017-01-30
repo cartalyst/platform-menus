@@ -77,7 +77,7 @@ class DataHandler implements DataHandlerInterface
         // without anything being messed up.
         $index = $child['id'];
 
-        $data = input("children.{$index}");
+        $data = request()->input("children.{$index}");
 
         // Prepare the new child data
         $prepared = [
