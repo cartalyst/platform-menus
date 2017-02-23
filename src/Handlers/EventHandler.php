@@ -21,7 +21,7 @@
 namespace Platform\Menus\Handlers;
 
 use Platform\Menus\Models\Menu;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Cartalyst\Support\Handlers\EventHandler as BaseEventHandler;
 
 class EventHandler extends BaseEventHandler implements EventHandlerInterface
