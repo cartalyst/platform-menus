@@ -28,6 +28,7 @@
         "platform/foundation": "dev-feature/six@dev"
     },
     "require-dev": {
+        "laravel/framework": "~5.3",
         "cartalyst/testing": "~2.0@dev",
         "platform/pages": "dev-feature/six@dev"
     },

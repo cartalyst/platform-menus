@@ -34,7 +34,7 @@ class MenusDataHandlerTest extends IlluminateTestCase
     {
         parent::setUp();
 
-        $this->handler = new DataHandler;
+        $this->handler = new DataHandler();
     }
 
     /** @test */
@@ -117,7 +117,7 @@ class MenusDataHandlerTest extends IlluminateTestCase
         ];
 
         $this->app['request']->shouldReceive('input')
-            ->with('children.1', '')
+            ->with('children.1')
             ->once()
             ->andReturn([
                 'name'    => 'Foo Main',
@@ -126,7 +126,7 @@ class MenusDataHandlerTest extends IlluminateTestCase
             ]);
 
         $this->app['request']->shouldReceive('input')
-            ->with('children.2', '')
+            ->with('children.2')
             ->once()
             ->andReturn([
                 'name'    => 'Foo Sub',
@@ -135,7 +135,7 @@ class MenusDataHandlerTest extends IlluminateTestCase
             ]);
 
         $this->app['request']->shouldReceive('input')
-            ->with('children.foo-foo', '')
+            ->with('children.foo-foo')
             ->once()
             ->andReturn([
                 'name'    => 'Foo',

@@ -104,7 +104,8 @@ class AdminMenusControllerTest extends IlluminateTestCase
             ->once();
 
         $this->menus->shouldReceive('grid')
-            ->once();
+            ->once()
+            ->andReturn([]);
 
         $this->controller->grid();
     }

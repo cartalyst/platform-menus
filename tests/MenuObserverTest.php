@@ -168,7 +168,7 @@ class MenuObserverTest extends IlluminateTestCase
             ->twice()
             ->andReturn($role = m::mock('Platform\Roles\Models\Role'));
 
-        $role->shouldReceive('lists')
+        $role->shouldReceive('pluck')
             ->with('id', 'slug')
             ->twice()
             ->andReturn(new Collection([
