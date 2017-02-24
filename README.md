@@ -1,6 +1,6 @@
 # Menus
 
-[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=5.0)](https://magnum.travis-ci.com/cartalyst/platform-menus)
+[![Build Status](https://magnum.travis-ci.com/cartalyst/platform-menus.svg?token=98Zt8zYdwyheTKqziswS&branch=6.0)](https://magnum.travis-ci.com/cartalyst/platform-menus)
 
 A Platform 6 Extension that allows you to manage all the menus throughout your website.
 
@@ -8,14 +8,15 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, ro
 
 ## Documentation
 
-Reader-friendly Documentation can be found [here](https://cartalyst.com/manual/platform-menus/5.0).
+Reader-friendly Documentation can be found [here](https://cartalyst.com/manual/platform-menus/6.0).
 
-Raw files can be found [here](https://github.com/cartalyst/platform-menus/tree/docs/5.0).
+Raw files can be found [here](https://github.com/cartalyst/platform-menus/tree/docs/6.0).
 
 ## Change Log
 
 Important versions listed below. Refer to the [Change Log](CHANGELOG.md) for a full history of the project.
 
+- [6.0](CHANGELOG.md) - 2017-02-24
 - [5.0](CHANGELOG.md) - 2017-02-24
 - [4.0](CHANGELOG.md) - 2016-08-03
 - [3.0](CHANGELOG.md) - 2015-07-06
