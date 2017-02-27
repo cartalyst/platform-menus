@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform Menus extension.
  *
@@ -10,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    5.0.0
+ * @version    5.0.1
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2017, Cartalyst LLC
@@ -74,7 +75,7 @@ return [
     |
     */
 
-    'version' => '5.0.0',
+    'version' => '5.0.1',
 
     /*
     |--------------------------------------------------------------------------
