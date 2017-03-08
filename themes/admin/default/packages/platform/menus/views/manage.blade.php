@@ -160,7 +160,10 @@
 
 								<fieldset>
 
-									<legend>{{{ $menu->exists ? $menu->name : null }}} Structure</legend>
+									<legend>
+                                        {{{ $menu->exists ? $menu->name : null }}} Structure
+                                        <span class="item-expand item-root small pull-right tip" data-original-title="{{ trans('platform/menus::action.expand_root') }}"></span>
+                                    </legend>
 
 									@if ( empty($children) )
 

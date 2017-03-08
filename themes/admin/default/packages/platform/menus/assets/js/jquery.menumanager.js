@@ -335,6 +335,29 @@
 
 			});
 
+            /**
+             * Expand/collapse child items
+             *
+             * @return void
+             */
+            $document.on('click', '.item-expand', function(e) {
+
+                var handle  = $(this),
+                    $root   = handle.hasClass('item-root') ? $('#sortable') : $(this).closest('li');
+
+                if (handle.hasClass('item-expanded'))
+                {
+                    handle.removeClass('item-expanded');
+                    $root.find('.item-expand').removeClass('item-expanded');
+                    $root.find('li .panel-body').collapse('hide');
+                }
+                else
+                {
+                    handle.addClass('item-expanded');
+                    $root.find('.item-expand').addClass('item-expanded');
+                    $root.find('li .panel-body').collapse('show');
+                }
+            });
 
 			/**
 			 * Shows a menu item form box.
@@ -369,8 +392,7 @@
 
 			});
 
-
-			/**
+            /**
 			 * Toggle the options on an item box.
 			 *
 			 * @return void

@@ -141,6 +141,23 @@ body.dragging, body.dragging * {
 	z-index: 2000;
 }
 
+.item-expand {
+	font-family: 'FontAwesome';
+	cursor: pointer;
+	display: inline-block;
+	padding: 3px 12px 0 14px;
+	margin-top: 10px;
+}
 
+.item-root {
+	margin-top: 0 !important;
+}
 
+.item-expand:after {
+	content: "\f065";
+}
+
+.item-expand.item-expanded:after {
+	content: "\f066";
+}
 

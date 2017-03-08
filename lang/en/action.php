@@ -22,4 +22,6 @@ return [
 	'add_item'     => 'Add a new Item',
 	'more_options' => 'More options',
 
+	'expand_root'  => 'Expand/collapse all items',
+	'expand' 	   => 'Expand/collapse child items',
 ];

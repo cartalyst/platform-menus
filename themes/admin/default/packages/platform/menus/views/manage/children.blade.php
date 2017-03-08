@@ -30,8 +30,13 @@
 
 	</div>
 
-	<ol>
-		@if ( ! empty($child) and $children = $child->getChildren())
+
+    @if (count($child->getChildren()))
+        <span class="item-expand pull-left small tip" data-original-title="{{ trans('platform/menus::action.expand') }}"></span>
+    @endif
+
+    <ol>
+		@if ( $children = $child->getChildren())
 		@foreach ($children as $_child)
 			@include('platform/menus::manage/children', ['child' => $_child, 'parentId' => $child->id])
 		@endforeach
