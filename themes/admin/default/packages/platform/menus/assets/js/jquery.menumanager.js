@@ -597,6 +597,9 @@
 
 				// Get the item form box
 				var formBox = $('[data-item-form="' + formId + '"]');
+				
+				// Get the item panel box
+				var panelBox = $('#panel-' + formId);
 
 				// Get the item panel box
 				var panelBox = $('#panel-' + formId);
