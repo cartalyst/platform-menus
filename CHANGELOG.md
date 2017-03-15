@@ -11,6 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v6.0.2 - 2017-03-15
+
+`FIXED`
+
+- A bug on number of menus being returned on the grid.
+- Data Grid filters.
+
 ### v6.0.1 - 2017-02-27
 
 `FIXED`
@@ -20,6 +27,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 ### v6.0.0 - 2017-02-24
 
 - Updated for Platform 7.
+
+### v5.0.2 - 2017-03-15
+
+`FIXED`
+
+- Data Grid filters.
 
 ### v5.0.1 - 2017-02-27
 
