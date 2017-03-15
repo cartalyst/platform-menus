@@ -93,7 +93,7 @@ return [
         'created_at' => 'Created At',
 
         'items_count' => '# of Items',
-        'items'       => '{0} No items|{1} 1 item|[2,Inf] :count items',
+        'items'       => '{0} No items|{1} 1 item|[2,*] :count items',
 
         'item_details' => 'Details',
         'advanced_settings' => 'Advanced Settings',
