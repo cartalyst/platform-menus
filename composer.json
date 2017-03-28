@@ -1,7 +1,7 @@
 {
     "name": "platform/menus",
     "type": "platform-extension",
-    "description": "A Platform 6 Extension that allows you to manage all the menus throughout your website.",
+    "description": "A Platform extension to manage menus throughout your website.",
     "keywords": [
         "cartalyst",
         "platform",
