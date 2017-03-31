@@ -21,6 +21,7 @@
 namespace Platform\Menus\Controllers\Admin;
 
 use Platform\Access\Controllers\AdminController;
+use Cartalyst\DataGrid\Export\Providers\ExportProvider;
 use Platform\Menus\Repositories\MenuRepositoryInterface;
 
 class MenusController extends AdminController
@@ -82,9 +83,8 @@ class MenusController extends AdminController
                 'enabled',
                 'created_at',
             ],
-            'sort'      => 'created_at',
-            'direction' => 'desc',
-            'pdf_view'  => 'pdf',
+            'sort'        => 'created_at',
+            'direction'   => 'desc',
             'transformer' => function ($element) {
                 $element['edit_uri'] = route('admin.menu.edit', $element['id']);
 
@@ -92,7 +92,9 @@ class MenusController extends AdminController
             },
         ];
 
-        return datagrid($this->menus->grid(), $settings);
+        $provider = new ExportProvider();
+
+        return datagrid($this->menus->grid(), $settings, $provider);
     }
 
     /**
