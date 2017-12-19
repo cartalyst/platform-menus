@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v6.0.4 - 2017-12-19
+
+`FIXED`
+
+- Added missing `bulk_actions` permission.
+
 ### v6.0.3 - 2017-03-31
 
 `FIXED`
