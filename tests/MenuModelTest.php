@@ -166,6 +166,9 @@ class MenuModelTest extends IlluminateTestCase
         $connection->shouldReceive('getPostProcessor')
             ->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'));
 
+        $connection->shouldReceive('getName')
+            ->andReturn('mysql');
+
         $processor->shouldReceive('processSelect')
             ->times(3)
             ->andReturn([]);
