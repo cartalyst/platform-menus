@@ -20,9 +20,10 @@
 
 return [
 
-    'index'  => 'List Menus',
-    'create' => 'Create new Menus',
-    'edit'   => 'View / Edit Menus',
-    'delete' => 'Delete Menus',
+    'index'        => 'List Menus',
+    'create'       => 'Create new Menus',
+    'edit'         => 'View / Edit Menus',
+    'delete'       => 'Delete Menus',
+    'bulk_actions' => 'Bulk Actions',
 
 ];

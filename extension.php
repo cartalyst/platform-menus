@@ -210,6 +210,12 @@ return [
 
                 $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'delete');
             });
+
+            $g->permission('menus.bulk_actions', function ($p) {
+                $p->label = trans('platform/menus::permissions.bulk_actions');
+
+                $p->controller('Platform\Menus\Controllers\Admin\MenusController', 'executeAction');
+            });
         });
     },
 
