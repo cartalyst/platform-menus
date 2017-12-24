@@ -170,7 +170,7 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn('mysql');
 
         $processor->shouldReceive('processSelect')
-            ->times(3)
+            ->times(2)
             ->andReturn([]);
 
         $connection->shouldReceive('select');
