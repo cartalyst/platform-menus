@@ -18,7 +18,10 @@
         }
     ],
     "repositories": [
-        { "type": "composer", "url": "https://packages.cartalyst.com" }
+        {
+            "type": "composer",
+            "url": "https://packages.cartalyst.com"
+        }
     ],
     "require": {
         "php": ">=7.0",
@@ -37,7 +40,19 @@
             "resources/database/migrations",
             "resources/database/seeds"
         ],
-        "psr-4": { "Platform\\Menus\\" : "src/" }
+        "psr-4": {
+            "Platform\\Menus\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Platform\\Menus\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "extra": {
         "component": "extension",
