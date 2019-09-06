@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -30,7 +30,7 @@ class MenusDataHandlerTest extends IlluminateTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,74 +44,73 @@ class MenusDataHandlerTest extends IlluminateTestCase
             'menu-name' => 'Foo',
             'menu-slug' => 'foo',
             'menu-tree' => '[{"id":1,"children":[{"id":2,"children":[{"id":"foo-foo"}]}]}]',
-            'children' => [
+            'children'  => [
                 [
-                    'name' => 'Foo',
-                    'slug' => 'foo-foo',
+                    'name'    => 'Foo',
+                    'slug'    => 'foo-foo',
                     'enabled' => '1',
-                    'parent' => '0',
-                    'type' => 'static',
-                    'secure' => '',
-                    'static' => [
+                    'parent'  => '0',
+                    'type'    => 'static',
+                    'secure'  => '',
+                    'static'  => [
                         'uri' => '',
                     ],
                     'page' => [
                         'page_id' => '1',
                     ],
                     'visibility' => 'always',
-                    'class' => 'fa fa-user',
-                    'target' => 'self',
-                    'regex' => '',
+                    'class'      => 'fa fa-user',
+                    'target'     => 'self',
+                    'regex'      => '',
                 ],
             ],
         ];
 
         $expected = [
-            'name' => 'Foo',
-            'slug' => 'foo',
+            'name'     => 'Foo',
+            'slug'     => 'foo',
             'children' => [
                 [
-                    'name'    => 'Foo Main',
-                    'slug'    => 'foo-main',
-                    'enabled' => 1,
-                    'type' => 'static',
-                    'secure' => null,
+                    'name'       => 'Foo Main',
+                    'slug'       => 'foo-main',
+                    'enabled'    => 1,
+                    'type'       => 'static',
+                    'secure'     => null,
                     'visibility' => 'always',
-                    'roles' => [],
-                    'class' => null,
-                    'target' => null,
-                    'regex' => null,
-                    'id' => 1,
-                    'children' => [
+                    'roles'      => [],
+                    'class'      => null,
+                    'target'     => null,
+                    'regex'      => null,
+                    'id'         => 1,
+                    'children'   => [
                         [
-                            'name'    => 'Foo Sub',
-                            'slug'    => 'foo-sub',
-                            'enabled' => 1,
-                            'type' => 'static',
-                            'secure' => null,
+                            'name'       => 'Foo Sub',
+                            'slug'       => 'foo-sub',
+                            'enabled'    => 1,
+                            'type'       => 'static',
+                            'secure'     => null,
                             'visibility' => 'always',
-                            'roles' => [],
-                            'class' => null,
-                            'target' => null,
-                            'regex' => null,
-                            'id' => 2,
-                            'children' => [
+                            'roles'      => [],
+                            'class'      => null,
+                            'target'     => null,
+                            'regex'      => null,
+                            'id'         => 2,
+                            'children'   => [
                                 [
-                                    'name'    => 'Foo',
-                                    'slug'    => 'foo',
-                                    'enabled' => 1,
-                                    'type' => 'static',
-                                    'secure' => null,
+                                    'name'       => 'Foo',
+                                    'slug'       => 'foo',
+                                    'enabled'    => 1,
+                                    'type'       => 'static',
+                                    'secure'     => null,
                                     'visibility' => 'always',
-                                    'roles' => [],
-                                    'class' => null,
-                                    'target' => null,
-                                    'regex' => null,
+                                    'roles'      => [],
+                                    'class'      => null,
+                                    'target'     => null,
+                                    'regex'      => null,
                                 ],
                             ],
                         ],
                     ],
-
                 ],
             ],
         ];
@@ -123,7 +122,8 @@ class MenusDataHandlerTest extends IlluminateTestCase
                 'name'    => 'Foo Main',
                 'slug'    => 'foo-main',
                 'enabled' => 1,
-            ]);
+            ])
+        ;
 
         $this->app['request']->shouldReceive('input')
             ->with('children.2')
@@ -132,7 +132,8 @@ class MenusDataHandlerTest extends IlluminateTestCase
                 'name'    => 'Foo Sub',
                 'slug'    => 'foo-sub',
                 'enabled' => 1,
-            ]);
+            ])
+        ;
 
         $this->app['request']->shouldReceive('input')
             ->with('children.foo-foo')
@@ -141,8 +142,9 @@ class MenusDataHandlerTest extends IlluminateTestCase
                 'name'    => 'Foo',
                 'slug'    => 'foo',
                 'enabled' => 1,
-            ]);
+            ])
+        ;
 
-        $this->assertEquals($expected, $this->handler->prepare($data));
+        $this->assertSame($expected, $this->handler->prepare($data));
     }
 }

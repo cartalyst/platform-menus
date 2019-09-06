@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -91,7 +91,7 @@ class MigrationPlatformMenusInstallMenus extends Migration
             // MySQL uses the InnoDB engine to support the indexes,
             // other engines aren't affected.
             $table->engine = 'InnoDB';
-            $table->unique(array('lft', 'rgt', 'menu'));
+            $table->unique(['lft', 'rgt', 'menu']);
         });
     }
 

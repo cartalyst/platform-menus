@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -25,7 +25,6 @@ use Cartalyst\Permissions\Container as Permissions;
 use Illuminate\Contracts\Routing\Registrar as Router;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Slug
@@ -107,9 +106,7 @@ return [
     */
 
     'requires' => [
-
         'platform/access',
-
     ],
 
     /*
@@ -123,9 +120,7 @@ return [
     */
 
     'providers' => [
-
         Platform\Menus\Providers\MenusServiceProvider::class,
-
     ],
 
     /*
@@ -147,7 +142,7 @@ return [
     'routes' => function (Router $router, ExtensionInterface $extension, Application $app) {
         if (! $app->routesAreCached()) {
             $router->group([
-                'prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin'
+                'prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin',
             ], function (Router $router) {
                 $router->get('/', 'MenusController@index')->name('admin.menus.all');
                 $router->post('/', 'MenusController@executeAction')->name('admin.menus.all');
@@ -237,7 +232,6 @@ return [
     */
 
     'settings' => function (Settings $settings, Application $app) {
-
     },
 
     /*
@@ -261,9 +255,7 @@ return [
     */
 
     'menus' => [
-
         'admin' => [
-
             [
                 'slug'  => 'admin-menus',
                 'name'  => 'Menus',
@@ -271,11 +263,9 @@ return [
                 'uri'   => 'menus',
                 'regex' => '/:admin\/menus/i',
             ],
-
         ],
 
         'system' => [
-
             [
                 'slug'   => 'system-preview',
                 'name'   => 'Preview',
@@ -291,11 +281,9 @@ return [
                 'uri'   => ':admin/settings',
                 'regex' => '/:admin\/settings/i',
             ],
-
         ],
 
         'main' => [
-
             [
                 'slug'  => 'main-about',
                 'name'  => 'About',
@@ -308,7 +296,6 @@ return [
                 'name'     => 'Help',
                 'class'    => 'fa fa-life-ring',
                 'children' => [
-
                     [
                         'slug'   => 'main-help-support',
                         'name'   => 'Support',
@@ -318,36 +305,31 @@ return [
                     ],
 
                     [
-                        'slug'  => 'main-help-docs',
-                        'name'  => 'Documentation',
-                        'class' => 'fa fa-graduation-cap',
-                        'uri'   => 'https://cartalyst.com/manual/platform',
+                        'slug'   => 'main-help-docs',
+                        'name'   => 'Documentation',
+                        'class'  => 'fa fa-graduation-cap',
+                        'uri'    => 'https://cartalyst.com/manual/platform',
                         'target' => 'blank',
                     ],
 
                     [
-                        'slug'  => 'main-help-license',
-                        'name'  => 'License',
-                        'class' => 'fa fa-book',
-                        'uri'   => 'https://cartalyst.com/license',
+                        'slug'   => 'main-help-license',
+                        'name'   => 'License',
+                        'class'  => 'fa fa-book',
+                        'uri'    => 'https://cartalyst.com/license',
                         'target' => 'blank',
                     ],
-
                 ],
-
             ],
-
         ],
 
         'account' => [
-
             [
                 'slug'     => 'account-menu',
                 'name'     => 'Account',
                 'class'    => 'fa fa-user',
                 'regex'    => '/profile/i',
                 'children' => [
-
                     [
                         'slug'       => 'account-admin',
                         'name'       => 'Administrator',
@@ -387,13 +369,8 @@ return [
                         'uri'        => 'register',
                         'visibility' => 'logged_out',
                     ],
-
                 ],
-
             ],
-
         ],
-
     ],
-
 ];

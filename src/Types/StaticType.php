@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -35,14 +35,14 @@ class StaticType extends AbstractType implements TypeInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function afterSave(Menu $child)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeDelete(Menu $child)
     {

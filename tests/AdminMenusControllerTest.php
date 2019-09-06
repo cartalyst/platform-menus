@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -21,16 +21,15 @@
 namespace Platform\Menus\Tests;
 
 use Mockery as m;
-use Platform\Menus\Models\Menu;
 use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Controllers\Admin\MenusController;
 
 class AdminMenusControllerTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -50,7 +49,8 @@ class AdminMenusControllerTest extends IlluminateTestCase
     {
         $this->app['view']->shouldReceive('make')
             ->atLeast()
-            ->once();
+            ->once()
+        ;
 
         $this->controller->index();
     }
@@ -60,11 +60,13 @@ class AdminMenusControllerTest extends IlluminateTestCase
     {
         $this->app['view']->shouldReceive('make')
             ->atLeast()
-            ->once();
+            ->once()
+        ;
 
         $this->menus->shouldReceive('getPreparedMenu')
             ->once()
-            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
+            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []])
+        ;
 
         $this->controller->create();
     }
@@ -74,11 +76,13 @@ class AdminMenusControllerTest extends IlluminateTestCase
     {
         $this->app['view']->shouldReceive('make')
             ->atLeast()
-            ->once();
+            ->once()
+        ;
 
         $this->menus->shouldReceive('getPreparedMenu')
             ->once()
-            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []]);
+            ->andReturn(['menu' => [], 'roles' => [], 'types' => [], 'children' => [], 'persistedSlugs' => []])
+        ;
 
         $this->controller->edit(1);
     }
@@ -87,10 +91,12 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function edit_non_existing()
     {
         $this->app['alerts']->shouldReceive('error')
-            ->once();
+            ->once()
+        ;
 
         $this->menus->shouldReceive('getPreparedMenu')
-            ->once();
+            ->once()
+        ;
 
         $this->trans()->redirect('route');
 
@@ -101,11 +107,13 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function datagrid()
     {
         $this->app['datagrid']->shouldReceive('make')
-            ->once();
+            ->once()
+        ;
 
         $this->menus->shouldReceive('grid')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->controller->grid();
     }
@@ -114,7 +122,8 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function store()
     {
         $this->app['alerts']->shouldReceive('success')
-            ->once();
+            ->once()
+        ;
 
         $this->trans();
 
@@ -124,16 +133,19 @@ class AdminMenusControllerTest extends IlluminateTestCase
 
         $this->app['request']->shouldReceive('all')
             ->once()
-            ->andReturn($menuData);
+            ->andReturn($menuData)
+        ;
 
         $this->menus->shouldReceive('store')
             ->once()
             ->with(null, $menuData)
-            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')])
+        ;
 
         $message->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $this->redirect('route');
 
@@ -144,7 +156,8 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function update_route()
     {
         $this->app['alerts']->shouldReceive('success')
-            ->once();
+            ->once()
+        ;
 
         $this->trans();
 
@@ -154,16 +167,19 @@ class AdminMenusControllerTest extends IlluminateTestCase
 
         $this->app['request']->shouldReceive('all')
             ->once()
-            ->andReturn($menuData);
+            ->andReturn($menuData)
+        ;
 
         $this->menus->shouldReceive('store')
             ->once()
             ->with(1, $menuData)
-            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')])
+        ;
 
         $message->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $this->redirect('route');
 
@@ -174,7 +190,8 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function update_invalid_route()
     {
         $this->app['alerts']->shouldReceive('error')
-            ->once();
+            ->once()
+        ;
 
         $menuData = [
             'slug' => 'foo',
@@ -182,16 +199,19 @@ class AdminMenusControllerTest extends IlluminateTestCase
 
         $this->app['request']->shouldReceive('all')
             ->once()
-            ->andReturn($menuData);
+            ->andReturn($menuData)
+        ;
 
         $this->menus->shouldReceive('store')
             ->once()
             ->with(1, $menuData)
-            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')]);
+            ->andReturn([$message = m::mock('Illuminate\Support\MessageBag'), $model = m::mock('Platform\Menus\Models\Menu')])
+        ;
 
         $message->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         $this->redirect('back')->redirect('withInput');
 
@@ -202,13 +222,15 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function delete_route()
     {
         $this->app['alerts']->shouldReceive('success')
-            ->once();
+            ->once()
+        ;
 
         $this->trans();
 
         $this->menus->shouldReceive('delete')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $this->redirect('route');
 
@@ -219,12 +241,14 @@ class AdminMenusControllerTest extends IlluminateTestCase
     public function delete_not_existing_route()
     {
         $this->app['alerts']->shouldReceive('error')
-            ->once();
+            ->once()
+        ;
 
         $this->trans();
 
         $this->menus->shouldReceive('delete')
-            ->once();
+            ->once()
+        ;
 
         $this->redirect('route');
 
@@ -237,20 +261,24 @@ class AdminMenusControllerTest extends IlluminateTestCase
         $this->app['request']->shouldReceive('input')
             ->once()
             ->with('action')
-            ->andReturn('delete');
+            ->andReturn('delete')
+        ;
 
         $this->app['request']->shouldReceive('input')
             ->once()
             ->with('rows', [])
-            ->andReturn([1]);
+            ->andReturn([1])
+        ;
 
         $this->menus->shouldReceive('delete')
             ->once()
-            ->with(1);
+            ->with(1)
+        ;
 
         $this->app['response']->shouldReceive('make')
             ->with('Success', 200, [])
-            ->once();
+            ->once()
+        ;
 
         $this->controller->executeAction();
     }
@@ -261,11 +289,13 @@ class AdminMenusControllerTest extends IlluminateTestCase
         $this->app['request']->shouldReceive('input')
             ->once()
             ->with('action')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $this->app['response']->shouldReceive('make')
             ->with('Failed', 500, [])
-            ->once();
+            ->once()
+        ;
 
         $this->controller->executeAction();
     }

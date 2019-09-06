@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -19,11 +19,9 @@
  */
 
 return [
-
     'index'        => 'List Menus',
     'create'       => 'Create new Menus',
     'edit'         => 'View / Edit Menus',
     'delete'       => 'Delete Menus',
     'bulk_actions' => 'Bulk Actions',
-
 ];

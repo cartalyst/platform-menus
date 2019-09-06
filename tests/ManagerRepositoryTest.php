@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -21,15 +21,16 @@
 namespace Platform\Menus\Tests;
 
 use Mockery as m;
+use Illuminate\Support\Arr;
 use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Repositories\ManagerRepository;
 
 class ManagerRepositoryTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,11 +45,12 @@ class ManagerRepositoryTest extends IlluminateTestCase
 
         $type->shouldReceive('getIdentifier')
             ->once()
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $this->repository->registerType($type);
 
-        $this->assertSame($type, array_get($this->repository->getTypes(), 'foo'));
+        $this->assertSame($type, Arr::get($this->repository->getTypes(), 'foo'));
     }
 
     /** @test */
@@ -58,7 +60,8 @@ class ManagerRepositoryTest extends IlluminateTestCase
 
         $type->shouldReceive('getIdentifier')
             ->once()
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $this->repository->registerType($type);
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -27,7 +27,7 @@ use Cartalyst\Support\Handlers\EventHandler as BaseEventHandler;
 class EventHandler extends BaseEventHandler implements EventHandlerInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function subscribe(Dispatcher $dispatcher)
     {
@@ -41,14 +41,14 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function creating(array $data)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function created(Menu $menu)
     {
@@ -56,14 +56,14 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function updating(Menu $menu, array $data)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function updated(Menu $menu)
     {
@@ -71,7 +71,7 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleted(Menu $menu)
     {
@@ -81,7 +81,8 @@ class EventHandler extends BaseEventHandler implements EventHandlerInterface
     /**
      * Flush the cache.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
+     * @param \Platform\Menus\Models\Menu $menu
+     *
      * @return void
      */
     protected function flushCache(Menu $menu)

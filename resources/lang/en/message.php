@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -19,7 +19,6 @@
  */
 
 return [
-
     'already_exists' => 'Menu already exists!',
     'not_found'      => 'Menu [:id] either not a root menu item or does not exist.',
     'no_children'    => 'There are currently no items for this menu, why not create one?',
@@ -35,5 +34,4 @@ return [
         'update' => 'There was an issue updating the menu. Please try again.',
         'delete' => 'There was an issue deleting the menu. Please try again.',
     ],
-
 ];

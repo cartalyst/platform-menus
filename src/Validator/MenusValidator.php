@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -25,7 +25,7 @@ use Cartalyst\Support\Validator;
 class MenusValidator extends Validator implements MenusValidatorInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $rules = [
         'name' => 'required',
@@ -33,10 +33,10 @@ class MenusValidator extends Validator implements MenusValidatorInterface
     ];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onUpdate()
     {
-        $this->rules['slug'] .= ",slug,{slug},slug";
+        $this->rules['slug'] .= ',slug,{slug},slug';
     }
 }

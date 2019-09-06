@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -19,12 +19,10 @@
  */
 
 return [
-
-    'title'  => 'Menus',
+    'title' => 'Menus',
 
     'tabs' => [
         'general'    => 'Menu',
         'attributes' => 'Attributes',
     ],
-
 ];

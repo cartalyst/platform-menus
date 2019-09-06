@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -20,6 +20,7 @@
 
 namespace Platform\Menus;
 
+use Illuminate\Support\Arr;
 use Platform\Menus\Models\Menu;
 use Cartalyst\Extensions\Extension;
 use Illuminate\Container\Container;
@@ -43,7 +44,8 @@ class Observer
     /**
      * Constructor.
      *
-     * @param  \Illuminate\Container\Container  $app
+     * @param \Illuminate\Container\Container $app
+     *
      * @return void
      */
     public function __construct(Container $app)
@@ -56,7 +58,8 @@ class Observer
     /**
      * Register an updating model event with the dispatcher.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
+     * @param \Platform\Menus\Models\Menu $menu
+     *
      * @return void
      */
     public function updating(Menu $menu)
@@ -69,7 +72,8 @@ class Observer
     /**
      * Observer after an extension is installed.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @param \Cartalyst\Extensions\Extension $extension
+     *
      * @return void
      */
     public function afterInstall(Extension $extension)
@@ -110,7 +114,8 @@ class Observer
                 ->createModel()
                 ->whereMenu($menu->getKey())
                 ->whereExtension($extension->getSlug())
-                ->where('slug', 'like', "%{$slug}-%");
+                ->where('slug', 'like', "%{$slug}-%")
+            ;
 
             if (count($slugs)) {
                 $query->whereNotIn('slug', $slugs);
@@ -151,7 +156,8 @@ class Observer
     /**
      * Observer after an extension is uninstalled.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @param \Cartalyst\Extensions\Extension $extension
+     *
      * @return void
      */
     public function afterUninstall(Extension $extension)
@@ -163,6 +169,7 @@ class Observer
         foreach ($menus as $slug => $children) {
             // Build up an array of all the slugs present in the children array
             $slugs = [];
+
             if (is_array($children) and ! empty($children)) {
                 array_walk_recursive($children, function ($value, $key) use (&$slugs) {
                     if ($key === 'slug') {
@@ -190,7 +197,8 @@ class Observer
     /**
      * Observer after an extension is enabled.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @param \Cartalyst\Extensions\Extension $extension
+     *
      * @return void
      */
     public function afterEnable(Extension $extension)
@@ -207,7 +215,8 @@ class Observer
     /**
      * Observer after an extension is disabled.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @param \Cartalyst\Extensions\Extension $extension
+     *
      * @return void
      */
     public function afterDisable(Extension $extension)
@@ -226,7 +235,8 @@ class Observer
      * returnin an array where the key is a menu slug and
      * the value is an array of children.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
+     * @param \Cartalyst\Extensions\Extension $extension
+     *
      * @return array
      */
     protected function extractMenus(Extension $extension)
@@ -259,8 +269,9 @@ class Observer
      * Purges the existing children from the children array and placed
      * the purged items in the existing children.
      *
-     * @param  array  $children
-     * @param  array  $existing
+     * @param array $children
+     * @param array $existing
+     *
      * @return void
      */
     protected function recursivelyPurgeExisting(array &$children, array &$existing)
@@ -284,8 +295,9 @@ class Observer
      * Attempts to place find a match for the child in the existing
      * children and update it's properties.
      *
-     * @param  array  $child
-     * @param  array  $existing
+     * @param array $child
+     * @param array $existing
+     *
      * @return mixed
      */
     protected function findAndUpdateExisting(array $child, array &$existing)
@@ -296,7 +308,7 @@ class Observer
             }
 
             if ($child['slug'] == $existingChild['slug']) {
-                return $existingChild = array_merge($existingChild, array_except($child, 'children'));
+                return $existingChild = array_merge($existingChild, Arr::except($child, 'children'));
             }
         }
 
@@ -307,8 +319,9 @@ class Observer
      * Prepares children for the fancy mapping process that will occur,
      * including validating attributes.
      *
-     * @param  \Cartalyst\Extensions\Extension  $extension
-     * @param  array  $children
+     * @param \Cartalyst\Extensions\Extension $extension
+     * @param array                           $children
+     *
      * @return void
      */
     protected function prepareChildren(Extension $extension, &$children)
@@ -321,7 +334,7 @@ class Observer
             'type'       => 'static',
             'visibility' => 'always',
             'children'   => [],
-            'extension'  =>  $slug,
+            'extension'  => $slug,
         ];
 
         foreach ($children as &$child) {
@@ -342,7 +355,8 @@ class Observer
     /**
      * Strip the guaraded attributes from a tree of children.
      *
-     * @param  array  $children
+     * @param array $children
+     *
      * @return void
      */
     protected function prepareChildrenAttributes(array &$children)
@@ -355,7 +369,7 @@ class Observer
 
         // Loop through the children
         foreach ($children as &$child) {
-            $child = array_except($child, $guarded);
+            $child = Arr::except($child, $guarded);
 
             if (isset($child['roles']) && is_array($child['roles'])) {
                 $child['roles'] = array_values(array_intersect_key($roles, array_flip($child['roles'])));

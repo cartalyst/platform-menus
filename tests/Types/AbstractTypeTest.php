@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -28,9 +28,9 @@ use Cartalyst\Testing\IlluminateTestCase;
 class AbstractTypeTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,8 @@ class AbstractTypeTest extends IlluminateTestCase
     {
         $this->app['translator']->shouldReceive('trans')
             ->with('platform/menus::model.general.type_foo')
-            ->once();
+            ->once()
+        ;
 
         $this->type->getName();
     }
@@ -55,7 +56,8 @@ class AbstractTypeTest extends IlluminateTestCase
 
         $menu->shouldReceive('getAttribute')
             ->with('name')
-            ->once();
+            ->once()
+        ;
 
         $this->type->getNameAttribute($menu);
     }
@@ -68,15 +70,18 @@ class AbstractTypeTest extends IlluminateTestCase
         $menu->shouldReceive('getAttribute')
             ->with('uri')
             ->once()
-            ->andReturn('bar');
+            ->andReturn('bar')
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('secure')
             ->once()
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         $this->app['url']->shouldReceive('to')
-            ->with('foo/bar', [], false);
+            ->with('foo/bar', [], false)
+        ;
 
         $this->type->getUrlAttribute($menu, ['before_uri' => 'foo']);
     }
@@ -88,7 +93,8 @@ class AbstractTypeTest extends IlluminateTestCase
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::types/foo/form', ['child' => $menu])
-            ->once();
+            ->once()
+        ;
 
         $this->type->getFormHtml($menu);
     }
@@ -98,7 +104,8 @@ class AbstractTypeTest extends IlluminateTestCase
     {
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::types/foo/template')
-            ->once();
+            ->once()
+        ;
 
         $this->type->getTemplateHtml();
     }
@@ -107,7 +114,7 @@ class AbstractTypeTest extends IlluminateTestCase
 class FooType extends AbstractType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -115,14 +122,14 @@ class FooType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function afterSave(Menu $child)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeDelete(Menu $child)
     {

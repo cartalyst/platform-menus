@@ -11,11 +11,14 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
+ *
  * @version    8.0.0
+ *
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       https://cartalyst.com
+ *
+ * @see       https://cartalyst.com
  */
 
 namespace Platform\Menus\Tests;
@@ -31,7 +34,7 @@ class DropdownWidgetTest extends IlluminateTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,16 +52,19 @@ class DropdownWidgetTest extends IlluminateTestCase
         $menu->shouldReceive('findChildren')
             ->with(1)
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->menu->shouldReceive('find')
             ->with('foo')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::widgets/dropdown', ['items' => [], 'attributes' => [], 'options' => []], [])
-            ->once();
+            ->once()
+        ;
 
         $widget->show('foo', 1);
     }
@@ -73,10 +79,12 @@ class DropdownWidgetTest extends IlluminateTestCase
         $child = m::mock('Platform\Menus\Models\Menu');
 
         $menu->shouldReceive('getChildren')
-            ->once();
+            ->once()
+        ;
 
         $child->shouldReceive('getChildren')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('setAttribute');
 
@@ -85,39 +93,47 @@ class DropdownWidgetTest extends IlluminateTestCase
         $menu->shouldReceive('getAttribute')
             ->with('id')
             ->once()
-            ->andReturn(1);
+            ->andReturn(1)
+        ;
 
         $child->shouldReceive('getAttribute')
             ->with('id')
             ->once()
-            ->andReturn(2);
+            ->andReturn(2)
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('depth')
             ->once()
-            ->andReturn(1);
+            ->andReturn(1)
+        ;
 
         $child->shouldReceive('getAttribute')
             ->with('depth')
             ->once()
-            ->andReturn(1);
+            ->andReturn(1)
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('children')
             ->once()
-            ->andReturn([$child]);
+            ->andReturn([$child])
+        ;
 
         $child->shouldReceive('getAttribute')
             ->with('children')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::widgets/dropdown', ['items' => [$menu], 'attributes' => [], 'options' => []], [])
-            ->once();
+            ->once()
+        ;
 
         $this->menu->shouldReceive('allRoot')->once()
-            ->andReturn([$menu]);
+            ->andReturn([$menu])
+        ;
 
         $widget->root();
     }

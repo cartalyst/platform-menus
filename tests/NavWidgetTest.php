@@ -11,11 +11,14 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
+ *
  * @version    8.0.0
+ *
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       https://cartalyst.com
+ *
+ * @see       https://cartalyst.com
  */
 
 namespace Platform\Menus\Tests;
@@ -31,7 +34,7 @@ class NavWidgetTest extends IlluminateTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,21 +47,25 @@ class NavWidgetTest extends IlluminateTestCase
     {
         $this->app['url']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url']);
+            ->andReturn($this->app['url'])
+        ;
 
         $this->app['url']->shouldReceive('current')
             ->once()
-            ->andReturn('admin/foo');
+            ->andReturn('admin/foo')
+        ;
 
         $widget = new Nav($this->app['sentinel'], $this->menu);
 
         $this->menu->shouldReceive('find')
             ->with('foo')
-            ->once();
+            ->once()
+        ;
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [], 'cssClass' => ''], [])
-            ->once();
+            ->once()
+        ;
 
         $widget->show('foo', 1);
     }
@@ -68,11 +75,13 @@ class NavWidgetTest extends IlluminateTestCase
     {
         $this->app['url']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url']);
+            ->andReturn($this->app['url'])
+        ;
 
         $this->app['url']->shouldReceive('current')
             ->once()
-            ->andReturn('admin/foo');
+            ->andReturn('admin/foo')
+        ;
 
         $widget = new Nav($this->app['sentinel'], $this->menu);
 
@@ -84,29 +93,34 @@ class NavWidgetTest extends IlluminateTestCase
     {
         $this->app['url']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url']);
+            ->andReturn($this->app['url'])
+        ;
 
         $this->app['url']->shouldReceive('current')
             ->once()
-            ->andReturn('admin/foo');
+            ->andReturn('admin/foo')
+        ;
 
         $widget = new Nav($this->app['sentinel'], $this->menu);
 
-        $menu = m::mock('Platform\Menus\Models\Menu');
+        $menu  = m::mock('Platform\Menus\Models\Menu');
         $child = m::mock('Platform\Menus\Models\Menu');
 
         $menu->shouldReceive('findDisplayableChildren')
             ->with(['always', 'logged_out'], [], 1)
             ->once()
-            ->andReturn([ $menu ]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('getChildren')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $child->shouldReceive('getChildren')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $menu->shouldReceive('setAttribute');
 
@@ -114,60 +128,74 @@ class NavWidgetTest extends IlluminateTestCase
 
         $menu->shouldReceive('getAttribute')
             ->with('children')
-            ->andReturn([ $child ]);
+            ->andReturn([$child])
+        ;
 
         $child->shouldReceive('getAttribute')
             ->with('children')
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('path')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('regex')
-            ->andReturn('/:admin\/foo/i');
+            ->andReturn('/:admin\/foo/i')
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('enabled')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('target')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('uri')
-            ->twice();
+            ->twice()
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('depth')
-            ->once();
+            ->once()
+        ;
 
         $child->shouldReceive('getAttribute')
             ->with('regex')
-            ->once();
+            ->once()
+        ;
 
         $child->shouldReceive('getAttribute');
 
         $menu->shouldReceive('getUrl')
-            ->once();
+            ->once()
+        ;
 
         $child->shouldReceive('getUrl')
-            ->once();
+            ->once()
+        ;
 
         $this->app['sentinel']->shouldReceive('check')
-            ->once();
+            ->once()
+        ;
 
         $this->menu->shouldReceive('find')
             ->with('foo')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
-            ->once();
+            ->once()
+        ;
 
         $widget->show('foo', 1);
     }
@@ -177,11 +205,13 @@ class NavWidgetTest extends IlluminateTestCase
     {
         $this->app['url']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url']);
+            ->andReturn($this->app['url'])
+        ;
 
         $this->app['url']->shouldReceive('current')
             ->once()
-            ->andReturn('admin/foo');
+            ->andReturn('admin/foo')
+        ;
 
         $widget = new Nav($this->app['sentinel'], $this->menu);
 
@@ -190,49 +220,60 @@ class NavWidgetTest extends IlluminateTestCase
         $menu->shouldReceive('findDisplayableChildren')
             ->with(['always', 'logged_out'], [], 1)
             ->once()
-            ->andReturn([ $menu ]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('getChildren')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $menu->shouldReceive('setAttribute');
 
         $menu->shouldReceive('getAttribute')
             ->with('children')
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('uri')
-            ->andReturn('admin/foo');
+            ->andReturn('admin/foo')
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('enabled')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('target')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->with('regex')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('getUrl')
-            ->once();
+            ->once()
+        ;
 
         $this->app['sentinel']->shouldReceive('check')
-            ->once();
+            ->once()
+        ;
 
         $this->menu->shouldReceive('find')
             ->with('foo')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $this->app['view']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
-            ->once();
+            ->once()
+        ;
 
         $widget->show('foo', 1);
     }

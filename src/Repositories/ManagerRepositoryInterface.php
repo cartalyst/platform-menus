@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -35,7 +35,8 @@ interface ManagerRepositoryInterface
     /**
      * Registers an menu type.
      *
-     * @param  \Platform\Menus\Types\TypeInterface  $type
+     * @param \Platform\Menus\Types\TypeInterface $type
+     *
      * @return void
      */
     public function registerType(TypeInterface $type);

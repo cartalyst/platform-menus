@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -21,14 +21,15 @@
 namespace Platform\Menus\Tests;
 
 use Mockery as m;
+use Illuminate\Support\Arr;
 use Cartalyst\Testing\IlluminateTestCase;
 
 class MenuRepositoryTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,11 +49,13 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $model->shouldReceive('allRoot')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $collection = m::mock('Illuminate\Database\Eloquent\Collection');
 
@@ -60,42 +63,52 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
             ->with('platform.menus.all.root', m::on(function ($callback) {
                 $callback();
+
                 return true;
             }))->andReturn($collection);
 
         $collection->shouldReceive('getIterator')
             ->once()
-            ->andReturn($iterator = m::mock('Iterator'));
+            ->andReturn($iterator = m::mock('Iterator'))
+        ;
 
         $iterator->shouldReceive('rewind')
-            ->once();
+            ->once()
+        ;
 
         $iterator->shouldReceive('valid')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $iterator->shouldReceive('valid')
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         $iterator->shouldReceive('current')
             ->once()
-            ->andReturn($menu = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($menu = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $menu->shouldReceive('getChildrenCount')
-            ->andReturn(2);
+            ->andReturn(2)
+        ;
 
         $menu->shouldReceive('setAttribute')
             ->with('items_count', 2)
-            ->once();
+            ->once()
+        ;
 
         $iterator->shouldReceive('next')
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         $this->app['translator']
             ->shouldReceive('transChoice')
             ->with('platform/menus::model.general.items', 2, ['count' => 2], 'messages', '')
             ->once()
-            ->andReturn(2);
+            ->andReturn(2)
+        ;
 
         $this->repository->grid();
     }
@@ -105,16 +118,19 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $model->shouldReceive('findAll')
             ->once()
-            ->andReturn($collection = m::mock('Illuminate\Database\Eloquent\Collection'));
+            ->andReturn($collection = m::mock('Illuminate\Database\Eloquent\Collection'))
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menus.all', m::on(function ($callback) {
                 $callback();
+
                 return true;
             }))->andReturn($collection);
 
@@ -128,11 +144,13 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $model->shouldReceive('allRoot')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $collection = m::mock('Illuminate\Database\Eloquent\Collection');
 
@@ -140,6 +158,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
             ->with('platform.menus.all.root', m::on(function ($callback) {
                 $callback();
+
                 return true;
             }))->andReturn($collection);
 
@@ -163,22 +182,27 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menu.slug.foo', m::on(function ($callback) {
                 $callback();
+
                 return true;
-            }));
+            }))
+        ;
 
         $model->shouldReceive('whereSlug')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('first')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->repository->find('foo');
     }
@@ -191,22 +215,27 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model->shouldReceive('getReservedAttributeName');
 
         $model->shouldReceive('find')
-            ->once();
+            ->once()
+        ;
 
         $model->shouldReceive('where')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menu.root.1', m::on(function ($callback) {
                 $callback();
+
                 return true;
-            }));
+            }))
+        ;
 
         $this->repository->findRoot(1);
     }
@@ -220,26 +249,32 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $model->shouldReceive('where')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menu.root.slug.foo', m::on(function ($callback) {
                 $callback();
+
                 return true;
-            }));
+            }))
+        ;
 
         $model->shouldReceive('whereSlug')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('first')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $this->repository->findRoot('foo');
     }
@@ -251,15 +286,18 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('foo', 'bar')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('first')
-            ->once();
+            ->once()
+        ;
 
         $this->repository->findWhere('foo', 'bar');
     }
@@ -271,15 +309,18 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('foo', 'bar')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('get')
-            ->once();
+            ->once()
+        ;
 
         $this->repository->findAllWhere('foo', 'bar');
     }
@@ -289,24 +330,29 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $this->app['platform.roles']
             ->shouldReceive('findAll')
-            ->once();
+            ->once()
+        ;
 
         $model = $this->shouldReceiveCreateModel(2);
 
         $model->shouldReceive('findAll')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menus.all', m::on(function ($callback) {
                 $callback();
+
                 return true;
             }))
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->app['platform.menus.manager']->shouldReceive('getTypes')
-            ->once();
+            ->once()
+        ;
 
         $preparedMenu = $this->repository->getPreparedMenu(null);
 
@@ -322,24 +368,29 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $this->app['platform.roles']
             ->shouldReceive('findAll')
-            ->once();
+            ->once()
+        ;
 
         $model = $this->shouldReceiveCreateModel(2);
 
         $model->shouldReceive('findAll')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menus.all', m::on(function ($callback) {
                 $callback();
+
                 return true;
             }))
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $this->app['platform.menus.manager']->shouldReceive('getTypes')
-            ->once();
+            ->once()
+        ;
 
         $preparedMenu = $this->repository->getPreparedMenu(null);
 
@@ -359,17 +410,21 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $model->shouldReceive('where')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('find')
-            ->once();
+            ->once()
+        ;
 
         $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menu.root.2', m::on(function ($callback) {
                 $callback();
+
                 return true;
-            }));
+            }))
+        ;
 
         $preparedMenu = $this->repository->getPreparedMenu(2);
 
@@ -384,11 +439,13 @@ class MenuRepositoryTest extends IlluminateTestCase
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('create')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $this->repository->setValidator($this->app['platform.menus.validator']);
 
@@ -405,21 +462,25 @@ class MenuRepositoryTest extends IlluminateTestCase
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('update')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('bind')
             ->with($data)
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $model->shouldReceive('getAttribute')
             ->once()
             ->with('slug')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $this->assertTrue($this->repository->validForUpdate($model, $data));
     }
@@ -452,13 +513,15 @@ class MenuRepositoryTest extends IlluminateTestCase
         $data = ['slug' => 'foo'];
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.creating', [ $data ])
+            ->with('platform.menu.creating', [$data])
             ->once()
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         list($messages, $menu) = $this->repository->create($data);
 
@@ -473,9 +536,10 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model = $this->shouldReceiveFind();
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updating', [ $model, $data ])
+            ->with('platform.menu.updating', [$model, $data])
             ->once()
-            ->andReturn(false);
+            ->andReturn(false)
+        ;
 
         list($messages, $menu) = $this->repository->update(1, $data);
 
@@ -500,11 +564,13 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model = $this->shouldReceiveFind();
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.deleted', [ $model ])
-            ->once();
+            ->with('platform.menu.deleted', [$model])
+            ->once()
+        ;
 
         $model->shouldReceive('deleteWithChildren')
-            ->once();
+            ->once()
+        ;
 
         $this->assertTrue($this->repository->delete(1));
     }
@@ -525,46 +591,56 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model = $this->shouldReceiveFind();
 
         $this->app['platform.menus.validator']->shouldReceive('bypass')
-            ->once();
+            ->once()
+        ;
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updating', [ $model, $data ])
-            ->once();
+            ->with('platform.menu.updating', [$model, $data])
+            ->once()
+        ;
 
         $this->app['platform.menus.handler.data']->shouldReceive('prepare')
             ->once()
-            ->andReturn($data);
+            ->andReturn($data)
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('update')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('bind')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
-            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'));
+            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'))
+        ;
 
         $messages->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $model->shouldReceive('getAttribute')
             ->once()
             ->with('slug')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $model->shouldReceive('setAttribute');
 
         $model->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updated', [ $model ])
-            ->once();
+            ->with('platform.menu.updated', [$model])
+            ->once()
+        ;
 
         list($messages, $menu) = $this->repository->enable(1);
 
@@ -579,46 +655,56 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model = $this->shouldReceiveFind();
 
         $this->app['platform.menus.validator']->shouldReceive('bypass')
-            ->once();
+            ->once()
+        ;
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updating', [ $model, $data ])
-            ->once();
+            ->with('platform.menu.updating', [$model, $data])
+            ->once()
+        ;
 
         $this->app['platform.menus.handler.data']->shouldReceive('prepare')
             ->once()
-            ->andReturn($data);
+            ->andReturn($data)
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('update')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('bind')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
-            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'));
+            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'))
+        ;
 
         $messages->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $model->shouldReceive('getAttribute')
             ->once()
             ->with('slug')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $model->shouldReceive('setAttribute');
 
         $model->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updated', [ $model ])
-            ->once();
+            ->with('platform.menu.updated', [$model])
+            ->once()
+        ;
 
         list($messages, $menu) = $this->repository->disable(1);
 
@@ -628,6 +714,8 @@ class MenuRepositoryTest extends IlluminateTestCase
     /**
      * Repository should receive createModel.
      *
+     * @param mixed $times
+     *
      * @return mixed
      */
     protected function shouldReceiveCreateModel($times = 1)
@@ -636,7 +724,8 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $this->repository->shouldReceive('createModel')
             ->times($times)
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         return $model;
     }
@@ -654,17 +743,21 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $cacheExpectation = $this->app['cache']->shouldReceive('rememberForever')
             ->once()
             ->with('platform.menu.1', m::on(function ($callback) {
                 $callback();
+
                 return true;
-            }));
+            }))
+        ;
 
         $modelExpectation = $model->shouldReceive('find')
-            ->once();
+            ->once()
+        ;
 
         if ($returnModel) {
             $modelExpectation->andReturn($model);
@@ -677,54 +770,65 @@ class MenuRepositoryTest extends IlluminateTestCase
     /**
      * Menu creation expectations.
      *
-     * @param  arary  $data
+     * @param arary $data
+     *
      * @return void
      */
     protected function shouldReceiveCreate($data)
     {
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.creating', [ $data ])
-            ->once();
+            ->with('platform.menu.creating', [$data])
+            ->once()
+        ;
 
         $this->app['events']->shouldReceive('fire')
             ->with('platform.menu.created', m::any())
-            ->once();
+            ->once()
+        ;
 
         $this->app['platform.menus.handler.data']->shouldReceive('prepare')
             ->once()
-            ->andReturn($data);
+            ->andReturn($data)
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('create')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
             ->with($data)
-            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'));
+            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'))
+        ;
 
         $messages->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $this->repository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'));
+            ->andReturn($model = m::mock('Platform\Menus\Models\Menu'))
+        ;
 
         $model->shouldReceive('mapTree')
-            ->once();
+            ->once()
+        ;
 
         $model->shouldReceive('setAttribute');
 
         $model->shouldReceive('makeRoot')
-            ->once();
+            ->once()
+        ;
     }
 
     /**
      * Menu update expectations.
      *
-     * @param  arary  $data
+     * @param arary $data
+     *
      * @return void
      */
     protected function shouldReceiveUpdate($data)
@@ -732,46 +836,56 @@ class MenuRepositoryTest extends IlluminateTestCase
         $model = $this->shouldReceiveFind();
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updating', [ $model, $data ])
-            ->once();
+            ->with('platform.menu.updating', [$model, $data])
+            ->once()
+        ;
 
         $this->app['platform.menus.handler.data']->shouldReceive('prepare')
             ->once()
-            ->andReturn($data);
+            ->andReturn($data)
+        ;
 
         $model->shouldReceive('getAttribute')
             ->once()
             ->with('slug')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
 
         $this->app['events']->shouldReceive('fire')
-            ->with('platform.menu.updated', [ $model ])
-            ->once();
+            ->with('platform.menu.updated', [$model])
+            ->once()
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('on')
             ->with('update')
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('bind')
-            ->with(array_except($data, 'children'))
+            ->with(Arr::except($data, 'children'))
             ->once()
-            ->andReturn($this->app['platform.menus.validator']);
+            ->andReturn($this->app['platform.menus.validator'])
+        ;
 
         $model->shouldReceive('mapTree')
-            ->once();
+            ->once()
+        ;
 
         $this->app['platform.menus.validator']->shouldReceive('validate')
             ->once()
-            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'));
+            ->andReturn($messages = m::mock('Illuminate\Support\MessageBag'))
+        ;
 
         $messages->shouldReceive('isEmpty')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         $model->shouldReceive('setAttribute');
 
         $model->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
     }
 }

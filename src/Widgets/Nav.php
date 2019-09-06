@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -51,8 +51,9 @@ class Nav
     /**
      * Constructor.
      *
-     * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
-     * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
+     * @param \Cartalyst\Sentinel\Sentinel                         $sentinel
+     * @param \Platform\Menus\Repositories\MenuRepositoryInterface $menus
+     *
      * @return void
      */
     public function __construct(Sentinel $sentinel, MenuRepositoryInterface $menus)
@@ -67,11 +68,12 @@ class Nav
     /**
      * Returns navigation HTML based off the current active menu.
      *
-     * @param  string  $slug
-     * @param  string  $depth
-     * @param  string  $cssClass
-     * @param  string  $beforeUri
-     * @param  string  $view
+     * @param string $slug
+     * @param string $depth
+     * @param string $cssClass
+     * @param string $beforeUri
+     * @param string $view
+     *
      * @return \Illuminate\View\View
      */
     public function show($slug, $depth = 0, $cssClass = null, $beforeUri = null, $view = null)
@@ -96,8 +98,9 @@ class Nav
     /**
      * Returns the children for a menu with the given slug.
      *
-     * @param  string  $slug
-     * @param  int  $depth
+     * @param string $slug
+     * @param int    $depth
+     *
      * @return array
      */
     protected function getChildrenForSlug($slug, $depth = 0)
@@ -126,8 +129,9 @@ class Nav
     /**
      * Recursively prepares a child for presentation within the nav widget.
      *
-     * @param  \Platform\Menus\Models\Menu  $child
-     * @param  string  $beforeUri
+     * @param \Platform\Menus\Models\Menu $child
+     * @param string                      $beforeUri
+     *
      * @return void
      */
     protected function prepareChildRecursively(Menu $child, $beforeUri = null)

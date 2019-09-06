@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -19,8 +19,6 @@
  */
 
 return [
-
     'add_item'     => 'Add a new Item',
     'more_options' => 'More options',
-
 ];

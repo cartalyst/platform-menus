@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -21,22 +21,23 @@
 namespace Platform\Menus\Tests;
 
 use Mockery as m;
-use Cartalyst\Testing\IlluminateTestCase;
+use Illuminate\Support\Arr;
 use Platform\Menus\Models\Menu;
+use Cartalyst\Testing\IlluminateTestCase;
 
 class MenuModelTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         // Additional IoC bindings
         $this->app['platform.menus.manager'] = m::mock('Platform\Menus\Repositories\ManagerRepository');
 
-        $this->menu = new Menu();
+        $this->menu       = new Menu();
         $this->menu->type = 'static';
     }
 
@@ -82,7 +83,7 @@ class MenuModelTest extends IlluminateTestCase
 
         $this->menu->roles = $roles;
 
-        $this->assertEquals(json_encode($roles), array_get($this->menu->getAttributes(), 'roles'));
+        $this->assertSame(json_encode($roles), Arr::get($this->menu->getAttributes(), 'roles'));
 
         $this->assertSame($roles, $this->menu->roles);
     }
@@ -93,7 +94,8 @@ class MenuModelTest extends IlluminateTestCase
         $this->app['platform.menus.manager']->shouldReceive('getType')
             ->with('static')
             ->once()
-            ->andReturn($type = m::mock('Platform\Menus\Types\StaticType'));
+            ->andReturn($type = m::mock('Platform\Menus\Types\StaticType'))
+        ;
 
         $this->assertSame($type, $this->menu->getType());
     }
@@ -113,7 +115,8 @@ class MenuModelTest extends IlluminateTestCase
         $this->app['platform.menus.manager']->shouldReceive('getType')
             ->with('static')
             ->once()
-            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]));
+            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]))
+        ;
 
         $this->menu->getIdentifier();
 
@@ -121,24 +124,26 @@ class MenuModelTest extends IlluminateTestCase
         $this->app['platform.menus.manager']->shouldReceive('getType')
             ->with('static')
             ->once()
-            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]));
+            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]))
+        ;
 
         $this->app['url']->shouldReceive('to')
-            ->once();
+            ->once()
+        ;
 
         $this->menu->getUrl();
     }
 
     /**
      * @test
-     * @expectedException \BadMethodCallException
      */
     public function it_can_dynamically_forward_methods_to_the_parent()
     {
         $this->app['platform.menus.manager']->shouldReceive('getType')
             ->with('static')
             ->once()
-            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]));
+            ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]))
+        ;
 
         $this->menu->foo();
     }
@@ -146,7 +151,8 @@ class MenuModelTest extends IlluminateTestCase
     /**
      * Adds a mock connection to the object.
      *
-     * @param  mixed  $model
+     * @param mixed $model
+     *
      * @return void
      */
     protected function shouldFindDisplayableChildren($model)
@@ -155,7 +161,8 @@ class MenuModelTest extends IlluminateTestCase
         $resolver = m::mock('Illuminate\Database\ConnectionResolverInterface');
 
         $resolver->shouldReceive('connection')
-            ->andReturn(m::mock('Illuminate\Database\Connection'));
+            ->andReturn(m::mock('Illuminate\Database\Connection'))
+        ;
 
         // Model
         $model->setConnectionResolver($resolver);
@@ -164,71 +171,87 @@ class MenuModelTest extends IlluminateTestCase
         $connection = $model->getConnection();
 
         $connection->shouldReceive('getPostProcessor')
-            ->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'));
+            ->andReturn($processor = m::mock('Illuminate\Database\Query\Processors\Processor'))
+        ;
 
         $connection->shouldReceive('getName')
-            ->andReturn('mysql');
+            ->andReturn('mysql')
+        ;
 
         $processor->shouldReceive('processSelect')
             ->times(2)
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $connection->shouldReceive('select');
 
         $connection->shouldReceive('table')
             ->twice()
-            ->andReturn($builder = m::mock('Illuminate\Database\Eloquent\Builder'));
+            ->andReturn($builder = m::mock('Illuminate\Database\Eloquent\Builder'))
+        ;
 
         $connection->shouldReceive('getQueryGrammar')
-            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'));
+            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'))
+        ;
 
         // Grammar
         $grammar->shouldReceive('compileSelect');
 
         $grammar->shouldReceive('wrap')
-            ->andReturn($grammar);
+            ->andReturn($grammar)
+        ;
 
         $grammar->shouldReceive('getTablePrefix');
 
         // Builder
         $builder->shouldReceive('join')
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('whereNested')
-            ->with(m::on(function($callback) use ($builder)
-            {
+            ->with(m::on(function ($callback) use ($builder) {
                 $callback($builder);
+
                 return true;
             }))
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('orWhere')
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('orWhereNull')
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('where')
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('mergeBindings')
             ->once()
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('whereIn')
             ->once()
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('orderBy')
             ->once()
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('groupBy')
             ->once()
-            ->andReturn($builder);
+            ->andReturn($builder)
+        ;
 
         $builder->shouldReceive('get')
             ->once()
-            ->andReturn([ $model ]);
+            ->andReturn([$model])
+        ;
     }
 }

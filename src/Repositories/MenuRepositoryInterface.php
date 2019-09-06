@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -48,7 +48,8 @@ interface MenuRepositoryInterface
     /**
      * Returns a menu by its primary key or slug.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Platform\Menus\Models\Menu
      */
     public function find($id);
@@ -56,7 +57,8 @@ interface MenuRepositoryInterface
     /**
      * Returns a menu by its slug.
      *
-     * @param  string  $slug
+     * @param string $slug
+     *
      * @return \Platform\Menus\Models\Menu
      */
     public function findBySlug($slug);
@@ -64,7 +66,8 @@ interface MenuRepositoryInterface
     /**
      * Returns a root menu by its primary key or slug.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Platform\Menus\Models\Menu
      */
     public function findRoot($id);
@@ -72,7 +75,8 @@ interface MenuRepositoryInterface
     /**
      * Returns a root menu by its slug.
      *
-     * @param  string  $slug
+     * @param string $slug
+     *
      * @return \Platform\Menus\Models\Menu
      */
     public function findRootBySlug($slug);
@@ -80,8 +84,9 @@ interface MenuRepositoryInterface
     /**
      * Perform a basic search.
      *
-     * @param  string  $column
-     * @param  mixed  $value
+     * @param string $column
+     * @param mixed  $value
+     *
      * @return \Platform\Menus\Models\Menu
      */
     public function findWhere($column, $value);
@@ -103,7 +108,8 @@ interface MenuRepositoryInterface
     /**
      * Determine if the given menu is valid for creation.
      *
-     * @param  array  $input
+     * @param array $input
+     *
      * @return \Illuminate\Support\MessageBag
      */
     public function validForCreation(array $input);
@@ -111,8 +117,9 @@ interface MenuRepositoryInterface
     /**
      * Determine if the given menu is valid for updating.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
-     * @param  array  $input
+     * @param \Platform\Menus\Models\Menu $menu
+     * @param array                       $input
+     *
      * @return \Illuminate\Support\MessageBag
      */
     public function validForUpdate(Menu $menu, array $input);
@@ -120,49 +127,55 @@ interface MenuRepositoryInterface
     /**
      * Creates a menu with the given data.
      *
-     * @param  array  $input
-     * @return bool|array
+     * @param array $input
+     *
+     * @return array|bool
      */
     public function create(array $input);
 
     /**
      * Updates a menu with the given data.
      *
-     * @param  int  $id
-     * @param  array  $input
-     * @return bool|array
+     * @param int   $id
+     * @param array $input
+     *
+     * @return array|bool
      */
     public function update($id, array $input);
 
     /**
      * Creates or updates the given menu.
      *
-     * @param  int  $id
-     * @param  array  $input
-     * @return bool|array
+     * @param int   $id
+     * @param array $input
+     *
+     * @return array|bool
      */
     public function store($id, array $input);
 
     /**
      * Enables the given menu.
      *
-     * @param  int  $id
-     * @return bool|array
+     * @param int $id
+     *
+     * @return array|bool
      */
     public function enable($id);
 
     /**
      * Disables the given menu.
      *
-     * @param  int  $id
-     * @return bool|array
+     * @param int $id
+     *
+     * @return array|bool
      */
     public function disable($id);
 
     /**
      * Deletes the given menu.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return bool
      */
     public function delete($id);

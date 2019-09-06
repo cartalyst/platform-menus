@@ -1,9 +1,9 @@
 <?php
-$childId   = ! empty($child) ? "{$child->id}_%s" : 'new-child_%s';
-$childName = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
-$mode = ! empty($child) ? 'update' : 'create';
-$parentId = ! empty($parentId) ? $parentId : 0;
-$selectedRoles = ! empty($child) ? $child->roles ?: array() : array();
+$childId       = ! empty($child) ? "{$child->id}_%s" : 'new-child_%s';
+$childName     = ! empty($child) ? "children[{$child->id}][%s]" : 'new-child_%s';
+$mode          = ! empty($child) ? 'update' : 'create';
+$parentId      = ! empty($parentId) ? $parentId : 0;
+$selectedRoles = ! empty($child) ? $child->roles ?: [] : [];
 ?>
 
 <div class="item-form" data-item-form="{{{ ! empty($child) ? $child->id : 'new-child' }}}" data-item-parent="{{{ $parentId }}}">

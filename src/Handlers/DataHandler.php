@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -20,20 +20,22 @@
 
 namespace Platform\Menus\Handlers;
 
+use Illuminate\Support\Arr;
+
 class DataHandler implements DataHandlerInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function prepare(array $data)
     {
-        if (! array_get($data, 'menu-name')) {
+        if (! Arr::get($data, 'menu-name')) {
             return $data;
         }
 
         return [
-            'name'     => array_get($data, 'menu-name'),
-            'slug'     => array_get($data, 'menu-slug'),
+            'name'     => Arr::get($data, 'menu-name'),
+            'slug'     => Arr::get($data, 'menu-slug'),
             'children' => $this->processSubmittedTree($data),
         ];
     }
@@ -41,13 +43,14 @@ class DataHandler implements DataHandlerInterface
     /**
      * Processes the submitted menu tree data.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return array
      */
     protected function processSubmittedTree(array $data)
     {
         // Get the tree
-        $tree = json_decode(array_get($data, 'menu-tree', ''), true) ?: [];
+        $tree = json_decode(Arr::get($data, 'menu-tree', ''), true) ?: [];
 
         // Prepare our children
         $children = [];
@@ -66,8 +69,9 @@ class DataHandler implements DataHandlerInterface
      * POST data so that we can structure a nice tree of
      * pure data to send off to the API.
      *
-     * @param  array  $child
-     * @param  array  $children
+     * @param array $child
+     * @param array $children
+     *
      * @return void
      */
     protected function processChildRecursively($child, &$children)
@@ -81,16 +85,16 @@ class DataHandler implements DataHandlerInterface
 
         // Prepare the new child data
         $prepared = [
-            'name'       => array_get($data, 'name'),
-            'slug'       => array_get($data, 'slug'),
-            'enabled'    => array_get($data, 'enabled', 1),
-            'type'       => $type = array_get($data, 'type', 'static'),
-            'secure'     => array_get($data, 'secure'),
-            'visibility' => array_get($data, 'visibility', 'always'),
-            'roles'      => (array) array_get($data, 'roles', []),
-            'class'      => array_get($data, 'class'),
-            'target'     => array_get($data, 'target'),
-            'regex'      => array_get($data, 'regex'),
+            'name'       => Arr::get($data, 'name'),
+            'slug'       => Arr::get($data, 'slug'),
+            'enabled'    => Arr::get($data, 'enabled', 1),
+            'type'       => $type = Arr::get($data, 'type', 'static'),
+            'secure'     => Arr::get($data, 'secure'),
+            'visibility' => Arr::get($data, 'visibility', 'always'),
+            'roles'      => (array) Arr::get($data, 'roles', []),
+            'class'      => Arr::get($data, 'class'),
+            'target'     => Arr::get($data, 'target'),
+            'regex'      => Arr::get($data, 'regex'),
         ];
 
         // Only append the menu item id if we are
@@ -100,7 +104,7 @@ class DataHandler implements DataHandlerInterface
         }
 
         // Attach the menu type data
-        $prepared = array_merge($prepared, array_get($data, $type, []));
+        $prepared = array_merge($prepared, Arr::get($data, $type, []));
 
         // If we have children, call the function again
         if (! empty($child['children']) && is_array($child['children']) && count($child['children']) > 0) {

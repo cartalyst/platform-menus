@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -19,9 +19,7 @@
  */
 
 return [
-
     'general' => [
-
         'create' => [
             'legend'      => 'Create New Link',
             'description' => 'Add a new navigation item.',
@@ -95,9 +93,7 @@ return [
         'items_count' => '# of Items',
         'items'       => '{0} No items|{1} 1 item|[2,*] :count items',
 
-        'item_details' => 'Details',
+        'item_details'      => 'Details',
         'advanced_settings' => 'Advanced Settings',
-
     ],
-
 ];

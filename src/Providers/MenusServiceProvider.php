@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -26,7 +26,7 @@ use Cartalyst\Support\ServiceProvider;
 class MenusServiceProvider extends ServiceProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function boot()
     {
@@ -45,17 +45,25 @@ class MenusServiceProvider extends ServiceProvider
 
         $this->app['Platform\Menus\Models\Menu']->observe($observer);
 
-        Extension::enabled(function ($e) use ($observer) { $observer->afterEnable($e); });
+        Extension::enabled(function ($e) use ($observer) {
+            $observer->afterEnable($e);
+        });
 
-        Extension::disabled(function ($e) use ($observer) { $observer->afterDisable($e); });
+        Extension::disabled(function ($e) use ($observer) {
+            $observer->afterDisable($e);
+        });
 
-        Extension::installed(function ($e) use ($observer) { $observer->afterInstall($e); });
+        Extension::installed(function ($e) use ($observer) {
+            $observer->afterInstall($e);
+        });
 
-        Extension::uninstalled(function ($e) use ($observer) { $observer->afterUninstall($e); });
+        Extension::uninstalled(function ($e) use ($observer) {
+            $observer->afterUninstall($e);
+        });
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function register()
     {
@@ -130,14 +138,12 @@ class MenusServiceProvider extends ServiceProvider
      */
     protected function registerBladeWidgets()
     {
-        $this->app['blade.compiler']->directive('nav', function($value)
-        {
-            return "<?php echo app('widgets')->make('platform/menus::nav.show', array($value)); ?>";
+        $this->app['blade.compiler']->directive('nav', function ($value) {
+            return "<?php echo app('widgets')->make('platform/menus::nav.show', array(${value})); ?>";
         });
 
-        $this->app['blade.compiler']->directive('dropdown', function($value)
-        {
-            return "<?php echo app('widgets')->make('platform/menus::dropdown.show', array($value)); ?>";
+        $this->app['blade.compiler']->directive('dropdown', function ($value) {
+            return "<?php echo app('widgets')->make('platform/menus::dropdown.show', array(${value})); ?>";
         });
     }
 }

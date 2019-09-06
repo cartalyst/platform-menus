@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -22,8 +22,8 @@ namespace Platform\Menus\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cartalyst\Attributes\EntityInterface;
-use Illuminate\Database\Query\Expression;
 use Cartalyst\NestedSets\Nodes\NodeTrait;
+use Illuminate\Database\Query\Expression;
 use Platform\Attributes\Traits\EntityTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Cartalyst\NestedSets\Nodes\NodeInterface;
@@ -34,17 +34,17 @@ class Menu extends Model implements EntityInterface, NodeInterface
     use EntityTrait, NamespacedEntityTrait, NodeTrait;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $table = 'menus';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $primaryKey = 'id';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $fillable = [
         'slug',
@@ -63,7 +63,7 @@ class Menu extends Model implements EntityInterface, NodeInterface
     ];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $reservedAttributes = [
         'left'  => 'lft',
@@ -72,7 +72,7 @@ class Menu extends Model implements EntityInterface, NodeInterface
     ];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected static $entityNamespace = 'platform/menus';
 
@@ -86,7 +86,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Get accessor for the "enabled" attribute.
      *
-     * @param  int  $enabled
+     * @param int $enabled
+     *
      * @return bool
      */
     public function getEnabledAttribute($enabled)
@@ -97,7 +98,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Get accessor for the "secure" attribute.
      *
-     * @param  mixed  $secure
+     * @param mixed $secure
+     *
      * @return bool
      */
     public function getSecureAttribute($secure)
@@ -110,7 +112,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Get accessor for the "secure" attribute.
      *
-     * @param  mixed  $secure
+     * @param mixed $secure
+     *
      * @return void
      */
     public function setSecureAttribute($secure)
@@ -125,7 +128,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Get accessor for the "roles" attribute.
      *
-     * @param  string  $roles
+     * @param string $roles
+     *
      * @return array
      */
     public function getRolesAttribute($roles)
@@ -136,7 +140,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Set mutator for the "roles" attribute.
      *
-     * @param  array  $roles
+     * @param array $roles
+     *
      * @return void
      */
     public function setRolesAttribute($roles)
@@ -164,9 +169,10 @@ class Menu extends Model implements EntityInterface, NodeInterface
      * Filters children and returns an array of children
      * which satisfy any of the provided visibilities.
      *
-     * @param  array  $visibilities
-     * @param  array  $roles
-     * @param  int  $depth
+     * @param array $visibilities
+     * @param array $roles
+     * @param int   $depth
+     *
      * @return array
      */
     public function findDisplayableChildren(array $visibilities, array $roles = [], $depth = 0)
@@ -196,12 +202,12 @@ class Menu extends Model implements EntityInterface, NodeInterface
                         new Expression($worker->wrap('node.roles')),
                         ''
                     )
-                    ->orWhereNull(
+                        ->orWhereNull(
                         new Expression($worker->wrap('node.roles'))
-                    );
+                    )
+                    ;
                 });
             }
-
         }, $depth);
 
         Collection::make($children)->load('page');
@@ -218,8 +224,9 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Filters children pages based on their visibility settings.
      *
-     * @param  array  $children
-     * @param  array  $visibilities
+     * @param array $children
+     * @param array $visibilities
+     *
      * @return void
      */
     protected function filterChildrenPageVisibility(array &$children, array $visibilities = [])
@@ -232,6 +239,7 @@ class Menu extends Model implements EntityInterface, NodeInterface
             if ($page = $child->page) {
                 if (! in_array($page->visibility, $visibilities)) {
                     unset($children[$index]);
+
                     continue;
                 }
             }
@@ -245,7 +253,8 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Filters enabled children.
      *
-     * @param  array  $children
+     * @param array $children
+     *
      * @return void
      */
     protected function filterChildrenStatus(array &$children)
@@ -253,11 +262,13 @@ class Menu extends Model implements EntityInterface, NodeInterface
         foreach ($children as $index => $child) {
             if (! $child->enabled) {
                 unset($children[$index]);
+
                 continue;
             }
 
             if (($page = $child->page) && ! $page->enabled) {
                 unset($children[$index]);
+
                 continue;
             }
 
@@ -272,8 +283,9 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Filters children based on their roles.
      *
-     * @param  array  $children
-     * @param  array  $roles
+     * @param array $children
+     * @param array $roles
+     *
      * @return void
      */
     protected function filterChildrenRoles(array &$children, array $roles = [])
@@ -288,12 +300,14 @@ class Menu extends Model implements EntityInterface, NodeInterface
 
                 if (count($matching) === 0) {
                     unset($children[$index]);
+
                     continue;
                 }
 
                 if ($page = $child->page) {
                     if (count(array_intersect($page->roles, $roles)) === 0) {
                         unset($children[$index]);
+
                         continue;
                     }
                 }
@@ -320,8 +334,9 @@ class Menu extends Model implements EntityInterface, NodeInterface
     /**
      * Handle dynamic method calls into the method.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -343,7 +358,7 @@ class Menu extends Model implements EntityInterface, NodeInterface
         if ($methodFound) {
             array_unshift($parameters, $this);
 
-            return call_user_func_array([ $type, $method ], $parameters);
+            return call_user_func_array([$type, $method], $parameters);
         }
 
         return parent::__call($method, $parameters);

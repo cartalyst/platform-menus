@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -20,6 +20,7 @@
 
 namespace Platform\Menus\Types;
 
+use Illuminate\Support\Arr;
 use Platform\Menus\Models\Menu;
 use Illuminate\Container\Container;
 
@@ -56,7 +57,8 @@ abstract class AbstractType
     /**
      * Create a new type.
      *
-     * @param  \Illuminate\Container\Container  $app
+     * @param \Illuminate\Container\Container $app
+     *
      * @return void
      */
     public function __construct(Container $app)
@@ -90,7 +92,8 @@ abstract class AbstractType
     /**
      * Get the name for the menu child.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param \Platform\Menus\Menu $child
+     *
      * @return string
      */
     public function getNameAttribute(Menu $child)
@@ -101,15 +104,16 @@ abstract class AbstractType
     /**
      * Get the URL for the menu child.
      *
-     * @param  \Platform\Menus\Menu  $child
-     * @param  array  $options
+     * @param \Platform\Menus\Menu $child
+     * @param array                $options
+     *
      * @return string
      */
     public function getUrlAttribute(Menu $child, array $options = [])
     {
         $uri = $child->uri;
 
-        if ($beforeUri = array_get($options, 'before_uri')) {
+        if ($beforeUri = Arr::get($options, 'before_uri')) {
             $uri = "{$beforeUri}/{$uri}";
         }
 
@@ -120,7 +124,8 @@ abstract class AbstractType
      * Return the form HTML template for a edit child of this type as well
      * as creating new children.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param \Platform\Menus\Menu $child
+     *
      * @return \View
      */
     public function getFormHtml(Menu $child = null)
@@ -141,7 +146,8 @@ abstract class AbstractType
     /**
      * Event that is called after a menu children is saved.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param \Platform\Menus\Menu $child
+     *
      * @return void
      */
     abstract public function afterSave(Menu $child);
@@ -149,7 +155,8 @@ abstract class AbstractType
     /**
      * Event that is called before a children is deleted.
      *
-     * @param  \Platform\Menus\Menu  $child
+     * @param \Platform\Menus\Menu $child
+     *
      * @return void
      */
     abstract public function beforeDelete(Menu $child);

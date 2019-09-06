@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -35,7 +35,8 @@ class Dropdown
     /**
      * Constructor.
      *
-     * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
+     * @param \Platform\Menus\Repositories\MenuRepositoryInterface $menus
+     *
      * @return void
      */
     public function __construct(MenuRepositoryInterface $menus)
@@ -46,9 +47,10 @@ class Dropdown
     /**
      * Returns an HTML dropdown with all the root menus.
      *
-     * @param  int  $current
-     * @param  array  $attributes
-     * @param  array  $options
+     * @param int   $current
+     * @param array $attributes
+     * @param array $options
+     *
      * @return \Illuminate\View\View
      */
     public function root($current = null, array $attributes = [], array $options = [])
@@ -60,11 +62,12 @@ class Dropdown
      * Returns an HTML dropdown with all the children of
      * the provided menu slug.
      *
-     * @param  string  $slug
-     * @param  int  $depth
-     * @param  int  $current
-     * @param  array  $attributes
-     * @param  array  $options
+     * @param string $slug
+     * @param int    $depth
+     * @param int    $current
+     * @param array  $attributes
+     * @param array  $options
+     *
      * @return \Illuminate\View\View
      */
     public function show($slug, $depth, $current = null, array $attributes = [], array $options = [])
@@ -77,10 +80,11 @@ class Dropdown
     /**
      * Render the view with the dropdown items.
      *
-     * @param  array  $items
-     * @param  int  $current
-     * @param  array  $attributes
-     * @param  array  $options
+     * @param array $items
+     * @param int   $current
+     * @param array $attributes
+     * @param array $options
+     *
      * @return \Illuminate\View\View
      */
     protected function renderDropdown(array $items, $current, array $attributes, array $options)
@@ -99,8 +103,9 @@ class Dropdown
     /**
      * Recursively prepares the items for presentation.
      *
-     * @param  \Platform\Menus\Models\Menu  $item
-     * @param  string  $current
+     * @param \Platform\Menus\Models\Menu $item
+     * @param string                      $current
+     *
      * @return void
      */
     protected function prepareItemsRecursively(Menu $item, $current = null)
@@ -123,7 +128,8 @@ class Dropdown
     /**
      * Prepares attributes as a string.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return string
      */
     protected function attributes($attributes)

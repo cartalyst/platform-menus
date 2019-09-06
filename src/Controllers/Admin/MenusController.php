@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -47,7 +47,8 @@ class MenusController extends AdminController
     /**
      * Constructor.
      *
-     * @param  \Platform\Menus\Repositories\MenuRepositoryInterface  $menus
+     * @param \Platform\Menus\Repositories\MenuRepositoryInterface $menus
+     *
      * @return void
      */
     public function __construct(MenuRepositoryInterface $menus)
@@ -120,7 +121,8 @@ class MenusController extends AdminController
     /**
      * Shows the form for updating a menu.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return mixed
      */
     public function edit($id)
@@ -131,7 +133,8 @@ class MenusController extends AdminController
     /**
      * Handles posting of the form for updating a menu.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
@@ -142,7 +145,8 @@ class MenusController extends AdminController
     /**
      * Removes the specified menu.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function delete($id)
@@ -181,8 +185,9 @@ class MenusController extends AdminController
     /**
      * Shows the form.
      *
-     * @param  string  $mode
-     * @param  mixed  $id
+     * @param string $mode
+     * @param mixed  $id
+     *
      * @return mixed
      */
     protected function showForm($mode, $id = null)
@@ -219,8 +224,9 @@ class MenusController extends AdminController
     /**
      * Processes the form.
      *
-     * @param  string  $mode
-     * @param  mixed  $id
+     * @param string $mode
+     * @param mixed  $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function processForm($mode, $id = null)

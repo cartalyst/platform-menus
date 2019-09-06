@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -27,9 +27,9 @@ use Platform\Menus\Handlers\EventHandler;
 class MenusEventHandlerTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,23 +44,28 @@ class MenusEventHandlerTest extends IlluminateTestCase
 
         $this->app['events']->shouldReceive('listen')
             ->once()
-            ->with('platform.menu.creating', $class.'@creating');
+            ->with('platform.menu.creating', $class.'@creating')
+        ;
 
         $this->app['events']->shouldReceive('listen')
             ->once()
-            ->with('platform.menu.created', $class.'@created');
+            ->with('platform.menu.created', $class.'@created')
+        ;
 
         $this->app['events']->shouldReceive('listen')
             ->once()
-            ->with('platform.menu.updating', $class.'@updating');
+            ->with('platform.menu.updating', $class.'@updating')
+        ;
 
         $this->app['events']->shouldReceive('listen')
             ->once()
-            ->with('platform.menu.updated', $class.'@updated');
+            ->with('platform.menu.updated', $class.'@updated')
+        ;
 
         $this->app['events']->shouldReceive('listen')
             ->once()
-            ->with('platform.menu.deleted', $class.'@deleted');
+            ->with('platform.menu.deleted', $class.'@deleted')
+        ;
 
         $this->handler->subscribe($this->app['events']);
     }
@@ -98,43 +103,52 @@ class MenusEventHandlerTest extends IlluminateTestCase
     /**
      * Sets expected method calls for flushing cache.
      *
-     * @param  \Platform\Content\Models\Content  $menu
+     * @param \Platform\Content\Models\Content $menu
+     *
      * @return void
      */
     protected function shouldFlushCache($menu)
     {
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with("platform.menu.1");
+            ->with('platform.menu.1')
+        ;
 
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with('platform.menu.root.1');
+            ->with('platform.menu.root.1')
+        ;
 
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with('platform.menu.slug.foo');
+            ->with('platform.menu.slug.foo')
+        ;
 
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with('platform.menu.root.slug.foo');
+            ->with('platform.menu.root.slug.foo')
+        ;
 
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with('platform.menus.all');
+            ->with('platform.menus.all')
+        ;
 
         $this->app['cache']->shouldReceive('forget')
             ->once()
-            ->with('platform.menus.all.root');
+            ->with('platform.menus.all.root')
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->twice()
             ->with('id')
-            ->andReturn(1);
+            ->andReturn(1)
+        ;
 
         $menu->shouldReceive('getAttribute')
             ->twice()
             ->with('slug')
-            ->andReturn('foo');
+            ->andReturn('foo')
+        ;
     }
 }

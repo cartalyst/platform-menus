@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -20,16 +20,15 @@
 
 namespace Platform\Menus\Tests\Types;
 
-use Mockery as m;
-use Cartalyst\Testing\IlluminateTestCase;
 use Platform\Menus\Types\StaticType;
+use Cartalyst\Testing\IlluminateTestCase;
 
 class StaticTypeTest extends IlluminateTestCase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -40,6 +39,6 @@ class StaticTypeTest extends IlluminateTestCase
     /** @test */
     public function it_has_static_identifier()
     {
-        $this->assertEquals('static', $this->type->getIdentifier());
+        $this->assertSame('static', $this->type->getIdentifier());
     }
 }

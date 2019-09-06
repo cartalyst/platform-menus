@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -20,7 +20,6 @@
 
 namespace Platform\Menus\Repositories;
 
-use Platform\Menus\Models\Menu;
 use Platform\Menus\Types\TypeInterface;
 
 class ManagerRepository implements ManagerRepositoryInterface
@@ -33,7 +32,7 @@ class ManagerRepository implements ManagerRepositoryInterface
     protected $types = [];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTypes()
     {
@@ -41,7 +40,7 @@ class ManagerRepository implements ManagerRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getType($type)
     {
@@ -51,7 +50,7 @@ class ManagerRepository implements ManagerRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function registerType(TypeInterface $type)
     {

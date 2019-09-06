@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -28,7 +28,8 @@ interface EventHandlerInterface extends BaseEventHandlerInterface
     /**
      * When a menu is being created.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return mixed
      */
     public function creating(array $data);
@@ -36,7 +37,8 @@ interface EventHandlerInterface extends BaseEventHandlerInterface
     /**
      * When a menu is created.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
+     * @param \Platform\Menus\Models\Menu $menu
+     *
      * @return mixed
      */
     public function created(Menu $menu);
@@ -44,8 +46,9 @@ interface EventHandlerInterface extends BaseEventHandlerInterface
     /**
      * When a menu is being updated.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
-     * @param  array  $data
+     * @param \Platform\Menus\Models\Menu $menu
+     * @param array                       $data
+     *
      * @return mixed
      */
     public function updating(Menu $menu, array $data);
@@ -53,7 +56,8 @@ interface EventHandlerInterface extends BaseEventHandlerInterface
     /**
      * When a menu is updated.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
+     * @param \Platform\Menus\Models\Menu $menu
+     *
      * @return mixed
      */
     public function updated(Menu $menu);
@@ -61,7 +65,8 @@ interface EventHandlerInterface extends BaseEventHandlerInterface
     /**
      * When a menu is deleted.
      *
-     * @param  \Platform\Menus\Models\Menu  $menu
+     * @param \Platform\Menus\Models\Menu $menu
+     *
      * @return mixed
      */
     public function deleted(Menu $menu);

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE
@@ -21,17 +21,17 @@
 namespace Platform\Menus\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Platform\Menus\Validator\MenusValidator;
 
-class MenusValidatorTest extends PHPUnit_Framework_TestCase
+class MenusValidatorTest extends TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -41,7 +41,7 @@ class MenusValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->validator = new MenusValidator(m::mock('Illuminate\Validation\Factory'));
     }
@@ -54,12 +54,12 @@ class MenusValidatorTest extends PHPUnit_Framework_TestCase
             'slug' => 'required|unique:menus',
         ];
 
-        $this->assertEquals($rules, $this->validator->getRules());
+        $this->assertSame($rules, $this->validator->getRules());
 
         $this->validator->onUpdate();
 
         $rules['slug'] .= ',slug,{slug},slug';
 
-        $this->assertEquals($rules, $this->validator->getRules());
+        $this->assertSame($rules, $this->validator->getRules());
     }
 }

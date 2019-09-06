@@ -1,4 +1,4 @@
-/**
+/*
  * Part of the Platform Menus extension.
  *
  * NOTICE OF LICENSE

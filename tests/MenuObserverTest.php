@@ -11,11 +11,14 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
+ *
  * @version    8.0.0
+ *
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       https://cartalyst.com
+ *
+ * @see       https://cartalyst.com
  */
 
 namespace Platform\Menus\Tests;
@@ -32,7 +35,7 @@ class MenuObserverTest extends IlluminateTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -53,15 +56,18 @@ class MenuObserverTest extends IlluminateTestCase
 
         $this->menu->shouldReceive('getManager')
             ->once()
-            ->andReturn($manager = m::mock('Platform\Menus\Repositories\ManagerRepository'));
+            ->andReturn($manager = m::mock('Platform\Menus\Repositories\ManagerRepository'))
+        ;
 
         $manager->shouldReceive('getType')
             ->once()
-            ->andReturn($type = m::mock('Platform\Menus\Types\StaticType'));
+            ->andReturn($type = m::mock('Platform\Menus\Types\StaticType'))
+        ;
 
         $type->shouldReceive('afterSave')
             ->with($menu)
-            ->once();
+            ->once()
+        ;
 
         $this->observer->updating($menu);
     }
@@ -74,9 +80,7 @@ class MenuObserverTest extends IlluminateTestCase
         $menu = m::mock('Platform\Menus\Models\Menu');
 
         $menus = [
-
             'admin' => [
-
                 [
                     'slug'  => 'admin-menus',
                     'name'  => 'Menus',
@@ -84,27 +88,29 @@ class MenuObserverTest extends IlluminateTestCase
                     'roles' => ['admin', 'subscribers'],
                     'regex' => '/:admin\/menus/i',
                 ],
-
             ],
-
         ];
 
         $extension->shouldReceive('getAttribute')
             ->with('menus')
             ->once()
-            ->andReturn($menus);
+            ->andReturn($menus)
+        ;
 
         $extension->shouldReceive('getSlug')
             ->times(4)
-            ->andReturn('foo/bar');
+            ->andReturn('foo/bar')
+        ;
 
         $this->menu->shouldReceive('createModel')
             ->times(4)
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $this->menu->shouldReceive('findBySlug')
             ->with('admin')
-            ->once();
+            ->once()
+        ;
 
         $this->menu->shouldReceive('create')
             ->with([
@@ -112,46 +118,57 @@ class MenuObserverTest extends IlluminateTestCase
                 'menu-slug' => 'admin',
             ])
             ->once()
-            ->andReturn([null, $menu]);
+            ->andReturn([null, $menu])
+        ;
 
         $menu->shouldReceive('findChildren')
             ->once()
-            ->andReturn([]);
+            ->andReturn([])
+        ;
 
         $menu->shouldReceive('getKey')
             ->once()
-            ->andReturn('id');
+            ->andReturn('id')
+        ;
 
         $menu->shouldReceive('whereMenu')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('whereExtension')
             ->twice()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('where')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('whereNotIn')
             ->with('slug', ['admin-menus'])
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('get')
             ->twice()
-            ->andReturn([$menu]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('refresh')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('delete')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('toArray')
             ->once()
-            ->andReturn(['children' => []]);
+            ->andReturn(['children' => []])
+        ;
 
         $menu->shouldReceive('getGuarded')
             ->twice()
@@ -162,33 +179,38 @@ class MenuObserverTest extends IlluminateTestCase
                 'depth',
                 'created_at',
                 'updated_at',
-            ]);
+            ])
+        ;
 
         $this->app['sentinel.roles']->shouldReceive('createModel')
             ->twice()
-            ->andReturn($role = m::mock('Platform\Roles\Models\Role'));
+            ->andReturn($role = m::mock('Platform\Roles\Models\Role'))
+        ;
 
         $role->shouldReceive('pluck')
             ->with('id', 'slug')
             ->twice()
             ->andReturn(new Collection([
                 [
-                    'id' => 1,
+                    'id'   => 1,
                     'slug' => 'admin',
                 ],
                 [
-                    'id' => 2,
+                    'id'   => 2,
                     'slug' => 'subscribers',
                 ],
-            ]));
+            ]))
+        ;
 
         $menu->shouldReceive('mapTreeAndKeep')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('setAttribute');
 
         $menu->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $this->observer->afterInstall($extension);
     }
@@ -203,34 +225,42 @@ class MenuObserverTest extends IlluminateTestCase
         $extension->shouldReceive('getAttribute')
             ->with('menus')
             ->once()
-            ->andReturn([['slug' => 'foo', 'roles' => ['admin', 'subscribers']]]);
+            ->andReturn([['slug' => 'foo', 'roles' => ['admin', 'subscribers']]])
+        ;
 
         $this->menu->shouldReceive('createModel')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $extension->shouldReceive('getSlug')
             ->once()
-            ->andReturn('foo/bar');
+            ->andReturn('foo/bar')
+        ;
 
         $menu->shouldReceive('orWhereIn')
             ->once()
             ->with('slug', ['foo'])
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('whereExtension')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('get')
             ->once()
-            ->andReturn([$menu]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('refresh')
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('delete')
-            ->once();
+            ->once()
+        ;
 
         $this->observer->afterUninstall($extension);
     }
@@ -244,26 +274,32 @@ class MenuObserverTest extends IlluminateTestCase
 
         $extension->shouldReceive('getSlug')
             ->once()
-            ->andReturn('foo/bar');
+            ->andReturn('foo/bar')
+        ;
 
         $this->menu->shouldReceive('createModel')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('whereExtension')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('get')
             ->once()
-            ->andReturn([$menu]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('setAttribute')
             ->with('enabled', true)
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $this->observer->afterEnable($extension);
     }
@@ -277,26 +313,32 @@ class MenuObserverTest extends IlluminateTestCase
 
         $extension->shouldReceive('getSlug')
             ->once()
-            ->andReturn('foo/bar');
+            ->andReturn('foo/bar')
+        ;
 
         $this->menu->shouldReceive('createModel')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('whereExtension')
             ->once()
-            ->andReturn($menu);
+            ->andReturn($menu)
+        ;
 
         $menu->shouldReceive('get')
             ->once()
-            ->andReturn([$menu]);
+            ->andReturn([$menu])
+        ;
 
         $menu->shouldReceive('setAttribute')
             ->with('enabled', false)
-            ->once();
+            ->once()
+        ;
 
         $menu->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $this->observer->afterDisable($extension);
     }
