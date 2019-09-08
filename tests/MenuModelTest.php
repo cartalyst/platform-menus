@@ -28,6 +28,18 @@ use Cartalyst\Testing\IlluminateTestCase;
 class MenuModelTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -127,7 +139,7 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]))
         ;
 
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
         ;
 
@@ -144,6 +156,8 @@ class MenuModelTest extends IlluminateTestCase
             ->once()
             ->andReturn(m::mock('Platform\Menus\Types\StaticType[getTypes]', [$this->app]))
         ;
+
+        $this->menu->query()->shouldReceive('foo');
 
         $this->menu->foo();
     }
@@ -178,11 +192,6 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn('mysql')
         ;
 
-        $processor->shouldReceive('processSelect')
-            ->times(2)
-            ->andReturn([])
-        ;
-
         $connection->shouldReceive('select');
 
         $connection->shouldReceive('table')
@@ -190,8 +199,34 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn($builder = m::mock('Illuminate\Database\Eloquent\Builder'))
         ;
 
+        $connection->shouldReceive('query')
+            ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'))
+        ;
+
         $connection->shouldReceive('getQueryGrammar')
             ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'))
+        ;
+
+        $query->shouldReceive('from');
+
+        $query->shouldReceive('where');
+
+        $query->shouldReceive('whereNotNull');
+
+        $query->shouldReceive('get')
+            ->andReturn($collection = m::mock('Illuminate\Database\Eloquent\Collection'))
+        ;
+
+        $query->shouldReceive('getConnection')
+            ->andReturn($connection)
+        ;
+
+        $query->shouldReceive('whereIntegerInRaw')
+            ->once()
+        ;
+
+        $collection->shouldReceive('all')
+            ->andReturn([])
         ;
 
         // Grammar

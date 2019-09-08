@@ -28,6 +28,18 @@ use Cartalyst\Testing\IlluminateTestCase;
 class AbstractTypeTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -79,7 +91,7 @@ class AbstractTypeTest extends IlluminateTestCase
             ->andReturn(false)
         ;
 
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->with('foo/bar', [], false)
         ;
 
@@ -91,7 +103,7 @@ class AbstractTypeTest extends IlluminateTestCase
     {
         $menu = m::mock('Platform\Menus\Models\Menu');
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::types/foo/form', ['child' => $menu])
             ->once()
         ;
@@ -102,7 +114,7 @@ class AbstractTypeTest extends IlluminateTestCase
     /** @test */
     public function it_can_retrieve_the_template_html()
     {
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::types/foo/template')
             ->once()
         ;

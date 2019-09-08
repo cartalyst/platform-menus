@@ -43,7 +43,7 @@ abstract class AbstractType
     /**
      * The View Factory.
      *
-     * @var \Illuminate\View\Factory
+     * @var \Illuminate\Contracts\View\Factory
      */
     protected $view;
 
@@ -65,9 +65,9 @@ abstract class AbstractType
     {
         $this->app = $app;
 
-        $this->url = $this->app['url'];
+        $this->url = $this->app['Illuminate\Contracts\Routing\UrlGenerator'];
 
-        $this->view = $this->app['view'];
+        $this->view = $this->app['Illuminate\Contracts\View\Factory'];
 
         $this->translator = $this->app['translator'];
     }

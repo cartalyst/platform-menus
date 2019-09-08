@@ -30,6 +30,18 @@ use Cartalyst\Testing\IlluminateTestCase;
 class NavWidgetTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * Setup.
      *
      * @return void
@@ -45,12 +57,12 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_return_without_childs()
     {
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url'])
+            ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])
         ;
 
-        $this->app['url']->shouldReceive('current')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('current')
             ->once()
             ->andReturn('admin/foo')
         ;
@@ -62,7 +74,7 @@ class NavWidgetTest extends IlluminateTestCase
             ->once()
         ;
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [], 'cssClass' => ''], [])
             ->once()
         ;
@@ -73,12 +85,12 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_returns_null_on_exception()
     {
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url'])
+            ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])
         ;
 
-        $this->app['url']->shouldReceive('current')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('current')
             ->once()
             ->andReturn('admin/foo')
         ;
@@ -91,12 +103,12 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_show_a_menu_with_regex()
     {
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url'])
+            ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])
         ;
 
-        $this->app['url']->shouldReceive('current')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('current')
             ->once()
             ->andReturn('admin/foo')
         ;
@@ -192,7 +204,7 @@ class NavWidgetTest extends IlluminateTestCase
             ->andReturn($menu)
         ;
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
             ->once()
         ;
@@ -203,12 +215,12 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_show_a_menu_without_regex()
     {
-        $this->app['url']->shouldReceive('to')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
-            ->andReturn($this->app['url'])
+            ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])
         ;
 
-        $this->app['url']->shouldReceive('current')
+        $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('current')
             ->once()
             ->andReturn('admin/foo')
         ;
@@ -270,7 +282,7 @@ class NavWidgetTest extends IlluminateTestCase
             ->andReturn($menu)
         ;
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::widgets/nav', ['children' => [$menu], 'cssClass' => ''], [])
             ->once()
         ;

@@ -27,6 +27,18 @@ use Cartalyst\Testing\IlluminateTestCase;
 class MenuRepositoryTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -512,7 +524,7 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $data = ['slug' => 'foo'];
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.creating', [$data])
             ->once()
             ->andReturn(false)
@@ -535,7 +547,7 @@ class MenuRepositoryTest extends IlluminateTestCase
 
         $model = $this->shouldReceiveFind();
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updating', [$model, $data])
             ->once()
             ->andReturn(false)
@@ -563,7 +575,7 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $model = $this->shouldReceiveFind();
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.deleted', [$model])
             ->once()
         ;
@@ -594,7 +606,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updating', [$model, $data])
             ->once()
         ;
@@ -637,7 +649,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updated', [$model])
             ->once()
         ;
@@ -658,7 +670,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updating', [$model, $data])
             ->once()
         ;
@@ -701,7 +713,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->once()
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updated', [$model])
             ->once()
         ;
@@ -776,12 +788,12 @@ class MenuRepositoryTest extends IlluminateTestCase
      */
     protected function shouldReceiveCreate($data)
     {
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.creating', [$data])
             ->once()
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.created', m::any())
             ->once()
         ;
@@ -835,7 +847,7 @@ class MenuRepositoryTest extends IlluminateTestCase
     {
         $model = $this->shouldReceiveFind();
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updating', [$model, $data])
             ->once()
         ;
@@ -851,7 +863,7 @@ class MenuRepositoryTest extends IlluminateTestCase
             ->andReturn('foo')
         ;
 
-        $this->app['events']->shouldReceive('fire')
+        $this->app['events']->shouldReceive('dispatch')
             ->with('platform.menu.updated', [$model])
             ->once()
         ;

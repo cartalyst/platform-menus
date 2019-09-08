@@ -27,6 +27,18 @@ use Platform\Menus\Controllers\Admin\MenusController;
 class AdminMenusControllerTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -35,7 +47,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
 
         // Foundation Controller expectations
         $this->app['sentinel']->shouldReceive('getUser');
-        $this->app['view']->shouldReceive('share');
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('share');
 
         // Menus repository
         $this->menus = m::mock('Platform\Menus\Repositories\MenuRepositoryInterface');
@@ -47,7 +59,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
     /** @test */
     public function index_route()
     {
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->atLeast()
             ->once()
         ;
@@ -58,7 +70,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
     /** @test */
     public function create_route()
     {
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->atLeast()
             ->once()
         ;
@@ -74,7 +86,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
     /** @test */
     public function edit_route()
     {
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->atLeast()
             ->once()
         ;
@@ -275,7 +287,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
             ->with(1)
         ;
 
-        $this->app['response']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\Routing\ResponseFactory']->shouldReceive('make')
             ->with('Success', 200, [])
             ->once()
         ;
@@ -292,7 +304,7 @@ class AdminMenusControllerTest extends IlluminateTestCase
             ->andReturn('foo')
         ;
 
-        $this->app['response']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\Routing\ResponseFactory']->shouldReceive('make')
             ->with('Failed', 500, [])
             ->once()
         ;

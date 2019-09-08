@@ -30,6 +30,18 @@ use Cartalyst\Testing\IlluminateTestCase;
 class DropdownWidgetTest extends IlluminateTestCase
 {
     /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->addToAssertionCount(1);
+
+        m::close();
+    }
+
+    /**
      * Setup.
      *
      * @return void
@@ -61,7 +73,7 @@ class DropdownWidgetTest extends IlluminateTestCase
             ->andReturn($menu)
         ;
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::widgets/dropdown', ['items' => [], 'attributes' => [], 'options' => []], [])
             ->once()
         ;
@@ -126,7 +138,7 @@ class DropdownWidgetTest extends IlluminateTestCase
             ->andReturn([])
         ;
 
-        $this->app['view']->shouldReceive('make')
+        $this->app['Illuminate\Contracts\View\Factory']->shouldReceive('make')
             ->with('platform/menus::widgets/dropdown', ['items' => [$menu], 'attributes' => [], 'options' => []], [])
             ->once()
         ;
