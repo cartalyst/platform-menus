@@ -53,7 +53,7 @@ class AbstractTypeTest extends IlluminateTestCase
     /** @test */
     public function it_can_retrieve_the_type_name()
     {
-        $this->app['translator']->shouldReceive('trans')
+        $this->app['translator']->shouldReceive('get')
             ->with('platform/menus::model.general.type_foo')
             ->once()
         ;
