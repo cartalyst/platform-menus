@@ -1,5 +1,11 @@
 # Changelog
 
+### v8.0.1 - 2019-09-27
+
+`FIXED`
+
+- A renamed `trans` reference.
+
 ### v8.0.0 - 2019-09-26
 
 - Updated for Platform 9
