@@ -16,7 +16,7 @@ $allMenus = $menus->findAll();
 
 ```php
 $menus->create([
-	'name' => 'Foo',
-	'slug' => 'foo',
+    'name' => 'Foo',
+    'slug' => 'foo',
 ]);
 ```
