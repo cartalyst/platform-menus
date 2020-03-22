@@ -12,11 +12,11 @@
  *
  * @package    Platform Menus extension
  *
- * @version    8.0.1
+ * @version    9.0.0
  *
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @copyright  (c) 2011-2020, Cartalyst LLC
  *
  * @see       https://cartalyst.com
  */

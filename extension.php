@@ -11,10 +11,10 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Platform Menus extension
- * @version    8.0.1
+ * @version    9.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @copyright  (c) 2011-2020, Cartalyst LLC
  * @link       https://cartalyst.com
  */
 
@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'version' => '8.0.0',
+    'version' => '9.0.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -145,15 +145,15 @@ return [
                 'prefix' => admin_uri().'/menus', 'namespace' => 'Platform\Menus\Controllers\Admin',
             ], function (Router $router) {
                 $router->get('/', 'MenusController@index')->name('admin.menus.all');
-                $router->post('/', 'MenusController@executeAction')->name('admin.menus.all');
+                $router->post('/', 'MenusController@executeAction')->name('admin.menus.execute');
 
                 $router->get('grid', 'MenusController@grid')->name('admin.menus.grid');
 
                 $router->get('create', 'MenusController@create')->name('admin.menu.create');
-                $router->post('create', 'MenusController@store')->name('admin.menu.create');
+                $router->post('create', 'MenusController@store')->name('admin.menu.store');
 
                 $router->get('{id}', 'MenusController@edit')->name('admin.menu.edit');
-                $router->post('{id}', 'MenusController@update')->name('admin.menu.edit');
+                $router->post('{id}', 'MenusController@update')->name('admin.menu.update');
                 $router->delete('{id}', 'MenusController@delete')->name('admin.menu.delete');
             });
         }
