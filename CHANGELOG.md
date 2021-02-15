@@ -1,6 +1,6 @@
 # Changelog
 
-### v10.0.0 - TBA
+### v10.0.0 - 2021-02-15
 
 - Updated for Platform 11
 
