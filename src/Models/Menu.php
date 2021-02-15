@@ -347,12 +347,14 @@ class Menu extends Model implements EntityInterface, NodeInterface
 
         $_method = 'get'.substr($method, 3).'Attribute';
 
-        if (method_exists($type, $method)) {
-            $methodFound = true;
-        } elseif (method_exists($type, $_method)) {
-            $method = $_method;
+        if (is_object($type)) {
+            if (method_exists($type, $method)) {
+                $methodFound = true;
+            } elseif (method_exists($type, $_method)) {
+                $method = $_method;
 
-            $methodFound = true;
+                $methodFound = true;
+            }
         }
 
         if ($methodFound) {
