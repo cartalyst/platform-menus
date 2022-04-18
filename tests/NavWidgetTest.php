@@ -100,6 +100,11 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_show_a_menu_with_regex()
     {
+        $this->app['config']     = m::mock('Illuminate\Config\Repository');
+        $this->app['config']->shouldIgnoreMissing();
+        $this->app['config']->shouldReceive('get')
+            ->andReturn('');
+
         $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
             ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])
@@ -140,6 +145,16 @@ class NavWidgetTest extends IlluminateTestCase
             ->andReturn([$child])
         ;
 
+        $menu->shouldReceive('getAttribute')
+            ->with('uri')
+            ->andReturn('')
+        ;
+
+        $child->shouldReceive('getAttribute')
+            ->with('uri')
+            ->andReturn('')
+        ;
+
         $child->shouldReceive('getAttribute')
             ->with('children')
             ->andReturn([])
@@ -164,11 +179,6 @@ class NavWidgetTest extends IlluminateTestCase
         $menu->shouldReceive('getAttribute')
             ->with('target')
             ->once()
-        ;
-
-        $menu->shouldReceive('getAttribute')
-            ->with('uri')
-            ->twice()
         ;
 
         $menu->shouldReceive('getAttribute')
@@ -212,6 +222,11 @@ class NavWidgetTest extends IlluminateTestCase
     /** @test */
     public function it_can_show_a_menu_without_regex()
     {
+        $this->app['config']     = m::mock('Illuminate\Config\Repository');
+        $this->app['config']->shouldIgnoreMissing();
+        $this->app['config']->shouldReceive('get')
+            ->andReturn('');
+
         $this->app['Illuminate\Contracts\Routing\UrlGenerator']->shouldReceive('to')
             ->once()
             ->andReturn($this->app['Illuminate\Contracts\Routing\UrlGenerator'])

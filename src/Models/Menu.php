@@ -134,7 +134,7 @@ class Menu extends Model implements EntityInterface, NodeInterface
      */
     public function getRolesAttribute($roles)
     {
-        return json_decode($roles, true) ?: [];
+        return json_decode($roles ?? '', true) ?: [];
     }
 
     /**

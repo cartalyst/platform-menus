@@ -76,7 +76,7 @@ class MenuModelTest extends IlluminateTestCase
 
         $this->assertTrue($this->menu->secure);
 
-        $this->menu->secure = null;
+        $this->menu->secure = '';
 
         $this->assertNull($this->menu->secure);
 
@@ -151,6 +151,8 @@ class MenuModelTest extends IlluminateTestCase
      */
     public function it_can_dynamically_forward_methods_to_the_parent()
     {
+        $this->shouldFindDisplayableChildren($this->menu, false);
+
         $this->app['platform.menus.manager']->shouldReceive('getType')
             ->with('static')
             ->once()
@@ -169,7 +171,7 @@ class MenuModelTest extends IlluminateTestCase
      *
      * @return void
      */
-    protected function shouldFindDisplayableChildren($model)
+    protected function shouldFindDisplayableChildren($model, $withBuilder = true)
     {
         // Resolver
         $resolver = m::mock('Illuminate\Database\ConnectionResolverInterface');
@@ -194,17 +196,8 @@ class MenuModelTest extends IlluminateTestCase
 
         $connection->shouldReceive('select');
 
-        $connection->shouldReceive('table')
-            ->twice()
-            ->andReturn($builder = m::mock('Illuminate\Database\Eloquent\Builder'))
-        ;
-
         $connection->shouldReceive('query')
             ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'))
-        ;
-
-        $connection->shouldReceive('getQueryGrammar')
-            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'))
         ;
 
         $query->shouldReceive('from');
@@ -221,72 +214,88 @@ class MenuModelTest extends IlluminateTestCase
             ->andReturn($connection)
         ;
 
-        $query->shouldReceive('whereIntegerInRaw')
-            ->once()
-        ;
-
         $collection->shouldReceive('all')
             ->andReturn([])
         ;
 
-        // Grammar
-        $grammar->shouldReceive('compileSelect');
 
-        $grammar->shouldReceive('wrap')
-            ->andReturn($grammar)
-        ;
+        if ($withBuilder) {
+            $query->shouldReceive('whereIntegerInRaw')
+                ->once()
+            ;
 
-        $grammar->shouldReceive('getTablePrefix');
+            $connection->shouldReceive('table')
+                ->twice()
+                ->andReturn($builder = m::mock('Illuminate\Database\Eloquent\Builder'))
+            ;
 
-        // Builder
-        $builder->shouldReceive('join')
-            ->andReturn($builder)
-        ;
+            $connection->shouldReceive('query')
+                ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'))
+            ;
 
-        $builder->shouldReceive('whereNested')
-            ->with(m::on(function ($callback) use ($builder) {
-                $callback($builder);
+            $connection->shouldReceive('getQueryGrammar')
+                ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'))
+            ;
 
-                return true;
-            }))
-            ->andReturn($builder)
-        ;
+            // Grammar
+            $grammar->shouldReceive('compileSelect');
 
-        $builder->shouldReceive('orWhere')
-            ->andReturn($builder)
-        ;
+            $grammar->shouldReceive('wrap')
+                ->andReturn($grammar)
+            ;
 
-        $builder->shouldReceive('orWhereNull')
-            ->andReturn($builder)
-        ;
+            $grammar->shouldReceive('getTablePrefix');
 
-        $builder->shouldReceive('where')
-            ->andReturn($builder)
-        ;
+            // Builder
+            $builder->shouldReceive('join')
+                ->andReturn($builder)
+            ;
 
-        $builder->shouldReceive('mergeBindings')
-            ->once()
-            ->andReturn($builder)
-        ;
+            $builder->shouldReceive('whereNested')
+                ->with(m::on(function ($callback) use ($builder) {
+                    $callback($builder);
 
-        $builder->shouldReceive('whereIn')
-            ->once()
-            ->andReturn($builder)
-        ;
+                    return true;
+                }))
+                ->andReturn($builder)
+            ;
 
-        $builder->shouldReceive('orderBy')
-            ->once()
-            ->andReturn($builder)
-        ;
+            $builder->shouldReceive('orWhere')
+                ->andReturn($builder)
+            ;
 
-        $builder->shouldReceive('groupBy')
-            ->once()
-            ->andReturn($builder)
-        ;
+            $builder->shouldReceive('orWhereNull')
+                ->andReturn($builder)
+            ;
 
-        $builder->shouldReceive('get')
-            ->once()
-            ->andReturn([$model])
-        ;
+            $builder->shouldReceive('where')
+                ->andReturn($builder)
+            ;
+
+            $builder->shouldReceive('mergeBindings')
+                ->once()
+                ->andReturn($builder)
+            ;
+
+            $builder->shouldReceive('whereIn')
+                ->once()
+                ->andReturn($builder)
+            ;
+
+            $builder->shouldReceive('orderBy')
+                ->once()
+                ->andReturn($builder)
+            ;
+
+            $builder->shouldReceive('groupBy')
+                ->once()
+                ->andReturn($builder)
+            ;
+
+            $builder->shouldReceive('get')
+                ->once()
+                ->andReturn([$model])
+            ;
+        }
     }
 }
