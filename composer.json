@@ -24,18 +24,18 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
         "cartalyst/composer-installers": "^2.0",
-        "cartalyst/nested-sets": "^7.0",
-        "platform/access": "^10.0",
-        "platform/attributes": "^10.0",
-        "platform/foundation": "^10.0"
+        "cartalyst/nested-sets": "^8.0",
+        "platform/access": "^11.0",
+        "platform/attributes": "^11.0",
+        "platform/foundation": "^11.0"
     },
     "require-dev": {
-        "cartalyst/php-cs-fixer-config": "^1.0",
+        "cartalyst/php-cs-fixer-config": "^2.0",
         "laravel/framework": "^8.0",
-        "cartalyst/testing": "^5.0",
-        "platform/pages": "^10.0"
+        "cartalyst/testing": "^6.0",
+        "platform/pages": "^11.0"
     },
     "autoload": {
         "classmap": [
@@ -59,7 +59,7 @@
     "extra": {
         "component": "extension",
         "branch-alias": {
-            "dev-master": "10.0.x-dev"
+            "dev-master": "11.0.x-dev"
         }
     },
     "scripts": {
