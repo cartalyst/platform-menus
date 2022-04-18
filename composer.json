@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "cartalyst/php-cs-fixer-config": "^2.0",
-        "laravel/framework": "^8.0",
+        "laravel/framework": "^9.0",
         "cartalyst/testing": "^6.0",
         "platform/pages": "^11.0"
     },
